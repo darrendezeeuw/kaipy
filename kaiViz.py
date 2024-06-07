@@ -3,10 +3,16 @@
 from kaipy.kdefs import *
 import h5py
 import numpy as np
+import os
+from PIL import Image
+from operator import sub
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
 from matplotlib.colors import Normalize
+from matplotlib.colors import SymLogNorm
+from matplotlib.patches import Wedge
+from matplotlib import ticker
 
 
 #Create 2D equatorial grid (Ni,Nj*2+1) from lfm/egg-style
@@ -109,35 +115,71 @@ def SetAx(xyBds=[-1, 1, -1, 1], ax=None, Adj='box'):
 
 
 #Set axis labels and locations
-def SetAxLabs(Ax,xLab,yLab,doBot=True,doLeft=True,fs="medium"):
-    Ax.set_xlabel(xLab,fontsize=fs)
-    Ax.set_ylabel(yLab,fontsize=fs)
-    if (not doBot):
+def SetAxLabs(Ax, xLab, yLab, doBot=True, doLeft=True, fs="medium"):
+    """
+    Set the x and y axis labels for a given matplotlib Axes object.
+
+    Parameters:
+    - Ax (matplotlib.axes.Axes): The Axes object to set the labels for.
+    - xLab (str): The label for the x-axis.
+    - yLab (str): The label for the y-axis.
+    - doBot (bool, optional): Whether to display the x-axis labels and ticks at the bottom. Default is True.
+    - doLeft (bool, optional): Whether to display the y-axis labels and ticks on the left. Default is True.
+    - fs (str, optional): The font size for the labels. Default is "medium".
+
+    Returns:
+    None
+    """
+    Ax.set_xlabel(xLab, fontsize=fs)
+    Ax.set_ylabel(yLab, fontsize=fs)
+    if not doBot:
         Ax.xaxis.tick_top()
         Ax.xaxis.set_label_position('top')
-    if (not doLeft):
+    if not doLeft:
         Ax.yaxis.tick_right()
         Ax.yaxis.set_label_position('right')
 
-    #Kill labels if not string is None
-    if (xLab is None):
+    # Kill labels if not string is None
+    if xLab is None:
         Ax.xaxis.label.set_visible(False)
         Ax.xaxis.set_visible(False)
-        plt.setp(Ax.get_xticklabels(),visible=False)
+        plt.setp(Ax.get_xticklabels(), visible=False)
 
-    if (yLab is None):
+    if yLab is None:
         Ax.yaxis.label.set_visible(False)
         Ax.yaxis.set_visible(False)
-        plt.setp(Ax.get_yticklabels(),visible=False)
+        plt.setp(Ax.get_yticklabels(), visible=False)
 
 #Set X axis to labels to well formatted date time
-def SetAxDate(Ax,fmt='%H:%M \n%Y-%m-%d'):
+def SetAxDate(Ax, fmt='%H:%M \n%Y-%m-%d'):
+    """
+    Set the x-axis of the given Axes object to display dates.
+
+    Parameters:
+    - Ax: The Axes object to set the x-axis date format for.
+    - fmt: The date format string to use. Defaults to '%H:%M \n%Y-%m-%d'.
+
+    Returns:
+    None
+    """
     Ax.xaxis_date()
     Ax.xaxis.set_major_formatter(mpl.dates.DateFormatter(fmt))
 
 #Adds 2D earth w/ dawn/dusk
 def addEarth2D(Re=1, angle=-90, ax=None):
-    from matplotlib.patches import Wedge
+    """
+    Adds a 2D representation of Earth to the given matplotlib axes.
+
+    Parameters:
+    - Re (float): Radius of the Earth. Default is 1.
+    - angle (float): Angle at which the Earth is rotated. Default is -90.
+    - ax (matplotlib.axes.Axes): The axes to which the Earth will be added. If None, the current axes will be used.
+
+    Returns:
+    - list: A list containing the two Wedge objects representing the Earth.
+
+    """
+    
 
     if ax is None:
         ax = plt.gca()
@@ -150,86 +192,183 @@ def addEarth2D(Re=1, angle=-90, ax=None):
     for wedge in [w1, w2]:
         ax.add_artist(wedge)
     return [w1, w2]
+
 #Add inner cutout
-def DrawCut(Rin=2.5,ax=None):
-    from matplotlib.patches import Wedge
+def DrawCut(Rin=2.5, ax=None):
+    """
+    Draw a cut using matplotlib.patches.Wedge.
+
+    Parameters:
+    Rin (float): The inner radius of the cut. Default is 2.5.
+    ax (matplotlib.axes.Axes, optional): The axes on which to draw the cut. If not provided, the current axes will be used.
+
+    Returns:
+    matplotlib.patches.Wedge: The created Wedge object representing the cut.
+    """
+    
     if ax is None:
         ax = plt.gca()
-    w1 = Wedge(0,Rin,0,360,fc=None,ec='k')
+    w1 = Wedge(0, Rin, 0, 360, fc=None, ec='k')
     ax.add_artist(w1)
     return w1
 
 #Take cell-centered polar values and add extra phi layer
 #Useful for contour plots through +X
 def reWrap(V):
-    Ni,Nj = V.shape
-    Vp = np.zeros((Ni,Nj+1))
-    Vp[:,0:Nj] = V
-    Vp[:,-1] = V[:,0]
+    """
+    Re-wraps a 2D array by adding an extra column at the end, where the values in the new column are the same as the values in the first column.
+
+    Parameters:
+    V (numpy.ndarray): The input 2D array.
+
+    Returns:
+    numpy.ndarray: The re-wrapped 2D array with an extra column.
+    """
+    Ni, Nj = V.shape
+    Vp = np.zeros((Ni, Nj+1))
+    Vp[:, 0:Nj] = V
+    Vp[:, -1] = V[:, 0]
     return Vp
 
 #Image files
 #Wrapper to save (and trim) figure
-def savePic(fOut,dpiQ=300,doTrim=True,bLenX=20,bLenY=None,doClose=False,doEps=False):
-    #Start by saving
-    import matplotlib.pyplot as plt
-    if (doEps):
-        plt.savefig(fOut,dpi=dpiQ,format='eps')
+def savePic(fOut, dpiQ=300, doTrim=True, bLenX=20, bLenY=None, doClose=False, doEps=False):
+    """
+    Save a matplotlib figure to a file.
+
+    Parameters:
+    - fOut (str): The output file path.
+    - dpiQ (int): The resolution of the saved figure in dots per inch (default: 300).
+    - doTrim (bool): Whether to trim the saved figure (default: True).
+    - bLenX (int): The length of the x-axis trim boundary (default: 20).
+    - bLenY (int): The length of the y-axis trim boundary (default: None).
+    - doClose (bool): Whether to close all figures after saving (default: False).
+    - doEps (bool): Whether to save the figure in EPS format (default: False).
+
+    Returns:
+    - Image File saved to disk.
+    """
+    if doEps:
+        plt.savefig(fOut, dpi=dpiQ, format='eps')
     else:
-        plt.savefig(fOut,dpi=dpiQ)
-        if (doTrim):
-            trimFig(fOut,bLenX,bLenY)
-    if (doClose):
+        plt.savefig(fOut, dpi=dpiQ)
+        if doTrim:
+            trimFig(fOut, bLenX, bLenY)
+
+    if doClose:
         plt.close('all')
+
 
 #Use imagemagick to trim whitespace off figure
 #doEven: Guarantee even number of pixels in X/Y
-def trimFig(fName,bLenX=20,bLenY=None,doEven=True):
-    import os
-    if (bLenY is None):
+def trimFig(fName, bLenX=20, bLenY=None, doEven=True):
+    """
+    Trims the figure image file by removing the borders and resizing it to have even dimensions.
+
+    Parameters:
+    - fName (str): The file name of the figure image.
+    - bLenX (int): The length of the border to be added on the X-axis. Default is 20.
+    - bLenY (int): The length of the border to be added on the Y-axis. If not provided, it will be set to bLenX.
+    - doEven (bool): Flag indicating whether to resize the image to have even dimensions. Default is True.
+
+    Returns:
+    - Image file saved to disk.
+    """
+
+
+    if bLenY is None:
         bLenY = bLenX
 
-    ComS = 'convert -trim -border %dx%d -bordercolor "#FFFFFF" '%(bLenX,bLenY) + fName + ' ' + fName
+    ComS = 'convert -trim -border %dx%d -bordercolor "#FFFFFF" ' % (bLenX, bLenY) + fName + ' ' + fName
     os.system(ComS)
 
-    if (doEven):
-        Nx,Ny = picSz(fName)
-        #print(Nx,Ny)
-        while ( (Nx % 2) != 0 ):
-            #print("Shaving X")
+    if doEven:
+        Nx, Ny = picSz(fName)
+
+        while (Nx % 2) != 0:
             ShaveX(fName)
-            Nx,Ny = picSz(fName)
-            #print('\t%d,%d'%(Nx,Ny))
+            Nx, Ny = picSz(fName)
 
-        while ( (Ny % 2) != 0 ):
-            #print("Shaving Y")
+        while (Ny % 2) != 0:
             ShaveY(fName)
-            Nx,Ny = picSz(fName)
-            #print('\t%d,%d'%(Nx,Ny))
+            Nx, Ny = picSz(fName)
 
-        Nx,Ny = picSz(fName)
-        if ( ((Nx % 2) != 0) or ((Ny % 2) != 0) ):
+        Nx, Ny = picSz(fName)
+        if (Nx % 2) != 0 or (Ny % 2) != 0:
             print("Parity failure on pic sizing")
-            print(Nx,Ny)
+            print(Nx, Ny)
+
 
 def picSz(fName):
-    from PIL import Image
+    """
+    Get the size of an image.
+
+    Parameters:
+    fName (str): The file path of the image.
+
+    Returns:
+    tuple: A tuple containing the width and height of the image.
+    """
+
+    
     with Image.open(fName) as img:
-        Nx,Ny = img.size
-    return Nx,Ny
+        Nx, Ny = img.size
+    return Nx, Ny
 
 def ShaveX(fName):
-    import os
+    """
+    ShaveX function crops an image file by removing one pixel from the right side.
+
+    Parameters:
+    - fName (str): The file name of the image to be cropped.
+
+    Returns:
+    - fName file is cropped by one pixel on the right side.
+    """
     ComS = 'convert -crop -1+0 +repage ' + fName + ' ' + fName
     os.system(ComS)
+
 def ShaveY(fName):
-    import os
+    """
+    Shave one pixel from the top of the image.
+
+    Parameters:
+        fName (str): The file name of the image.
+
+    Returns:
+        fName file is cropped by one pixel on the top.
+    """
     ComS = 'convert -crop +0-1 +repage ' + fName + ' ' + fName
     os.system(ComS)
 
 #---------------------------------
 #Create colorbar with specified midpoint (grabbed from stack overflow)
 class MidpointNormalize(Normalize):
+    """
+    Custom normalization class that maps values to the range [0, 1] with a specified midpoint.
+
+    Parameters:
+    - vmin: float, optional
+        The minimum value of the input range. If not provided, the minimum value of the input data will be used.
+    - vmax: float, optional
+        The maximum value of the input range. If not provided, the maximum value of the input data will be used.
+    - midpoint: float, optional
+        The midpoint value that will be mapped to 0.5 in the output range. If not provided, the average of vmin and vmax will be used.
+    - clip: bool, default False
+        If True, values outside the range [vmin, vmax] will be clipped to vmin or vmax.
+
+    Returns:
+    - normalized_value: numpy.ma.masked_array
+        The normalized value(s) within the range [0, 1].
+
+    Example usage:
+    ```
+    norm = MidpointNormalize(vmin=0, vmax=10, midpoint=5)
+    normalized_value = norm(7)
+    print(normalized_value)  # Output: 0.7
+    ```
+    """
+
     def __init__(self, vmin=None, vmax=None, midpoint=None, clip=False):
         self.midpoint = midpoint
         Normalize.__init__(self, vmin, vmax, clip)
@@ -241,48 +380,106 @@ class MidpointNormalize(Normalize):
         return np.ma.masked_array(np.interp(value, x, y))
 
 #Create norm object for MPL
-def genNorm(vMin,vMax=None,doLog=False,doSymLog=False,midP=None,linP=1.0):
-    from matplotlib.colors import LogNorm
-    from matplotlib.colors import Normalize
-    from matplotlib.colors import SymLogNorm
-    if (vMax is None):
+def genNorm(vMin, vMax=None, doLog=False, doSymLog=False, midP=None, linP=1.0):
+    """
+    Generate a matplotlib color normalization object based on the given parameters.
+
+    Parameters:
+    - vMin: float, the minimum value of the data range
+    - vMax: float, optional, the maximum value of the data range (default: None)
+    - doLog: bool, optional, whether to use logarithmic normalization (default: False)
+    - doSymLog: bool, optional, whether to use symmetric logarithmic normalization (default: False)
+    - midP: float, optional, the midpoint value for midpoint normalization (default: None)
+    - linP: float, optional, the linear threshold for symmetric logarithmic normalization (default: 1.0)
+
+    Returns:
+    - vN: matplotlib.colors.Normalize, the color normalization object
+
+    Note:
+    - If vMax is not provided, the absolute value of vMin is used as both vMin and vMax.
+    - If midP is not provided, midpoint normalization is not used.
+    - If doLog is True, logarithmic normalization is used.
+    - If doSymLog is True, symmetric logarithmic normalization is used.
+    - If none of the above conditions are met, linear normalization is used.
+    """
+
+
+    if vMax is None:
         vMin = -np.abs(vMin)
         vMax = np.abs(vMin)
-    if (midP is None):
+
+    if midP is None:
         doMid = False
     else:
         doMid = True
 
-    if (doMid):
-        vN = MidpointNormalize(vmin=vMin,vmax=vMax,midpoint=midP)
-    elif (doLog):
-        vN = LogNorm(vmin=vMin,vmax=vMax)
-    elif (doSymLog):
-        vN = SymLogNorm(linthresh=linP,vmin=vMin,vmax=vMax,base=10)
+    if doMid:
+        vN = MidpointNormalize(vmin=vMin, vmax=vMax, midpoint=midP)
+    elif doLog:
+        vN = LogNorm(vmin=vMin, vmax=vMax)
+    elif doSymLog:
+        vN = SymLogNorm(linthresh=linP, vmin=vMin, vmax=vMax, base=10)
     else:
-        vN = Normalize(vmin=vMin,vmax=vMax)
+        vN = Normalize(vmin=vMin, vmax=vMax)
 
     return vN
 
-#Create colorbar object into specified axis
-def genCB(AxCB,vN,cbT="Title",cM="viridis",doVert=False,cbSz="medium",Ntk=None):
-    from matplotlib import ticker
 
-    if (doVert):
+#Create colorbar object into specified axis
+def genCB(AxCB, vN, cbT="Title", cM="viridis", doVert=False, cbSz="medium", Ntk=None):
+    """
+    Generate a colorbar using matplotlib.
+
+    Parameters:
+    - AxCB: Axes object
+        The axes object where the colorbar will be drawn.
+    - vN: Normalize object
+        The normalization object used to map data values to colors.
+    - cbT: str, optional
+        The title of the colorbar. Default is "Title".
+    - cM: str, optional
+        The name of the colormap to use. Default is "viridis".
+    - doVert: bool, optional
+        Whether to display the colorbar vertically. Default is False.
+    - cbSz: str, optional
+        The size of the colorbar labels and title. Default is "medium".
+    - Ntk: int, optional
+        The number of ticks to display on the colorbar. Default is None.
+
+    Returns:
+    - cb: Colorbar object
+        The generated colorbar object.
+
+    """
+    
+
+    if doVert:
         cbOr = "vertical"
     else:
         cbOr = "horizontal"
     cmData = plt.get_cmap(cM)
-    cb = mpl.colorbar.ColorbarBase(AxCB,cmap=cmData,norm=vN,orientation=cbOr)
-    if (Ntk is not None):
+    cb = mpl.colorbar.ColorbarBase(AxCB, cmap=cmData, norm=vN, orientation=cbOr)
+    if Ntk is not None:
         cb.locator = ticker.MaxNLocator(nbins=Ntk)
         cb.update_ticks()
 
-    cb.set_label(cbT,fontsize=cbSz)
+    cb.set_label(cbT, fontsize=cbSz)
     cb.ax.tick_params(labelsize=cbSz)
     return cb
 
+
 def labelStr(data, key, vecComp):
+    """
+    Generate a label string based on the given data, key, and vector component.
+
+    Parameters:
+        data (dict): A dictionary containing the data.
+        key (str): The key used to access the data.
+        vecComp (int): The vector component.
+
+    Returns:
+        str: The generated label string.
+    """
     vecLabel = ['x', 'y', 'z']
     if key == "Velocity":
         key = "Speed"
@@ -298,8 +495,21 @@ def labelStr(data, key, vecComp):
     return label
 
 
-def itemPlot(Ax,data,key,plotNum,numPlots,vecComp=-1):
-    #print(key,vecComp)
+def itemPlot(Ax, data, key, plotNum, numPlots, vecComp=-1):
+    """
+    Plot the data for a specific item.
+
+    Parameters:
+        Ax (matplotlib.axes.Axes): The axes object to plot on.
+        data (dict): The data dictionary containing the data to plot.
+        key (str): The key representing the item to plot.
+        plotNum (int): The plot number.
+        numPlots (int): The total number of plots.
+        vecComp (int, optional): The vector component to plot. Defaults to -1.
+
+    Returns:
+        None
+    """
     if -1 == vecComp:
         # if key == "Br":
         #     # Plot a horizontal line at Br=0. This indicates passage of the
@@ -312,208 +522,167 @@ def itemPlot(Ax,data,key,plotNum,numPlots,vecComp=-1):
         # </HACK>
         if key == "Velocity":
             maskedData = np.ma.masked_where(
-                data["GAMERA_inDom"][:]==0.0,
+                data["GAMERA_inDom"][:] == 0.0,
                 data[key].flatten()[0]["VR"][:]
             )
             maskedGamera = np.ma.masked_where(
-                data["GAMERA_inDom"][:]==0.0, data['GAMERA_Speed'][:]
+                data["GAMERA_inDom"][:] == 0.0, data['GAMERA_Speed'][:]
             )
         else:
             maskedData = np.ma.masked_where(
-                data["GAMERA_inDom"][:]==0.0, data[key][:]
+                data["GAMERA_inDom"][:] == 0.0, data[key][:]
             )
             maskedGamera = np.ma.masked_where(
-                data["GAMERA_inDom"][:]==0.0, data['GAMERA_' + key][:]
+                data["GAMERA_inDom"][:] == 0.0, data['GAMERA_' + key][:]
             )
-        Ax.plot(data['Epoch_bin'],maskedData)
-        Ax.plot(data['Epoch_bin'],maskedGamera)
+        Ax.plot(data['Epoch_bin'], maskedData)
+        Ax.plot(data['Epoch_bin'], maskedGamera)
     else:
-        maskedData = np.ma.masked_where(data["GAMERA_inDom"][:]==0.0,
-            data[key][:,vecComp])
-        Ax.plot(data['Epoch_bin'],maskedData)
-        maskedGamera = np.ma.masked_where(data["GAMERA_inDom"][:]==0.0,
-            data['GAMERA_'+key][:,vecComp])
-        Ax.plot(data['Epoch_bin'],maskedGamera)
+        maskedData = np.ma.masked_where(data["GAMERA_inDom"][:] == 0.0,
+                                        data[key][:, vecComp])
+        Ax.plot(data['Epoch_bin'], maskedData)
+        maskedGamera = np.ma.masked_where(data["GAMERA_inDom"][:] == 0.0,
+                                          data['GAMERA_' + key][:, vecComp])
+        Ax.plot(data['Epoch_bin'], maskedGamera)
     if (plotNum % 2) == 0:
         left = True
     else:
         left = False
-    label = labelStr(data, key,vecComp)
-    if plotNum == (numPlots-1):
-        SetAxLabs(Ax,'UT',label,doLeft=left)
+    label = labelStr(data, key, vecComp)
+    if plotNum == (numPlots - 1):
+        SetAxLabs(Ax, 'UT', label, doLeft=left)
         SetAxDate(Ax)
     else:
-        SetAxLabs(Ax,None,label,doLeft=left)
+        SetAxLabs(Ax, None, label, doLeft=left)
     return
 
 
-def compPlot(plotname,scId,data):
+def compPlot(plotname, scId, data):
+    """
+    Generate a composite plot with multiple subplots based on the given data.
 
+    Parameters:
+    - plotname (str): The title of the composite plot.
+    - scId (str): The identifier for the subplot legend.
+    - data (dict): A dictionary containing the data to be plotted.
+
+    Returns:
+    - Image file saved to disk.
+
+    """
     numPlots = 0
     variables_to_plot = []
     keys = data.keys()
-    #print(keys)
+
     if 'Density' in keys:
-        numPlots = numPlots + 1
+        numPlots += 1
         variables_to_plot.append('Density')
     if 'Pressue' in keys:
-        numPlots = numPlots + 1
+        numPlots += 1
         variables_to_plot.append('Pressue')
     if 'Temperature' in keys:
-        numPlots = numPlots + 1
+        numPlots += 1
         variables_to_plot.append('Temperature')
     if 'MagneticField' in keys:
-        numPlots = numPlots + 3
+        numPlots += 3
         variables_to_plot.append('MagneticField')
     if 'Velocity' in keys:
-        numPlots = numPlots + 3
+        numPlots += 3
         variables_to_plot.append('Velocity')
 
-    figsize = (10,10)
+    figsize = (10, 10)
     fig = plt.figure(figsize=figsize)
-    gs = fig.add_gridspec(numPlots,1)
+    gs = fig.add_gridspec(numPlots, 1)
     plotNum = 0
+
     for key in variables_to_plot:
-        #print('Plotting',key)
         if 'MagneticField' == key or 'Velocity' == key:
             doVecPlot = True
         else:
             doVecPlot = False
-        if 0 == plotNum:
-            Ax1 = fig.add_subplot(gs[plotNum,0])
-            if doVecPlot:
-                #print('key',key,'plotNum',plotNum)
-                itemPlot(Ax1,data,key,plotNum,numPlots,vecComp=0)
-                plotNum = plotNum + 1
-                Ax = fig.add_subplot(gs[plotNum,0],sharex=Ax1)
-                itemPlot(Ax,data,key,plotNum,numPlots,vecComp=1)
-                plotNum = plotNum + 1
-                Ax = fig.add_subplot(gs[plotNum,0],sharex=Ax1)
-                itemPlot(Ax,data,key,plotNum,numPlots,vecComp=2)
-                plotNum = plotNum + 1
-            else:
-                #print('key',key,'plotNum',plotNum)
-                itemPlot(Ax1,data,key,plotNum,numPlots)
-                plotNum = plotNum + 1
-        else:
-            Ax = fig.add_subplot(gs[plotNum,0],sharex=Ax1)
-            if doVecPlot:
-                #print('key',key,'plotNum',plotNum)
-                itemPlot(Ax,data,key,plotNum,numPlots,vecComp=0)
-                plotNum = plotNum + 1
-                Ax = fig.add_subplot(gs[plotNum,0],sharex=Ax1)
-                itemPlot(Ax,data,key,plotNum,numPlots,vecComp=1)
-                plotNum = plotNum + 1
-                Ax = fig.add_subplot(gs[plotNum,0],sharex=Ax1)
-                itemPlot(Ax,data,key,plotNum,numPlots,vecComp=2)
-                plotNum = plotNum + 1
-            else:
-                #print('key',key,'plotNum',plotNum)
-                itemPlot(Ax,data,key,plotNum,numPlots)
-                plotNum = plotNum + 1
 
-    Ax1.legend([scId,'GAMERA'],loc='best')
+        if 0 == plotNum:
+            Ax1 = fig.add_subplot(gs[plotNum, 0])
+            if doVecPlot:
+                itemPlot(Ax1, data, key, plotNum, numPlots, vecComp=0)
+                plotNum += 1
+                Ax = fig.add_subplot(gs[plotNum, 0], sharex=Ax1)
+                itemPlot(Ax, data, key, plotNum, numPlots, vecComp=1)
+                plotNum += 1
+                Ax = fig.add_subplot(gs[plotNum, 0], sharex=Ax1)
+                itemPlot(Ax, data, key, plotNum, numPlots, vecComp=2)
+                plotNum += 1
+            else:
+                itemPlot(Ax1, data, key, plotNum, numPlots)
+                plotNum += 1
+        else:
+            Ax = fig.add_subplot(gs[plotNum, 0], sharex=Ax1)
+            if doVecPlot:
+                itemPlot(Ax, data, key, plotNum, numPlots, vecComp=0)
+                plotNum += 1
+                Ax = fig.add_subplot(gs[plotNum, 0], sharex=Ax1)
+                itemPlot(Ax, data, key, plotNum, numPlots, vecComp=1)
+                plotNum += 1
+                Ax = fig.add_subplot(gs[plotNum, 0], sharex=Ax1)
+                itemPlot(Ax, data, key, plotNum, numPlots, vecComp=2)
+                plotNum += 1
+            else:
+                itemPlot(Ax, data, key, plotNum, numPlots)
+                plotNum += 1
+
+    Ax1.legend([scId, 'GAMERA'], loc='best')
     Ax1.set_title(plotname)
     plt.subplots_adjust(hspace=0)
 
     savePic(plotname, doClose=True)
 
-def compPlot(plotname,scId,data):
 
-	numPlots = 0
-	keysToPlot = []
-	keys = data.keys()
-	#print(keys)
-	if 'Density' in keys:
-		numPlots = numPlots + 1
-		keysToPlot.append('Density')
-	if 'Pressue' in keys:
-		numPlots = numPlots + 1
-		keysToPlot.append('Pressue')
-	if 'Temperature' in keys:
-		numPlots = numPlots + 1
-		keysToPlot.append('Temperature')
-	if 'MagneticField' in keys:
-		numPlots = numPlots + 3
-		keysToPlot.append('MagneticField')
-	if 'Velocity' in keys:
-		numPlots = numPlots + 3
-		keysToPlot.append('Velocity')
-
-	figsize = (10,10)
-	fig = plt.figure(figsize=figsize)
-	gs = fig.add_gridspec(numPlots,1)
-	plotNum = 0
-	for key in keysToPlot:
-		#print('Plotting',key)
-		if 'MagneticField' == key or 'Velocity' == key:
-			doVecPlot = True
-		else:
-			doVecPlot = False
-		if 0 == plotNum:
-			Ax1 = fig.add_subplot(gs[plotNum,0])
-			if doVecPlot:
-				#print('key',key,'plotNum',plotNum)
-				itemPlot(Ax1,data,key,plotNum,numPlots,vecComp=0)
-				plotNum = plotNum + 1
-				Ax = fig.add_subplot(gs[plotNum,0],sharex=Ax1)
-				itemPlot(Ax,data,key,plotNum,numPlots,vecComp=1)
-				plotNum = plotNum + 1
-				Ax = fig.add_subplot(gs[plotNum,0],sharex=Ax1)
-				itemPlot(Ax,data,key,plotNum,numPlots,vecComp=2)
-				plotNum = plotNum + 1
-			else:
-				#print('key',key,'plotNum',plotNum)
-				itemPlot(Ax1,data,key,plotNum,numPlots)
-				plotNum = plotNum + 1
-		else:
-			Ax = fig.add_subplot(gs[plotNum,0],sharex=Ax1)
-			if doVecPlot:
-				#print('key',key,'plotNum',plotNum)
-				itemPlot(Ax,data,key,plotNum,numPlots,vecComp=0)
-				plotNum = plotNum + 1
-				Ax = fig.add_subplot(gs[plotNum,0],sharex=Ax1)
-				itemPlot(Ax,data,key,plotNum,numPlots,vecComp=1)
-				plotNum = plotNum + 1
-				Ax = fig.add_subplot(gs[plotNum,0],sharex=Ax1)
-				itemPlot(Ax,data,key,plotNum,numPlots,vecComp=2)
-				plotNum = plotNum + 1
-			else:
-				#print('key',key,'plotNum',plotNum)
-				itemPlot(Ax,data,key,plotNum,numPlots)
-				plotNum = plotNum + 1
-
-	Ax1.legend([scId,'GAMERA'],loc='best')
-	Ax1.set_title(plotname)
-	plt.subplots_adjust(hspace=0)
-
-	savePic(plotname)
     
-def trajPlot(plotname,scId,data,toRe):
-    figsize = (15,5)
+def trajPlot(plotname, scId, data, toRe):
+    """
+    Plot the trajectory of a spacecraft.
+
+    Parameters:
+    - plotname (str): The name of the plot.
+    - scId (str): The spacecraft ID.
+    - data (dict): A dictionary containing the spacecraft's ephemeris data.
+    - toRe (float): The conversion factor from meters to Re (Earth radii).
+
+    Returns:
+    - Image file saved to disk.
+    """
+    figsize = (15, 5)
     # Create the figure in-memory.
     mpl.use("AGG")
     fig = plt.figure(figsize=figsize)
-    gs = fig.add_gridspec(1,3)
-    Ax1 = fig.add_subplot(gs[0,0])
-    Ax2 = fig.add_subplot(gs[0,1])
-    Ax3 = fig.add_subplot(gs[0,2])
-    Ax1.plot(data['Ephemeris'][:,0]*toRe,data['Ephemeris'][:,1]*toRe)
-    Ax2.plot(data['Ephemeris'][:,0]*toRe,data['Ephemeris'][:,2]*toRe)
-    Ax3.plot(data['Ephemeris'][:,1]*toRe,data['Ephemeris'][:,2]*toRe)
+    gs = fig.add_gridspec(1, 3)
+    Ax1 = fig.add_subplot(gs[0, 0])
+    Ax2 = fig.add_subplot(gs[0, 1])
+    Ax3 = fig.add_subplot(gs[0, 2])
+    Ax1.plot(data['Ephemeris'][:, 0] * toRe, data['Ephemeris'][:, 1] * toRe)
+    Ax2.plot(data['Ephemeris'][:, 0] * toRe, data['Ephemeris'][:, 2] * toRe)
+    Ax3.plot(data['Ephemeris'][:, 1] * toRe, data['Ephemeris'][:, 2] * toRe)
     Ax1.set_title('XY SM')
     Ax2.set_title('XZ SM')
     Ax3.set_title('YZ SM')
-    titlestr = (scId + ' - ' + data['Epoch_bin'][0].strftime('%m/%d/%Y - %H:%M:%S') + ' to ' +  
+    titlestr = (scId + ' - ' + data['Epoch_bin'][0].strftime('%m/%d/%Y - %H:%M:%S') + ' to ' +
                 data['Epoch_bin'][-1].strftime('%m/%d/%Y - %H:%M:%S'))
     fig.suptitle(titlestr)
     savePic(plotname, doClose=True)
 
 
 def get_aspect(ax):
-    """Get current aspect ratio of ax
     """
-    from operator import sub
+    Get the current aspect ratio of the given ax.
+
+    Parameters:
+    - ax: The matplotlib Axes object.
+
+    Returns:
+    - The aspect ratio of the Axes object.
+
+    """
+    
     # Total figure size
     figW, figH = ax.get_figure().get_size_inches()
     # Axis size on figure
@@ -532,6 +701,17 @@ def get_aspect(ax):
 
 
 def helio_labelStr(data, key, vecComp):
+    """
+    Returns the label for a given data key in the heliocentric coordinate system.
+
+    Parameters:
+        data (dict): A dictionary containing the data.
+        key (str): The key for which the label is needed.
+        vecComp (str): The vector component for which the label is needed.
+
+    Returns:
+        str: The label for the specified data key and vector component.
+    """
     label = (
         data['GAMHELIO_' + key].attrs['AXISLABEL'] +
         ' [' + data['GAMHELIO_' + key].attrs['UNITS'] + ']'

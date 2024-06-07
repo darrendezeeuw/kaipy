@@ -22,57 +22,98 @@ import datetime
 from spacepy.coordinates import Coords
 from spacepy.time import Ticktock
 
-def SMtoGSM(x,y,z,ut):
+def SMtoGSM(x, y, z, ut):
     """
-    >>> SMtoGSM(1,2,3, datetime.datetime(2009,1,27,0,0,0)) # doctest:+ELLIPSIS
+    Convert coordinates from Solar Magnetic (SM) system to Geocentric Solar Magnetospheric (GSM) system.
+
+    Parameters:
+    x (float): The x-coordinate in SM system.
+    y (float): The y-coordinate in SM system.
+    z (float): The z-coordinate in SM system.
+    ut (datetime.datetime): The Universal Time (UT) for the conversion.
+
+    Returns:
+    tuple: A tuple containing the x, y, and z coordinates in GSM system.
+
+    Examples:
+    >>> SMtoGSM(1, 2, 3, datetime.datetime(2009, 1, 27, 0, 0, 0))
     (-0.126..., 2.0, 3.159...)
     """
-    #Adapting code from scutils:convertGameraVec
-    fromSys  = 'SM'
+    # Adapting code from scutils:convertGameraVec
+    fromSys = 'SM'
     fromType = 'car'
-    toSys    = 'GSM'
-    toType   = 'car'
+    toSys = 'GSM'
+    toType = 'car'
 
-    invec = Coords(np.column_stack((x,y,z)),fromSys,fromType, use_irbem=False)
+    invec = Coords(np.column_stack((x, y, z)), fromSys, fromType, use_irbem=False)
     invec.ticks = Ticktock(ut)
-    outvec = invec.convert(toSys,toType)
+    outvec = invec.convert(toSys, toType)
 
-    return outvec.x[0],outvec.y[0],outvec.z[0]
+    return outvec.x[0], outvec.y[0], outvec.z[0]
 
 
-def GSMtoSM(x,y,z,ut):
+def GSMtoSM(x, y, z, ut):
     """
-    >>> GSMtoSM(1,2,3, datetime.datetime(2009,1,27,0,0,0)) # doctest:+ELLIPSIS
+    Convert coordinates from GSM (Geocentric Solar Magnetospheric) system to SM (Solar Magnetic) system.
+
+    Parameters:
+    x (float): The x-coordinate in GSM system.
+    y (float): The y-coordinate in GSM system.
+    z (float): The z-coordinate in GSM system.
+    ut (datetime.datetime): The universal time.
+
+    Returns:
+    tuple: A tuple containing the converted x, y, and z coordinates in SM system.
+
+    Examples:
+    >>> GSMtoSM(1, 2, 3, datetime.datetime(2009, 1, 27, 0, 0, 0))
     (1.997..., 2.0, 2.451...)
     """
-    #Adapting code from scutils:convertGameraVec
-    fromSys  = 'GSM'
+    # Adapting code from scutils:convertGameraVec
+    fromSys = 'GSM'
     fromType = 'car'
-    toSys    = 'SM'
-    toType   = 'car'
+    toSys = 'SM'
+    toType = 'car'
 
-    invec = Coords(np.column_stack((x,y,z)),fromSys,fromType, use_irbem=False)
+    invec = Coords(np.column_stack((x, y, z)), fromSys, fromType, use_irbem=False)
     invec.ticks = Ticktock(ut)
-    outvec = invec.convert(toSys,toType)
+    outvec = invec.convert(toSys, toType)
 
-    return outvec.x[0],outvec.y[0],outvec.z[0]
+    return outvec.x[0], outvec.y[0], outvec.z[0]
 
 
-def GSEtoGSM(x,y,z,ut):
+
+def GSEtoGSM(x, y, z, ut):
     """
-    >>> GSEtoGSM(1,2,3, datetime.datetime(2009,1,27,0,0,0)) # doctest:+ELLIPSIS
-    (0.99..., 0.540..., 3.564...)
+    Convert coordinates from GSE (Geocentric Solar Ecliptic) to GSM (Geocentric Solar Magnetospheric) system.
+
+    Args:
+        x (float): X-coordinate in GSE system.
+        y (float): Y-coordinate in GSE system.
+        z (float): Z-coordinate in GSE system.
+        ut (datetime.datetime): Universal Time (UT) for the conversion.
+
+    Returns:
+        tuple: A tuple containing the converted X, Y, and Z coordinates in GSM system.
+
+    Examples:
+        >>> GSEtoGSM(1, 2, 3, datetime.datetime(2009, 1, 27, 0, 0, 0))
+        (0.9999999999999998, 0.5403023058681398, 3.564718122410546)
+
+    Note:
+        This function adapts code from scutils:convertGameraVec.
     """
-    #Adapting code from scutils:convertGameraVec
-    fromSys  = 'GSE'
+    # Adapting code from scutils:convertGameraVec
+    fromSys = 'GSE'
     fromType = 'car'
-    toSys    = 'GSM'
-    toType   = 'car'
+    toSys = 'GSM'
+    toType = 'car'
 
-    invec = Coords(np.column_stack((x,y,z)),fromSys,fromType, use_irbem=False)
+    invec = Coords(np.column_stack((x, y, z)), fromSys, fromType, use_irbem=False)
     invec.ticks = Ticktock(ut)
-    outvec = invec.convert(toSys,toType)
+    outvec = invec.convert(toSys, toType)
 
-    return outvec.x[0],outvec.y[0],outvec.z[0]
+    return outvec.x[0], outvec.y[0], outvec.z[0]
+
 
 
