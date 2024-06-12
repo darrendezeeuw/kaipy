@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>kaiTools module &mdash; Kaipy 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="kaiViz module" href="kaiViz.html" />
+    <link rel="prev" title="kaiH5 module" href="kaiH5.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Kaipy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">kaipy</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cdaweb_utils.html">cdaweb_utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chimp.html">chimp package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embiggenUtils.html">embiggenUtils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gamera.html">gamera package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gamhelio.html">gamhelio package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kJobs.html">kJobs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kaiH5.html">kaiH5 module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">kaiTools module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#kaiTools.GetSymH"><code class="docutils literal notranslate"><span class="pre">GetSymH()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiTools.L_to_bVol"><code class="docutils literal notranslate"><span class="pre">L_to_bVol()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiTools.MJD2UT"><code class="docutils literal notranslate"><span class="pre">MJD2UT()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiTools.burtonDst"><code class="docutils literal notranslate"><span class="pre">burtonDst()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiTools.getRunInfo"><code class="docutils literal notranslate"><span class="pre">getRunInfo()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiTools.interpTSC"><code class="docutils literal notranslate"><span class="pre">interpTSC()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiTools.interpTSCWeights"><code class="docutils literal notranslate"><span class="pre">interpTSCWeights()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiTools.newellcoupling"><code class="docutils literal notranslate"><span class="pre">newellcoupling()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiTools.newellkp"><code class="docutils literal notranslate"><span class="pre">newellkp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiTools.to_center1D"><code class="docutils literal notranslate"><span class="pre">to_center1D()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiTools.to_center2D"><code class="docutils literal notranslate"><span class="pre">to_center2D()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiTools.to_center3D"><code class="docutils literal notranslate"><span class="pre">to_center3D()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiTools.xyz2rtp"><code class="docutils literal notranslate"><span class="pre">xyz2rtp()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="kaiViz.html">kaiViz module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kaijson.html">kaijson module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kaixdmf.html">kaixdmf module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kdefs.html">kdefs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lfm2kaiju.html">lfm2kaiju module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paraview.html">paraview package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rcm.html">rcm package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="remix.html">remix package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solarWind.html">solarWind package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supermag_api.html">supermag_api module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supermage.html">supermage module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">transform module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Kaipy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">kaipy</a></li>
+      <li class="breadcrumb-item active">kaiTools module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/kaiTools.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-kaiTools">
+<span id="kaitools-module"></span><h1>kaiTools module<a class="headerlink" href="#module-kaiTools" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiTools.GetSymH">
+<span class="sig-prename descclassname"><span class="pre">kaiTools.</span></span><span class="sig-name descname"><span class="pre">GetSymH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fBC</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiTools.GetSymH" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve symh data from an HDF5 file.</p>
+<p>Parameters:
+- fBC (str): The path to the HDF5 file.</p>
+<p>Returns:
+- utData (numpy.ndarray): Array of UT data.
+- tData (numpy.ndarray): Array of T data.
+- dstData (numpy.ndarray): Array of symh data.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiTools.L_to_bVol">
+<span class="sig-prename descclassname"><span class="pre">kaiTools.</span></span><span class="sig-name descname"><span class="pre">L_to_bVol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bsurf_nT</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">29617.37</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiTools.L_to_bVol" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the flux tube volume [Rp/nT] from the given L shell [Rp].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>L</strong> (<em>float</em>) – L shell [Rp].</p></li>
+<li><p><strong>bsurf_nT</strong> (<em>float</em><em>, </em><em>optional</em>) – Surface field [nT]. Default is Earth’s surface field.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flux tube volume [Rp/nT].</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiTools.MJD2UT">
+<span class="sig-prename descclassname"><span class="pre">kaiTools.</span></span><span class="sig-name descname"><span class="pre">MJD2UT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mjd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiTools.MJD2UT" title="Permalink to this definition"></a></dt>
+<dd><p>Convert Modified Julian Date (MJD) to Coordinated Universal Time (UTC).</p>
+<p>Parameters:
+- mjd: A single value or a list of MJD values.</p>
+<p>Returns:
+- If given a single value, returns a single datetime.datetime object representing the corresponding UTC time.
+- If given a list of values, returns a list of datetime.datetime objects representing the corresponding UTC times.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiTools.burtonDst">
+<span class="sig-prename descclassname"><span class="pre">kaiTools.</span></span><span class="sig-name descname"><span class="pre">burtonDst</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bz</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiTools.burtonDst" title="Permalink to this definition"></a></dt>
+<dd><p>Given time in seconds, density in cm^-3, velocity in km/s and magnetic field in nT,
+this function will return Dst computed from the Burton 1975
+(doi: 10.1029/ja080i031p04204) model.</p>
+<p>Parameters:
+- secs (array-like): Time in seconds.
+- n (array-like): Density in cm^-3.
+- vx (array-like): Velocity in km/s (x-component).
+- vy (array-like): Velocity in km/s (y-component).
+- vz (array-like): Velocity in km/s (z-component).
+- bx (array-like): Magnetic field in nT (x-component).
+- by (array-like): Magnetic field in nT (y-component).
+- bz (array-like): Magnetic field in nT (z-component).</p>
+<p>Returns:
+- dst (array-like): Dst values computed from the Burton 1975 model.</p>
+<p>Note:
+- The input arrays should have the same length.</p>
+<p>References:
+- Burton, R. K., et al. (1975). “The Dst index: A measure of geomagnetic activity.” Journal of Geophysical Research, 80(31), 4204-4214. doi: 10.1029/ja080i031p04204</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiTools.getRunInfo">
+<span class="sig-prename descclassname"><span class="pre">kaiTools.</span></span><span class="sig-name descname"><span class="pre">getRunInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ftag</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiTools.getRunInfo" title="Permalink to this definition"></a></dt>
+<dd><p>Get information about the run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fdir</strong> (<em>str</em>) – The directory where the files are located.</p></li>
+<li><p><strong>ftag</strong> (<em>str</em>) – The file tag.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the file name, isMPI flag, Ri, Rj, and Rk values.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If more than one parallel file is found or no MPI database is found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiTools.interpTSC">
+<span class="sig-prename descclassname"><span class="pre">kaiTools.</span></span><span class="sig-name descname"><span class="pre">interpTSC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gridX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiTools.interpTSC" title="Permalink to this definition"></a></dt>
+<dd><p>gridX/gridY: 3-element x &amp; y grid vals (center value is closest grid point to desired interpolation point)
+x: dim1 of point of interest
+y: dim2 of point of interest
+var: 3x3 values of desired variable</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiTools.interpTSCWeights">
+<span class="sig-prename descclassname"><span class="pre">kaiTools.</span></span><span class="sig-name descname"><span class="pre">interpTSCWeights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gridX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiTools.interpTSCWeights" title="Permalink to this definition"></a></dt>
+<dd><p>Interpolates the weights for a 2D point of interest using a 3x3 grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gridX</strong> (<em>list</em>) – A list of 3 x-coordinates of the grid points.</p></li>
+<li><p><strong>gridY</strong> (<em>list</em>) – A list of 3 y-coordinates of the grid points.</p></li>
+<li><p><strong>x</strong> (<em>float</em>) – The x-coordinate of the point of interest.</p></li>
+<li><p><strong>y</strong> (<em>float</em>) – The y-coordinate of the point of interest.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A 3x3 array of weights for the point of interest.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiTools.newellcoupling">
+<span class="sig-prename descclassname"><span class="pre">kaiTools.</span></span><span class="sig-name descname"><span class="pre">newellcoupling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bz</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiTools.newellcoupling" title="Permalink to this definition"></a></dt>
+<dd><p>Given density in cm^-3, velocity in km/s, and magnetic field in nT,
+this function returns the Universal Coupling Function computed from the
+Newell 2007 (doi: 10.1029/2006ja012015).</p>
+<p>Parameters:
+- vx (float): X-component of velocity in km/s.
+- vy (float): Y-component of velocity in km/s.
+- vz (float): Z-component of velocity in km/s.
+- bx (float): X-component of magnetic field in nT.
+- by (float): Y-component of magnetic field in nT.
+- bz (float): Z-component of magnetic field in nT.</p>
+<p>Returns:
+- newcoup (float): The computed Universal Coupling Function.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiTools.newellkp">
+<span class="sig-prename descclassname"><span class="pre">kaiTools.</span></span><span class="sig-name descname"><span class="pre">newellkp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bz</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiTools.newellkp" title="Permalink to this definition"></a></dt>
+<dd><p>Given time in seconds, density in cm^-3, velocity in km/s, and magnetic field in nT,
+this function will return Kp computed from the Newell 2008 (doi: 10.1029/2007ja012825).</p>
+<p>Parameters:
+- secs (array-like): Time in seconds.
+- n (array-like): Density in cm^-3.
+- vx (array-like): Velocity in km/s (x-component).
+- vy (array-like): Velocity in km/s (y-component).
+- vz (array-like): Velocity in km/s (z-component).
+- bx (array-like): Magnetic field in nT (x-component).
+- by (array-like): Magnetic field in nT (y-component).
+- bz (array-like): Magnetic field in nT (z-component).</p>
+<p>Returns:
+- conextendkp (array-like): Kp values computed from the Newell 2008 model.</p>
+<p>Notes:
+- Kp is a three-hour index, so the function computes a three-hour rolling average using convolution</p>
+<blockquote>
+<div><p>with the first and last value extended.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiTools.to_center1D">
+<span class="sig-prename descclassname"><span class="pre">kaiTools.</span></span><span class="sig-name descname"><span class="pre">to_center1D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiTools.to_center1D" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiTools.to_center2D">
+<span class="sig-prename descclassname"><span class="pre">kaiTools.</span></span><span class="sig-name descname"><span class="pre">to_center2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiTools.to_center2D" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiTools.to_center3D">
+<span class="sig-prename descclassname"><span class="pre">kaiTools.</span></span><span class="sig-name descname"><span class="pre">to_center3D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiTools.to_center3D" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiTools.xyz2rtp">
+<span class="sig-prename descclassname"><span class="pre">kaiTools.</span></span><span class="sig-name descname"><span class="pre">xyz2rtp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ay</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Az</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiTools.xyz2rtp" title="Permalink to this definition"></a></dt>
+<dd><p>Convert Cartesian coordinates (Ax, Ay, Az) to spherical coordinates (r, theta, phi).</p>
+<p>Parameters:
+phi (float): The azimuthal angle in radians.
+theta (float): The polar angle in radians.
+Ax (float): The x-coordinate in Cartesian coordinates.
+Ay (float): The y-coordinate in Cartesian coordinates.
+Az (float): The z-coordinate in Cartesian coordinates.</p>
+<p>Returns:
+Ar (float): The radial component in spherical coordinates.
+At (float): The azimuthal component in spherical coordinates.
+Ap (float): The polar component in spherical coordinates.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="kaiH5.html" class="btn btn-neutral float-left" title="kaiH5 module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="kaiViz.html" class="btn btn-neutral float-right" title="kaiViz module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Center for Geospace Storms.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
