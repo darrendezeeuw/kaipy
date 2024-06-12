@@ -88,19 +88,17 @@ def SetAx(xyBds=[-1, 1, -1, 1], ax=None, Adj='box'):
     Ensure that the plot has an equal aspect ratio and that the axis limits
     are set to the specified values.
 
-    Parameters
-    ----------
-    xyBds : list of 4 float, optional, default [-1, 1, -1, 1]
-        Axis limits for x and y as (xmin, xmax, ymin, ymax).
-    ax: matplotlib.Axes, optional, default None
-        Axes object to modify.
-    Adj: str, optional, default 'box
-        Specify what aspect of the plot to adjust to achieve equal aspect
-        ratio.
+    Parameters:
+        xyBds : list of 4 float, optional, default [-1, 1, -1, 1]
+            Axis limits for x and y as (xmin, xmax, ymin, ymax).
+        ax: matplotlib.Axes, optional, default None
+            Axes object to modify.
+        Adj: str, optional, default 'box
+            Specify what aspect of the plot to adjust to achieve equal aspect
+            ratio.
 
-    Returns
-    -------
-    None
+    Returns:
+        None
     """
     # If no Axes object is specified, fetch the current Axes object.
     if ax is None:
@@ -122,19 +120,17 @@ def SetAxLabs(Ax, xLab, yLab, doBot=True, doLeft=True, fs="medium"):
     Ensure that the plot has an equal aspect ratio and that the axis limits
     are set to the specified values.
 
-    Parameters
-    ----------
-    xyBds : list of 4 float, optional, default [-1, 1, -1, 1]
-        Axis limits for x and y as (xmin, xmax, ymin, ymax).
-    ax: matplotlib.Axes, optional, default None
-        Axes object to modify.
-    Adj: str, optional, default 'box
-        Specify what aspect of the plot to adjust to achieve equal aspect
-        ratio.
+    Parameters:
+        xyBds : list of 4 float, optional, default [-1, 1, -1, 1]
+            Axis limits for x and y as (xmin, xmax, ymin, ymax).
+        ax: matplotlib.Axes, optional, default None
+            Axes object to modify.
+        Adj: str, optional, default 'box
+            Specify what aspect of the plot to adjust to achieve equal aspect
+            ratio.
 
-    Returns
-    -------
-    None
+    Returns:
+        None
     """
     # """Set the x and y axis labels for a given matplotlib Axes object.
 
@@ -176,11 +172,11 @@ def SetAxDate(Ax, fmt='%H:%M \n%Y-%m-%d'):
     """Set the x-axis of the given Axes object to display dates.
 
     Parameters:
-    - Ax: The Axes object to set the x-axis date format for.
-    - fmt: The date format string to use. Defaults to '%H:%M \n%Y-%m-%d'.
+        Ax: The Axes object to set the x-axis date format for.
+        fmt: The date format string to use. Defaults to '%H:%M%Y-%m-%d'.
 
     Returns:
-    None
+        None
     """
     Ax.xaxis_date()
     Ax.xaxis.set_major_formatter(mpl.dates.DateFormatter(fmt))
@@ -191,13 +187,12 @@ def addEarth2D(Re=1, angle=-90, ax=None):
     Adds a 2D representation of Earth to the given matplotlib axes.
 
     Parameters:
-    - Re (float): Radius of the Earth. Default is 1.
-    - angle (float): Angle at which the Earth is rotated. Default is -90.
-    - ax (matplotlib.axes.Axes): The axes to which the Earth will be added. If None, the current axes will be used.
+        Re (float): Radius of the Earth. Default is 1.
+        angle (float): Angle at which the Earth is rotated. Default is -90.
+        ax (matplotlib.axes.Axes): The axes to which the Earth will be added. If None, the current axes will be used.
 
     Returns:
-    - list: A list containing the two Wedge objects representing the Earth.
-
+        list: A list containing the two Wedge objects representing the Earth.
     """
     
 
@@ -219,11 +214,11 @@ def DrawCut(Rin=2.5, ax=None):
     Draw a cut using matplotlib.patches.Wedge.
 
     Parameters:
-    Rin (float): The inner radius of the cut. Default is 2.5.
-    ax (matplotlib.axes.Axes, optional): The axes on which to draw the cut. If not provided, the current axes will be used.
+        Rin (float): The inner radius of the cut. Default is 2.5.
+        ax (matplotlib.axes.Axes, optional): The axes on which to draw the cut. If not provided, the current axes will be used.
 
     Returns:
-    matplotlib.patches.Wedge: The created Wedge object representing the cut.
+        matplotlib.patches.Wedge: The created Wedge object representing the cut.
     """
     
     if ax is None:
@@ -239,10 +234,10 @@ def reWrap(V):
     Re-wraps a 2D array by adding an extra column at the end, where the values in the new column are the same as the values in the first column.
 
     Parameters:
-    V (numpy.ndarray): The input 2D array.
+        V (numpy.ndarray): The input 2D array.
 
     Returns:
-    numpy.ndarray: The re-wrapped 2D array with an extra column.
+        numpy.ndarray: The re-wrapped 2D array with an extra column.
     """
     Ni, Nj = V.shape
     Vp = np.zeros((Ni, Nj+1))
@@ -257,16 +252,16 @@ def savePic(fOut, dpiQ=300, doTrim=True, bLenX=20, bLenY=None, doClose=False, do
     Save a matplotlib figure to a file.
 
     Parameters:
-    - fOut (str): The output file path.
-    - dpiQ (int): The resolution of the saved figure in dots per inch (default: 300).
-    - doTrim (bool): Whether to trim the saved figure (default: True).
-    - bLenX (int): The length of the x-axis trim boundary (default: 20).
-    - bLenY (int): The length of the y-axis trim boundary (default: None).
-    - doClose (bool): Whether to close all figures after saving (default: False).
-    - doEps (bool): Whether to save the figure in EPS format (default: False).
+        fOut (str): The output file path.
+        dpiQ (int): The resolution of the saved figure in dots per inch (default: 300).
+        doTrim (bool): Whether to trim the saved figure (default: True).
+        bLenX (int): The length of the x-axis trim boundary (default: 20).
+        bLenY (int): The length of the y-axis trim boundary (default: None).
+        doClose (bool): Whether to close all figures after saving (default: False).
+        doEps (bool): Whether to save the figure in EPS format (default: False).
 
     Returns:
-    - Image File saved to disk.
+        Image File saved to disk.
     """
     if doEps:
         plt.savefig(fOut, dpi=dpiQ, format='eps')
@@ -286,13 +281,13 @@ def trimFig(fName, bLenX=20, bLenY=None, doEven=True):
     Trims the figure image file by removing the borders and resizing it to have even dimensions.
 
     Parameters:
-    - fName (str): The file name of the figure image.
-    - bLenX (int): The length of the border to be added on the X-axis. Default is 20.
-    - bLenY (int): The length of the border to be added on the Y-axis. If not provided, it will be set to bLenX.
-    - doEven (bool): Flag indicating whether to resize the image to have even dimensions. Default is True.
+        fName (str): The file name of the figure image.
+        bLenX (int): The length of the border to be added on the X-axis. Default is 20.
+        bLenY (int): The length of the border to be added on the Y-axis. If not provided, it will be set to bLenX.
+        doEven (bool): Flag indicating whether to resize the image to have even dimensions. Default is True.
 
     Returns:
-    - Image file saved to disk.
+        Image file saved to disk.
     """
 
 
@@ -324,10 +319,10 @@ def picSz(fName):
     Get the size of an image.
 
     Parameters:
-    fName (str): The file path of the image.
+        fName (str): The file path of the image.
 
     Returns:
-    tuple: A tuple containing the width and height of the image.
+        tuple: A tuple containing the width and height of the image.
     """
 
     
@@ -340,10 +335,10 @@ def ShaveX(fName):
     ShaveX function crops an image file by removing one pixel from the right side.
 
     Parameters:
-    - fName (str): The file name of the image to be cropped.
+        fName (str): The file name of the image to be cropped.
 
     Returns:
-    - fName file is cropped by one pixel on the right side.
+        fName file is cropped by one pixel on the right side.
     """
     ComS = 'convert -crop -1+0 +repage ' + fName + ' ' + fName
     os.system(ComS)
@@ -368,25 +363,20 @@ class MidpointNormalize(Normalize):
     Custom normalization class that maps values to the range [0, 1] with a specified midpoint.
 
     Parameters:
-    - vmin: float, optional
-        The minimum value of the input range. If not provided, the minimum value of the input data will be used.
-    - vmax: float, optional
-        The maximum value of the input range. If not provided, the maximum value of the input data will be used.
-    - midpoint: float, optional
-        The midpoint value that will be mapped to 0.5 in the output range. If not provided, the average of vmin and vmax will be used.
-    - clip: bool, default False
-        If True, values outside the range [vmin, vmax] will be clipped to vmin or vmax.
+        vmin (float, optional): The minimum value of the input range. If not provided, the minimum value of the input data will be used.
+        vmax: (float, optional): The maximum value of the input range. If not provided, the maximum value of the input data will be used.
+        midpoint (float, optional): The midpoint value that will be mapped to 0.5 in the output range. If not provided, the average of vmin and vmax will be used.
+        clip (bool, default False): If True, values outside the range [vmin, vmax] will be clipped to vmin or vmax.
 
     Returns:
-    - normalized_value: numpy.ma.masked_array
-        The normalized value(s) within the range [0, 1].
+        normalized_value (numpy.ma.masked_array): The normalized value(s) within the range [0, 1].
 
     Example usage:
-    ```
-    norm = MidpointNormalize(vmin=0, vmax=10, midpoint=5)
-    normalized_value = norm(7)
-    print(normalized_value)  # Output: 0.7
-    ```
+        ```
+        norm = MidpointNormalize(vmin=0, vmax=10, midpoint=5)
+        normalized_value = norm(7)
+        print(normalized_value)  # Output: 0.7
+        ```
     """
 
     def __init__(self, vmin=None, vmax=None, midpoint=None, clip=False):
@@ -405,22 +395,22 @@ def genNorm(vMin, vMax=None, doLog=False, doSymLog=False, midP=None, linP=1.0):
     Generate a matplotlib color normalization object based on the given parameters.
 
     Parameters:
-    - vMin: float, the minimum value of the data range
-    - vMax: float, optional, the maximum value of the data range (default: None)
-    - doLog: bool, optional, whether to use logarithmic normalization (default: False)
-    - doSymLog: bool, optional, whether to use symmetric logarithmic normalization (default: False)
-    - midP: float, optional, the midpoint value for midpoint normalization (default: None)
-    - linP: float, optional, the linear threshold for symmetric logarithmic normalization (default: 1.0)
+        vMin (float): the minimum value of the data range
+        vMax (float): optional, the maximum value of the data range (default: None)
+        doLog (bool, optional): whether to use logarithmic normalization (default: False)
+        doSymLog (bool, optional): whether to use symmetric logarithmic normalization (default: False)
+        midP (float, optional): the midpoint value for midpoint normalization (default: None)
+        linP (float, optional): the linear threshold for symmetric logarithmic normalization (default: 1.0)
 
     Returns:
-    - vN: matplotlib.colors.Normalize, the color normalization object
+        vN (matplotlib.colors.Normalize): the color normalization object
 
     Note:
-    - If vMax is not provided, the absolute value of vMin is used as both vMin and vMax.
-    - If midP is not provided, midpoint normalization is not used.
-    - If doLog is True, logarithmic normalization is used.
-    - If doSymLog is True, symmetric logarithmic normalization is used.
-    - If none of the above conditions are met, linear normalization is used.
+        If vMax is not provided, the absolute value of vMin is used as both vMin and vMax.
+        If midP is not provided, midpoint normalization is not used.
+        If doLog is True, logarithmic normalization is used.
+        If doSymLog is True, symmetric logarithmic normalization is used.
+        If none of the above conditions are met, linear normalization is used.
     """
 
 
@@ -451,24 +441,16 @@ def genCB(AxCB, vN, cbT="Title", cM="viridis", doVert=False, cbSz="medium", Ntk=
     Generate a colorbar using matplotlib.
 
     Parameters:
-    - AxCB: Axes object
-        The axes object where the colorbar will be drawn.
-    - vN: Normalize object
-        The normalization object used to map data values to colors.
-    - cbT: str, optional
-        The title of the colorbar. Default is "Title".
-    - cM: str, optional
-        The name of the colormap to use. Default is "viridis".
-    - doVert: bool, optional
-        Whether to display the colorbar vertically. Default is False.
-    - cbSz: str, optional
-        The size of the colorbar labels and title. Default is "medium".
-    - Ntk: int, optional
-        The number of ticks to display on the colorbar. Default is None.
+        AxCB (Axes object): The axes object where the colorbar will be drawn.
+        vN (Normalize object): The normalization object used to map data values to colors.
+        cbT (str, optional): The title of the colorbar. Default is "Title".
+        cM (str, optional): The name of the colormap to use. Default is "viridis".
+        doVert (bool, optional): Whether to display the colorbar vertically. Default is False.
+        cbSz (str, optional): The size of the colorbar labels and title. Default is "medium".
+        Ntk (int, optional): The number of ticks to display on the colorbar. Default is None.
 
     Returns:
-    - cb: Colorbar object
-        The generated colorbar object.
+        cb (Colorbar object): The generated colorbar object.
 
     """
     
@@ -582,12 +564,12 @@ def compPlot(plotname, scId, data):
     Generate a composite plot with multiple subplots based on the given data.
 
     Parameters:
-    - plotname (str): The title of the composite plot.
-    - scId (str): The identifier for the subplot legend.
-    - data (dict): A dictionary containing the data to be plotted.
+        plotname (str): The title of the composite plot.
+        scId (str): The identifier for the subplot legend.
+        data (dict): A dictionary containing the data to be plotted.
 
     Returns:
-    - Image file saved to disk.
+        Image file saved to disk.
 
     """
     numPlots = 0
@@ -663,13 +645,13 @@ def trajPlot(plotname, scId, data, toRe):
     Plot the trajectory of a spacecraft.
 
     Parameters:
-    - plotname (str): The name of the plot.
-    - scId (str): The spacecraft ID.
-    - data (dict): A dictionary containing the spacecraft's ephemeris data.
-    - toRe (float): The conversion factor from meters to Re (Earth radii).
+        lotname (str): The name of the plot.
+        scId (str): The spacecraft ID.
+        data (dict): A dictionary containing the spacecraft's ephemeris data.
+        toRe (float): The conversion factor from meters to Re (Earth radii).
 
     Returns:
-    - Image file saved to disk.
+        Image file saved to disk.
     """
     figsize = (15, 5)
     # Create the figure in-memory.
@@ -696,10 +678,10 @@ def get_aspect(ax):
     Get the current aspect ratio of the given ax.
 
     Parameters:
-    - ax: The matplotlib Axes object.
+        ax: The matplotlib Axes object.
 
     Returns:
-    - The aspect ratio of the Axes object.
+        The aspect ratio of the Axes object.
 
     """
     
@@ -744,24 +726,16 @@ def helioItemPlot_new(Ax, sc_id, data, key, plotNum, numPlots, show_zero=False):
 
     Plot a single variable for the comparison plot.
 
-    Parameters
-    ----------
-    Ax: matplotlib.axes._subplots.AxesSubplot
-        Matplotlib axis for plot.
-    data: spacepy.datamodel.SpaceData
-        Object containing the measured spacecraft data.
-    key: str
-        Name of variable to plot.
-    plotNum: int
-        Position of plot in sequence of plots.
-    numPlots: int
-        Number of plots in sequence.
-    show_zero ": bool, default False
-        Set to True to show a black dashed line at the 0 level for the variable.
+    Parameters: 
+        Ax (matplotlib.axes._subplots.AxesSubplot): Matplotlib axis for plot.
+        data (spacepy.datamodel.SpaceData): Object containing the measured spacecraft data.
+        key (str): Name of variable to plot.
+        plotNum (int): Position of plot in sequence of plots.
+        numPlots (int): Number of plots in sequence.
+        show_zero (bool, default False): Set to True to show a black dashed line at the 0 level for the variable.
 
-    Returns
-    -------
-    None
+    Returns:
+        None
     """
     # Extract the times and values which fall within the gamhelio simulation
     # domain.

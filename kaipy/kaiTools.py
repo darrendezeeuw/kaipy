@@ -49,11 +49,11 @@ def MJD2UT(mjd):
 	Convert Modified Julian Date (MJD) to Coordinated Universal Time (UTC).
 
 	Parameters:
-	- mjd: A single value or a list of MJD values.
+		mjd: A single value or a list of MJD values.
 
 	Returns:
-	- If given a single value, returns a single datetime.datetime object representing the corresponding UTC time.
-	- If given a list of values, returns a list of datetime.datetime objects representing the corresponding UTC times.
+		If given a single value, returns a single datetime.datetime object representing the corresponding UTC time.
+		If given a list of values, returns a list of datetime.datetime objects representing the corresponding UTC times.
 	"""
 
 	UT = Time(mjd, format='mjd').isot
@@ -111,16 +111,16 @@ def xyz2rtp(phi, theta, Ax, Ay, Az):
 	Convert Cartesian coordinates (Ax, Ay, Az) to spherical coordinates (r, theta, phi).
 
 	Parameters:
-	phi (float): The azimuthal angle in radians.
-	theta (float): The polar angle in radians.
-	Ax (float): The x-coordinate in Cartesian coordinates.
-	Ay (float): The y-coordinate in Cartesian coordinates.
-	Az (float): The z-coordinate in Cartesian coordinates.
+		phi (float): The azimuthal angle in radians.
+		theta (float): The polar angle in radians.
+		Ax (float): The x-coordinate in Cartesian coordinates.
+		Ay (float): The y-coordinate in Cartesian coordinates.
+		Az (float): The z-coordinate in Cartesian coordinates.
 
 	Returns:
-	Ar (float): The radial component in spherical coordinates.
-	At (float): The azimuthal component in spherical coordinates.
-	Ap (float): The polar component in spherical coordinates.
+		Ar (float): The radial component in spherical coordinates.
+		At (float): The azimuthal component in spherical coordinates.
+		Ap (float): The polar component in spherical coordinates.
 	"""
 	Ar = Ax * np.cos(phi) * np.sin(theta) + Ay * np.sin(phi) * np.sin(theta) + Az * np.cos(theta)
 	Ap = -Ax * np.sin(phi) + Ay * np.cos(phi)
@@ -135,23 +135,23 @@ def burtonDst(secs, n, vx, vy, vz, bx, by, bz):
 	(doi: 10.1029/ja080i031p04204) model.
 
 	Parameters:
-	- secs (array-like): Time in seconds.
-	- n (array-like): Density in cm^-3.
-	- vx (array-like): Velocity in km/s (x-component).
-	- vy (array-like): Velocity in km/s (y-component).
-	- vz (array-like): Velocity in km/s (z-component).
-	- bx (array-like): Magnetic field in nT (x-component).
-	- by (array-like): Magnetic field in nT (y-component).
-	- bz (array-like): Magnetic field in nT (z-component).
+		secs (array-like): Time in seconds.
+		n (array-like): Density in cm^-3.
+		vx (array-like): Velocity in km/s (x-component).
+		vy (array-like): Velocity in km/s (y-component).
+		vz (array-like): Velocity in km/s (z-component).
+		bx (array-like): Magnetic field in nT (x-component).
+		by (array-like): Magnetic field in nT (y-component).
+		bz (array-like): Magnetic field in nT (z-component).
 
 	Returns:
-	- dst (array-like): Dst values computed from the Burton 1975 model.
+		dst (array-like): Dst values computed from the Burton 1975 model.
 
 	Note:
-	- The input arrays should have the same length.
+		The input arrays should have the same length.
 
 	References:
-	- Burton, R. K., et al. (1975). "The Dst index: A measure of geomagnetic activity." Journal of Geophysical Research, 80(31), 4204-4214. doi: 10.1029/ja080i031p04204
+		Burton, R. K., et al. (1975). "The Dst index: A measure of geomagnetic activity." Journal of Geophysical Research, 80(31), 4204-4214. doi: 10.1029/ja080i031p04204
 	"""
 	v = np.sqrt(vx**2 + vy**2 + vz**2)
 	b = np.sqrt(bx**2 + by**2 + bz**2)
@@ -175,20 +175,20 @@ def newellkp(secs, n, vx, vy, vz, bx, by, bz):
 		this function will return Kp computed from the Newell 2008 (doi: 10.1029/2007ja012825).
 
 		Parameters:
-		- secs (array-like): Time in seconds.
-		- n (array-like): Density in cm^-3.
-		- vx (array-like): Velocity in km/s (x-component).
-		- vy (array-like): Velocity in km/s (y-component).
-		- vz (array-like): Velocity in km/s (z-component).
-		- bx (array-like): Magnetic field in nT (x-component).
-		- by (array-like): Magnetic field in nT (y-component).
-		- bz (array-like): Magnetic field in nT (z-component).
+			secs (array-like): Time in seconds.
+			n (array-like): Density in cm^-3.
+			vx (array-like): Velocity in km/s (x-component).
+			vy (array-like): Velocity in km/s (y-component).
+			vz (array-like): Velocity in km/s (z-component).
+			bx (array-like): Magnetic field in nT (x-component).
+			by (array-like): Magnetic field in nT (y-component).
+			bz (array-like): Magnetic field in nT (z-component).
 
 		Returns:
-		- conextendkp (array-like): Kp values computed from the Newell 2008 model.
+			conextendkp (array-like): Kp values computed from the Newell 2008 model.
 
 		Notes:
-		- Kp is a three-hour index, so the function computes a three-hour rolling average using convolution
+			Kp is a three-hour index, so the function computes a three-hour rolling average using convolution
 			with the first and last value extended.
 		"""
 		v = np.sqrt(vx**2 + vy**2 + vz**2)
@@ -211,16 +211,15 @@ def newellcoupling(vx, vy, vz, bx, by, bz):
 	Newell 2007 (doi: 10.1029/2006ja012015).
 
 	Parameters:
-	- vx (float): X-component of velocity in km/s.
-	- vy (float): Y-component of velocity in km/s.
-	- vz (float): Z-component of velocity in km/s.
-	- bx (float): X-component of magnetic field in nT.
-	- by (float): Y-component of magnetic field in nT.
-	- bz (float): Z-component of magnetic field in nT.
+		vx (float): X-component of velocity in km/s.
+		vy (float): Y-component of velocity in km/s.
+		vz (float): Z-component of velocity in km/s.
+		bx (float): X-component of magnetic field in nT.
+		by (float): Y-component of magnetic field in nT.
+		bz (float): Z-component of magnetic field in nT.
 
 	Returns:
-	- newcoup (float): The computed Universal Coupling Function.
-
+		newcoup (float): The computed Universal Coupling Function.
 	"""
 	v = np.sqrt(vx**2 + vy**2 + vz**2)
 	b = np.sqrt(bx**2 + by**2 + bz**2)
@@ -234,12 +233,12 @@ def GetSymH(fBC):
 	Retrieve symh data from an HDF5 file.
 
 	Parameters:
-	- fBC (str): The path to the HDF5 file.
+		fBC (str): The path to the HDF5 file.
 
 	Returns:
-	- utData (numpy.ndarray): Array of UT data.
-	- tData (numpy.ndarray): Array of T data.
-	- dstData (numpy.ndarray): Array of symh data.
+		utData (numpy.ndarray): Array of UT data.
+		tData (numpy.ndarray): Array of T data.
+		dstData (numpy.ndarray): Array of symh data.
 	"""
 	mjdData = kH5.PullVar(fBC, 'MJD')
 	tData = kH5.PullVar(fBC, 'T')
@@ -270,7 +269,10 @@ def interpTSC(gridX, gridY, x, y, var):
 
 	return result
 def interpTSC(gridX, gridY, x, y, var):
-	""" gridX/gridY: 3-element x & y grid vals (center value is closest grid point to desired interpolation point)
+	""" Conducts a Triangular Shaped Cloud (TSC) interpolation of a 2D variable.
+	
+	Paramters:
+		gridX/gridY: 3-element x & y grid vals (center value is closest grid point to desired interpolation point)
 		x: dim1 of point of interest
 		y: dim2 of point of interest
 		var: 3x3 values of desired variable

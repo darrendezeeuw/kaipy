@@ -1,16 +1,3 @@
-"""Simple utilitiles for fetching data from CDAWeb.
-
-This module provides utility functions which perform simple queries to CDAWeb.
-
-This module currently support all of the spacecraft that are described in
-the YAML file used by the satellite comparison script msphSatComp.py.
-
-Author
-------
-Eric Winter (eric.winter62@gmail.com)
-"""
-
-
 # Import standard modules.
 import datetime
 import os
@@ -30,6 +17,17 @@ from sunpy.coordinates import frames
 import kaipy.kaiTools as kaiTools
 import kaipy.satcomp.scutils as scutils
 
+# """Simple utilitiles for fetching data from CDAWeb.
+
+# This module provides utility functions which perform simple queries to CDAWeb.
+
+# This module currently support all of the spacecraft that are described in
+# the YAML file used by the satellite comparison script msphSatComp.py.
+
+# Author
+# ------
+# Eric Winter (eric.winter62@gmail.com)
+# """
 
 # Program constants
 
@@ -44,18 +42,12 @@ def fetch_satellite_geographic_position(spacecraft, when):
     Data is fetched from CDAWeb. The first returned position is assumed to
     correspond to the requested value of "when".
 
-    Parameters
-    ----------
-    spacecraft : str
-        CDAWeb-compliant spacecraft ID.
-    when : datetime.datetime
-        datetime for position fetch.
+    Args:
+        spacecraft (str): CDAWeb-compliant spacecraft ID.
+        when (datetime.datetime): datetime for position fetch.
 
-    Returns
-    -------
-    sc_rad, sc_lat, sc_lon : float
-        Geographic longitude and latitude of spacecraft (degrees) and
-        radius (km).
+    Returns:
+        Tuple[float, float, float]: Geographic longitude and latitude of spacecraft (degrees) and radius (km).
     """
     # Read the CDAWeb spacecraft database.
     sc_info = scutils.getScIds()
@@ -115,23 +107,18 @@ def fetch_satellite_geographic_position(spacecraft, when):
 
 
 def fetch_satellite_SM_position(spacecraft, when):
-    """Fetch the Solar Magnetic position of a satellite at a specified time.
+    """Fetches the Solar Magnetic position of a satellite at a specified time.
 
-    Fetch the Solar Magnetic position of a satellite at a specified time, in
+    Fetches the Solar Magnetic position of a satellite at a specified time, in
     SM cartesian coordinates. Data is fetched from CDAWeb. The first returned
     position is assumed to correspond to the requested value of "when".
 
-    Parameters
-    ----------
-    spacecraft : str
-        CDAWeb-compliant spacecraft ID.
-    when : datetime.datetime
-        datetime for position fetch.
+    Args:
+        spacecraft (str): CDAWeb-compliant spacecraft ID.
+        when (datetime.datetime): datetime for position fetch.
 
-    Returns
-    -------
-    sc_x, sc_y, sc_z : float
-        Cartesian SM coordinates of spacecraft (units of kilometers).
+    Returns:
+        Tuple[float, float, float]: Cartesian SM coordinates of spacecraft (units of kilometers).
     """
     # Read the CDAWeb spacecraft database.
     sc_info = scutils.getScIds()
@@ -193,20 +180,16 @@ def fetch_satellite_SM_position(spacecraft, when):
 def fetch_spacecraft_SM_trajectory(spacecraft, t_start, t_end):
     """Fetch the Solar Magnetic trajectory of a spacecraft in a time range.
 
-    Fetch the trajectory of a spacecraft in a time range, in Solar Magnetic
+    Fetches the trajectory of a spacecraft in a time range, in Solar Magnetic
     Cartesian coordinates. Data is fetched from CDAWeb.
 
-    Parameters
-    ----------
-    spacecraft : str
-        CDAWeb-compliant spacecraft ID.
-    t_start, t_end : datetime.datetime
-        Start and end datetime for trajectory fetch.
+    Args:
+        spacecraft (str): CDAWeb-compliant spacecraft ID.
+        t_start (datetime.datetime): Start datetime for trajectory fetch.
+        t_end (datetime.datetime): End datetime for trajectory fetch.
 
-    Returns
-    -------
-    XXX : XXX
-        XXX
+    Returns:
+        Tuple[float, float, float]: Cartesian SM coordinates of spacecraft (units of kilometers).
     """
     # Read the CDAWeb spacecraft database.
     sc_info = scutils.getScIds()
@@ -268,22 +251,16 @@ def fetch_spacecraft_SM_trajectory(spacecraft, t_start, t_end):
 def fetch_satellite_magnetic_northern_footprint_position(spacecraft, when):
     """Fetch the position of the northern magnetic footprint.
 
-    Fetch the positions of the northern magnetic footprint for a spacecraft
+    Fetches the positions of the northern magnetic footprint for a spacecraft
     at a specified time. Data is fetched from CDAWeb. The first returned
     positions are assumed to correspond to the requested value of "when".
 
-    Parameters
-    ----------
-    spacecraft : str
-        CDAWeb-compliant spacecraft ID.
-    when : datetime.datetime
-        datetime for position fetch.
+    Args:
+        spacecraft (str): CDAWeb-compliant spacecraft ID.
+        when (datetime.datetime): datetime for position fetch.
 
-    Returns
-    -------
-    fp_lon, fp_lat : float
-        Geographic longitude and latitude (degrees) of northern magnetic
-        footprint.
+    Returns:
+        Tuple[float, float]: Geographic longitude and latitude (degrees) of northern magnetic footprint.
     """
     # Initialize the footprint position.
     fp_lat = None
@@ -359,22 +336,16 @@ def fetch_satellite_magnetic_northern_footprint_position(spacecraft, when):
 def fetch_satellite_magnetic_southern_footprint_position(spacecraft, when):
     """Fetch the position of the southern magnetic footprint.
 
-    Fetch the positions of the southern magnetic footprint for a spacecraft
+    Fetches the positions of the southern magnetic footprint for a spacecraft
     at a specified time. Data is fetched from CDAWeb. The first returned
     positions are assumed to correspond to the requested value of "when".
 
-    Parameters
-    ----------
-    spacecraft : str
-        CDAWeb-compliant spacecraft ID.
-    when : datetime.datetime
-        datetime for position fetch.
+    Args:
+        spacecraft (str): CDAWeb-compliant spacecraft ID.
+        when (datetime.datetime): datetime for position fetch.
 
-    Returns
-    -------
-    fp_lon, fp_lat : float
-        Geographic longitude and latitude (degrees) of southern magnetic
-        footprint.
+    Returns:
+        Tuple[float, float]: Geographic longitude and latitude (degrees) of southern magnetic footprint.
     """
     # Initialize the footprint position.
     fp_lat = None
@@ -448,22 +419,18 @@ def fetch_satellite_magnetic_southern_footprint_position(spacecraft, when):
 
 
 def fetch_helio_spacecraft_HGS_trajectory(spacecraft, t_start, t_end, mjdc):
-    """Fetch the HGS trajectory of a spacecraft in a time range.
+    """Fetches the HGS trajectory of a spacecraft in a time range.
 
-    Fetch the trajectory of a spacecraft in a time range, in the HGS
+    Fetches the trajectory of a spacecraft in a time range, in the HGS
     frame. Data is fetched from CDAWeb.
 
-    Parameters
-    ----------
-    spacecraft : str
-        CDAWeb-compliant spacecraft ID.
-    t_start, t_end : datetime.datetime
-        Start and end datetime for trajectory fetch.
+    Args:
+        spacecraft (str): CDAWeb-compliant spacecraft ID.
+        t_start (datetime.datetime): Start datetime for trajectory fetch.
+        t_end (datetime.datetime): End datetime for trajectory fetch.
 
-    Returns
-    -------
-    XXX : XXX
-        XXX
+    Returns:
+        Tuple[np.array, np.array, np.array]: Cartesian coordinates (x, y, z) of the spacecraft in the HGS frame.
     """
     # Read the CDAWeb spacecraft database.
     spacecraft_data_file = os.path.join(
@@ -526,22 +493,18 @@ def fetch_helio_spacecraft_HGS_trajectory(spacecraft, t_start, t_end, mjdc):
 
 
 def fetch_helio_spacecraft_trajectory(sc_id, t_start, t_end):
-    """Fetch the trajectory of a spacecraft in a time range.
+    """Fetches the trajectory of a spacecraft in a time range.
 
-    Fetch the trajectory of a spacecraft in a time range, in the HGS
+    Fetches the trajectory of a spacecraft in a time range, in the HGS
     frame. Data is fetched from CDAWeb.
 
-    Parameters
-    ----------
-    spacecraft : str
-        CDAWeb-compliant spacecraft ID.
-    t_start, t_end : datetime.datetime
-        Start and end datetime for trajectory fetch.
+    Args:
+        spacecraft (str): CDAWeb-compliant spacecraft ID.
+        t_start (datetime.datetime): Start datetime for trajectory fetch.
+        t_end (datetime.datetime): End datetime for trajectory fetch.
 
-    Returns
-    -------
-    XXX : XXX
-        XXX
+    Returns:
+        Tuple[np.array, np.array, np.array]: Cartesian coordinates (x, y, z) of the spacecraft in the HGS frame.
     """
     # Read the CDAWeb spacecraft database.
     sc_metadata_path = os.path.join(
@@ -567,21 +530,19 @@ def fetch_helio_spacecraft_trajectory(sc_id, t_start, t_end):
     # Return the spacecraft data (could be None).
     return cdaweb_query_results
 
-
 def ingest_helio_spacecraft_trajectory(sc_id, sc_data, MJDc):
-    """XXX
+    """
+    Ingests the heliospheric spacecraft trajectory data and converts the coordinates to the GH(MJDc) frame.
 
-    XXX
+    Args:
+        sc_id (str): The spacecraft ID.
+        sc_data (dict): The spacecraft data containing the trajectory information.
+        MJDc (float): The Modified Julian Date (MJD) for the desired frame.
 
-    Parameters
-    ----------
-    XXX : XXX
-        XXX
-
-    Returns
-    -------
-    XXX : XXX
-        XXX
+    Returns:
+        x (dm.dmarray): The x-coordinate in the GH(MJDc) frame.
+        y (dm.dmarray): The y-coordinate in the GH(MJDc) frame.
+        z (dm.dmarray): The z-coordinate in the GH(MJDc) frame.
     """
     # Read the CDAWeb spacecraft database.
     sc_metadata_path = os.path.join(

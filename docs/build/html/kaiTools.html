@@ -118,12 +118,19 @@
 <dt class="sig sig-object py" id="kaiTools.GetSymH">
 <span class="sig-prename descclassname"><span class="pre">kaiTools.</span></span><span class="sig-name descname"><span class="pre">GetSymH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fBC</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiTools.GetSymH" title="Permalink to this definition"></a></dt>
 <dd><p>Retrieve symh data from an HDF5 file.</p>
-<p>Parameters:
-- fBC (str): The path to the HDF5 file.</p>
-<p>Returns:
-- utData (numpy.ndarray): Array of UT data.
-- tData (numpy.ndarray): Array of T data.
-- dstData (numpy.ndarray): Array of symh data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fBC</strong> (<em>str</em>) – The path to the HDF5 file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array of UT data.
+tData (numpy.ndarray): Array of T data.
+dstData (numpy.ndarray): Array of symh data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>utData (numpy.ndarray)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -150,11 +157,15 @@
 <dt class="sig sig-object py" id="kaiTools.MJD2UT">
 <span class="sig-prename descclassname"><span class="pre">kaiTools.</span></span><span class="sig-name descname"><span class="pre">MJD2UT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mjd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiTools.MJD2UT" title="Permalink to this definition"></a></dt>
 <dd><p>Convert Modified Julian Date (MJD) to Coordinated Universal Time (UTC).</p>
-<p>Parameters:
-- mjd: A single value or a list of MJD values.</p>
-<p>Returns:
-- If given a single value, returns a single datetime.datetime object representing the corresponding UTC time.
-- If given a list of values, returns a list of datetime.datetime objects representing the corresponding UTC times.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mjd</strong> – A single value or a list of MJD values.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If given a single value, returns a single datetime.datetime object representing the corresponding UTC time.
+If given a list of values, returns a list of datetime.datetime objects representing the corresponding UTC times.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -163,21 +174,32 @@
 <dd><p>Given time in seconds, density in cm^-3, velocity in km/s and magnetic field in nT,
 this function will return Dst computed from the Burton 1975
 (doi: 10.1029/ja080i031p04204) model.</p>
-<p>Parameters:
-- secs (array-like): Time in seconds.
-- n (array-like): Density in cm^-3.
-- vx (array-like): Velocity in km/s (x-component).
-- vy (array-like): Velocity in km/s (y-component).
-- vz (array-like): Velocity in km/s (z-component).
-- bx (array-like): Magnetic field in nT (x-component).
-- by (array-like): Magnetic field in nT (y-component).
-- bz (array-like): Magnetic field in nT (z-component).</p>
-<p>Returns:
-- dst (array-like): Dst values computed from the Burton 1975 model.</p>
-<p>Note:
-- The input arrays should have the same length.</p>
-<p>References:
-- Burton, R. K., et al. (1975). “The Dst index: A measure of geomagnetic activity.” Journal of Geophysical Research, 80(31), 4204-4214. doi: 10.1029/ja080i031p04204</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>secs</strong> (<em>array-like</em>) – Time in seconds.</p></li>
+<li><p><strong>n</strong> (<em>array-like</em>) – Density in cm^-3.</p></li>
+<li><p><strong>vx</strong> (<em>array-like</em>) – Velocity in km/s (x-component).</p></li>
+<li><p><strong>vy</strong> (<em>array-like</em>) – Velocity in km/s (y-component).</p></li>
+<li><p><strong>vz</strong> (<em>array-like</em>) – Velocity in km/s (z-component).</p></li>
+<li><p><strong>bx</strong> (<em>array-like</em>) – Magnetic field in nT (x-component).</p></li>
+<li><p><strong>by</strong> (<em>array-like</em>) – Magnetic field in nT (y-component).</p></li>
+<li><p><strong>bz</strong> (<em>array-like</em>) – Magnetic field in nT (z-component).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dst values computed from the Burton 1975 model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dst (array-like)</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input arrays should have the same length.</p>
+</div>
+<p class="rubric">References</p>
+<p>Burton, R. K., et al. (1975). “The Dst index: A measure of geomagnetic activity.” Journal of Geophysical Research, 80(31), 4204-4214. doi: 10.1029/ja080i031p04204</p>
 </dd></dl>
 
 <dl class="py function">
@@ -240,15 +262,24 @@ var: 3x3 values of desired variable</p>
 <dd><p>Given density in cm^-3, velocity in km/s, and magnetic field in nT,
 this function returns the Universal Coupling Function computed from the
 Newell 2007 (doi: 10.1029/2006ja012015).</p>
-<p>Parameters:
-- vx (float): X-component of velocity in km/s.
-- vy (float): Y-component of velocity in km/s.
-- vz (float): Z-component of velocity in km/s.
-- bx (float): X-component of magnetic field in nT.
-- by (float): Y-component of magnetic field in nT.
-- bz (float): Z-component of magnetic field in nT.</p>
-<p>Returns:
-- newcoup (float): The computed Universal Coupling Function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vx</strong> (<em>float</em>) – X-component of velocity in km/s.</p></li>
+<li><p><strong>vy</strong> (<em>float</em>) – Y-component of velocity in km/s.</p></li>
+<li><p><strong>vz</strong> (<em>float</em>) – Z-component of velocity in km/s.</p></li>
+<li><p><strong>bx</strong> (<em>float</em>) – X-component of magnetic field in nT.</p></li>
+<li><p><strong>by</strong> (<em>float</em>) – Y-component of magnetic field in nT.</p></li>
+<li><p><strong>bz</strong> (<em>float</em>) – Z-component of magnetic field in nT.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The computed Universal Coupling Function.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>newcoup (float)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -256,22 +287,29 @@ Newell 2007 (doi: 10.1029/2006ja012015).</p>
 <span class="sig-prename descclassname"><span class="pre">kaiTools.</span></span><span class="sig-name descname"><span class="pre">newellkp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">secs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bz</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiTools.newellkp" title="Permalink to this definition"></a></dt>
 <dd><p>Given time in seconds, density in cm^-3, velocity in km/s, and magnetic field in nT,
 this function will return Kp computed from the Newell 2008 (doi: 10.1029/2007ja012825).</p>
-<p>Parameters:
-- secs (array-like): Time in seconds.
-- n (array-like): Density in cm^-3.
-- vx (array-like): Velocity in km/s (x-component).
-- vy (array-like): Velocity in km/s (y-component).
-- vz (array-like): Velocity in km/s (z-component).
-- bx (array-like): Magnetic field in nT (x-component).
-- by (array-like): Magnetic field in nT (y-component).
-- bz (array-like): Magnetic field in nT (z-component).</p>
-<p>Returns:
-- conextendkp (array-like): Kp values computed from the Newell 2008 model.</p>
-<p>Notes:
-- Kp is a three-hour index, so the function computes a three-hour rolling average using convolution</p>
-<blockquote>
-<div><p>with the first and last value extended.</p>
-</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>secs</strong> (<em>array-like</em>) – Time in seconds.</p></li>
+<li><p><strong>n</strong> (<em>array-like</em>) – Density in cm^-3.</p></li>
+<li><p><strong>vx</strong> (<em>array-like</em>) – Velocity in km/s (x-component).</p></li>
+<li><p><strong>vy</strong> (<em>array-like</em>) – Velocity in km/s (y-component).</p></li>
+<li><p><strong>vz</strong> (<em>array-like</em>) – Velocity in km/s (z-component).</p></li>
+<li><p><strong>bx</strong> (<em>array-like</em>) – Magnetic field in nT (x-component).</p></li>
+<li><p><strong>by</strong> (<em>array-like</em>) – Magnetic field in nT (y-component).</p></li>
+<li><p><strong>bz</strong> (<em>array-like</em>) – Magnetic field in nT (z-component).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Kp values computed from the Newell 2008 model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>conextendkp (array-like)</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Kp is a three-hour index, so the function computes a three-hour rolling average using convolution
+with the first and last value extended.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -293,16 +331,25 @@ this function will return Kp computed from the Newell 2008 (doi: 10.1029/2007ja0
 <dt class="sig sig-object py" id="kaiTools.xyz2rtp">
 <span class="sig-prename descclassname"><span class="pre">kaiTools.</span></span><span class="sig-name descname"><span class="pre">xyz2rtp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ay</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Az</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiTools.xyz2rtp" title="Permalink to this definition"></a></dt>
 <dd><p>Convert Cartesian coordinates (Ax, Ay, Az) to spherical coordinates (r, theta, phi).</p>
-<p>Parameters:
-phi (float): The azimuthal angle in radians.
-theta (float): The polar angle in radians.
-Ax (float): The x-coordinate in Cartesian coordinates.
-Ay (float): The y-coordinate in Cartesian coordinates.
-Az (float): The z-coordinate in Cartesian coordinates.</p>
-<p>Returns:
-Ar (float): The radial component in spherical coordinates.
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phi</strong> (<em>float</em>) – The azimuthal angle in radians.</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – The polar angle in radians.</p></li>
+<li><p><strong>Ax</strong> (<em>float</em>) – The x-coordinate in Cartesian coordinates.</p></li>
+<li><p><strong>Ay</strong> (<em>float</em>) – The y-coordinate in Cartesian coordinates.</p></li>
+<li><p><strong>Az</strong> (<em>float</em>) – The z-coordinate in Cartesian coordinates.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The radial component in spherical coordinates.
 At (float): The azimuthal component in spherical coordinates.
 Ap (float): The polar component in spherical coordinates.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Ar (float)</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

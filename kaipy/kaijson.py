@@ -137,11 +137,11 @@ def dumps(data, noIndent=False):
 	Returns a string with the given dictionary in JSON format.
 
 	Parameters:
-	- data: The dictionary to be converted to JSON.
-	- noIndent: Optional parameter to specify whether to include indentation in the JSON string. Default is False.
+		data: The dictionary to be converted to JSON.
+		noIndent: Optional parameter to specify whether to include indentation in the JSON string. Default is False.
 
 	Returns:
-	- A string representing the dictionary in JSON format.
+		A string representing the dictionary in JSON format.
 	'''
 	if noIndent:
 		return json.dumps(data, cls=CustomEncoder)

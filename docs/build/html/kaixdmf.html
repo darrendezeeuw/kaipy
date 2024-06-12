@@ -113,29 +113,41 @@
 <dt class="sig sig-object py" id="kaixdmf.AddDI">
 <span class="sig-prename descclassname"><span class="pre">kaixdmf.</span></span><span class="sig-name descname"><span class="pre">AddDI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h5F</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nStp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cDims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vId</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaixdmf.AddDI" title="Permalink to this definition"></a></dt>
 <dd><p>Adds a DataItem element to the given element.</p>
-<p>Parameters:
-- elt: The parent element to which the DataItem element will be added.
-- h5F: The HDF file path.
-- nStp: The step number.
-- cDims: The dimensions of the DataItem.
-- vId: The variable ID.</p>
-<p>Returns:
-None</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>elt</strong> – The parent element to which the DataItem element will be added.</p></li>
+<li><p><strong>h5F</strong> – The HDF file path.</p></li>
+<li><p><strong>nStp</strong> – The step number.</p></li>
+<li><p><strong>cDims</strong> – The dimensions of the DataItem.</p></li>
+<li><p><strong>vId</strong> – The variable ID.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="kaixdmf.AddData">
 <span class="sig-prename descclassname"><span class="pre">kaixdmf.</span></span><span class="sig-name descname"><span class="pre">AddData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vLoc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xDims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaixdmf.AddData" title="Permalink to this definition"></a></dt>
 <dd><p>AddData function adds data to the given Grid.</p>
-<p>Parameters:
-- Grid: The parent element to which the data will be added.
-- fname: The file name or path.
-- vID: The ID of the attribute.
-- vLoc: The location of the attribute.
-- xDims: The dimensions of the data item.
-- s0: The step number (optional).</p>
-<p>Returns:
-None</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Grid</strong> – The parent element to which the data will be added.</p></li>
+<li><p><strong>fname</strong> – The file name or path.</p></li>
+<li><p><strong>vID</strong> – The ID of the attribute.</p></li>
+<li><p><strong>vLoc</strong> – The location of the attribute.</p></li>
+<li><p><strong>xDims</strong> – The dimensions of the data item.</p></li>
+<li><p><strong>s0</strong> – The step number (optional).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -161,49 +173,73 @@ None</p>
 <dt class="sig sig-object py" id="kaixdmf.AddVectors">
 <span class="sig-prename descclassname"><span class="pre">kaixdmf.</span></span><span class="sig-name descname"><span class="pre">AddVectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vIds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cDims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vDims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nStp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaixdmf.AddVectors" title="Permalink to this definition"></a></dt>
 <dd><p>Adds vector attributes to the given Grid element based on the provided parameters.</p>
-<p>Parameters:
-- Grid: The Grid element to which the vector attributes will be added.
-- fname: The file name.
-- vIds: A list of vector identifiers.
-- cDims: The cell dimensions.
-- vDims: The vector dimensions.
-- Nd: The number of dimensions.
-- nStp: The number of steps.</p>
-<p>Returns:
-None</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Grid</strong> – The Grid element to which the vector attributes will be added.</p></li>
+<li><p><strong>fname</strong> – The file name.</p></li>
+<li><p><strong>vIds</strong> – A list of vector identifiers.</p></li>
+<li><p><strong>cDims</strong> – The cell dimensions.</p></li>
+<li><p><strong>vDims</strong> – The vector dimensions.</p></li>
+<li><p><strong>Nd</strong> – The number of dimensions.</p></li>
+<li><p><strong>nStp</strong> – The number of steps.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="kaixdmf.addHyperslab">
 <span class="sig-prename descclassname"><span class="pre">kaixdmf.</span></span><span class="sig-name descname"><span class="pre">addHyperslab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dSetDimStr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vdimStr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startStr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strideStr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numStr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origDSetDimStr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fileText</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaixdmf.addHyperslab" title="Permalink to this definition"></a></dt>
 <dd><p>Add a hyperslab to the given Grid element.</p>
-<p>Parameters:
-- Grid: The parent element to which the hyperslab will be added.
-- vName: The name of the attribute.
-- dSetDimStr: The dimensions of the hyperslab.
-- vdimStr: The dimensions of the cut.
-- startStr: The start position of the hyperslab.
-- strideStr: The stride of the hyperslab.
-- numStr: The number of elements in the hyperslab.
-- origDSetDimStr: The dimensions of the original dataset.
-- fileText: The text of the file.</p>
-<p>Returns:
-- None</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Grid</strong> – The parent element to which the hyperslab will be added.</p></li>
+<li><p><strong>vName</strong> – The name of the attribute.</p></li>
+<li><p><strong>dSetDimStr</strong> – The dimensions of the hyperslab.</p></li>
+<li><p><strong>vdimStr</strong> – The dimensions of the cut.</p></li>
+<li><p><strong>startStr</strong> – The start position of the hyperslab.</p></li>
+<li><p><strong>strideStr</strong> – The stride of the hyperslab.</p></li>
+<li><p><strong>numStr</strong> – The number of elements in the hyperslab.</p></li>
+<li><p><strong>origDSetDimStr</strong> – The dimensions of the original dataset.</p></li>
+<li><p><strong>fileText</strong> – The text of the file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="kaixdmf.getLoc">
 <span class="sig-prename descclassname"><span class="pre">kaixdmf.</span></span><span class="sig-name descname"><span class="pre">getLoc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gDims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vDims</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaixdmf.getLoc" title="Permalink to this definition"></a></dt>
 <dd><p>Determines the location type based on the given global dimensions and variable dimensions.</p>
-<p>Parameters:
-gDims (list): A list of integers representing the global dimensions.
-vDims (list): A list of integers representing the variable dimensions.</p>
-<p>Returns:
-str: The location type, which can be “Cell”, “Node”, or “Other”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gDims</strong> (<em>list</em>) – A list of integers representing the global dimensions.</p></li>
+<li><p><strong>vDims</strong> (<em>list</em>) – A list of integers representing the variable dimensions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The location type, which can be “Cell”, “Node”, or “Other”.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>If the lengths of gDims and vDims are not equal, the function returns “Other”.
 The function checks each dimension and determines the location type based on the comparison
 between the global dimension and the variable dimension. If all dimensions have the same
 location type, the function returns that type. Otherwise, it returns “Other”.</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -218,12 +254,9 @@ location type, the function returns that type. Otherwise, it returns “Other”
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>A tuple containing two lists - <cite>vIds</cite> and <cite>vLocs</cite>.</dt><dd><p><cite>vIds</cite> (list): A list of variable IDs.
+<dd class="field-even"><p>A tuple containing two lists - <cite>vIds</cite> and <cite>vLocs</cite>.
+<cite>vIds</cite> (list): A list of variable IDs.
 <cite>vLocs</cite> (list): A list of variable locations.</p>
-</dd>
-</dl>
-</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tuple</p>

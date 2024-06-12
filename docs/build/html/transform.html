@@ -152,32 +152,54 @@ the NumPy vectorize() method to handle ndarray inputs when appropriate.</p>
 <dt class="sig sig-object py" id="transform.GSMtoSM">
 <span class="sig-prename descclassname"><span class="pre">transform.</span></span><span class="sig-name descname"><span class="pre">GSMtoSM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ut</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#transform.GSMtoSM" title="Permalink to this definition"></a></dt>
 <dd><p>Convert coordinates from GSM (Geocentric Solar Magnetospheric) system to SM (Solar Magnetic) system.</p>
-<p>Parameters:
-x (float): The x-coordinate in GSM system.
-y (float): The y-coordinate in GSM system.
-z (float): The z-coordinate in GSM system.
-ut (datetime.datetime): The universal time.</p>
-<p>Returns:
-tuple: A tuple containing the converted x, y, and z coordinates in SM system.</p>
-<p>Examples:
-&gt;&gt;&gt; GSMtoSM(1, 2, 3, datetime.datetime(2009, 1, 27, 0, 0, 0))
-(1.997…, 2.0, 2.451…)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>float</em>) – The x-coordinate in GSM system.</p></li>
+<li><p><strong>y</strong> (<em>float</em>) – The y-coordinate in GSM system.</p></li>
+<li><p><strong>z</strong> (<em>float</em>) – The z-coordinate in GSM system.</p></li>
+<li><p><strong>ut</strong> (<em>datetime.datetime</em>) – The universal time.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the converted x, y, and z coordinates in SM system.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">GSMtoSM</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2009</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="go">(1.997..., 2.0, 2.451...)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="transform.SMtoGSM">
 <span class="sig-prename descclassname"><span class="pre">transform.</span></span><span class="sig-name descname"><span class="pre">SMtoGSM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ut</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#transform.SMtoGSM" title="Permalink to this definition"></a></dt>
 <dd><p>Convert coordinates from Solar Magnetic (SM) system to Geocentric Solar Magnetospheric (GSM) system.</p>
-<p>Parameters:
-x (float): The x-coordinate in SM system.
-y (float): The y-coordinate in SM system.
-z (float): The z-coordinate in SM system.
-ut (datetime.datetime): The Universal Time (UT) for the conversion.</p>
-<p>Returns:
-tuple: A tuple containing the x, y, and z coordinates in GSM system.</p>
-<p>Examples:
-&gt;&gt;&gt; SMtoGSM(1, 2, 3, datetime.datetime(2009, 1, 27, 0, 0, 0))
-(-0.126…, 2.0, 3.159…)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>float</em>) – The x-coordinate in SM system.</p></li>
+<li><p><strong>y</strong> (<em>float</em>) – The y-coordinate in SM system.</p></li>
+<li><p><strong>z</strong> (<em>float</em>) – The z-coordinate in SM system.</p></li>
+<li><p><strong>ut</strong> (<em>datetime.datetime</em>) – The Universal Time (UT) for the conversion.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the x, y, and z coordinates in GSM system.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SMtoGSM</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2009</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="go">(-0.126..., 2.0, 3.159...)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>

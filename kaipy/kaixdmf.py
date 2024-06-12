@@ -36,15 +36,15 @@ def AddData(Grid, fname, vID, vLoc, xDims, s0=None):
 	AddData function adds data to the given Grid.
 
 	Parameters:
-	- Grid: The parent element to which the data will be added.
-	- fname: The file name or path.
-	- vID: The ID of the attribute.
-	- vLoc: The location of the attribute.
-	- xDims: The dimensions of the data item.
-	- s0: The step number (optional).
+		Grid: The parent element to which the data will be added.
+		fname: The file name or path.
+		vID: The ID of the attribute.
+		vLoc: The location of the attribute.
+		xDims: The dimensions of the data item.
+		s0: The step number (optional).
 
 	Returns:
-	None
+		None
 	"""
 	if vLoc != 'Other':
 		# Add attribute
@@ -71,14 +71,14 @@ def AddDI(elt, h5F, nStp, cDims, vId):
 	Adds a DataItem element to the given element.
 
 	Parameters:
-	- elt: The parent element to which the DataItem element will be added.
-	- h5F: The HDF file path.
-	- nStp: The step number.
-	- cDims: The dimensions of the DataItem.
-	- vId: The variable ID.
+		elt: The parent element to which the DataItem element will be added.
+		h5F: The HDF file path.
+		nStp: The step number.
+		cDims: The dimensions of the DataItem.
+		vId: The variable ID.
 
 	Returns:
-	None
+		None
 	"""
 	aDI = et.SubElement(elt, "DataItem")
 	aDI.set("Dimensions", cDims)
@@ -102,8 +102,8 @@ def getRootVars(fname, gDims):
 
 	Returns:
 		tuple: A tuple containing two lists - `vIds` and `vLocs`.
-			`vIds` (list): A list of variable IDs.
-			`vLocs` (list): A list of variable locations.
+		`vIds` (list): A list of variable IDs.
+		`vLocs` (list): A list of variable locations.
 
 	"""
 	with h5py.File(fname, 'r') as hf:
@@ -188,16 +188,16 @@ def AddVectors(Grid, fname, vIds, cDims, vDims, Nd, nStp):
 	Adds vector attributes to the given Grid element based on the provided parameters.
 
 	Parameters:
-	- Grid: The Grid element to which the vector attributes will be added.
-	- fname: The file name.
-	- vIds: A list of vector identifiers.
-	- cDims: The cell dimensions.
-	- vDims: The vector dimensions.
-	- Nd: The number of dimensions.
-	- nStp: The number of steps.
+		Grid: The Grid element to which the vector attributes will be added.
+		fname: The file name.
+		vIds: A list of vector identifiers.
+		cDims: The cell dimensions.
+		vDims: The vector dimensions.
+		Nd: The number of dimensions.
+		nStp: The number of steps.
 
 	Returns:
-	None
+		None
 	"""
 	# Velocity (2D)
 	if (Nd == 2) and ("Vx" in vIds) and ("Vy" in vIds):
@@ -311,16 +311,17 @@ def getLoc(gDims, vDims):
 	Determines the location type based on the given global dimensions and variable dimensions.
 
 	Parameters:
-	gDims (list): A list of integers representing the global dimensions.
-	vDims (list): A list of integers representing the variable dimensions.
+		gDims (list): A list of integers representing the global dimensions.
+		vDims (list): A list of integers representing the variable dimensions.
 
 	Returns:
-	str: The location type, which can be "Cell", "Node", or "Other".
+		str: The location type, which can be "Cell", "Node", or "Other".
 
-	If the lengths of gDims and vDims are not equal, the function returns "Other".
-	The function checks each dimension and determines the location type based on the comparison
-	between the global dimension and the variable dimension. If all dimensions have the same
-	location type, the function returns that type. Otherwise, it returns "Other".
+	Note:
+		If the lengths of gDims and vDims are not equal, the function returns "Other".
+		The function checks each dimension and determines the location type based on the comparison
+		between the global dimension and the variable dimension. If all dimensions have the same
+		location type, the function returns that type. Otherwise, it returns "Other".
 	"""
 	vDims = np.array(vDims, dtype=int)
 	dimLocs = []
@@ -349,18 +350,18 @@ def addHyperslab(Grid, vName, dSetDimStr, vdimStr, startStr, strideStr, numStr, 
 	Add a hyperslab to the given Grid element.
 
 	Parameters:
-	- Grid: The parent element to which the hyperslab will be added.
-	- vName: The name of the attribute.
-	- dSetDimStr: The dimensions of the hyperslab.
-	- vdimStr: The dimensions of the cut.
-	- startStr: The start position of the hyperslab.
-	- strideStr: The stride of the hyperslab.
-	- numStr: The number of elements in the hyperslab.
-	- origDSetDimStr: The dimensions of the original dataset.
-	- fileText: The text of the file.
+		Grid: The parent element to which the hyperslab will be added.
+		vName: The name of the attribute.
+		dSetDimStr: The dimensions of the hyperslab.
+		vdimStr: The dimensions of the cut.
+		startStr: The start position of the hyperslab.
+		strideStr: The stride of the hyperslab.
+		numStr: The number of elements in the hyperslab.
+		origDSetDimStr: The dimensions of the original dataset.
+		fileText: The text of the file.
 
 	Returns:
-	- None
+		None
 	"""
 	vAtt = et.SubElement(Grid, "Attribute")
 	vAtt.set("Name", vName)

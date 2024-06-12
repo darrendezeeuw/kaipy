@@ -1,4 +1,3 @@
-#Various routines to deal with LFM-style data
 import numpy as np
 import kaipy.gamera.gamGrids as gg
 from pyhdf.SD import SD, SDC
@@ -54,10 +53,10 @@ def lfmTimes(hdfs):
 	Get the time attribute from a list of files.
 
 	Parameters:
-	hdfs (list): A list of file paths.
+		hdfs (list): A list of file paths.
 
 	Returns:
-	numpy.ndarray: An array containing the time attributes from the input files.
+		Ts (numpy.ndarray): An array containing the time attributes from the input files.
 	"""
 	Ts = [SD(fIn).attributes().get('time') for fIn in hdfs]
 	return np.array(Ts)
@@ -66,17 +65,17 @@ def lfmFields(fIn):
 	"""
 	Retrieves cell-centered fields from an HDF file.
 
-	Parameters:
-	fIn (str): The path to the HDF file.
+	Args:
+		fIn (str): The path to the HDF file.
 
 	Returns:
-	tuple: A tuple containing the following fields:
-		- Vx3cc (numpy.ndarray): X-component of the cell-centered velocity field.
-		- Vy3cc (numpy.ndarray): Y-component of the cell-centered velocity field.
-		- Vz3cc (numpy.ndarray): Z-component of the cell-centered velocity field.
-		- Bx3cc (numpy.ndarray): X-component of the cell-centered magnetic field.
-		- By3cc (numpy.ndarray): Y-component of the cell-centered magnetic field.
-		- Bz3cc (numpy.ndarray): Z-component of the cell-centered magnetic field.
+		tuple: A tuple containing the following fields:
+			- Vx3cc (numpy.ndarray): X-component of the cell-centered velocity field.
+			- Vy3cc (numpy.ndarray): Y-component of the cell-centered velocity field.
+			- Vz3cc (numpy.ndarray): Z-component of the cell-centered velocity field.
+			- Bx3cc (numpy.ndarray): X-component of the cell-centered magnetic field.
+			- By3cc (numpy.ndarray): Y-component of the cell-centered magnetic field.
+			- Bz3cc (numpy.ndarray): Z-component of the cell-centered magnetic field.
 	"""
 	hdffile = SD(fIn)
 	#Get cell-centered fields
@@ -94,10 +93,10 @@ def lfmFlow(fIn):
 	Calculate the number density and pressure of a fluid flow.
 
 	Parameters:
-	fIn (str): The input file path.
+		fIn (str): The input file path.
 
 	Returns:
-	tuple: A tuple containing the number density (n3) and pressure (P3) of the fluid flow.
+		tuple (numpy.ndarray): A tuple containing the number density (n3) and pressure (P3) of the fluid flow.
 
 	"""
 	hdffile = SD(fIn)
@@ -121,15 +120,16 @@ def getHDFVec(hdffile, qi, Scl=1.0):
 	"""
 	Retrieves vector components from an HDF file.
 
-	Parameters:
-	- hdffile (HDF file object): The HDF file object from which to retrieve the vector components.
-	- qi (str): The base name of the vector components.
-	- Scl (float, optional): Scaling factor for the vector components. Default is 1.0.
+	Args:
+		hdffile (HDF file object): The HDF file object from which to retrieve the vector components.
+		qi (str): The base name of the vector components.
+		Scl (float, optional): Scaling factor for the vector components. Default is 1.0.
 
 	Returns:
-	- Qx3cc (ndarray): The x-component of the vector, with corners removed.
-	- Qy3cc (ndarray): The y-component of the vector, with corners removed.
-	- Qz3cc (ndarray): The z-component of the vector, with corners removed.
+		tuple: A tuple containing the following fields:
+			Qx3cc (ndarray): The x-component of the vector, with corners removed.
+			Qy3cc (ndarray): The y-component of the vector, with corners removed.
+			Qz3cc (ndarray): The z-component of the vector, with corners removed.
 	"""
 	qxi = qi + 'x_'
 	qyi = qi + 'y_'
@@ -152,13 +152,13 @@ def getHDFScl(hdffile, q, Scl=1.0):
 	"""
 	Get the HDFScl (HDF Scale) for a given hdffile and variable q.
 
-	Parameters:
-	- hdffile: The HDF file containing the data.
-	- q: The variable to select from the HDF file.
-	- Scl: The scaling factor to apply to the selected variable. Default is 1.0.
+	Args:
+		hdffile (HDF file object): The HDF file containing the data.
+		q (str): The variable to select from the HDF file.
+		Scl (float, optional): The scaling factor to apply to the selected variable. Default is 1.0.
 
 	Returns:
-	- Q3cc: The scaled selected variable with corners chopped out.
+		ndarray: The scaled selected variable with corners chopped out.
 	"""
 	qi = q + "_"
 	Q3 = np.double(hdffile.select(qi).get())
