@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>kaijson module &mdash; Kaipy 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="kaixdmf module" href="kaixdmf.html" />
+    <link rel="prev" title="kaiViz module" href="kaiViz.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Kaipy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">kaipy</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cdaweb_utils.html">cdaweb_utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chimp.html">chimp package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embiggenUtils.html">embiggenUtils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gamera.html">gamera package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gamhelio.html">gamhelio package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kJobs.html">kJobs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kaiH5.html">kaiH5 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kaiTools.html">kaiTools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kaiViz.html">kaiViz module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">kaijson module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#kaijson.CustomEncoder"><code class="docutils literal notranslate"><span class="pre">CustomEncoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kaijson.CustomEncoder.default"><code class="docutils literal notranslate"><span class="pre">CustomEncoder.default()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#kaijson.customhook"><code class="docutils literal notranslate"><span class="pre">customhook()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaijson.dump"><code class="docutils literal notranslate"><span class="pre">dump()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaijson.dumps"><code class="docutils literal notranslate"><span class="pre">dumps()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaijson.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaijson.loads"><code class="docutils literal notranslate"><span class="pre">loads()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="kaixdmf.html">kaixdmf module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kdefs.html">kdefs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lfm2kaiju.html">lfm2kaiju module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paraview.html">paraview package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rcm.html">rcm package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="remix.html">remix package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solarWind.html">solarWind package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supermag_api.html">supermag_api module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supermage.html">supermage module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">transform module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Kaipy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">kaipy</a></li>
+      <li class="breadcrumb-item active">kaijson module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/kaijson.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-kaijson">
+<span id="kaijson-module"></span><h1>kaijson module<a class="headerlink" href="#module-kaijson" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="kaijson.CustomEncoder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">kaijson.</span></span><span class="sig-name descname"><span class="pre">CustomEncoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skipkeys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensure_ascii</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_circular</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaijson.CustomEncoder" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">JSONEncoder</span></code></p>
+<p>Custom JSON encoder that extends the functionality of the base JSONEncoder class.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="kaijson.CustomEncoder.default">
+<span class="sig-name descname"><span class="pre">default</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaijson.CustomEncoder.default" title="Permalink to this definition"></a></dt>
+<dd><p>Override the default method to handle custom encoding for specific object types.
+Extends the base JSONEncoder class to handle encoding of datetime objects,
+numpy arrays, and numpy base variable types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> – The object to be encoded.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The encoded representation of the object.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TypeError</strong> – If the object cannot be encoded.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaijson.customhook">
+<span class="sig-prename descclassname"><span class="pre">kaijson.</span></span><span class="sig-name descname"><span class="pre">customhook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dct</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaijson.customhook" title="Permalink to this definition"></a></dt>
+<dd><p>Custom hook function for JSON decoding.</p>
+<p>This function is used as a hook for the <cite>json.loads</cite> function to customize the decoding process.
+It handles specific cases for datetime objects, numpy arrays, and numpy base variable types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dct</strong> (<em>dict</em>) – The dictionary representing the JSON object being decoded.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The modified dictionary after applying the custom decoding logic.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaijson.dump">
+<span class="sig-prename descclassname"><span class="pre">kaijson.</span></span><span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'w'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaijson.dump" title="Permalink to this definition"></a></dt>
+<dd><p>Store data [dict] in file fname.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fname</strong> (<em>str</em>) – The file name or path where the data will be stored.</p></li>
+<li><p><strong>data</strong> (<em>dict</em>) – The data to be stored in the file.</p></li>
+<li><p><strong>action</strong> (<em>str</em><em>, </em><em>optional</em>) – The action to perform on the file. Defaults to ‘w’ (write).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the specified file path does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaijson.dumps">
+<span class="sig-prename descclassname"><span class="pre">kaijson.</span></span><span class="sig-name descname"><span class="pre">dumps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noIndent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaijson.dumps" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a string with the given dictionary in JSON format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – The dictionary to be converted to JSON.</p></li>
+<li><p><strong>noIndent</strong> – Optional parameter to specify whether to include indentation in the JSON string. Default is False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A string representing the dictionary in JSON format.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaijson.load">
+<span class="sig-prename descclassname"><span class="pre">kaijson.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaijson.load" title="Permalink to this definition"></a></dt>
+<dd><p>Load JSON data from a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fname</strong> (<em>str</em>) – The path to the JSON file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The loaded JSON data as a dictionary.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>FileNotFoundError</strong> – If the specified file doesn’t exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaijson.loads">
+<span class="sig-prename descclassname"><span class="pre">kaijson.</span></span><span class="sig-name descname"><span class="pre">loads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataString</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaijson.loads" title="Permalink to this definition"></a></dt>
+<dd><p>Parses a string containing JSON data and returns a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataString</strong> (<em>str</em>) – The string containing JSON data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary representing the parsed JSON data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="kaiViz.html" class="btn btn-neutral float-left" title="kaiViz module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="kaixdmf.html" class="btn btn-neutral float-right" title="kaixdmf module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Center for Geospace Storms.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

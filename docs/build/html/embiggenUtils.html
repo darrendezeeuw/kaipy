@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>embiggenUtils module &mdash; Kaipy 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="gamera package" href="gamera.html" />
+    <link rel="prev" title="chimp package" href="chimp.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Kaipy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">kaipy</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cdaweb_utils.html">cdaweb_utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chimp.html">chimp package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">embiggenUtils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#embiggenUtils.Bvec2Global"><code class="docutils literal notranslate"><span class="pre">Bvec2Global()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#embiggenUtils.CompRestarts"><code class="docutils literal notranslate"><span class="pre">CompRestarts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#embiggenUtils.Corner2Global"><code class="docutils literal notranslate"><span class="pre">Corner2Global()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#embiggenUtils.Flux2Global"><code class="docutils literal notranslate"><span class="pre">Flux2Global()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#embiggenUtils.Gas2Global"><code class="docutils literal notranslate"><span class="pre">Gas2Global()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#embiggenUtils.MaxDiv"><code class="docutils literal notranslate"><span class="pre">MaxDiv()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#embiggenUtils.PullRestartMPI"><code class="docutils literal notranslate"><span class="pre">PullRestartMPI()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#embiggenUtils.PushRestartMPI"><code class="docutils literal notranslate"><span class="pre">PushRestartMPI()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#embiggenUtils.Volume"><code class="docutils literal notranslate"><span class="pre">Volume()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#embiggenUtils.ccL2G"><code class="docutils literal notranslate"><span class="pre">ccL2G()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#embiggenUtils.upCCMag"><code class="docutils literal notranslate"><span class="pre">upCCMag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#embiggenUtils.upFlux"><code class="docutils literal notranslate"><span class="pre">upFlux()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#embiggenUtils.upGas"><code class="docutils literal notranslate"><span class="pre">upGas()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#embiggenUtils.upGrid"><code class="docutils literal notranslate"><span class="pre">upGrid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#embiggenUtils.upVarCC"><code class="docutils literal notranslate"><span class="pre">upVarCC()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gamera.html">gamera package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gamhelio.html">gamhelio package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kJobs.html">kJobs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kaiH5.html">kaiH5 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kaiTools.html">kaiTools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kaiViz.html">kaiViz module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kaijson.html">kaijson module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kaixdmf.html">kaixdmf module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kdefs.html">kdefs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lfm2kaiju.html">lfm2kaiju module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paraview.html">paraview package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rcm.html">rcm package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="remix.html">remix package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solarWind.html">solarWind package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supermag_api.html">supermag_api module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supermage.html">supermage module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">transform module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Kaipy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">kaipy</a></li>
+      <li class="breadcrumb-item active">embiggenUtils module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/embiggenUtils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-embiggenUtils">
+<span id="embiggenutils-module"></span><h1>embiggenUtils module<a class="headerlink" href="#module-embiggenUtils" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="embiggenUtils.Bvec2Global">
+<span class="sig-prename descclassname"><span class="pre">embiggenUtils.</span></span><span class="sig-name descname"><span class="pre">Bvec2Global</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iH5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Njp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nkp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#embiggenUtils.Bvec2Global" title="Permalink to this definition"></a></dt>
+<dd><p>Convert a local B vector to the global B vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>B</strong> (<em>ndarray</em>) – The global B vector.</p></li>
+<li><p><strong>vID</strong> (<em>int</em>) – The ID of the vector.</p></li>
+<li><p><strong>iH5</strong> (<em>ndarray</em>) – The local B vector.</p></li>
+<li><p><strong>i</strong> (<em>int</em>) – The i index.</p></li>
+<li><p><strong>j</strong> (<em>int</em>) – The j index.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The k index.</p></li>
+<li><p><strong>Ri</strong> (<em>float</em>) – The Ri value.</p></li>
+<li><p><strong>Rj</strong> (<em>float</em>) – The Rj value.</p></li>
+<li><p><strong>Rk</strong> (<em>float</em>) – The Rk value.</p></li>
+<li><p><strong>Nip</strong> (<em>int</em>) – The Nip value.</p></li>
+<li><p><strong>Njp</strong> (<em>int</em>) – The Njp value.</p></li>
+<li><p><strong>Nkp</strong> (<em>int</em>) – The Nkp value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="embiggenUtils.CompRestarts">
+<span class="sig-prename descclassname"><span class="pre">embiggenUtils.</span></span><span class="sig-name descname"><span class="pre">CompRestarts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iStr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oStr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nRes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rk</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#embiggenUtils.CompRestarts" title="Permalink to this definition"></a></dt>
+<dd><p>Compare restart files and calculate the differences between corresponding variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iStr</strong> (<em>str</em>) – Input file name pattern for the original restart files.</p></li>
+<li><p><strong>oStr</strong> (<em>str</em>) – Input file name pattern for the modified restart files.</p></li>
+<li><p><strong>nRes</strong> (<em>int</em>) – Number of restart files.</p></li>
+<li><p><strong>Ri</strong> (<em>int</em>) – Number of iterations in the i-direction.</p></li>
+<li><p><strong>Rj</strong> (<em>int</em>) – Number of iterations in the j-direction.</p></li>
+<li><p><strong>Rk</strong> (<em>int</em>) – Number of iterations in the k-direction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="embiggenUtils.Corner2Global">
+<span class="sig-prename descclassname"><span class="pre">embiggenUtils.</span></span><span class="sig-name descname"><span class="pre">Corner2Global</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iH5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Njp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nkp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#embiggenUtils.Corner2Global" title="Permalink to this definition"></a></dt>
+<dd><p>Transfers a corner of data from a local grid to the global grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Q</strong> (<em>ndarray</em>) – Global grid.</p></li>
+<li><p><strong>vID</strong> (<em>int</em>) – Index of the corner data in iH5.</p></li>
+<li><p><strong>iH5</strong> (<em>ndarray</em>) – Local grid.</p></li>
+<li><p><strong>i</strong> (<em>int</em>) – Index of the corner in the i-direction.</p></li>
+<li><p><strong>j</strong> (<em>int</em>) – Index of the corner in the j-direction.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – Index of the corner in the k-direction.</p></li>
+<li><p><strong>Ri</strong> (<em>float</em>) – Grid resolution in the i-direction.</p></li>
+<li><p><strong>Rj</strong> (<em>float</em>) – Grid resolution in the j-direction.</p></li>
+<li><p><strong>Rk</strong> (<em>float</em>) – Grid resolution in the k-direction.</p></li>
+<li><p><strong>Nip</strong> (<em>int</em>) – Number of points in the i-direction.</p></li>
+<li><p><strong>Njp</strong> (<em>int</em>) – Number of points in the j-direction.</p></li>
+<li><p><strong>Nkp</strong> (<em>int</em>) – Number of points in the k-direction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="embiggenUtils.Flux2Global">
+<span class="sig-prename descclassname"><span class="pre">embiggenUtils.</span></span><span class="sig-name descname"><span class="pre">Flux2Global</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iH5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Njp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nkp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#embiggenUtils.Flux2Global" title="Permalink to this definition"></a></dt>
+<dd><p>Converts local flux data to global flux data and updates the global flux array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>M</strong> (<em>ndarray</em>) – The global flux array with shape (Nd, NkT1, NjT1, NiT1).</p></li>
+<li><p><strong>vID</strong> (<em>int</em>) – The index of the local flux data in the iH5 array.</p></li>
+<li><p><strong>iH5</strong> (<em>ndarray</em>) – The array containing the local flux data.</p></li>
+<li><p><strong>i</strong> (<em>int</em>) – The indices of the local flux data in the global flux array.</p></li>
+<li><p><strong>j</strong> (<em>int</em>) – The indices of the local flux data in the global flux array.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The indices of the local flux data in the global flux array.</p></li>
+<li><p><strong>Ri</strong> (<em>int</em>) – The number of grid points in the i, j, k directions.</p></li>
+<li><p><strong>Rj</strong> (<em>int</em>) – The number of grid points in the i, j, k directions.</p></li>
+<li><p><strong>Rk</strong> (<em>int</em>) – The number of grid points in the i, j, k directions.</p></li>
+<li><p><strong>Nip</strong> (<em>int</em>) – The number of grid points in the i, j, k directions excluding ghost cells.</p></li>
+<li><p><strong>Njp</strong> (<em>int</em>) – The number of grid points in the i, j, k directions excluding ghost cells.</p></li>
+<li><p><strong>Nkp</strong> (<em>int</em>) – The number of grid points in the i, j, k directions excluding ghost cells.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="embiggenUtils.Gas2Global">
+<span class="sig-prename descclassname"><span class="pre">embiggenUtils.</span></span><span class="sig-name descname"><span class="pre">Gas2Global</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iH5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Njp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nkp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#embiggenUtils.Gas2Global" title="Permalink to this definition"></a></dt>
+<dd><p>Copies a local gas field to the corresponding global indices in a larger gas field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> (<em>ndarray</em>) – The larger gas field with shape (Ns, Nv, NkT, NjT, NiT).</p></li>
+<li><p><strong>vID</strong> (<em>int</em>) – The index of the local gas field to be copied.</p></li>
+<li><p><strong>iH5</strong> (<em>ndarray</em>) – The local gas field with shape (Ns, Nv, Nk, Nj, Ni).</p></li>
+<li><p><strong>i</strong> (<em>int</em>) – The current i-index of the local gas field.</p></li>
+<li><p><strong>j</strong> (<em>int</em>) – The current j-index of the local gas field.</p></li>
+<li><p><strong>k</strong> (<em>int</em>) – The current k-index of the local gas field.</p></li>
+<li><p><strong>Ri</strong> (<em>int</em>) – The total number of i-indices in the larger gas field.</p></li>
+<li><p><strong>Rj</strong> (<em>int</em>) – The total number of j-indices in the larger gas field.</p></li>
+<li><p><strong>Rk</strong> (<em>int</em>) – The total number of k-indices in the larger gas field.</p></li>
+<li><p><strong>Nip</strong> (<em>int</em>) – The number of i-indices in the local gas field.</p></li>
+<li><p><strong>Njp</strong> (<em>int</em>) – The number of j-indices in the local gas field.</p></li>
+<li><p><strong>Nkp</strong> (<em>int</em>) – The number of k-indices in the local gas field.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="embiggenUtils.MaxDiv">
+<span class="sig-prename descclassname"><span class="pre">embiggenUtils.</span></span><span class="sig-name descname"><span class="pre">MaxDiv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">M</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#embiggenUtils.MaxDiv" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the maximum divergence and mean divergence of a given 3D array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>M</strong> (<em>numpy.ndarray</em>) – The input 3D array with shape (Nd, Nkc, Njc, Nic).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The divergence array with shape (Nk, Nj, Ni).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="embiggenUtils.PullRestartMPI">
+<span class="sig-prename descclassname"><span class="pre">embiggenUtils.</span></span><span class="sig-name descname"><span class="pre">PullRestartMPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bStr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nRes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rk</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#embiggenUtils.PullRestartMPI" title="Permalink to this definition"></a></dt>
+<dd><p>Pulls and restarts MPI data from input files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bStr</strong> (<em>str</em>) – Base string for file names.</p></li>
+<li><p><strong>nRes</strong> (<em>int</em>) – Number of resolution levels.</p></li>
+<li><p><strong>Ri</strong> (<em>int</em>) – Number of blocks in the i-direction.</p></li>
+<li><p><strong>Rj</strong> (<em>int</em>) – Number of blocks in the j-direction.</p></li>
+<li><p><strong>Rk</strong> (<em>int</em>) – Number of blocks in the k-direction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A tuple containing the following arrays and variables:</dt><dd><ul class="simple">
+<li><p>X (ndarray): X-coordinate array.</p></li>
+<li><p>Y (ndarray): Y-coordinate array.</p></li>
+<li><p>Z (ndarray): Z-coordinate array.</p></li>
+<li><p>nG (ndarray): Global gas array.</p></li>
+<li><p>nM (ndarray): Global magnetic flux array.</p></li>
+<li><p>nB (ndarray): Global magnetic field array.</p></li>
+<li><p>oG (ndarray): Ghost gas array.</p></li>
+<li><p>oM (ndarray): Ghost magnetic flux array.</p></li>
+<li><p>oB (ndarray): Ghost magnetic field array.</p></li>
+<li><p>G0 (ndarray): Initial gas array.</p></li>
+<li><p>fIn0 (str): Initial input file name.</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="embiggenUtils.PushRestartMPI">
+<span class="sig-prename descclassname"><span class="pre">embiggenUtils.</span></span><span class="sig-name descname"><span class="pre">PushRestartMPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nRes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Rk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nB</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oB</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtScl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#embiggenUtils.PushRestartMPI" title="Permalink to this definition"></a></dt>
+<dd><p>Pushes restart data to multiple output files in a parallel MPI simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>outid</strong> (<em>int</em>) – Output identifier.</p></li>
+<li><p><strong>nRes</strong> (<em>int</em>) – Number of restarts.</p></li>
+<li><p><strong>Ri</strong> (<em>int</em>) – Number of MPI processes in the i-direction.</p></li>
+<li><p><strong>Rj</strong> (<em>int</em>) – Number of MPI processes in the j-direction.</p></li>
+<li><p><strong>Rk</strong> (<em>int</em>) – Number of MPI processes in the k-direction.</p></li>
+<li><p><strong>X</strong> (<em>ndarray</em>) – Array of X-coordinates.</p></li>
+<li><p><strong>Y</strong> (<em>ndarray</em>) – Array of Y-coordinates.</p></li>
+<li><p><strong>Z</strong> (<em>ndarray</em>) – Array of Z-coordinates.</p></li>
+<li><p><strong>nG</strong> (<em>ndarray</em>) – Array of cell-centered values.</p></li>
+<li><p><strong>nM</strong> (<em>ndarray</em>) – Array of face fluxes.</p></li>
+<li><p><strong>nB</strong> (<em>ndarray</em>) – Array of cell-centered magnetic field values.</p></li>
+<li><p><strong>oG</strong> (<em>ndarray</em>) – Array of old cell-centered values.</p></li>
+<li><p><strong>oM</strong> (<em>ndarray</em>) – Array of old face fluxes.</p></li>
+<li><p><strong>oB</strong> (<em>ndarray</em>) – Array of old cell-centered magnetic field values.</p></li>
+<li><p><strong>G0</strong> (<em>ndarray</em>) – Array of initial cell-centered values.</p></li>
+<li><p><strong>f0</strong> (<em>str</em>) – File path of the input file.</p></li>
+<li><p><strong>dtScl</strong> (<em>float</em><em>, </em><em>optional</em>) – Scaling factor for the time step. Defaults to 1.0.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="embiggenUtils.Volume">
+<span class="sig-prename descclassname"><span class="pre">embiggenUtils.</span></span><span class="sig-name descname"><span class="pre">Volume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Xg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Yg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#embiggenUtils.Volume" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the volume of a grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Xg</strong> (<em>ndarray</em>) – X coordinates of the grid.</p></li>
+<li><p><strong>Yg</strong> (<em>ndarray</em>) – Y coordinates of the grid.</p></li>
+<li><p><strong>Zg</strong> (<em>ndarray</em>) – Z coordinates of the grid.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Volume of the grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dV (ndarray)</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The function calculates the volume of a grid by performing a convex hull calculation on each grid cell.
+The grid is assumed to have LFM-like symmetry.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="embiggenUtils.ccL2G">
+<span class="sig-prename descclassname"><span class="pre">embiggenUtils.</span></span><span class="sig-name descname"><span class="pre">ccL2G</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nip</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#embiggenUtils.ccL2G" title="Permalink to this definition"></a></dt>
+<dd><p>Convert local indices to global indices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>i</strong> (<em>int</em>) – The local index.</p></li>
+<li><p><strong>Ri</strong> (<em>int</em>) – The total number of local indices.</p></li>
+<li><p><strong>Nip</strong> (<em>int</em>) – The number of indices per process.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the start and end indices for the local and global indices.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="embiggenUtils.upCCMag">
+<span class="sig-prename descclassname"><span class="pre">embiggenUtils.</span></span><span class="sig-name descname"><span class="pre">upCCMag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dV0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dVu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Bxyz'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#embiggenUtils.upCCMag" title="Permalink to this definition"></a></dt>
+<dd><p>Upscales the given magnetic field data by a factor of 2 in each dimension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>B</strong> (<em>numpy.ndarray</em>) – The input magnetic field data with shape (Nv, Nk, Nj, Ni).</p></li>
+<li><p><strong>dV0</strong> (<em>numpy.ndarray</em>) – The cell volume data with shape (Nk, Nj, Ni).</p></li>
+<li><p><strong>dVu</strong> (<em>float</em>) – The upscaled cell volume.</p></li>
+<li><p><strong>vID</strong> (<em>str</em><em>, </em><em>optional</em>) – The identifier for the variable being upscaled. Default is “Bxyz”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The upscaled magnetic field data with shape (Nv, 2*Nk, 2*Nj, 2*Ni).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Bu (numpy.ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="embiggenUtils.upFlux">
+<span class="sig-prename descclassname"><span class="pre">embiggenUtils.</span></span><span class="sig-name descname"><span class="pre">upFlux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">M</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#embiggenUtils.upFlux" title="Permalink to this definition"></a></dt>
+<dd><p>Upscales the face fluxes of a given input array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>M</strong> (<em>numpy.ndarray</em>) – The input array representing the face fluxes.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The upscaled face fluxes.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Mu (numpy.ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="embiggenUtils.upGas">
+<span class="sig-prename descclassname"><span class="pre">embiggenUtils.</span></span><span class="sig-name descname"><span class="pre">upGas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dV0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dVu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Gas'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#embiggenUtils.upGas" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="embiggenUtils.upGrid">
+<span class="sig-prename descclassname"><span class="pre">embiggenUtils.</span></span><span class="sig-name descname"><span class="pre">upGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Z</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#embiggenUtils.upGrid" title="Permalink to this definition"></a></dt>
+<dd><p>Upscales a grid by embedding old points into a new grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em>) – 3D array representing the X-coordinates of the original grid.</p></li>
+<li><p><strong>Y</strong> (<em>ndarray</em>) – 3D array representing the Y-coordinates of the original grid.</p></li>
+<li><p><strong>Z</strong> (<em>ndarray</em>) – 3D array representing the Z-coordinates of the original grid.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Upscaled X-coordinates of the new grid.
+ndarray: Upscaled Y-coordinates of the new grid.
+ndarray: Upscaled Z-coordinates of the new grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="embiggenUtils.upVarCC">
+<span class="sig-prename descclassname"><span class="pre">embiggenUtils.</span></span><span class="sig-name descname"><span class="pre">upVarCC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dV0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dVu</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#embiggenUtils.upVarCC" title="Permalink to this definition"></a></dt>
+<dd><p>Upscale a variable defined on a coarse grid to a finer grid using conservative interpolation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Q</strong> (<em>ndarray</em>) – Variable defined on the coarse grid.</p></li>
+<li><p><strong>dV0</strong> (<em>ndarray</em>) – Volumes of the coarse grid cells.</p></li>
+<li><p><strong>dVu</strong> (<em>ndarray</em>) – Volumes of the finer subgrid cells.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Upscaled variable on the finer grid.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The function loops over the coarse grid and calculates the weighted contribution of each subcell on the finer grid.
+It then scales back the density to obtain the upscaled variable.
+The conservation of the variable is tested by comparing the total values before and after the upscaling process.</p>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="chimp.html" class="btn btn-neutral float-left" title="chimp package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gamera.html" class="btn btn-neutral float-right" title="gamera package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Center for Geospace Storms.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

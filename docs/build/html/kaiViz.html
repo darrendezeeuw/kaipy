@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>kaiViz module &mdash; Kaipy 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="kaijson module" href="kaijson.html" />
+    <link rel="prev" title="kaiTools module" href="kaiTools.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Kaipy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">kaipy</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cdaweb_utils.html">cdaweb_utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chimp.html">chimp package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embiggenUtils.html">embiggenUtils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gamera.html">gamera package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gamhelio.html">gamhelio package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kJobs.html">kJobs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kaiH5.html">kaiH5 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kaiTools.html">kaiTools module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">kaiViz module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.DrawCut"><code class="docutils literal notranslate"><span class="pre">DrawCut()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.MidpointNormalize"><code class="docutils literal notranslate"><span class="pre">MidpointNormalize</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.SetAx"><code class="docutils literal notranslate"><span class="pre">SetAx()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.SetAxDate"><code class="docutils literal notranslate"><span class="pre">SetAxDate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.SetAxLabs"><code class="docutils literal notranslate"><span class="pre">SetAxLabs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.ShaveX"><code class="docutils literal notranslate"><span class="pre">ShaveX()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.ShaveY"><code class="docutils literal notranslate"><span class="pre">ShaveY()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.addEarth2D"><code class="docutils literal notranslate"><span class="pre">addEarth2D()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.compPlot"><code class="docutils literal notranslate"><span class="pre">compPlot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.genCB"><code class="docutils literal notranslate"><span class="pre">genCB()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.genNorm"><code class="docutils literal notranslate"><span class="pre">genNorm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.get_aspect"><code class="docutils literal notranslate"><span class="pre">get_aspect()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.helioCompPlot_new"><code class="docutils literal notranslate"><span class="pre">helioCompPlot_new()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.helioItemPlot_new"><code class="docutils literal notranslate"><span class="pre">helioItemPlot_new()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.helioTrajPlot"><code class="docutils literal notranslate"><span class="pre">helioTrajPlot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.helio_labelStr"><code class="docutils literal notranslate"><span class="pre">helio_labelStr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.itemPlot"><code class="docutils literal notranslate"><span class="pre">itemPlot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.labelStr"><code class="docutils literal notranslate"><span class="pre">labelStr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.picSz"><code class="docutils literal notranslate"><span class="pre">picSz()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.reWrap"><code class="docutils literal notranslate"><span class="pre">reWrap()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.savePic"><code class="docutils literal notranslate"><span class="pre">savePic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.trajPlot"><code class="docutils literal notranslate"><span class="pre">trajPlot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kaiViz.trimFig"><code class="docutils literal notranslate"><span class="pre">trimFig()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="kaijson.html">kaijson module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kaixdmf.html">kaixdmf module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kdefs.html">kdefs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lfm2kaiju.html">lfm2kaiju module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paraview.html">paraview package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rcm.html">rcm package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="remix.html">remix package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solarWind.html">solarWind package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supermag_api.html">supermag_api module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supermage.html">supermage module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="transform.html">transform module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Kaipy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">kaipy</a></li>
+      <li class="breadcrumb-item active">kaiViz module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/kaiViz.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-kaiViz">
+<span id="kaiviz-module"></span><h1>kaiViz module<a class="headerlink" href="#module-kaiViz" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.DrawCut">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">DrawCut</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Rin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.DrawCut" title="Permalink to this definition"></a></dt>
+<dd><p>Draw a cut using matplotlib.patches.Wedge.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Rin</strong> (<em>float</em>) – The inner radius of the cut. Default is 2.5.</p></li>
+<li><p><strong>ax</strong> (<em>matplotlib.axes.Axes</em><em>, </em><em>optional</em>) – The axes on which to draw the cut. If not provided, the current axes will be used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The created Wedge object representing the cut.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib.patches.Wedge</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="kaiViz.MidpointNormalize">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">MidpointNormalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">midpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.MidpointNormalize" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Normalize</span></code></p>
+<p>Custom normalization class that maps values to the range [0, 1] with a specified midpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vmin</strong> (<em>float</em><em>, </em><em>optional</em>) – The minimum value of the input range. If not provided, the minimum value of the input data will be used.</p></li>
+<li><p><strong>vmax</strong> – (float, optional): The maximum value of the input range. If not provided, the maximum value of the input data will be used.</p></li>
+<li><p><strong>midpoint</strong> (<em>float</em><em>, </em><em>optional</em>) – The midpoint value that will be mapped to 0.5 in the output range. If not provided, the average of vmin and vmax will be used.</p></li>
+<li><p><strong>clip</strong> (<em>bool</em><em>, </em><em>default False</em>) – If True, values outside the range [vmin, vmax] will be clipped to vmin or vmax.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The normalized value(s) within the range [0, 1].</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>normalized_value (numpy.ma.masked_array)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Example usage:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">norm</span> <span class="pre">=</span> <span class="pre">MidpointNormalize(vmin=0,</span> <span class="pre">vmax=10,</span> <span class="pre">midpoint=5)</span>
+<span class="pre">normalized_value</span> <span class="pre">=</span> <span class="pre">norm(7)</span>
+<span class="pre">print(normalized_value)</span>&#160; <span class="pre">#</span> <span class="pre">Output:</span> <span class="pre">0.7</span>
+<span class="pre">`</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.SetAx">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">SetAx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyBds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-1,</span> <span class="pre">1,</span> <span class="pre">-1,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Adj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'box'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.SetAx" title="Permalink to this definition"></a></dt>
+<dd><p>Set axis plot bounds and aspect ratio.</p>
+<p>Ensure that the plot has an equal aspect ratio and that the axis limits
+are set to the specified values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xyBds</strong> – list of 4 float, optional, default [-1, 1, -1, 1]
+Axis limits for x and y as (xmin, xmax, ymin, ymax).</p></li>
+<li><p><strong>ax</strong> – matplotlib.Axes, optional, default None
+Axes object to modify.</p></li>
+<li><p><strong>Adj</strong> – str, optional, default ‘box
+Specify what aspect of the plot to adjust to achieve equal aspect
+ratio.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.SetAxDate">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">SetAxDate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'%H:%M</span> <span class="pre">\n%Y-%m-%d'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.SetAxDate" title="Permalink to this definition"></a></dt>
+<dd><p>Set the x-axis of the given Axes object to display dates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Ax</strong> – The Axes object to set the x-axis date format for.</p></li>
+<li><p><strong>fmt</strong> – The date format string to use. Defaults to ‘%H:%M%Y-%m-%d’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.SetAxLabs">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">SetAxLabs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xLab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yLab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doBot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doLeft</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'medium'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.SetAxLabs" title="Permalink to this definition"></a></dt>
+<dd><p>Set axis plot bounds and aspect ratio.</p>
+<p>Ensure that the plot has an equal aspect ratio and that the axis limits
+are set to the specified values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xyBds</strong> – list of 4 float, optional, default [-1, 1, -1, 1]
+Axis limits for x and y as (xmin, xmax, ymin, ymax).</p></li>
+<li><p><strong>ax</strong> – matplotlib.Axes, optional, default None
+Axes object to modify.</p></li>
+<li><p><strong>Adj</strong> – str, optional, default ‘box
+Specify what aspect of the plot to adjust to achieve equal aspect
+ratio.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.ShaveX">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">ShaveX</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fName</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.ShaveX" title="Permalink to this definition"></a></dt>
+<dd><p>ShaveX function crops an image file by removing one pixel from the right side.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fName</strong> (<em>str</em>) – The file name of the image to be cropped.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>fName file is cropped by one pixel on the right side.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.ShaveY">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">ShaveY</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fName</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.ShaveY" title="Permalink to this definition"></a></dt>
+<dd><p>Shave one pixel from the top of the image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fName</strong> (<em>str</em>) – The file name of the image.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>fName file is cropped by one pixel on the top.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.addEarth2D">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">addEarth2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Re</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-90</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.addEarth2D" title="Permalink to this definition"></a></dt>
+<dd><p>Adds a 2D representation of Earth to the given matplotlib axes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Re</strong> (<em>float</em>) – Radius of the Earth. Default is 1.</p></li>
+<li><p><strong>angle</strong> (<em>float</em>) – Angle at which the Earth is rotated. Default is -90.</p></li>
+<li><p><strong>ax</strong> (<em>matplotlib.axes.Axes</em>) – The axes to which the Earth will be added. If None, the current axes will be used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list containing the two Wedge objects representing the Earth.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.compPlot">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">compPlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plotname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.compPlot" title="Permalink to this definition"></a></dt>
+<dd><p>Generate a composite plot with multiple subplots based on the given data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>plotname</strong> (<em>str</em>) – The title of the composite plot.</p></li>
+<li><p><strong>scId</strong> (<em>str</em>) – The identifier for the subplot legend.</p></li>
+<li><p><strong>data</strong> (<em>dict</em>) – A dictionary containing the data to be plotted.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Image file saved to disk.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.genCB">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">genCB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">AxCB</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbT</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Title'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cM</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'viridis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doVert</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbSz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'medium'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ntk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.genCB" title="Permalink to this definition"></a></dt>
+<dd><p>Generate a colorbar using matplotlib.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>AxCB</strong> (<em>Axes object</em>) – The axes object where the colorbar will be drawn.</p></li>
+<li><p><strong>vN</strong> (<em>Normalize object</em>) – The normalization object used to map data values to colors.</p></li>
+<li><p><strong>cbT</strong> (<em>str</em><em>, </em><em>optional</em>) – The title of the colorbar. Default is “Title”.</p></li>
+<li><p><strong>cM</strong> (<em>str</em><em>, </em><em>optional</em>) – The name of the colormap to use. Default is “viridis”.</p></li>
+<li><p><strong>doVert</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to display the colorbar vertically. Default is False.</p></li>
+<li><p><strong>cbSz</strong> (<em>str</em><em>, </em><em>optional</em>) – The size of the colorbar labels and title. Default is “medium”.</p></li>
+<li><p><strong>Ntk</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of ticks to display on the colorbar. Default is None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generated colorbar object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>cb (Colorbar object)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.genNorm">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">genNorm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vMin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doLog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doSymLog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">midP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.genNorm" title="Permalink to this definition"></a></dt>
+<dd><p>Generate a matplotlib color normalization object based on the given parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vMin</strong> (<em>float</em>) – the minimum value of the data range</p></li>
+<li><p><strong>vMax</strong> (<em>float</em>) – optional, the maximum value of the data range (default: None)</p></li>
+<li><p><strong>doLog</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to use logarithmic normalization (default: False)</p></li>
+<li><p><strong>doSymLog</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to use symmetric logarithmic normalization (default: False)</p></li>
+<li><p><strong>midP</strong> (<em>float</em><em>, </em><em>optional</em>) – the midpoint value for midpoint normalization (default: None)</p></li>
+<li><p><strong>linP</strong> (<em>float</em><em>, </em><em>optional</em>) – the linear threshold for symmetric logarithmic normalization (default: 1.0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the color normalization object</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>vN (matplotlib.colors.Normalize)</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If vMax is not provided, the absolute value of vMin is used as both vMin and vMax.
+If midP is not provided, midpoint normalization is not used.
+If doLog is True, logarithmic normalization is used.
+If doSymLog is True, symmetric logarithmic normalization is used.
+If none of the above conditions are met, linear normalization is used.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.get_aspect">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">get_aspect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.get_aspect" title="Permalink to this definition"></a></dt>
+<dd><p>Get the current aspect ratio of the given ax.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ax</strong> – The matplotlib Axes object.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The aspect ratio of the Axes object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.helioCompPlot_new">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">helioCompPlot_new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sc_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sc_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.helioCompPlot_new" title="Permalink to this definition"></a></dt>
+<dd><p>Create comparison plots for heliospheric results.</p>
+<p>Create comparison plots for heliospheric results and save the plots to a
+file. The plots will compare simulation results to measured spacecraft
+data. The compared variables are radial velocity, radial magnetic field,
+number density, and temperature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>plotname</strong> (<em>str</em>) – Path to file to hold plot image.</p></li>
+<li><p><strong>scId</strong> (<em>str</em>) – ID string for spacecraft.</p></li>
+<li><p><strong>data</strong> (<em>spacepy.datamodel.SpaceData</em>) – The current spacecraft and model data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.helioItemPlot_new">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">helioItemPlot_new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sc_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plotNum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numPlots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_zero</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.helioItemPlot_new" title="Permalink to this definition"></a></dt>
+<dd><p>Plot a single variable for the comparison plot.</p>
+<p>Plot a single variable for the comparison plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Ax</strong> (<em>matplotlib.axes._subplots.AxesSubplot</em>) – Matplotlib axis for plot.</p></li>
+<li><p><strong>data</strong> (<em>spacepy.datamodel.SpaceData</em>) – Object containing the measured spacecraft data.</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – Name of variable to plot.</p></li>
+<li><p><strong>plotNum</strong> (<em>int</em>) – Position of plot in sequence of plots.</p></li>
+<li><p><strong>numPlots</strong> (<em>int</em>) – Number of plots in sequence.</p></li>
+<li><p><strong>show_zero</strong> (<em>bool</em><em>, </em><em>default False</em>) – Set to True to show a black dashed line at the 0 level for the variable.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.helioTrajPlot">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">helioTrajPlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sc_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sc_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.helioTrajPlot" title="Permalink to this definition"></a></dt>
+<dd><p>Create a set of trajectory plots for a heliospheric spacecraft.</p>
+<p>Create a set of trajectory plots for a heliospheric spacecraft.
+These plots are created in the original spacecraft frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>plot_name</strong> (<em>str</em>) – Path to plot file.</p></li>
+<li><p><strong>scId</strong> (<em>str</em>) – Name of spacecraft.</p></li>
+<li><p><strong>data</strong> (<em>spacepy.datamodel.SpaceData</em>) – Object containing spacecraft data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.helio_labelStr">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">helio_labelStr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vecComp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.helio_labelStr" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the label for a given data key in the heliocentric coordinate system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>dict</em>) – A dictionary containing the data.</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – The key for which the label is needed.</p></li>
+<li><p><strong>vecComp</strong> (<em>str</em>) – The vector component for which the label is needed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The label for the specified data key and vector component.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.itemPlot">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">itemPlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plotNum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numPlots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vecComp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.itemPlot" title="Permalink to this definition"></a></dt>
+<dd><p>Plot the data for a specific item.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Ax</strong> (<em>matplotlib.axes.Axes</em>) – The axes object to plot on.</p></li>
+<li><p><strong>data</strong> (<em>dict</em>) – The data dictionary containing the data to plot.</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – The key representing the item to plot.</p></li>
+<li><p><strong>plotNum</strong> (<em>int</em>) – The plot number.</p></li>
+<li><p><strong>numPlots</strong> (<em>int</em>) – The total number of plots.</p></li>
+<li><p><strong>vecComp</strong> (<em>int</em><em>, </em><em>optional</em>) – The vector component to plot. Defaults to -1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.labelStr">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">labelStr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vecComp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.labelStr" title="Permalink to this definition"></a></dt>
+<dd><p>Generate a label string based on the given data, key, and vector component.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>dict</em>) – A dictionary containing the data.</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – The key used to access the data.</p></li>
+<li><p><strong>vecComp</strong> (<em>int</em>) – The vector component.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generated label string.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.picSz">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">picSz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fName</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.picSz" title="Permalink to this definition"></a></dt>
+<dd><p>Get the size of an image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fName</strong> (<em>str</em>) – The file path of the image.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the width and height of the image.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.reWrap">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">reWrap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">V</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.reWrap" title="Permalink to this definition"></a></dt>
+<dd><p>Re-wraps a 2D array by adding an extra column at the end, where the values in the new column are the same as the values in the first column.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>V</strong> (<em>numpy.ndarray</em>) – The input 2D array.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The re-wrapped 2D array with an extra column.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.savePic">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">savePic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fOut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpiQ</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doTrim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bLenX</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bLenY</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doClose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doEps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.savePic" title="Permalink to this definition"></a></dt>
+<dd><p>Save a matplotlib figure to a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fOut</strong> (<em>str</em>) – The output file path.</p></li>
+<li><p><strong>dpiQ</strong> (<em>int</em>) – The resolution of the saved figure in dots per inch (default: 300).</p></li>
+<li><p><strong>doTrim</strong> (<em>bool</em>) – Whether to trim the saved figure (default: True).</p></li>
+<li><p><strong>bLenX</strong> (<em>int</em>) – The length of the x-axis trim boundary (default: 20).</p></li>
+<li><p><strong>bLenY</strong> (<em>int</em>) – The length of the y-axis trim boundary (default: None).</p></li>
+<li><p><strong>doClose</strong> (<em>bool</em>) – Whether to close all figures after saving (default: False).</p></li>
+<li><p><strong>doEps</strong> (<em>bool</em>) – Whether to save the figure in EPS format (default: False).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Image File saved to disk.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.trajPlot">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">trajPlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plotname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toRe</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.trajPlot" title="Permalink to this definition"></a></dt>
+<dd><p>Plot the trajectory of a spacecraft.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lotname</strong> (<em>str</em>) – The name of the plot.</p></li>
+<li><p><strong>scId</strong> (<em>str</em>) – The spacecraft ID.</p></li>
+<li><p><strong>data</strong> (<em>dict</em>) – A dictionary containing the spacecraft’s ephemeris data.</p></li>
+<li><p><strong>toRe</strong> (<em>float</em>) – The conversion factor from meters to Re (Earth radii).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Image file saved to disk.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="kaiViz.trimFig">
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">trimFig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bLenX</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bLenY</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doEven</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.trimFig" title="Permalink to this definition"></a></dt>
+<dd><p>Trims the figure image file by removing the borders and resizing it to have even dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fName</strong> (<em>str</em>) – The file name of the figure image.</p></li>
+<li><p><strong>bLenX</strong> (<em>int</em>) – The length of the border to be added on the X-axis. Default is 20.</p></li>
+<li><p><strong>bLenY</strong> (<em>int</em>) – The length of the border to be added on the Y-axis. If not provided, it will be set to bLenX.</p></li>
+<li><p><strong>doEven</strong> (<em>bool</em>) – Flag indicating whether to resize the image to have even dimensions. Default is True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Image file saved to disk.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="kaiTools.html" class="btn btn-neutral float-left" title="kaiTools module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="kaijson.html" class="btn btn-neutral float-right" title="kaijson module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Center for Geospace Storms.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
