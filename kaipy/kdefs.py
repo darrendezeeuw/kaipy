@@ -82,7 +82,7 @@ SaturnM0g = 0.21        # Gauss
 RSaturnXE = 9.5         # Rx = X*Re
 #Jupiter
 JupiterM0g = 4.8        # Gauss
-RJupiterXE = 11.0       # !Rx = X*Re
+RJupiterXE = 11.209       # !Rx = X*Re
 #Mercury
 MercuryM0g = 0.00345    # Gauss
 RMercuryXE = 0.31397    # Rx = X*Re
