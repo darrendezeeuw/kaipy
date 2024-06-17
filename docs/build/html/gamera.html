@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>gamera package &mdash; Kaipy 1.0.0 documentation</title>
@@ -13,11 +13,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -53,99 +53,15 @@
 <li class="toctree-l2"><a class="reference internal" href="embiggenUtils.html">embiggenUtils module</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">gamera package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-gamera.block_gampp">gamera.block_gampp module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.block_gampp.GameraPipe"><code class="docutils literal notranslate"><span class="pre">GameraPipe</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-gamera.block_gampp">gamera.block_gampp module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#gamera-deltabviz-module">gamera.deltabViz module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-gamera.gamGrids">gamera.gamGrids module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.Aug2D"><code class="docutils literal notranslate"><span class="pre">Aug2D()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.Aug2Dext"><code class="docutils literal notranslate"><span class="pre">Aug2Dext()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.Aug3D"><code class="docutils literal notranslate"><span class="pre">Aug3D()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.Egglipses"><code class="docutils literal notranslate"><span class="pre">Egglipses()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.GenKSph"><code class="docutils literal notranslate"><span class="pre">GenKSph()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.GenKSphNonU"><code class="docutils literal notranslate"><span class="pre">GenKSphNonU()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.GenKSphNonUGL"><code class="docutils literal notranslate"><span class="pre">GenKSphNonUGL()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.LoadTabG"><code class="docutils literal notranslate"><span class="pre">LoadTabG()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.PrintRing"><code class="docutils literal notranslate"><span class="pre">PrintRing()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.RampUp"><code class="docutils literal notranslate"><span class="pre">RampUp()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.VizGrid"><code class="docutils literal notranslate"><span class="pre">VizGrid()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.WriteChimp"><code class="docutils literal notranslate"><span class="pre">WriteChimp()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.WriteGrid"><code class="docutils literal notranslate"><span class="pre">WriteGrid()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.genEgg"><code class="docutils literal notranslate"><span class="pre">genEgg()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.genEllip"><code class="docutils literal notranslate"><span class="pre">genEllip()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.genFatEgg"><code class="docutils literal notranslate"><span class="pre">genFatEgg()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.genLFM"><code class="docutils literal notranslate"><span class="pre">genLFM()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.genRing"><code class="docutils literal notranslate"><span class="pre">genRing()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.genSph"><code class="docutils literal notranslate"><span class="pre">genSph()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.getLFM"><code class="docutils literal notranslate"><span class="pre">getLFM()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gamGrids.regrid"><code class="docutils literal notranslate"><span class="pre">regrid()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-gamera.gampp">gamera.gampp module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.gampp.GameraPipe"><code class="docutils literal notranslate"><span class="pre">GameraPipe</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-gamera.magsphere">gamera.magsphere module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.magsphere.GamsphPipe"><code class="docutils literal notranslate"><span class="pre">GamsphPipe</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-gamera.magsphereRescale">gamera.magsphereRescale module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.magsphereRescale.MaxDiv"><code class="docutils literal notranslate"><span class="pre">MaxDiv()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.magsphereRescale.PullRestartMPI"><code class="docutils literal notranslate"><span class="pre">PullRestartMPI()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.magsphereRescale.PushRestartMPI"><code class="docutils literal notranslate"><span class="pre">PushRestartMPI()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.magsphereRescale.Volume"><code class="docutils literal notranslate"><span class="pre">Volume()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.magsphereRescale.downFlux"><code class="docutils literal notranslate"><span class="pre">downFlux()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.magsphereRescale.downGas"><code class="docutils literal notranslate"><span class="pre">downGas()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.magsphereRescale.downGrid"><code class="docutils literal notranslate"><span class="pre">downGrid()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.magsphereRescale.downMIX"><code class="docutils literal notranslate"><span class="pre">downMIX()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.magsphereRescale.downVolt"><code class="docutils literal notranslate"><span class="pre">downVolt()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.magsphereRescale.upFlux"><code class="docutils literal notranslate"><span class="pre">upFlux()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.magsphereRescale.upGas"><code class="docutils literal notranslate"><span class="pre">upGas()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.magsphereRescale.upGrid"><code class="docutils literal notranslate"><span class="pre">upGrid()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.magsphereRescale.upMIX"><code class="docutils literal notranslate"><span class="pre">upMIX()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.magsphereRescale.upRCM"><code class="docutils literal notranslate"><span class="pre">upRCM()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.magsphereRescale.upRCM1D"><code class="docutils literal notranslate"><span class="pre">upRCM1D()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.magsphereRescale.upRCM1Dw"><code class="docutils literal notranslate"><span class="pre">upRCM1Dw()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.magsphereRescale.upRCMCpl"><code class="docutils literal notranslate"><span class="pre">upRCMCpl()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.magsphereRescale.upVolt"><code class="docutils literal notranslate"><span class="pre">upVolt()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-gamera.msphViz">gamera.msphViz module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.msphViz.AddIonBoxes"><code class="docutils literal notranslate"><span class="pre">AddIonBoxes()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.msphViz.AddSizeArgs"><code class="docutils literal notranslate"><span class="pre">AddSizeArgs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.msphViz.CalcTotalErrAbs"><code class="docutils literal notranslate"><span class="pre">CalcTotalErrAbs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.msphViz.CalcTotalErrRel"><code class="docutils literal notranslate"><span class="pre">CalcTotalErrRel()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.msphViz.GetSizeBds"><code class="docutils literal notranslate"><span class="pre">GetSizeBds()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.msphViz.PlotEqB"><code class="docutils literal notranslate"><span class="pre">PlotEqB()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.msphViz.PlotEqEphi"><code class="docutils literal notranslate"><span class="pre">PlotEqEphi()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.msphViz.PlotEqErrAbs"><code class="docutils literal notranslate"><span class="pre">PlotEqErrAbs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.msphViz.PlotEqErrRel"><code class="docutils literal notranslate"><span class="pre">PlotEqErrRel()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.msphViz.PlotJyXZ"><code class="docutils literal notranslate"><span class="pre">PlotJyXZ()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.msphViz.PlotLogicalErrAbs"><code class="docutils literal notranslate"><span class="pre">PlotLogicalErrAbs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.msphViz.PlotLogicalErrRel"><code class="docutils literal notranslate"><span class="pre">PlotLogicalErrRel()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.msphViz.PlotMPI"><code class="docutils literal notranslate"><span class="pre">PlotMPI()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.msphViz.PlotMerid"><code class="docutils literal notranslate"><span class="pre">PlotMerid()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.msphViz.plotPlane"><code class="docutils literal notranslate"><span class="pre">plotPlane()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.msphViz.plotXY"><code class="docutils literal notranslate"><span class="pre">plotXY()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.msphViz.plotXZ"><code class="docutils literal notranslate"><span class="pre">plotXZ()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-gamera.rcmpp">gamera.rcmpp module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.rcmpp.AddRCMBox"><code class="docutils literal notranslate"><span class="pre">AddRCMBox()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.rcmpp.GetMask"><code class="docutils literal notranslate"><span class="pre">GetMask()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.rcmpp.GetPotential"><code class="docutils literal notranslate"><span class="pre">GetPotential()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.rcmpp.GetVarMask"><code class="docutils literal notranslate"><span class="pre">GetVarMask()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.rcmpp.RCMEq"><code class="docutils literal notranslate"><span class="pre">RCMEq()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.rcmpp.RCMInset"><code class="docutils literal notranslate"><span class="pre">RCMInset()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-gamera.remixpp">gamera.remixpp module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.remixpp.AddCBs"><code class="docutils literal notranslate"><span class="pre">AddCBs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.remixpp.AddPotCB"><code class="docutils literal notranslate"><span class="pre">AddPotCB()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#gamera.remixpp.CMIPic"><code class="docutils literal notranslate"><span class="pre">CMIPic()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-gamera.gamGrids">gamera.gamGrids module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gamera-gampp-module">gamera.gampp module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gamera-magsphere-module">gamera.magsphere module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-gamera.magsphereRescale">gamera.magsphereRescale module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gamera-msphviz-module">gamera.msphViz module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gamera-rcmpp-module">gamera.rcmpp module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-gamera.remixpp">gamera.remixpp module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-gamera">Module contents</a></li>
 </ul>
 </li>
@@ -359,145 +275,11 @@
 <dd></dd></dl>
 
 </section>
-<section id="module-gamera.gampp">
-<span id="gamera-gampp-module"></span><h2>gamera.gampp module<a class="headerlink" href="#module-gamera.gampp" title="Permalink to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="gamera.gampp.GameraPipe">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gamera.gampp.</span></span><span class="sig-name descname"><span class="pre">GameraPipe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ftag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doFast</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doVerbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doParallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nWorkers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.gampp.GameraPipe" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.gampp.GameraPipe.GetGrid">
-<span class="sig-name descname"><span class="pre">GetGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doVerbose</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.gampp.GameraPipe.GetGrid" title="Permalink to this definition"></a></dt>
-<dd><p>Load Grid from Gamera HDF5 file</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.gampp.GameraPipe.GetGridParallel">
-<span class="sig-name descname"><span class="pre">GetGridParallel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doVerbose</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.gampp.GameraPipe.GetGridParallel" title="Permalink to this definition"></a></dt>
-<dd><p>Parallel read of grid datasets</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.gampp.GameraPipe.GetRootSlice">
-<span class="sig-name descname"><span class="pre">GetRootSlice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ijkdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'idir'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vScl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doVerb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.gampp.GameraPipe.GetRootSlice" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.gampp.GameraPipe.GetRootVar">
-<span class="sig-name descname"><span class="pre">GetRootVar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vScl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doVerb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.gampp.GameraPipe.GetRootVar" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.gampp.GameraPipe.GetSlice">
-<span class="sig-name descname"><span class="pre">GetSlice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ijkdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'idir'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vScl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doVerb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.gampp.GameraPipe.GetSlice" title="Permalink to this definition"></a></dt>
-<dd><p>Get variable slice of constant i,j,k
-Directions = idir/jdir/kdir strings
-Indexing = (1,Nijk)</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.gampp.GameraPipe.GetVar">
-<span class="sig-name descname"><span class="pre">GetVar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vScl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doVerb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.gampp.GameraPipe.GetVar" title="Permalink to this definition"></a></dt>
-<dd><p>Read Var with name vID</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.gampp.GameraPipe.GetVarParallel">
-<span class="sig-name descname"><span class="pre">GetVarParallel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vScl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doVerb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.gampp.GameraPipe.GetVarParallel" title="Permalink to this definition"></a></dt>
-<dd><p>Parallel read of Var</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.gampp.GameraPipe.OpenPipe">
-<span class="sig-name descname"><span class="pre">OpenPipe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doVerbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.gampp.GameraPipe.OpenPipe" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.gampp.GameraPipe.SetUnits">
-<span class="sig-name descname"><span class="pre">SetUnits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.gampp.GameraPipe.SetUnits" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<section id="gamera-gampp-module">
+<h2>gamera.gampp module<a class="headerlink" href="#gamera-gampp-module" title="Permalink to this heading"></a></h2>
 </section>
-<section id="module-gamera.magsphere">
-<span id="gamera-magsphere-module"></span><h2>gamera.magsphere module<a class="headerlink" href="#module-gamera.magsphere" title="Permalink to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="gamera.magsphere.GamsphPipe">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gamera.magsphere.</span></span><span class="sig-name descname"><span class="pre">GamsphPipe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ftag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doFast</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Earth'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.magsphere.GamsphPipe" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">GameraPipe</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.magsphere.GamsphPipe.AddCPCP">
-<span class="sig-name descname"><span class="pre">AddCPCP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.9,</span> <span class="pre">0.95]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cLab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'medium'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doBox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BoxC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lightgrey'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.magsphere.GamsphPipe.AddCPCP" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.magsphere.GamsphPipe.AddSW">
-<span class="sig-name descname"><span class="pre">AddSW</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.725,</span> <span class="pre">0.025]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cLab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'medium'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doBox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BoxC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lightgrey'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doAll</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.magsphere.GamsphPipe.AddSW" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.magsphere.GamsphPipe.AddTime">
-<span class="sig-name descname"><span class="pre">AddTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.9,</span> <span class="pre">0.95]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cLab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'medium'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doBox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BoxC</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lightgrey'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.magsphere.GamsphPipe.AddTime" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.magsphere.GamsphPipe.CMIViz">
-<span class="sig-name descname"><span class="pre">CMIViz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">AxM</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nStp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doNorth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'upper</span> <span class="pre">left'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dxy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[20,</span> <span class="pre">20]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.magsphere.GamsphPipe.CMIViz" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.magsphere.GamsphPipe.DelBz">
-<span class="sig-name descname"><span class="pre">DelBz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.magsphere.GamsphPipe.DelBz" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.magsphere.GamsphPipe.EggSlice">
-<span class="sig-name descname"><span class="pre">EggSlice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vScl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doEq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doVerb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numGhost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.magsphere.GamsphPipe.EggSlice" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.magsphere.GamsphPipe.Gam2Remix">
-<span class="sig-name descname"><span class="pre">Gam2Remix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.magsphere.GamsphPipe.Gam2Remix" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.magsphere.GamsphPipe.GetCPCP">
-<span class="sig-name descname"><span class="pre">GetCPCP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.magsphere.GamsphPipe.GetCPCP" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.magsphere.GamsphPipe.GetM0">
-<span class="sig-name descname"><span class="pre">GetM0</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gamera.magsphere.GamsphPipe.GetM0" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.magsphere.GamsphPipe.OpenPipe">
-<span class="sig-name descname"><span class="pre">OpenPipe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doVerbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.magsphere.GamsphPipe.OpenPipe" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.magsphere.GamsphPipe.bStream">
-<span class="sig-name descname"><span class="pre">bStream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyBds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-35,</span> <span class="pre">25,</span> <span class="pre">-25,</span> <span class="pre">25]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.magsphere.GamsphPipe.bStream" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.magsphere.GamsphPipe.doStream">
-<span class="sig-name descname"><span class="pre">doStream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">U</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">V</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyBds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-35,</span> <span class="pre">25,</span> <span class="pre">-25,</span> <span class="pre">25]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.magsphere.GamsphPipe.doStream" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.magsphere.GamsphPipe.eqMagB">
-<span class="sig-name descname"><span class="pre">eqMagB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.magsphere.GamsphPipe.eqMagB" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="gamera.magsphere.GamsphPipe.vStream">
-<span class="sig-name descname"><span class="pre">vStream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyBds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-35,</span> <span class="pre">25,</span> <span class="pre">-25,</span> <span class="pre">25]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.magsphere.GamsphPipe.vStream" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<section id="gamera-magsphere-module">
+<h2>gamera.magsphere module<a class="headerlink" href="#gamera-magsphere-module" title="Permalink to this heading"></a></h2>
 </section>
 <section id="module-gamera.magsphereRescale">
 <span id="gamera-magsphererescale-module"></span><h2>gamera.magsphereRescale module<a class="headerlink" href="#module-gamera.magsphereRescale" title="Permalink to this heading"></a></h2>
@@ -592,126 +374,11 @@ Indexing = (1,Nijk)</p>
 <dd></dd></dl>
 
 </section>
-<section id="module-gamera.msphViz">
-<span id="gamera-msphviz-module"></span><h2>gamera.msphViz module<a class="headerlink" href="#module-gamera.msphViz" title="Permalink to this heading"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.msphViz.AddIonBoxes">
-<span class="sig-prename descclassname"><span class="pre">gamera.msphViz.</span></span><span class="sig-name descname"><span class="pre">AddIonBoxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ion</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.msphViz.AddIonBoxes" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.msphViz.AddSizeArgs">
-<span class="sig-prename descclassname"><span class="pre">gamera.msphViz.</span></span><span class="sig-name descname"><span class="pre">AddSizeArgs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parser</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.msphViz.AddSizeArgs" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.msphViz.CalcTotalErrAbs">
-<span class="sig-prename descclassname"><span class="pre">gamera.msphViz.</span></span><span class="sig-name descname"><span class="pre">CalcTotalErrAbs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gsphP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gsphO</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nStp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fieldNames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doVerb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meanAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.msphViz.CalcTotalErrAbs" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.msphViz.CalcTotalErrRel">
-<span class="sig-prename descclassname"><span class="pre">gamera.msphViz.</span></span><span class="sig-name descname"><span class="pre">CalcTotalErrRel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gsphP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gsphO</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nStp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fieldNames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doVerb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meanAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.msphViz.CalcTotalErrRel" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.msphViz.GetSizeBds">
-<span class="sig-prename descclassname"><span class="pre">gamera.msphViz.</span></span><span class="sig-name descname"><span class="pre">GetSizeBds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.msphViz.GetSizeBds" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.msphViz.PlotEqB">
-<span class="sig-prename descclassname"><span class="pre">gamera.msphViz.</span></span><span class="sig-name descname"><span class="pre">PlotEqB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gsph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nStp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyBds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AxCB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doClear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doDeco</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doBz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.msphViz.PlotEqB" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.msphViz.PlotEqEphi">
-<span class="sig-prename descclassname"><span class="pre">gamera.msphViz.</span></span><span class="sig-name descname"><span class="pre">PlotEqEphi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gsph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nStp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyBds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AxCB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doClear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doDeco</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.msphViz.PlotEqEphi" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.msphViz.PlotEqErrAbs">
-<span class="sig-prename descclassname"><span class="pre">gamera.msphViz.</span></span><span class="sig-name descname"><span class="pre">PlotEqErrAbs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gsphP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gsphO</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nStp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyBds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fieldNames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AxCB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doClear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doDeco</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vMin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-09</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doLog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doVerb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.msphViz.PlotEqErrAbs" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.msphViz.PlotEqErrRel">
-<span class="sig-prename descclassname"><span class="pre">gamera.msphViz.</span></span><span class="sig-name descname"><span class="pre">PlotEqErrRel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gsphP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gsphO</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nStp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyBds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fieldNames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AxCB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doClear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doDeco</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vMin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doLog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doVerb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.msphViz.PlotEqErrRel" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.msphViz.PlotJyXZ">
-<span class="sig-prename descclassname"><span class="pre">gamera.msphViz.</span></span><span class="sig-name descname"><span class="pre">PlotJyXZ</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gsph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nStp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyBds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AxCB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jScl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doDeco</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.msphViz.PlotJyXZ" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.msphViz.PlotLogicalErrAbs">
-<span class="sig-prename descclassname"><span class="pre">gamera.msphViz.</span></span><span class="sig-name descname"><span class="pre">PlotLogicalErrAbs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gsphP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gsphO</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nStp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fieldNames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meanAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AxCB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doClear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doDeco</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vMin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doLog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doVerb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.msphViz.PlotLogicalErrAbs" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.msphViz.PlotLogicalErrRel">
-<span class="sig-prename descclassname"><span class="pre">gamera.msphViz.</span></span><span class="sig-name descname"><span class="pre">PlotLogicalErrRel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gsphP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gsphO</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nStp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fieldNames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meanAxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AxCB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doClear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doDeco</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vMin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doLog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doVerb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.msphViz.PlotLogicalErrRel" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.msphViz.PlotMPI">
-<span class="sig-prename descclassname"><span class="pre">gamera.msphViz.</span></span><span class="sig-name descname"><span class="pre">PlotMPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gsph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ashd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.msphViz.PlotMPI" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.msphViz.PlotMerid">
-<span class="sig-prename descclassname"><span class="pre">gamera.msphViz.</span></span><span class="sig-name descname"><span class="pre">PlotMerid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gsph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nStp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyBds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doDen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doRCM</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AxCB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doClear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doDeco</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doSrc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.msphViz.PlotMerid" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.msphViz.plotPlane">
-<span class="sig-prename descclassname"><span class="pre">gamera.msphViz.</span></span><span class="sig-name descname"><span class="pre">plotPlane</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gsph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyBds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AxCB</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'D'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vMin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doDeco</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'viridis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doLog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">midp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.msphViz.plotPlane" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.msphViz.plotXY">
-<span class="sig-prename descclassname"><span class="pre">gamera.msphViz.</span></span><span class="sig-name descname"><span class="pre">plotXY</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gsph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nStp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xyBds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AxCB</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'D'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vMin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doDeco</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'viridis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doLog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">midp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.msphViz.plotXY" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.msphViz.plotXZ">
-<span class="sig-prename descclassname"><span class="pre">gamera.msphViz.</span></span><span class="sig-name descname"><span class="pre">plotXZ</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gsph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nStp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xzBds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">AxCB</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'D'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vMin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vMax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doDeco</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'viridis'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doLog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">midp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.msphViz.plotXZ" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
+<section id="gamera-msphviz-module">
+<h2>gamera.msphViz module<a class="headerlink" href="#gamera-msphviz-module" title="Permalink to this heading"></a></h2>
 </section>
-<section id="module-gamera.rcmpp">
-<span id="gamera-rcmpp-module"></span><h2>gamera.rcmpp module<a class="headerlink" href="#module-gamera.rcmpp" title="Permalink to this heading"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.rcmpp.AddRCMBox">
-<span class="sig-prename descclassname"><span class="pre">gamera.rcmpp.</span></span><span class="sig-name descname"><span class="pre">AddRCMBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.rcmpp.AddRCMBox" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.rcmpp.GetMask">
-<span class="sig-prename descclassname"><span class="pre">gamera.rcmpp.</span></span><span class="sig-name descname"><span class="pre">GetMask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rcmdata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nStp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doVerb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.rcmpp.GetMask" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.rcmpp.GetPotential">
-<span class="sig-prename descclassname"><span class="pre">gamera.rcmpp.</span></span><span class="sig-name descname"><span class="pre">GetPotential</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rcmdata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nStp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">I</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NumCP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doVerb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.rcmpp.GetPotential" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.rcmpp.GetVarMask">
-<span class="sig-prename descclassname"><span class="pre">gamera.rcmpp.</span></span><span class="sig-name descname"><span class="pre">GetVarMask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rcmdata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nStp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Qid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'P'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">I</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doVerb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.rcmpp.GetVarMask" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.rcmpp.RCMEq">
-<span class="sig-prename descclassname"><span class="pre">gamera.rcmpp.</span></span><span class="sig-name descname"><span class="pre">RCMEq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rcmdata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nStp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doMask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doXYZ</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doVerb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.rcmpp.RCMEq" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="gamera.rcmpp.RCMInset">
-<span class="sig-prename descclassname"><span class="pre">gamera.rcmpp.</span></span><span class="sig-name descname"><span class="pre">RCMInset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">AxRCM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rcmdata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nStp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pCol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'k'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doPP</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gamera.rcmpp.RCMInset" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
+<section id="gamera-rcmpp-module">
+<h2>gamera.rcmpp module<a class="headerlink" href="#gamera-rcmpp-module" title="Permalink to this heading"></a></h2>
 </section>
 <section id="module-gamera.remixpp">
 <span id="gamera-remixpp-module"></span><h2>gamera.remixpp module<a class="headerlink" href="#module-gamera.remixpp" title="Permalink to this heading"></a></h2>

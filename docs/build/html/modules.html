@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>kaipy &mdash; Kaipy 1.0.0 documentation</title>
@@ -13,11 +13,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -103,181 +103,24 @@
 <li class="toctree-l1"><a class="reference internal" href="cdaweb_utils.html">cdaweb_utils module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="chimp.html">chimp package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="chimp.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="chimp.html#module-chimp.chimph5p">chimp.chimph5p module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="chimp.html#chimp.chimph5p.bndTPs"><code class="docutils literal notranslate"><span class="pre">bndTPs()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="chimp.html#chimp.chimph5p.cntSteps"><code class="docutils literal notranslate"><span class="pre">cntSteps()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="chimp.html#chimp.chimph5p.cntTPs"><code class="docutils literal notranslate"><span class="pre">cntTPs()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="chimp.html#chimp.chimph5p.getH5p"><code class="docutils literal notranslate"><span class="pre">getH5p()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="chimp.html#chimp.chimph5p.getH5pT"><code class="docutils literal notranslate"><span class="pre">getH5pT()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="chimp.html#chimp.chimph5p.getH5pid"><code class="docutils literal notranslate"><span class="pre">getH5pid()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="chimp.html#chimp.chimph5p.locPID"><code class="docutils literal notranslate"><span class="pre">locPID()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="chimp.html#chimp.chimph5p.tStep"><code class="docutils literal notranslate"><span class="pre">tStep()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="chimp.html#module-chimp.chimpviz">chimp.chimpviz module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="chimp.html#chimp.chimpviz.AddTPs"><code class="docutils literal notranslate"><span class="pre">AddTPs()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="chimp.html#module-chimp.kCyl">chimp.kCyl module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="chimp.html#chimp.kCyl.PIso"><code class="docutils literal notranslate"><span class="pre">PIso()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="chimp.html#chimp.kCyl.getEQGrid"><code class="docutils literal notranslate"><span class="pre">getEQGrid()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="chimp.html#chimp.kCyl.getGrid"><code class="docutils literal notranslate"><span class="pre">getGrid()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="chimp.html#chimp.kCyl.getSlc"><code class="docutils literal notranslate"><span class="pre">getSlc()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="chimp.html#module-chimp.chimph5p">chimp.chimph5p module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chimp.html#module-chimp.chimpviz">chimp.chimpviz module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chimp.html#module-chimp.kCyl">chimp.kCyl module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="chimp.html#module-chimp">Module contents</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="embiggenUtils.html">embiggenUtils module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="embiggenUtils.html#embiggenUtils.Bvec2Global"><code class="docutils literal notranslate"><span class="pre">Bvec2Global()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="embiggenUtils.html#embiggenUtils.CompRestarts"><code class="docutils literal notranslate"><span class="pre">CompRestarts()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="embiggenUtils.html#embiggenUtils.Corner2Global"><code class="docutils literal notranslate"><span class="pre">Corner2Global()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="embiggenUtils.html#embiggenUtils.Flux2Global"><code class="docutils literal notranslate"><span class="pre">Flux2Global()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="embiggenUtils.html#embiggenUtils.Gas2Global"><code class="docutils literal notranslate"><span class="pre">Gas2Global()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="embiggenUtils.html#embiggenUtils.MaxDiv"><code class="docutils literal notranslate"><span class="pre">MaxDiv()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="embiggenUtils.html#embiggenUtils.PullRestartMPI"><code class="docutils literal notranslate"><span class="pre">PullRestartMPI()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="embiggenUtils.html#embiggenUtils.PushRestartMPI"><code class="docutils literal notranslate"><span class="pre">PushRestartMPI()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="embiggenUtils.html#embiggenUtils.Volume"><code class="docutils literal notranslate"><span class="pre">Volume()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="embiggenUtils.html#embiggenUtils.ccL2G"><code class="docutils literal notranslate"><span class="pre">ccL2G()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="embiggenUtils.html#embiggenUtils.upCCMag"><code class="docutils literal notranslate"><span class="pre">upCCMag()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="embiggenUtils.html#embiggenUtils.upFlux"><code class="docutils literal notranslate"><span class="pre">upFlux()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="embiggenUtils.html#embiggenUtils.upGas"><code class="docutils literal notranslate"><span class="pre">upGas()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="embiggenUtils.html#embiggenUtils.upGrid"><code class="docutils literal notranslate"><span class="pre">upGrid()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="embiggenUtils.html#embiggenUtils.upVarCC"><code class="docutils literal notranslate"><span class="pre">upVarCC()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="embiggenUtils.html">embiggenUtils module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gamera.html">gamera package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="gamera.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gamera.html#module-gamera.block_gampp">gamera.block_gampp module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.block_gampp.GameraPipe"><code class="docutils literal notranslate"><span class="pre">GameraPipe</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.block_gampp.GameraPipe.ChunkName"><code class="docutils literal notranslate"><span class="pre">GameraPipe.ChunkName()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.block_gampp.GameraPipe.GetGrid"><code class="docutils literal notranslate"><span class="pre">GameraPipe.GetGrid()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.block_gampp.GameraPipe.GetRootSlice"><code class="docutils literal notranslate"><span class="pre">GameraPipe.GetRootSlice()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.block_gampp.GameraPipe.GetRootVar"><code class="docutils literal notranslate"><span class="pre">GameraPipe.GetRootVar()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.block_gampp.GameraPipe.GetSlice"><code class="docutils literal notranslate"><span class="pre">GameraPipe.GetSlice()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.block_gampp.GameraPipe.GetVar"><code class="docutils literal notranslate"><span class="pre">GameraPipe.GetVar()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.block_gampp.GameraPipe.OpenPipe"><code class="docutils literal notranslate"><span class="pre">GameraPipe.OpenPipe()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.block_gampp.GameraPipe.SetUnits"><code class="docutils literal notranslate"><span class="pre">GameraPipe.SetUnits()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="gamera.html#module-gamera.block_gampp">gamera.block_gampp module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gamera.html#gamera-deltabviz-module">gamera.deltabViz module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gamera.html#module-gamera.gamGrids">gamera.gamGrids module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.Aug2D"><code class="docutils literal notranslate"><span class="pre">Aug2D()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.Aug2Dext"><code class="docutils literal notranslate"><span class="pre">Aug2Dext()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.Aug3D"><code class="docutils literal notranslate"><span class="pre">Aug3D()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.Egglipses"><code class="docutils literal notranslate"><span class="pre">Egglipses()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.GenKSph"><code class="docutils literal notranslate"><span class="pre">GenKSph()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.GenKSphNonU"><code class="docutils literal notranslate"><span class="pre">GenKSphNonU()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.GenKSphNonUGL"><code class="docutils literal notranslate"><span class="pre">GenKSphNonUGL()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.LoadTabG"><code class="docutils literal notranslate"><span class="pre">LoadTabG()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.PrintRing"><code class="docutils literal notranslate"><span class="pre">PrintRing()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.RampUp"><code class="docutils literal notranslate"><span class="pre">RampUp()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.VizGrid"><code class="docutils literal notranslate"><span class="pre">VizGrid()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.WriteChimp"><code class="docutils literal notranslate"><span class="pre">WriteChimp()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.WriteGrid"><code class="docutils literal notranslate"><span class="pre">WriteGrid()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.genEgg"><code class="docutils literal notranslate"><span class="pre">genEgg()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.genEllip"><code class="docutils literal notranslate"><span class="pre">genEllip()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.genFatEgg"><code class="docutils literal notranslate"><span class="pre">genFatEgg()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.genLFM"><code class="docutils literal notranslate"><span class="pre">genLFM()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.genRing"><code class="docutils literal notranslate"><span class="pre">genRing()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.genSph"><code class="docutils literal notranslate"><span class="pre">genSph()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.getLFM"><code class="docutils literal notranslate"><span class="pre">getLFM()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gamGrids.regrid"><code class="docutils literal notranslate"><span class="pre">regrid()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="gamera.html#module-gamera.gampp">gamera.gampp module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.gampp.GameraPipe"><code class="docutils literal notranslate"><span class="pre">GameraPipe</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.gampp.GameraPipe.GetGrid"><code class="docutils literal notranslate"><span class="pre">GameraPipe.GetGrid()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.gampp.GameraPipe.GetGridParallel"><code class="docutils literal notranslate"><span class="pre">GameraPipe.GetGridParallel()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.gampp.GameraPipe.GetRootSlice"><code class="docutils literal notranslate"><span class="pre">GameraPipe.GetRootSlice()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.gampp.GameraPipe.GetRootVar"><code class="docutils literal notranslate"><span class="pre">GameraPipe.GetRootVar()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.gampp.GameraPipe.GetSlice"><code class="docutils literal notranslate"><span class="pre">GameraPipe.GetSlice()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.gampp.GameraPipe.GetVar"><code class="docutils literal notranslate"><span class="pre">GameraPipe.GetVar()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.gampp.GameraPipe.GetVarParallel"><code class="docutils literal notranslate"><span class="pre">GameraPipe.GetVarParallel()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.gampp.GameraPipe.OpenPipe"><code class="docutils literal notranslate"><span class="pre">GameraPipe.OpenPipe()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.gampp.GameraPipe.SetUnits"><code class="docutils literal notranslate"><span class="pre">GameraPipe.SetUnits()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="gamera.html#module-gamera.magsphere">gamera.magsphere module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.magsphere.GamsphPipe"><code class="docutils literal notranslate"><span class="pre">GamsphPipe</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.magsphere.GamsphPipe.AddCPCP"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.AddCPCP()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.magsphere.GamsphPipe.AddSW"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.AddSW()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.magsphere.GamsphPipe.AddTime"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.AddTime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.magsphere.GamsphPipe.CMIViz"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.CMIViz()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.magsphere.GamsphPipe.DelBz"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.DelBz()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.magsphere.GamsphPipe.EggSlice"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.EggSlice()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.magsphere.GamsphPipe.Gam2Remix"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.Gam2Remix()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.magsphere.GamsphPipe.GetCPCP"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.GetCPCP()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.magsphere.GamsphPipe.GetM0"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.GetM0()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.magsphere.GamsphPipe.OpenPipe"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.OpenPipe()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.magsphere.GamsphPipe.bStream"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.bStream()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.magsphere.GamsphPipe.doStream"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.doStream()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.magsphere.GamsphPipe.eqMagB"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.eqMagB()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamera.html#gamera.magsphere.GamsphPipe.vStream"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.vStream()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="gamera.html#module-gamera.magsphereRescale">gamera.magsphereRescale module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.magsphereRescale.MaxDiv"><code class="docutils literal notranslate"><span class="pre">MaxDiv()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.magsphereRescale.PullRestartMPI"><code class="docutils literal notranslate"><span class="pre">PullRestartMPI()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.magsphereRescale.PushRestartMPI"><code class="docutils literal notranslate"><span class="pre">PushRestartMPI()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.magsphereRescale.Volume"><code class="docutils literal notranslate"><span class="pre">Volume()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.magsphereRescale.downFlux"><code class="docutils literal notranslate"><span class="pre">downFlux()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.magsphereRescale.downGas"><code class="docutils literal notranslate"><span class="pre">downGas()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.magsphereRescale.downGrid"><code class="docutils literal notranslate"><span class="pre">downGrid()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.magsphereRescale.downMIX"><code class="docutils literal notranslate"><span class="pre">downMIX()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.magsphereRescale.downVolt"><code class="docutils literal notranslate"><span class="pre">downVolt()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.magsphereRescale.upFlux"><code class="docutils literal notranslate"><span class="pre">upFlux()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.magsphereRescale.upGas"><code class="docutils literal notranslate"><span class="pre">upGas()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.magsphereRescale.upGrid"><code class="docutils literal notranslate"><span class="pre">upGrid()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.magsphereRescale.upMIX"><code class="docutils literal notranslate"><span class="pre">upMIX()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.magsphereRescale.upRCM"><code class="docutils literal notranslate"><span class="pre">upRCM()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.magsphereRescale.upRCM1D"><code class="docutils literal notranslate"><span class="pre">upRCM1D()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.magsphereRescale.upRCM1Dw"><code class="docutils literal notranslate"><span class="pre">upRCM1Dw()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.magsphereRescale.upRCMCpl"><code class="docutils literal notranslate"><span class="pre">upRCMCpl()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.magsphereRescale.upVolt"><code class="docutils literal notranslate"><span class="pre">upVolt()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="gamera.html#module-gamera.msphViz">gamera.msphViz module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.msphViz.AddIonBoxes"><code class="docutils literal notranslate"><span class="pre">AddIonBoxes()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.msphViz.AddSizeArgs"><code class="docutils literal notranslate"><span class="pre">AddSizeArgs()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.msphViz.CalcTotalErrAbs"><code class="docutils literal notranslate"><span class="pre">CalcTotalErrAbs()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.msphViz.CalcTotalErrRel"><code class="docutils literal notranslate"><span class="pre">CalcTotalErrRel()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.msphViz.GetSizeBds"><code class="docutils literal notranslate"><span class="pre">GetSizeBds()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.msphViz.PlotEqB"><code class="docutils literal notranslate"><span class="pre">PlotEqB()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.msphViz.PlotEqEphi"><code class="docutils literal notranslate"><span class="pre">PlotEqEphi()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.msphViz.PlotEqErrAbs"><code class="docutils literal notranslate"><span class="pre">PlotEqErrAbs()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.msphViz.PlotEqErrRel"><code class="docutils literal notranslate"><span class="pre">PlotEqErrRel()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.msphViz.PlotJyXZ"><code class="docutils literal notranslate"><span class="pre">PlotJyXZ()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.msphViz.PlotLogicalErrAbs"><code class="docutils literal notranslate"><span class="pre">PlotLogicalErrAbs()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.msphViz.PlotLogicalErrRel"><code class="docutils literal notranslate"><span class="pre">PlotLogicalErrRel()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.msphViz.PlotMPI"><code class="docutils literal notranslate"><span class="pre">PlotMPI()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.msphViz.PlotMerid"><code class="docutils literal notranslate"><span class="pre">PlotMerid()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.msphViz.plotPlane"><code class="docutils literal notranslate"><span class="pre">plotPlane()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.msphViz.plotXY"><code class="docutils literal notranslate"><span class="pre">plotXY()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.msphViz.plotXZ"><code class="docutils literal notranslate"><span class="pre">plotXZ()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="gamera.html#module-gamera.rcmpp">gamera.rcmpp module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.rcmpp.AddRCMBox"><code class="docutils literal notranslate"><span class="pre">AddRCMBox()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.rcmpp.GetMask"><code class="docutils literal notranslate"><span class="pre">GetMask()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.rcmpp.GetPotential"><code class="docutils literal notranslate"><span class="pre">GetPotential()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.rcmpp.GetVarMask"><code class="docutils literal notranslate"><span class="pre">GetVarMask()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.rcmpp.RCMEq"><code class="docutils literal notranslate"><span class="pre">RCMEq()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.rcmpp.RCMInset"><code class="docutils literal notranslate"><span class="pre">RCMInset()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="gamera.html#module-gamera.remixpp">gamera.remixpp module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.remixpp.AddCBs"><code class="docutils literal notranslate"><span class="pre">AddCBs()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.remixpp.AddPotCB"><code class="docutils literal notranslate"><span class="pre">AddPotCB()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="gamera.html#gamera.remixpp.CMIPic"><code class="docutils literal notranslate"><span class="pre">CMIPic()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="gamera.html#module-gamera.gamGrids">gamera.gamGrids module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gamera.html#gamera-gampp-module">gamera.gampp module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gamera.html#gamera-magsphere-module">gamera.magsphere module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gamera.html#module-gamera.magsphereRescale">gamera.magsphereRescale module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gamera.html#gamera-msphviz-module">gamera.msphViz module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gamera.html#gamera-rcmpp-module">gamera.rcmpp module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gamera.html#module-gamera.remixpp">gamera.remixpp module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gamera.html#module-gamera">Module contents</a></li>
 </ul>
 </li>
@@ -313,160 +156,18 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="gamhelio.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gamhelio.html#gamhelio-helioviz-module">gamhelio.helioViz module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gamhelio.html#module-gamhelio.heliosphere">gamhelio.heliosphere module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe"><code class="docutils literal notranslate"><span class="pre">GamsphPipe</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.AddTime"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.AddTime()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.EqSlice"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.EqSlice()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.MerBrNrm"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.MerBrNrm()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.MerDNrm"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.MerDNrm()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.MerMagV"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.MerMagV()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.MerTemp"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.MerTemp()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.MeridGrid"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.MeridGrid()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.MeridGridHalfs"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.MeridGridHalfs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.MeridSlice"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.MeridSlice()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.OpenPipe"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.OpenPipe()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.RadProfDen"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.RadProfDen()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.RadProfFlux"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.RadProfFlux()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.RadProfSpeed"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.RadProfSpeed()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.RadialProfileGrid"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.RadialProfileGrid()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.RadialProfileVar"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.RadialProfileVar()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.bStream"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.bStream()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.eqBx"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.eqBx()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.eqBy"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.eqBy()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.eqBz"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.eqBz()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.eqMagV"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.eqMagV()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.eqNormBr"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.eqNormBr()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.eqNormD"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.eqNormD()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.eqTemp"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.eqTemp()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.iSliceBr"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.iSliceBr()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.iSliceBrBound"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.iSliceBrBound()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.iSliceBx"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.iSliceBx()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.iSliceBy"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.iSliceBy()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.iSliceBz"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.iSliceBz()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.iSliceD"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.iSliceD()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.iSliceGrid"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.iSliceGrid()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.iSliceMagV"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.iSliceMagV()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.iSliceT"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.iSliceT()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.iSliceVar"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.iSliceVar()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.jMagV"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.jMagV()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.jNormBr"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.jNormBr()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.jNormD"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.jNormD()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.jSlice"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.jSlice()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.jTemp"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.jTemp()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="gamhelio.html#gamhelio.heliosphere.GamsphPipe.vStream"><code class="docutils literal notranslate"><span class="pre">GamsphPipe.vStream()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="gamhelio.html#gamhelio-heliosphere-module">gamhelio.heliosphere module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gamhelio.html#module-gamhelio">Module contents</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="kJobs.html">kJobs module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="kJobs.html#kJobs.OMPJob"><code class="docutils literal notranslate"><span class="pre">OMPJob()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kJobs.html#kJobs.addXBlk"><code class="docutils literal notranslate"><span class="pre">addXBlk()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kJobs.html#kJobs.genXBlk"><code class="docutils literal notranslate"><span class="pre">genXBlk()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kJobs.html#kJobs.xml2str"><code class="docutils literal notranslate"><span class="pre">xml2str()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="kaiH5.html">kaiH5 module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.CheckDirOrMake"><code class="docutils literal notranslate"><span class="pre">CheckDirOrMake()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.CheckOrDie"><code class="docutils literal notranslate"><span class="pre">CheckOrDie()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.GetBranch"><code class="docutils literal notranslate"><span class="pre">GetBranch()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.GetHash"><code class="docutils literal notranslate"><span class="pre">GetHash()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.LocDT"><code class="docutils literal notranslate"><span class="pre">LocDT()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.MageStep"><code class="docutils literal notranslate"><span class="pre">MageStep()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.PullAtt"><code class="docutils literal notranslate"><span class="pre">PullAtt()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.PullVar"><code class="docutils literal notranslate"><span class="pre">PullVar()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.PullVarLoc"><code class="docutils literal notranslate"><span class="pre">PullVarLoc()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.StampBranch"><code class="docutils literal notranslate"><span class="pre">StampBranch()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.StampHash"><code class="docutils literal notranslate"><span class="pre">StampHash()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.cntSteps"><code class="docutils literal notranslate"><span class="pre">cntSteps()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.cntX"><code class="docutils literal notranslate"><span class="pre">cntX()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.func"><code class="docutils literal notranslate"><span class="pre">func()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.genName"><code class="docutils literal notranslate"><span class="pre">genName()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.genNameOld"><code class="docutils literal notranslate"><span class="pre">genNameOld()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.getDims"><code class="docutils literal notranslate"><span class="pre">getDims()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.getRootVars"><code class="docutils literal notranslate"><span class="pre">getRootVars()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.getTs"><code class="docutils literal notranslate"><span class="pre">getTs()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.getVars"><code class="docutils literal notranslate"><span class="pre">getVars()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiH5.html#kaiH5.tStep"><code class="docutils literal notranslate"><span class="pre">tStep()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="kaiTools.html">kaiTools module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="kaiTools.html#kaiTools.GetSymH"><code class="docutils literal notranslate"><span class="pre">GetSymH()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiTools.html#kaiTools.L_to_bVol"><code class="docutils literal notranslate"><span class="pre">L_to_bVol()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiTools.html#kaiTools.MJD2UT"><code class="docutils literal notranslate"><span class="pre">MJD2UT()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiTools.html#kaiTools.burtonDst"><code class="docutils literal notranslate"><span class="pre">burtonDst()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiTools.html#kaiTools.getRunInfo"><code class="docutils literal notranslate"><span class="pre">getRunInfo()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiTools.html#kaiTools.interpTSC"><code class="docutils literal notranslate"><span class="pre">interpTSC()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiTools.html#kaiTools.interpTSCWeights"><code class="docutils literal notranslate"><span class="pre">interpTSCWeights()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiTools.html#kaiTools.newellcoupling"><code class="docutils literal notranslate"><span class="pre">newellcoupling()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiTools.html#kaiTools.newellkp"><code class="docutils literal notranslate"><span class="pre">newellkp()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiTools.html#kaiTools.to_center1D"><code class="docutils literal notranslate"><span class="pre">to_center1D()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiTools.html#kaiTools.to_center2D"><code class="docutils literal notranslate"><span class="pre">to_center2D()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiTools.html#kaiTools.to_center3D"><code class="docutils literal notranslate"><span class="pre">to_center3D()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiTools.html#kaiTools.xyz2rtp"><code class="docutils literal notranslate"><span class="pre">xyz2rtp()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="kaiViz.html">kaiViz module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.DrawCut"><code class="docutils literal notranslate"><span class="pre">DrawCut()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.MidpointNormalize"><code class="docutils literal notranslate"><span class="pre">MidpointNormalize</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.SetAx"><code class="docutils literal notranslate"><span class="pre">SetAx()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.SetAxDate"><code class="docutils literal notranslate"><span class="pre">SetAxDate()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.SetAxLabs"><code class="docutils literal notranslate"><span class="pre">SetAxLabs()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.ShaveX"><code class="docutils literal notranslate"><span class="pre">ShaveX()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.ShaveY"><code class="docutils literal notranslate"><span class="pre">ShaveY()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.addEarth2D"><code class="docutils literal notranslate"><span class="pre">addEarth2D()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.compPlot"><code class="docutils literal notranslate"><span class="pre">compPlot()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.genCB"><code class="docutils literal notranslate"><span class="pre">genCB()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.genNorm"><code class="docutils literal notranslate"><span class="pre">genNorm()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.get_aspect"><code class="docutils literal notranslate"><span class="pre">get_aspect()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.helioCompPlot_new"><code class="docutils literal notranslate"><span class="pre">helioCompPlot_new()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.helioItemPlot_new"><code class="docutils literal notranslate"><span class="pre">helioItemPlot_new()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.helioTrajPlot"><code class="docutils literal notranslate"><span class="pre">helioTrajPlot()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.helio_labelStr"><code class="docutils literal notranslate"><span class="pre">helio_labelStr()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.itemPlot"><code class="docutils literal notranslate"><span class="pre">itemPlot()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.labelStr"><code class="docutils literal notranslate"><span class="pre">labelStr()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.picSz"><code class="docutils literal notranslate"><span class="pre">picSz()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.reWrap"><code class="docutils literal notranslate"><span class="pre">reWrap()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.savePic"><code class="docutils literal notranslate"><span class="pre">savePic()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.trajPlot"><code class="docutils literal notranslate"><span class="pre">trajPlot()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaiViz.html#kaiViz.trimFig"><code class="docutils literal notranslate"><span class="pre">trimFig()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="kaijson.html">kaijson module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="kaijson.html#kaijson.CustomEncoder"><code class="docutils literal notranslate"><span class="pre">CustomEncoder</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="kaijson.html#kaijson.CustomEncoder.default"><code class="docutils literal notranslate"><span class="pre">CustomEncoder.default()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="kaijson.html#kaijson.customhook"><code class="docutils literal notranslate"><span class="pre">customhook()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaijson.html#kaijson.dump"><code class="docutils literal notranslate"><span class="pre">dump()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaijson.html#kaijson.dumps"><code class="docutils literal notranslate"><span class="pre">dumps()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaijson.html#kaijson.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaijson.html#kaijson.loads"><code class="docutils literal notranslate"><span class="pre">loads()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="kaixdmf.html">kaixdmf module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="kaixdmf.html#kaixdmf.AddDI"><code class="docutils literal notranslate"><span class="pre">AddDI()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaixdmf.html#kaixdmf.AddData"><code class="docutils literal notranslate"><span class="pre">AddData()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaixdmf.html#kaixdmf.AddGrid"><code class="docutils literal notranslate"><span class="pre">AddGrid()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaixdmf.html#kaixdmf.AddVectors"><code class="docutils literal notranslate"><span class="pre">AddVectors()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaixdmf.html#kaixdmf.addHyperslab"><code class="docutils literal notranslate"><span class="pre">addHyperslab()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaixdmf.html#kaixdmf.getLoc"><code class="docutils literal notranslate"><span class="pre">getLoc()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaixdmf.html#kaixdmf.getRootVars"><code class="docutils literal notranslate"><span class="pre">getRootVars()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="kaixdmf.html#kaixdmf.getVars"><code class="docutils literal notranslate"><span class="pre">getVars()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="kJobs.html">kJobs module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kaiH5.html">kaiH5 module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kaiTools.html">kaiTools module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kaiViz.html">kaiViz module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kaijson.html">kaijson module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kaixdmf.html">kaixdmf module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="kdefs.html">kdefs module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lfm2kaiju.html">lfm2kaiju module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="lfm2kaiju.html#lfm2kaiju.getHDFScl"><code class="docutils literal notranslate"><span class="pre">getHDFScl()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="lfm2kaiju.html#lfm2kaiju.getHDFVec"><code class="docutils literal notranslate"><span class="pre">getHDFVec()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="lfm2kaiju.html#lfm2kaiju.lfm2gg"><code class="docutils literal notranslate"><span class="pre">lfm2gg()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="lfm2kaiju.html#lfm2kaiju.lfmFields"><code class="docutils literal notranslate"><span class="pre">lfmFields()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="lfm2kaiju.html#lfm2kaiju.lfmFlow"><code class="docutils literal notranslate"><span class="pre">lfmFlow()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="lfm2kaiju.html#lfm2kaiju.lfmTimes"><code class="docutils literal notranslate"><span class="pre">lfmTimes()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="lfm2kaiju.html">lfm2kaiju module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="paraview.html">paraview package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="paraview.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="paraview.html#paraview-pvgam-module">paraview.pvGam module</a></li>
@@ -483,7 +184,7 @@
 <li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#module-rcm.lambdautils.DistTypes">rcm.lambdautils.DistTypes module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#module-rcm.lambdautils.fileIO">rcm.lambdautils.fileIO module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#module-rcm.lambdautils.genAlam">rcm.lambdautils.genAlam module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#module-rcm.lambdautils.plotter">rcm.lambdautils.plotter module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm-lambdautils-plotter-module">rcm.lambdautils.plotter module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#module-rcm.lambdautils">Module contents</a></li>
 </ul>
 </li>
@@ -497,169 +198,34 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="rcm.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rcm.html#module-rcm.rcminit">rcm.rcminit module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rcm.html#rcm.rcminit.LoadDKTab"><code class="docutils literal notranslate"><span class="pre">LoadDKTab()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.html#rcm.rcminit.LoadEnchan"><code class="docutils literal notranslate"><span class="pre">LoadEnchan()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.html#rcm.rcminit.LoadLAS1"><code class="docutils literal notranslate"><span class="pre">LoadLAS1()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="rcm.html#module-rcm.rcmutils">rcm.rcmutils module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rcm.html#rcm.rcmutils.getClosedRegionMask"><code class="docutils literal notranslate"><span class="pre">getClosedRegionMask()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.html#rcm.rcmutils.getCumulPress"><code class="docutils literal notranslate"><span class="pre">getCumulPress()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.html#rcm.rcmutils.getSpecieslambdata"><code class="docutils literal notranslate"><span class="pre">getSpecieslambdata()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.html#rcm.rcmutils.getValAtLoc_linterp"><code class="docutils literal notranslate"><span class="pre">getValAtLoc_linterp()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.html#rcm.rcmutils.updateFactors"><code class="docutils literal notranslate"><span class="pre">updateFactors()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="rcm.html#module-rcm.rcmxdmf">rcm.rcmxdmf module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rcm.html#rcm.rcmxdmf.addRCMGeom"><code class="docutils literal notranslate"><span class="pre">addRCMGeom()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.html#rcm.rcmxdmf.addRCMVars"><code class="docutils literal notranslate"><span class="pre">addRCMVars()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="rcm.html#module-rcm.rcminit">rcm.rcminit module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rcm.html#module-rcm.rcmutils">rcm.rcmutils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rcm.html#module-rcm.rcmxdmf">rcm.rcmxdmf module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rcm.html#module-rcm">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="remix.html">remix package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="remix.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="remix.html#module-remix.remix">remix.remix module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="remix.html#remix.remix.remix"><code class="docutils literal notranslate"><span class="pre">remix</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="remix.html#remix.remix.remix.BSFluxTubeInt"><code class="docutils literal notranslate"><span class="pre">remix.BSFluxTubeInt()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="remix.html#remix.remix.remix.calcFaceAreas"><code class="docutils literal notranslate"><span class="pre">remix.calcFaceAreas()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="remix.html#remix.remix.remix.cartesianCellCenters"><code class="docutils literal notranslate"><span class="pre">remix.cartesianCellCenters()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="remix.html#remix.remix.remix.dB"><code class="docutils literal notranslate"><span class="pre">remix.dB()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="remix.html#remix.remix.remix.distance"><code class="docutils literal notranslate"><span class="pre">remix.distance()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="remix.html#remix.remix.remix.efield"><code class="docutils literal notranslate"><span class="pre">remix.efield()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="remix.html#remix.remix.remix.get_data"><code class="docutils literal notranslate"><span class="pre">remix.get_data()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="remix.html#remix.remix.remix.get_spherical"><code class="docutils literal notranslate"><span class="pre">remix.get_spherical()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="remix.html#remix.remix.remix.hCurrents"><code class="docutils literal notranslate"><span class="pre">remix.hCurrents()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="remix.html#remix.remix.remix.init_vars"><code class="docutils literal notranslate"><span class="pre">remix.init_vars()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="remix.html#remix.remix.remix.joule"><code class="docutils literal notranslate"><span class="pre">remix.joule()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="remix.html#remix.remix.remix.plot"><code class="docutils literal notranslate"><span class="pre">remix.plot()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="remix.html#module-remix.remix">remix.remix module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="remix.html#module-remix">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="solarWind.html">solarWind package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="solarWind.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="solarWind.html#solarwind-custom-module">solarWind.CUSTOM module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="solarWind.html#module-solarWind.OMNI">solarWind.OMNI module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.OMNI.OMNI"><code class="docutils literal notranslate"><span class="pre">OMNI</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.OMNI.OMNIW"><code class="docutils literal notranslate"><span class="pre">OMNIW</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="solarWind.html#module-solarWind.SolarWind">solarWind.SolarWind module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.SolarWind.SolarWind"><code class="docutils literal notranslate"><span class="pre">SolarWind</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="solarWind.html#solarWind.SolarWind.SolarWind.bxFit"><code class="docutils literal notranslate"><span class="pre">SolarWind.bxFit()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="solarWind.html#module-solarWind.TimeSeries">solarWind.TimeSeries module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.TimeSeries.TimeSeries"><code class="docutils literal notranslate"><span class="pre">TimeSeries</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="solarWind.html#solarWind.TimeSeries.TimeSeries.append"><code class="docutils literal notranslate"><span class="pre">TimeSeries.append()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="solarWind.html#solarWind.TimeSeries.TimeSeries.getData"><code class="docutils literal notranslate"><span class="pre">TimeSeries.getData()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="solarWind.html#solarWind.TimeSeries.TimeSeries.getName"><code class="docutils literal notranslate"><span class="pre">TimeSeries.getName()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="solarWind.html#solarWind.TimeSeries.TimeSeries.getUnits"><code class="docutils literal notranslate"><span class="pre">TimeSeries.getUnits()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="solarWind.html#solarWind.TimeSeries.TimeSeries.setData"><code class="docutils literal notranslate"><span class="pre">TimeSeries.setData()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="solarWind.html#solarWind.TimeSeries.TimeSeries.setName"><code class="docutils literal notranslate"><span class="pre">TimeSeries.setName()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="solarWind.html#solarWind.TimeSeries.TimeSeries.setUnits"><code class="docutils literal notranslate"><span class="pre">TimeSeries.setUnits()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="solarWind.html#module-solarWind.WIND">solarWind.WIND module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.WIND.WIND"><code class="docutils literal notranslate"><span class="pre">WIND</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.WIND.WINDF"><code class="docutils literal notranslate"><span class="pre">WINDF</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="solarWind.html#module-solarWind.jdutil">solarWind.jdutil module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.jdutil.date_to_jd"><code class="docutils literal notranslate"><span class="pre">date_to_jd()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.jdutil.datetime"><code class="docutils literal notranslate"><span class="pre">datetime</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="solarWind.html#solarWind.jdutil.datetime.to_jd"><code class="docutils literal notranslate"><span class="pre">datetime.to_jd()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="solarWind.html#solarWind.jdutil.datetime.to_mjd"><code class="docutils literal notranslate"><span class="pre">datetime.to_mjd()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.jdutil.datetime_to_jd"><code class="docutils literal notranslate"><span class="pre">datetime_to_jd()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.jdutil.days_to_hmsm"><code class="docutils literal notranslate"><span class="pre">days_to_hmsm()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.jdutil.hmsm_to_days"><code class="docutils literal notranslate"><span class="pre">hmsm_to_days()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.jdutil.jd_to_date"><code class="docutils literal notranslate"><span class="pre">jd_to_date()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.jdutil.jd_to_datetime"><code class="docutils literal notranslate"><span class="pre">jd_to_datetime()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.jdutil.jd_to_mjd"><code class="docutils literal notranslate"><span class="pre">jd_to_mjd()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.jdutil.mjd_to_jd"><code class="docutils literal notranslate"><span class="pre">mjd_to_jd()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.jdutil.timedelta_to_days"><code class="docutils literal notranslate"><span class="pre">timedelta_to_days()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="solarWind.html#module-solarWind.ols">solarWind.ols module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.ols.ols"><code class="docutils literal notranslate"><span class="pre">ols</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="solarWind.html#solarWind.ols.ols.JB"><code class="docutils literal notranslate"><span class="pre">ols.JB()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="solarWind.html#solarWind.ols.ols.dw"><code class="docutils literal notranslate"><span class="pre">ols.dw()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="solarWind.html#solarWind.ols.ols.estimate"><code class="docutils literal notranslate"><span class="pre">ols.estimate()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="solarWind.html#solarWind.ols.ols.ll"><code class="docutils literal notranslate"><span class="pre">ols.ll()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="solarWind.html#solarWind.ols.ols.omni"><code class="docutils literal notranslate"><span class="pre">ols.omni()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="solarWind.html#solarWind.ols.ols.summary"><code class="docutils literal notranslate"><span class="pre">ols.summary()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.ols.randn"><code class="docutils literal notranslate"><span class="pre">randn()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="solarWind.html#module-solarWind.swBCplots">solarWind.swBCplots module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.swBCplots.BasicPlot"><code class="docutils literal notranslate"><span class="pre">BasicPlot()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.swBCplots.MultiPlot"><code class="docutils literal notranslate"><span class="pre">MultiPlot()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.swBCplots.MultiPlot2"><code class="docutils literal notranslate"><span class="pre">MultiPlot2()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.swBCplots.MultiPlotN"><code class="docutils literal notranslate"><span class="pre">MultiPlotN()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.swBCplots.SummaryPlot"><code class="docutils literal notranslate"><span class="pre">SummaryPlot()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="solarWind.html#solarWind.swBCplots.swQuickPlot"><code class="docutils literal notranslate"><span class="pre">swQuickPlot()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="solarWind.html#solarwind-omni-module">solarWind.OMNI module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solarWind.html#solarwind-solarwind-module">solarWind.SolarWind module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solarWind.html#module-solarWind.TimeSeries">solarWind.TimeSeries module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solarWind.html#solarwind-wind-module">solarWind.WIND module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solarWind.html#module-solarWind.jdutil">solarWind.jdutil module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solarWind.html#module-solarWind.ols">solarWind.ols module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solarWind.html#module-solarWind.swBCplots">solarWind.swBCplots module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="solarWind.html#module-solarWind">Module contents</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="supermag_api.html">supermag_api module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="supermag_api.html#supermag_api.SuperMAGGetData"><code class="docutils literal notranslate"><span class="pre">SuperMAGGetData()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermag_api.html#supermag_api.SuperMAGGetIndices"><code class="docutils literal notranslate"><span class="pre">SuperMAGGetIndices()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermag_api.html#supermag_api.SuperMAGGetInventory"><code class="docutils literal notranslate"><span class="pre">SuperMAGGetInventory()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermag_api.html#supermag_api.sm_DateToYMDHMS"><code class="docutils literal notranslate"><span class="pre">sm_DateToYMDHMS()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermag_api.html#supermag_api.sm_GetUrl"><code class="docutils literal notranslate"><span class="pre">sm_GetUrl()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermag_api.html#supermag_api.sm_coreurl"><code class="docutils literal notranslate"><span class="pre">sm_coreurl()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermag_api.html#supermag_api.sm_csvitem_to_dict"><code class="docutils literal notranslate"><span class="pre">sm_csvitem_to_dict()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermag_api.html#supermag_api.sm_csvitem_to_list"><code class="docutils literal notranslate"><span class="pre">sm_csvitem_to_list()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermag_api.html#supermag_api.sm_grabme"><code class="docutils literal notranslate"><span class="pre">sm_grabme()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermag_api.html#supermag_api.sm_keycheck_data"><code class="docutils literal notranslate"><span class="pre">sm_keycheck_data()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermag_api.html#supermag_api.sm_keycheck_indices"><code class="docutils literal notranslate"><span class="pre">sm_keycheck_indices()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermag_api.html#supermag_api.sm_microtest"><code class="docutils literal notranslate"><span class="pre">sm_microtest()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermag_api.html#supermag_api.sm_parsestart"><code class="docutils literal notranslate"><span class="pre">sm_parsestart()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermag_api.html#supermag_api.supermag_testing"><code class="docutils literal notranslate"><span class="pre">supermag_testing()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="supermage.html">supermage module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="supermage.html#supermage.CalculateSMRBins"><code class="docutils literal notranslate"><span class="pre">CalculateSMRBins()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermage.html#supermage.EField1DCalculation"><code class="docutils literal notranslate"><span class="pre">EField1DCalculation()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermage.html#supermage.E_Field_1D"><code class="docutils literal notranslate"><span class="pre">E_Field_1D()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermage.html#supermage.FetchSMData"><code class="docutils literal notranslate"><span class="pre">FetchSMData()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermage.html#supermage.FetchSMIndices"><code class="docutils literal notranslate"><span class="pre">FetchSMIndices()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermage.html#supermage.Float2Time"><code class="docutils literal notranslate"><span class="pre">Float2Time()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermage.html#supermage.InterpolateSimData"><code class="docutils literal notranslate"><span class="pre">InterpolateSimData()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermage.html#supermage.MJD2Str"><code class="docutils literal notranslate"><span class="pre">MJD2Str()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermage.html#supermage.MakeContourPlots"><code class="docutils literal notranslate"><span class="pre">MakeContourPlots()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermage.html#supermage.MakeIndicesPlot"><code class="docutils literal notranslate"><span class="pre">MakeIndicesPlot()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermage.html#supermage.ReadSimData"><code class="docutils literal notranslate"><span class="pre">ReadSimData()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermage.html#supermage.SMContourPlotPrep"><code class="docutils literal notranslate"><span class="pre">SMContourPlotPrep()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermage.html#supermage.Time2Float"><code class="docutils literal notranslate"><span class="pre">Time2Float()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermage.html#supermage.Z_Tensor_1D"><code class="docutils literal notranslate"><span class="pre">Z_Tensor_1D()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermage.html#supermage.doFetch"><code class="docutils literal notranslate"><span class="pre">doFetch()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermage.html#supermage.interp_grid"><code class="docutils literal notranslate"><span class="pre">interp_grid()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="supermage.html#supermage.interp_tri"><code class="docutils literal notranslate"><span class="pre">interp_tri()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="transform.html">transform module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="transform.html#transform.GSEtoGSM"><code class="docutils literal notranslate"><span class="pre">GSEtoGSM()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="transform.html#transform.GSMtoSM"><code class="docutils literal notranslate"><span class="pre">GSMtoSM()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="transform.html#transform.SMtoGSM"><code class="docutils literal notranslate"><span class="pre">SMtoGSM()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="supermag_api.html">supermag_api module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="supermage.html">supermage module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transform.html">transform module</a></li>
 </ul>
 </div>
 </section>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>rcm package &mdash; Kaipy 1.0.0 documentation</title>
@@ -13,11 +13,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -69,25 +69,9 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-rcm.rcminit">rcm.rcminit module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#rcm.rcminit.LoadDKTab"><code class="docutils literal notranslate"><span class="pre">LoadDKTab()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#rcm.rcminit.LoadEnchan"><code class="docutils literal notranslate"><span class="pre">LoadEnchan()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#rcm.rcminit.LoadLAS1"><code class="docutils literal notranslate"><span class="pre">LoadLAS1()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-rcm.rcmutils">rcm.rcmutils module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#rcm.rcmutils.getClosedRegionMask"><code class="docutils literal notranslate"><span class="pre">getClosedRegionMask()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#rcm.rcmutils.getCumulPress"><code class="docutils literal notranslate"><span class="pre">getCumulPress()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#rcm.rcmutils.getSpecieslambdata"><code class="docutils literal notranslate"><span class="pre">getSpecieslambdata()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#rcm.rcmutils.getValAtLoc_linterp"><code class="docutils literal notranslate"><span class="pre">getValAtLoc_linterp()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#rcm.rcmutils.updateFactors"><code class="docutils literal notranslate"><span class="pre">updateFactors()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-rcm.rcmxdmf">rcm.rcmxdmf module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#rcm.rcmxdmf.addRCMGeom"><code class="docutils literal notranslate"><span class="pre">addRCMGeom()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#rcm.rcmxdmf.addRCMVars"><code class="docutils literal notranslate"><span class="pre">addRCMVars()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-rcm.rcminit">rcm.rcminit module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-rcm.rcmutils">rcm.rcmutils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-rcm.rcmxdmf">rcm.rcmxdmf module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-rcm">Module contents</a></li>
 </ul>
 </li>
@@ -133,125 +117,19 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="rcm.lambdautils.html">rcm.lambdautils package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="rcm.lambdautils.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rcm.lambdautils.html#module-rcm.lambdautils.AlamData">rcm.lambdautils.AlamData module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamData.AlamData"><code class="docutils literal notranslate"><span class="pre">AlamData</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamData.AlamData.doUsePsphere"><code class="docutils literal notranslate"><span class="pre">AlamData.doUsePsphere</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamData.AlamData.params"><code class="docutils literal notranslate"><span class="pre">AlamData.params</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamData.AlamData.specs"><code class="docutils literal notranslate"><span class="pre">AlamData.specs</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamData.Species"><code class="docutils literal notranslate"><span class="pre">Species</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamData.Species.alams"><code class="docutils literal notranslate"><span class="pre">Species.alams</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamData.Species.amaxs"><code class="docutils literal notranslate"><span class="pre">Species.amaxs</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamData.Species.amins"><code class="docutils literal notranslate"><span class="pre">Species.amins</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamData.Species.flav"><code class="docutils literal notranslate"><span class="pre">Species.flav</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamData.Species.fudge"><code class="docutils literal notranslate"><span class="pre">Species.fudge</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamData.Species.n"><code class="docutils literal notranslate"><span class="pre">Species.n</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamData.Species.name"><code class="docutils literal notranslate"><span class="pre">Species.name</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamData.Species.params"><code class="docutils literal notranslate"><span class="pre">Species.params</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamData.conditional_decorator"><code class="docutils literal notranslate"><span class="pre">conditional_decorator()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="rcm.lambdautils.html#module-rcm.lambdautils.AlamParams">rcm.lambdautils.AlamParams module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamParams.AlamParams"><code class="docutils literal notranslate"><span class="pre">AlamParams</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamParams.AlamParams.L_kt"><code class="docutils literal notranslate"><span class="pre">AlamParams.L_kt</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamParams.AlamParams.doUsePsphere"><code class="docutils literal notranslate"><span class="pre">AlamParams.doUsePsphere</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamParams.AlamParams.emaxe"><code class="docutils literal notranslate"><span class="pre">AlamParams.emaxe</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamParams.AlamParams.emaxp"><code class="docutils literal notranslate"><span class="pre">AlamParams.emaxp</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamParams.AlamParams.emine"><code class="docutils literal notranslate"><span class="pre">AlamParams.emine</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamParams.AlamParams.eminp"><code class="docutils literal notranslate"><span class="pre">AlamParams.eminp</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamParams.AlamParams.specParams"><code class="docutils literal notranslate"><span class="pre">AlamParams.specParams</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamParams.SpecParams"><code class="docutils literal notranslate"><span class="pre">SpecParams</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamParams.SpecParams.amax"><code class="docutils literal notranslate"><span class="pre">SpecParams.amax</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamParams.SpecParams.amin"><code class="docutils literal notranslate"><span class="pre">SpecParams.amin</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamParams.SpecParams.distType"><code class="docutils literal notranslate"><span class="pre">SpecParams.distType</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamParams.SpecParams.flav"><code class="docutils literal notranslate"><span class="pre">SpecParams.flav</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamParams.SpecParams.fudge"><code class="docutils literal notranslate"><span class="pre">SpecParams.fudge</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamParams.SpecParams.genAlams"><code class="docutils literal notranslate"><span class="pre">SpecParams.genAlams()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamParams.SpecParams.n"><code class="docutils literal notranslate"><span class="pre">SpecParams.n</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamParams.SpecParams.name"><code class="docutils literal notranslate"><span class="pre">SpecParams.name</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.AlamParams.conditional_decorator"><code class="docutils literal notranslate"><span class="pre">conditional_decorator()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="rcm.lambdautils.html#module-rcm.lambdautils.DistTypes">rcm.lambdautils.DistTypes module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.DT_Manual"><code class="docutils literal notranslate"><span class="pre">DT_Manual</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.DT_ValueSpec"><code class="docutils literal notranslate"><span class="pre">DT_ValueSpec</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.DT_ValueSpec.genAlams"><code class="docutils literal notranslate"><span class="pre">DT_ValueSpec.genAlams()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.DT_ValueSpec.genAlamsFromSpecies"><code class="docutils literal notranslate"><span class="pre">DT_ValueSpec.genAlamsFromSpecies()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.DT_ValueSpec.specList"><code class="docutils literal notranslate"><span class="pre">DT_ValueSpec.specList</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.DT_Wolf"><code class="docutils literal notranslate"><span class="pre">DT_Wolf</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.DT_Wolf.genAlams"><code class="docutils literal notranslate"><span class="pre">DT_Wolf.genAlams()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.DT_Wolf.genAlamsFromSpecies"><code class="docutils literal notranslate"><span class="pre">DT_Wolf.genAlamsFromSpecies()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.DT_Wolf.p1"><code class="docutils literal notranslate"><span class="pre">DT_Wolf.p1</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.DT_Wolf.p2"><code class="docutils literal notranslate"><span class="pre">DT_Wolf.p2</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.DistType"><code class="docutils literal notranslate"><span class="pre">DistType</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.DistType.name"><code class="docutils literal notranslate"><span class="pre">DistType.name</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.ValueSpec"><code class="docutils literal notranslate"><span class="pre">ValueSpec</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.ValueSpec.c"><code class="docutils literal notranslate"><span class="pre">ValueSpec.c</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.ValueSpec.end"><code class="docutils literal notranslate"><span class="pre">ValueSpec.end</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.ValueSpec.eval"><code class="docutils literal notranslate"><span class="pre">ValueSpec.eval()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.ValueSpec.n"><code class="docutils literal notranslate"><span class="pre">ValueSpec.n</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.ValueSpec.scaleType"><code class="docutils literal notranslate"><span class="pre">ValueSpec.scaleType</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.ValueSpec.start"><code class="docutils literal notranslate"><span class="pre">ValueSpec.start</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.conditional_decorator"><code class="docutils literal notranslate"><span class="pre">conditional_decorator()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.DistTypes.getDistTypeFromKwargs"><code class="docutils literal notranslate"><span class="pre">getDistTypeFromKwargs()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="rcm.lambdautils.html#module-rcm.lambdautils.fileIO">rcm.lambdautils.fileIO module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.fileIO.loadParams"><code class="docutils literal notranslate"><span class="pre">loadParams()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.fileIO.saveData"><code class="docutils literal notranslate"><span class="pre">saveData()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.fileIO.saveParams"><code class="docutils literal notranslate"><span class="pre">saveParams()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.fileIO.saveRCMConfig"><code class="docutils literal notranslate"><span class="pre">saveRCMConfig()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="rcm.lambdautils.html#module-rcm.lambdautils.genAlam">rcm.lambdautils.genAlam module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.genAlam.genAlamDataFromParams"><code class="docutils literal notranslate"><span class="pre">genAlamDataFromParams()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.genAlam.genPsphereSpecies"><code class="docutils literal notranslate"><span class="pre">genPsphereSpecies()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.genAlam.genSpeciesFromParams"><code class="docutils literal notranslate"><span class="pre">genSpeciesFromParams()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.genAlam.getAlamMinMax"><code class="docutils literal notranslate"><span class="pre">getAlamMinMax()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="rcm.lambdautils.html#module-rcm.lambdautils.plotter">rcm.lambdautils.plotter module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.plotter.plotEnergyRange"><code class="docutils literal notranslate"><span class="pre">plotEnergyRange()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.plotter.plotLambdasBySpec"><code class="docutils literal notranslate"><span class="pre">plotLambdasBySpec()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.lambdautils.html#rcm.lambdautils.plotter.plotLambdas_Val_Spac"><code class="docutils literal notranslate"><span class="pre">plotLambdas_Val_Spac()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="rcm.lambdautils.html#module-rcm.lambdautils.AlamData">rcm.lambdautils.AlamData module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rcm.lambdautils.html#module-rcm.lambdautils.AlamParams">rcm.lambdautils.AlamParams module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rcm.lambdautils.html#module-rcm.lambdautils.DistTypes">rcm.lambdautils.DistTypes module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rcm.lambdautils.html#module-rcm.lambdautils.fileIO">rcm.lambdautils.fileIO module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rcm.lambdautils.html#module-rcm.lambdautils.genAlam">rcm.lambdautils.genAlam module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rcm.lambdautils.html#rcm-lambdautils-plotter-module">rcm.lambdautils.plotter module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rcm.lambdautils.html#module-rcm.lambdautils">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rcm.wmutils.html">rcm.wmutils package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="rcm.wmutils.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rcm.wmutils.html#module-rcm.wmutils.genWM">rcm.wmutils.genWM module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rcm.wmutils.html#rcm.wmutils.genWM.ChorusPoly"><code class="docutils literal notranslate"><span class="pre">ChorusPoly()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.wmutils.html#rcm.wmutils.genWM.ReSample"><code class="docutils literal notranslate"><span class="pre">ReSample()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.wmutils.html#rcm.wmutils.genWM.genChorus"><code class="docutils literal notranslate"><span class="pre">genChorus()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.wmutils.html#rcm.wmutils.genWM.genWM"><code class="docutils literal notranslate"><span class="pre">genWM()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.wmutils.html#rcm.wmutils.genWM.genh5"><code class="docutils literal notranslate"><span class="pre">genh5()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rcm.wmutils.html#rcm.wmutils.genWM.readPoly"><code class="docutils literal notranslate"><span class="pre">readPoly()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="rcm.wmutils.html#module-rcm.wmutils.wmData">rcm.wmutils.wmData module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rcm.wmutils.html#rcm.wmutils.wmData.wmParams"><code class="docutils literal notranslate"><span class="pre">wmParams</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="rcm.wmutils.html#rcm.wmutils.wmData.wmParams.getAttrs"><code class="docutils literal notranslate"><span class="pre">wmParams.getAttrs()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="rcm.wmutils.html#module-rcm.wmutils.genWM">rcm.wmutils.genWM module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rcm.wmutils.html#module-rcm.wmutils.wmData">rcm.wmutils.wmData module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rcm.wmutils.html#module-rcm.wmutils">Module contents</a></li>
 </ul>
 </li>

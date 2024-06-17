@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>kaiViz module &mdash; Kaipy 1.0.0 documentation</title>
@@ -13,11 +13,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -56,32 +56,7 @@
 <li class="toctree-l2"><a class="reference internal" href="kJobs.html">kJobs module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="kaiH5.html">kaiH5 module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="kaiTools.html">kaiTools module</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">kaiViz module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.DrawCut"><code class="docutils literal notranslate"><span class="pre">DrawCut()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.MidpointNormalize"><code class="docutils literal notranslate"><span class="pre">MidpointNormalize</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.SetAx"><code class="docutils literal notranslate"><span class="pre">SetAx()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.SetAxDate"><code class="docutils literal notranslate"><span class="pre">SetAxDate()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.SetAxLabs"><code class="docutils literal notranslate"><span class="pre">SetAxLabs()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.ShaveX"><code class="docutils literal notranslate"><span class="pre">ShaveX()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.ShaveY"><code class="docutils literal notranslate"><span class="pre">ShaveY()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.addEarth2D"><code class="docutils literal notranslate"><span class="pre">addEarth2D()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.compPlot"><code class="docutils literal notranslate"><span class="pre">compPlot()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.genCB"><code class="docutils literal notranslate"><span class="pre">genCB()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.genNorm"><code class="docutils literal notranslate"><span class="pre">genNorm()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.get_aspect"><code class="docutils literal notranslate"><span class="pre">get_aspect()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.helioCompPlot_new"><code class="docutils literal notranslate"><span class="pre">helioCompPlot_new()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.helioItemPlot_new"><code class="docutils literal notranslate"><span class="pre">helioItemPlot_new()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.helioTrajPlot"><code class="docutils literal notranslate"><span class="pre">helioTrajPlot()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.helio_labelStr"><code class="docutils literal notranslate"><span class="pre">helio_labelStr()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.itemPlot"><code class="docutils literal notranslate"><span class="pre">itemPlot()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.labelStr"><code class="docutils literal notranslate"><span class="pre">labelStr()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.picSz"><code class="docutils literal notranslate"><span class="pre">picSz()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.reWrap"><code class="docutils literal notranslate"><span class="pre">reWrap()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.savePic"><code class="docutils literal notranslate"><span class="pre">savePic()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.trajPlot"><code class="docutils literal notranslate"><span class="pre">trajPlot()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#kaiViz.trimFig"><code class="docutils literal notranslate"><span class="pre">trimFig()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">kaiViz module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="kaijson.html">kaijson module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="kaixdmf.html">kaixdmf module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="kdefs.html">kdefs module</a></li>
@@ -177,7 +152,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="kaiViz.SetAx">
-<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">SetAx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyBds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-1,</span> <span class="pre">1,</span> <span class="pre">-1,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Adj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'box'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.SetAx" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">SetAx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyBds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">-</span> <span class="pre">1,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Adj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'box'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.SetAx" title="Permalink to this definition"></a></dt>
 <dd><p>Set axis plot bounds and aspect ratio.</p>
 <p>Ensure that the plot has an equal aspect ratio and that the axis limits
 are set to the specified values.</p>
@@ -270,7 +245,7 @@ ratio.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="kaiViz.addEarth2D">
-<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">addEarth2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Re</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-90</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.addEarth2D" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">addEarth2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Re</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">90</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.addEarth2D" title="Permalink to this definition"></a></dt>
 <dd><p>Adds a 2D representation of Earth to the given matplotlib axes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -465,7 +440,7 @@ These plots are created in the original spacecraft frame.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="kaiViz.itemPlot">
-<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">itemPlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plotNum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numPlots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vecComp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.itemPlot" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">kaiViz.</span></span><span class="sig-name descname"><span class="pre">itemPlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plotNum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numPlots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vecComp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#kaiViz.itemPlot" title="Permalink to this definition"></a></dt>
 <dd><p>Plot the data for a specific item.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
