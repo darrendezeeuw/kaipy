@@ -4,14 +4,6 @@ gamera package
 Submodules
 ----------
 
-gamera.block\_gampp module
---------------------------
-
-.. automodule:: gamera.block_gampp
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 gamera.deltabViz module
 -----------------------
 
