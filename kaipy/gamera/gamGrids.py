@@ -4,6 +4,7 @@ from scipy import interpolate
 import sys
 import os
 from scipy.ndimage import gaussian_filter
+import pyhdf
 from pyhdf.SD import SD, SDC
 import matplotlib as mpl
 import matplotlib.cm as cm
@@ -903,7 +904,7 @@ def getLFM(fIn, Rin=3.0, Rout=25.0):
 		xxi (ndarray): The projected and scaled x array.
 		yyi (ndarray): The projected and scaled y array.
 	"""
-	hdffile = SD(fIn)
+	hdffile = pyhdf.SD.SD(fIn)
 	# Grab x/y/z arrays from HDF file. Scale by Re
 	# LFM is k,j,i ordering
 	iRe = 1.0/kdefs.Re_cgs
