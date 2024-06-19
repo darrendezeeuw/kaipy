@@ -45,7 +45,21 @@ gLW = 0.125
 
 #Adds inset figure to axis using data from fmix
 #dxy = [width%,height%]
-def CMIPic(nLat,nLon,llBC,P,C,AxM=None,doNorth=True,loc="upper left",dxy=[20,20]):
+def CMIPic(nLat, nLon, llBC, P, C, AxM=None, doNorth=True, loc="upper left", dxy=[20,20]):
+	"""
+	Generate a map plot using Basemap and plot data on it.
+
+	Args:
+		nLat (int): Number of latitude lines.
+		nLon (int): Number of longitude lines.
+		llBC (float): Bounding latitude for the map.
+		P (numpy.ndarray): Data to be plotted as contours.
+		C (numpy.ndarray): Data to be plotted as pcolormesh.
+		AxM (matplotlib.axes.Axes, optional): The axes to add the inset figure to. If not provided, the current axes will be used.
+		doNorth (bool, optional): Flag indicating whether the map is in the northern hemisphere. Default is True.
+		loc (str, optional): Location of the inset figure. Default is "upper left".
+		dxy (list, optional): Width and height of the inset figure as a percentage of the parent axes. Default is [20, 20].
+	"""
 	from mpl_toolkits.basemap import Basemap
 	if (doNorth):
 		tStr = "North"
@@ -55,85 +69,107 @@ def CMIPic(nLat,nLon,llBC,P,C,AxM=None,doNorth=True,loc="upper left",dxy=[20,20]
 	vC = kv.genNorm(cMax)
 	vP = kv.genNorm(pMax)
 
-	#Now add inset figure to passed axis
+	# Now add inset figure to passed axis
 	wStr = "%f%%"%(dxy[0])
 	hStr = "%f%%"%(dxy[1])
 
 	if (AxM is None):
 		AxM = plt.gca()
 
-	Ax = inset_axes(AxM,width=wStr,height=hStr,loc=loc)
+	Ax = inset_axes(AxM, width=wStr, height=hStr, loc=loc)
 	
 	for spine in Ax.spines.values():
 		spine.set_edgecolor(AxEC)
 	Ax.patch.set_alpha(0)
 	if (doNorth):
-		Ax.set_xlabel(tStr,fontsize=dfs,color=AxEC)
+		Ax.set_xlabel(tStr, fontsize=dfs, color=AxEC)
 	else:
-		Ax.set_title(tStr,fontsize=dfs,color=AxEC)
+		Ax.set_title(tStr, fontsize=dfs, color=AxEC)
 
 	
-	bmAx = Basemap(ax=Ax,projection=pType,boundinglat=llBC,lon_0=lon0)
+	bmAx = Basemap(ax=Ax, projection=pType, boundinglat=llBC, lon_0=lon0)
 
-	Lat0 = np.linspace(90,llBC,nLat+0)
-	Lat1 = np.linspace(90,llBC,nLat+1)
+	Lat0 = np.linspace(90, llBC, nLat+0)
+	Lat1 = np.linspace(90, llBC, nLat+1)
 	
 	if (doNorth):
-		Lon0 = np.linspace(0,360,nLon+0)
-		Lon1 = np.linspace(0,360,nLon+1)
+		Lon0 = np.linspace(0, 360, nLon+0)
+		Lon1 = np.linspace(0, 360, nLon+1)
 	else:
-		Lon0 = np.linspace(360,0,nLon+0)
-		Lon1 = np.linspace(360,0,nLon+1)
-	LonC,LatC = np.meshgrid(Lon0,Lat0)
-	LonI,LatI = np.meshgrid(Lon1,Lat1)
+		Lon0 = np.linspace(360, 0, nLon+0)
+		Lon1 = np.linspace(360, 0, nLon+1)
+	LonC, LatC = np.meshgrid(Lon0, Lat0)
+	LonI, LatI = np.meshgrid(Lon1, Lat1)
 	
-	#Now do plotting, start w/ gridding
+	# Now do plotting, start w/ gridding
 	
-	#Set parallels
-	gP = np.arange(90-dLat,0.95*llBC,-dLat)
-	bmAx.drawparallels(gP,latmax=gP.max(),dashes=gDash,linewidth=gLW,color=gC)
+	# Set parallels
+	gP = np.arange(90-dLat, 0.95*llBC, -dLat)
+	bmAx.drawparallels(gP, latmax=gP.max(), dashes=gDash, linewidth=gLW, color=gC)
 	
-	#Set meridians
-	gM = np.arange(0,360,dLon)
+	# Set meridians
+	gM = np.arange(0, 360, dLon)
 	for lon in gM:
-		bmAx.drawgreatcircle(lon,gP.max(),lon,llBC,linewidth=gLW,color=gC)
+		bmAx.drawgreatcircle(lon, gP.max(), lon, llBC, linewidth=gLW, color=gC)
 	
-	#Plot data
-	bmAx.pcolormesh(LonI,LatI,C,latlon=True,norm=vC,cmap=fcMap)
-	#Do potential contours
+	# Plot data
+	bmAx.pcolormesh(LonI, LatI, C, latlon=True, norm=vC, cmap=fcMap)
+	# Do potential contours
 	if (doAPC):
-		#Do positive contours
-		vAPp = kv.genNorm(0,pMax)
-		pVals = np.arange(dpC,pMax,dpC)
-		if (P.max()>dpC):
-			bmAx.contour(LonC,LatC,P,pVals,latlon=True,norm=vAPp,cmap=apMap,alpha=cAl,linewidths=cLW,linestyles='solid')
-		#Do negative contours
-		vAPm = kv.genNorm(-pMax,0)
+		# Do positive contours
+		vAPp = kv.genNorm(0, pMax)
+		pVals = np.arange(dpC, pMax, dpC)
+		if (P.max() > dpC):
+			bmAx.contour(LonC, LatC, P, pVals, latlon=True, norm=vAPp, cmap=apMap, alpha=cAl, linewidths=cLW, linestyles='solid')
+		# Do negative contours
+		vAPm = kv.genNorm(-pMax, 0)
 		apMapm = apMap+"_r"
 		pVals = -pVals[::-1]
-		if (P.min()<-dpC):
-			bmAx.contour(LonC,LatC,P,pVals,latlon=True,norm=vAPm,cmap=apMapm,alpha=cAl,linewidths=cLW,linestyles='dashed')
+		if (P.min() < -dpC):
+			bmAx.contour(LonC, LatC, P, pVals, latlon=True, norm=vAPm, cmap=apMapm, alpha=cAl, linewidths=cLW, linestyles='dashed')
 	else:
-		bmAx.contour(LonC,LatC,P,pVals,latlon=True,norm=vP,cmap=pMap,alpha=cAl,linewidths=cLW)
+		bmAx.contour(LonC, LatC, P, pVals, latlon=True, norm=vP, cmap=pMap, alpha=cAl, linewidths=cLW)
 	
-def AddPotCB(Ax,Lab="Potential [kV]",Ntk=7):
-	if (doAPC):
-		vP = kv.genNorm(0,pMax)
-		cm = apMap
-	else:
-		vP = kv.genNorm(-pMax,pMax)
-		cm = pMap
-	kv.genCB(Ax,vP,Lab,cM=cm,Ntk=Ntk)
+def AddPotCB(Ax, Lab="Potential [kV]", Ntk=7):
+	"""
+	Add a potential colorbar to the given axis.
 
-def AddCBs(Ax1,Ax2,Lab1="Potential [kV]",Lab2="FAC",Ntk1=7,Ntk2=5,doFlip=True):
+	Args:
+		Ax (matplotlib.axes.Axes): The axis to add the colorbar to.
+		Lab (str, optional): The label for the colorbar. Default is "Potential [kV]".
+		Ntk (int, optional): The number of ticks on the colorbar. Default is 7.
+	"""
 	if (doAPC):
-		vP = kv.genNorm(0,pMax)
+		vP = kv.genNorm(0, pMax)
 		cm = apMap
 	else:
-		vP = kv.genNorm(-pMax,pMax)
+		vP = kv.genNorm(-pMax, pMax)
 		cm = pMap
-	kv.genCB(Ax1,vP,Lab1,cM=cm,Ntk=Ntk1)
-	kv.genCB(Ax2,kv.genNorm(cMax),Lab2,fcMap,Ntk=Ntk2)
+	kv.genCB(Ax, vP, Lab, cM=cm, Ntk=Ntk)
+
+
+def AddCBs(Ax1, Ax2, Lab1="Potential [kV]", Lab2="FAC", Ntk1=7, Ntk2=5, doFlip=True):
+	"""
+	Add colorbars to the given axes.
+
+	Args:
+		Ax1 (matplotlib.axes.Axes): The first axes object to add the colorbar to.
+		Ax2 (matplotlib.axes.Axes): The second axes object to add the colorbar to.
+		Lab1 (str, optional): The label for the colorbar on Ax1. Default is "Potential [kV]".
+		Lab2 (str, optional): The label for the colorbar on Ax2. Default is "FAC".
+		Ntk1 (int, optional): The number of ticks for the colorbar on Ax1. Default is 7.
+		Ntk2 (int, optional): The number of ticks for the colorbar on Ax2. Default is 5.
+		doFlip (bool, optional): Whether to flip the colorbar on Ax2. Default is True.
+	"""
+	if (doAPC):
+		vP = kv.genNorm(0, pMax)
+		cm = apMap
+	else:
+		vP = kv.genNorm(-pMax, pMax)
+		cm = pMap
+	kv.genCB(Ax1, vP, Lab1, cM=cm, Ntk=Ntk1)
+	kv.genCB(Ax2, kv.genNorm(cMax), Lab2, fcMap, Ntk=Ntk2)
 	if (doFlip):
 		Ax2.xaxis.tick_top()
 		Ax2.xaxis.set_label_position('top')
+

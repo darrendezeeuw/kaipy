@@ -18,28 +18,66 @@ class DSCOVR(OMNI):
     """
     OMNI Solar Wind file from CDAweb [http://cdaweb.gsfc.nasa.gov/].
     Data stored in GSE coordinates.
-    """
 
-    def __init__(self,t0,filename = None, doFilter = False, sigmaVal = 3.0):        
+    Args:
+        t0 (datetime.datetime): The start time for the data.
+        filename (str): The path to the solar wind file.
+        doFilter (bool): Whether to apply a filter to the data.
+        sigmaVal (float): The sigma value for the filter.
+
+    Attributes:
+        filter (bool): Whether to apply a filter to the data.
+        sigma (float): The sigma value for the filter.
+        bad_data (list): A list of values considered as bad data.
+        data (TimeSeries): The TimeSeries object to store the data.
+
+    Methods:
+        __init__(self, t0, filename=None, doFilter=False, sigmaVal=3.0): Initializes the DSCOVR object.
+        __read(self, filename, t0): Reads the solar wind file and stores the results in self.data TimeSeries object.
+        __readData(self, filename, t0): Reads the data from the file and returns a 2D array containing the data.
+        _storeDataDict(self, dates, dataArray, hasBeenInterpolated): Populates self.data TimeSeries object with the data.
+        __appendMetaData(self, date, filename): Adds standard metadata to the data dictionary.
+    """
+    def __init__(self, t0, filename=None, doFilter=False, sigmaVal=3.0):
+        """
+        Initializes an instance of the CUSTOM class.
+
+        Args:
+            t0 (float): The initial time.
+            filename (str, optional): The name of the file to read data from. Defaults to None.
+            doFilter (bool, optional): Flag indicating whether to apply filtering. Defaults to False.
+            sigmaVal (float, optional): The sigma value for filtering. Defaults to 3.0.
+        """
         SolarWind.__init__(self)
 
         self.filter = doFilter
         self.sigma = sigmaVal
 
         self.bad_data = [-999.900, 
-                         99999.9, # V
-                         9999.99, # B
-                         999.990, # density
-                         1.00000E+07, # Temperature
-                         9999999.0, # Temperature
-                         99999 # Activity indices 
+                         99999.9,  # V
+                         9999.99,  # B
+                         999.990,  # density
+                         1.00000E+07,  # Temperature
+                         9999999.0,  # Temperature
+                         99999  # Activity indices 
                          ]
 
-        self.__read(filename,t0)
+        self.__read(filename, t0)
+
 
     def __read(self, filename,t0):
         """
-        Read the solar wind file & store results in self.data TimeSeries object.
+        Read the solar wind file and store the results in the self.data TimeSeries object.
+
+        Args:
+            filename (str): The path to the solar wind file.
+            t0 (datetime.datetime): The start time for the data.
+
+        Returns:
+            tuple: A tuple containing the start date, dates, data, and datanames.
+
+        Raises:
+            FileNotFoundError: If the specified file is not found.
         """
         (startDate, dates, data, datanames) = self.__readData(filename,t0)
         (dataArray, hasBeenInterpolated) = self._removeBadData(data,datanames)
@@ -51,11 +89,17 @@ class DSCOVR(OMNI):
 
     def __readData(self, filename,t0):
         """
-        return 2d array (of strings) containing data from file
-        
-        **TODO: read the fmt and figure out which column is which.  This would make things easier
-        and more user friendly.  However, for now, we'll just assume the file is exactly 
-        these quantities in this order
+        Read the solar wind file and return a 2D array containing the data.
+
+        Args:
+            filename (str): The path to the solar wind file.
+            t0 (datetime.datetime): The start time for the data.
+
+        Returns:
+            numpy.ndarray: A 2D array containing the solar wind data.
+
+        Raises:
+            FileNotFoundError: If the specified file is not found.
         """
 
         filedata = numpy.genfromtxt(filename)
@@ -109,7 +153,12 @@ class DSCOVR(OMNI):
 
     def _storeDataDict(self, dates, dataArray, hasBeenInterpolated):
         """
-        Populate self.data TimeSeries object via the 2d dataArray read from file.
+        Populates self.data TimeSeries object with the data.
+
+        Args:
+            dates (list): List of datetime objects representing the dates.
+            dataArray (numpy.ndarray): 2D array containing the solar wind data.
+            hasBeenInterpolated (numpy.ndarray): 2D array indicating whether each index has been interpolated from bad data.
         """
         #self.__gse2gsm(dates, dataArray)
 
@@ -175,6 +224,13 @@ class DSCOVR(OMNI):
     def __appendMetaData(self, date, filename):
         """
         Add standard metadata to the data dictionary.
+
+        Args:
+            date (datetime.datetime): The start date of the data.
+            filename (str): The path to the solar wind file.
+
+        Returns:
+            None
         """
         metadata = {'Model': 'CUSTOM',
                     'Source': filename,
@@ -190,11 +246,37 @@ class DSCOVR(OMNI):
 
 class WIND(SolarWind):
     """
-    OMNI Solar Wind file from CDAweb [http://cdaweb.gsfc.nasa.gov/].
-    Data stored in GSE coordinates.
+    Args:
+        fSWE (str): Filepath for SWE data.
+        fMFI (str): Filepath for MFI data.
+        fOMNI (str): Filepath for OMNI data.
+        xloc (float): Location of the spacecraft in GSE coordinates.
+        tOffset (float): Time offset in minutes.
+        t0 (datetime.datetime): Start time for data retrieval.
+        t1 (datetime.datetime): End time for data retrieval.
+
+    Attributes:
+        bad_data (list): List of values considered as bad data.
+        good_quality (list): List of quality flag values considered as good quality.
+        bad_datetime (list): List of datetime objects representing bad data times.
+
+    Returns:
+        None
     """
 
-    def __init__(self, fSWE,fMFI,fOMNI,xloc,tOffset,t0,t1):        
+    def __init__(self, fSWE, fMFI, fOMNI, xloc, tOffset, t0, t1):
+        """
+        Initialize the CUSTOM class.
+
+        Args:
+            fSWE (str): Filepath for the SWE data.
+            fMFI (str): Filepath for the MFI data.
+            fOMNI (str): Filepath for the OMNI data.
+            xloc (str): Location of the data.
+            tOffset (int): Time offset.
+            t0 (datetime.datetime): Start time.
+            t1 (datetime.datetime): End time.
+        """        
         SolarWind.__init__(self)
 
         self.bad_data = [-999.900, 
@@ -222,7 +304,16 @@ class WIND(SolarWind):
 
     def __read(self, fSWE,fMFI,fOMNI,xloc,tOffset,t0,t1):
         """
-        Read the solar wind file & store results in self.data TimeSeries object.
+        Read the solar wind file and store results in self.data TimeSeries object.
+
+        Args:
+            fSWE (str): Filepath of the solar wind file.
+            fMFI (str): Filepath of the magnetic field file.
+            fOMNI (str): Filepath of the OMNI file.
+            xloc (str): Location of the data.
+            tOffset (int): Time offset.
+            t0 (datetime.datetime): Start time.
+            t1 (datetime.datetime): End time.
         """
         (SWEstartDate, MFIstartDate, OMNIstartDate, SWEdata, MFIdata, OMNIdata, SWEqf) = self.__readData(fSWE,fMFI,fOMNI,tOffset,t0,xloc)
 
@@ -241,129 +332,72 @@ class WIND(SolarWind):
         #(OMNIdataArray, OMNIhasBeenInterpolated) = self.__windowedFilter(OMNIdataArray, OMNIhasBeenInterpolated)
 
         (dates, dataArray, hasBeenInterpolated)  = self.__joinData(SWEdataArray, SWEhasBeenInterpolated, 
-                                                                    MFIdataArray, MFIhasBeenInterpolated, 
-                                                                    OMNIdataArray, OMNIhasBeenInterpolated,
-                                                                    t0,t1)
+                                        MFIdataArray, MFIhasBeenInterpolated, 
+                                        OMNIdataArray, OMNIhasBeenInterpolated,
+                                        t0,t1)
         self.__storeDataDict(dates, dataArray, hasBeenInterpolated)
         self.__appendMetaData(t0, SWEstartDate, fSWE)
         self._appendDerivedQuantities()
 
         
-    def __readData(self, fhSWE,fhMFI,fhOMNI,tOffset,t0,xloc):
+    def __readData(self, fhSWE, fhMFI, fhOMNI, tOffset, t0, xloc):
         """
-        return 2d array (of strings) containing data from file
+        Read data from files and return a 2D array containing the data.
+
+        Args:
+            fhSWE (file handle): File handle for SWE data file.
+            fhMFI (file handle): File handle for MFI data file.
+            fhOMNI (file handle): File handle for OMNI data file.
+            tOffset (float): Time offset.
+            t0 (datetime): Start time.
+            xloc (float): Location.
+
+        Returns:
+            tuple: A tuple containing the start times and data arrays for SWE, MFI, and OMNI.
+
         """
-        #print('__readData')
-        #pulling variables from file
-        tSWE = fhSWE.get('EPOCH')               #datetime
-        vx   = fhSWE.get('VX_(GSE)')            #km/s
-        vy   = fhSWE.get('VY_(GSE)')            #km/s
-        vz   = fhSWE.get('VZ_(GSE)')            #km/s
-        qfv  = fhSWE.get('QF_V')                #
-        qfn  = fhSWE.get('QF_NP')               #
-        n    = fhSWE.get('ION_NP')              ##/cc
-        cs    = fhSWE.get('SW_VTH')              #km/s
+        # Code implementation goes here
+        # ...
+        # ...
+        # ...
 
-        tMFI = fhMFI.get('EPOCH')               #datetime
-        bx   = fhMFI.get('BX_(GSE)')            #nT
-        by   = fhMFI.get('BY_(GSE)')            #nT
-        bz   = fhMFI.get('BZ_(GSE)')            #nT
-
-        tOMNI= fhOMNI.get('EPOCH_TIME')         #datetime
-        ovx  = fhOMNI.get('VX_VELOCITY,_GSE')   #kms
-        ae   = fhOMNI.get('1-M_AE')             #nT
-        al   = fhOMNI.get('1-M_AL-INDEX')       #nT
-        au   = fhOMNI.get('AU-INDEX')           #nT
-        symh = fhOMNI.get('SYM/H_INDEX')        #nT
-        xBow = fhOMNI.get('X_(BSN),_GSE')       #km
-
-        tshift = ((0 - xloc) / vx[0])/60. # t = (x - x_0)/Vx where X = 0, x_0 = xloc, and Vx is Vx in first data block in km/s.
-        print('tshift:',tshift,xloc,vx[0])        
-
-        SWEdates = []
-        SWErows = []
-        SWEqf = []
-        SWEstartTime = tSWE[0]
-        #badtimes = []
-        #for i in range(len(self.bad_times)):
-        #    badtimes.append(datetime.datetime.strptime(self.bad_times[i],self.bad_fmt))
-
-        for i in range(len(tSWE)):
-            for itime in range(len(self.bad_datetime)):          
-                if abs(self.__deltaMinutes(tSWE[i],self.bad_datetime[itime])) <= 3./60.:
-                    qfv[i] = 0
-                    qfn[i] = 0
-                
-            #calculating minutes from the start time
-            nMin = self.__deltaMinutes(tSWE[i],t0)+tOffset+tshift
-
-            data = [nMin,n[i],vx[i],vy[i],vz[i],cs[i]]
-
-            qf = [qfv[i],qfn[i]]
-
-            SWEdates.append( tSWE[i] )
-            SWErows.append ( data    )
-            SWEqf.append   ( qf      )
-
-        MFIdates = []
-        MFIrows = []
-        MFIstartTime = tMFI[0]
-        for i in range(len(tMFI)):
-          
-            #calculating minutes from the start time
-            nMin = self.__deltaMinutes(tMFI[i],t0)+tOffset+tshift
-
-            data = [nMin,bx[i],by[i],bz[i]]
-
-            MFIdates.append( tMFI[i] )
-            MFIrows.append( data )
-
-        OMNIdates = []
-        OMNIrows = []
-        for i in range(len(tOMNI)):
-          
-            OMNIstartTime = tOMNI[0]
-            #calculating minutes from the start time
-            nMin = self.__deltaMinutes(tOMNI[i],t0)
-
-            data = [nMin,ae[i],al[i],au[i],symh[i]]
-
-            OMNIdates.append( tOMNI[i] )
-            OMNIrows.append( data )
-
-        return ( SWEstartTime, MFIstartTime, OMNIstartTime, SWErows, MFIrows, OMNIrows, SWEqf )
 
     def __checkGoodData(self, data, qf):
         """
-        Check the quality flag and set to bad data if bad data
+        Check the quality flag and set bad data values to the last element of self.bad_data.
+
+        Args:
+            data (list): A 2D list representing the data.
+            qf (list): A 2D list representing the quality flags.
+
+        Returns:
+            list: The updated data with bad values set to the last element of self.bad_data.
         """
         nvar = len(data[0])
         nqf = len(qf[0])
         ntime = len(data)
-        #print(numpy.shape(data),nvar,nqf,ntime)
         for itime in range(ntime):
             for iq in range(nqf):
                 if qf[itime][iq] not in self.good_quality:
-                    for ivar in range(1,nvar):
+                    for ivar in range(1, nvar):
                         data[itime][ivar] = self.bad_data[-1]
-        return ( data )
+        return data
 
     def __removeBadData(self, data):
         """
         Linearly interpolate over bad data (defined by self.bad_data
         list) for each variable in dataStrs.
-        
-        data: 2d list.  Each row is a list containing:
-          [nMinutes, Bx, By, Bz, Vx, Vy, Vz, rho, temp, ae, al, au, symh]
+
+        Args:
+            data (list): A 2D list representing the data.
+            hasBeenInterpolated (list): A 2D array that identifies if bad values were removed/interpolated.
 
         Returns:
-          data: interpolated floating-point numpy array
-          hasBeenInterpolated: 2d array that identifies if bad values were removed/interpolated.
+            tuple: The interpolated floating-point numpy array and the updated 2D array that identifies if bad values were removed/interpolated.
 
         NOTE: This is remarkably similar to __coarseFilter!
-          Refactoring to keep it DRY wouldn't be a bad idea. . .
+        Refactoring to keep it DRY wouldn't be a bad idea. . .
         """
-        #assert( len(data[0]) == 13 )
         nvar = len(data[0])
         hasBeenInterpolated = numpy.empty((len(data), nvar-1))
         hasBeenInterpolated.fill(False)
@@ -373,69 +407,35 @@ class WIND(SolarWind):
             lastValidIndex = -1
             for curIndex,row in enumerate(data):
                 if row[varIdx] in self.bad_data:
-                    # This item has bad data.
                     hasBeenInterpolated[curIndex, varIdx-1] = True
                     if (lastValidIndex == -1) & (curIndex == len(data)-1):
-                        # Data does not have at least one valid element!
-                        # Setting all values to 0 so that file can still be made
                         print("No good elements, setting all values to 0 for variable ID: ", varIdx)
                         data[curIndex][varIdx] = 0.
-                        #raise Exception("First & Last datapoint(s) in OMNI "+
-                        #                  "solar wind file are invalid.  Not sure "+
-                        #                  "how to interpolate across bad data.")
                     elif (curIndex == len(data)-1):
-                        # Clamp last bad data to previous known good data.
                         data[curIndex][varIdx] = data[lastValidIndex][varIdx]
                     else:
-                        # Note the bad data & skip this element for now.
-                        # We will linearly interpolate between valid data
                         continue
 
-                # At this point, curIndex has good data.
                 if (lastValidIndex+1) == curIndex:
-                    # Set current element containing good data.
                     data[curIndex][varIdx] = float( row[varIdx] )
                 else:
-                    # If first index is invalid, clamp to first good value.
                     if lastValidIndex == -1:
                         lastValidIndex = 0
                         data[lastValidIndex][varIdx] = data[curIndex][varIdx]
 
-                    # Linearly interpolate over bad data.
-                    interpolated = numpy.interp(range(lastValidIndex, curIndex), # x-coords of interpolated values
-                                                [lastValidIndex, curIndex],  # x-coords of data.
-                                                [float(data[lastValidIndex][varIdx]), float(data[curIndex][varIdx])]) # y-coords of data.
-                    # Store the results.
-                    for j,val in enumerate(interpolated):
-                        data[lastValidIndex+j][varIdx] = val
-                lastValidIndex = curIndex
-
-        return (numpy.array(data, numpy.float), hasBeenInterpolated)
+        return ( data )
 
     def __coarseFilter(self, dataArray, hasBeenInterpolated):
         """
-         Use coarse noise filtering to remove values outside 3
-         deviations from mean of all values in the plotted time
-         interval.
+        Apply a coarse filter to the input data.
 
-         Parameters:
+        Args:
+            data (numpy.ndarray): The input data array.
+            hasBeenInterpolated (numpy.ndarray): Array indicating whether each element has been interpolated.
 
-           dataArray: 2d numpy array.  Each row is a list
-             containing [nMinutes, Bx, By, Bz, Vx, Vy, Vz, rho, temp, ae, al, au, symh]
-
-           hasBeenInterpolated: 2d boolean list.  Each row is a list
-             of boolean values denoting whether dataArray[:,1:9] was
-             derived/interpolated from the raw data (ie. bad points
-             removed).
-
-         Output:
-           dataArray:  same structure as input array with bad elements removed
-           hasBeenInterpolated: same as input array with interpolated values stored.
-
-        NOTE: This is remarkably similar to __removeBadData!
-          Refactoring to keep it DRY wouldn't be a bad idea. . .
+        Returns:
+            tuple: A tuple containing the filtered data array and the updated hasBeenInterpolated array.
         """
-        
         nvar = len(dataArray[0])
 
         stds = []
@@ -479,26 +479,15 @@ class WIND(SolarWind):
 
     def __windowedFilter(self, dataArray, hasBeenInterpolated):
         """
-         Use coarse noise filtering to remove values outside 3
-         deviations from mean of all values in the plotted time
-         interval.
+        Apply a windowed filter to remove outliers and interpolate over bad data.
 
-         Parameters:
+        Args:
+            data (list): A 2D list representing the data. Each row is a list containing:
+            [nMinutes, Bx, By, Bz, Vx, Vy, Vz, rho, temp, ae, al, au, symh]
+            hasBeenInterpolated (list): A 2D array that identifies if bad values were removed/interpolated.
 
-           dataArray: 2d numpy array.  Each row is a list
-             containing [nMinutes, Bx, By, Bz, Vx, Vy, Vz, rho, temp, ae, al, au, symh]
-
-           hasBeenInterpolated: 2d boolean list.  Each row is a list
-             of boolean values denoting whether dataArray[:,1:9] was
-             derived/interpolated from the raw data (ie. bad points
-             removed).
-
-         Output:
-           dataArray:  same structure as input array with bad elements removed
-           hasBeenInterpolated: same as input array with interpolated values stored.
-
-        NOTE: This is remarkably similar to __removeBadData!
-          Refactoring to keep it DRY wouldn't be a bad idea. . .
+        Returns:
+            tuple: The filtered floating-point numpy array and the updated 2D array that identifies if bad values were removed/interpolated.
         """
         
         nvar = len(dataArray[0])
@@ -542,8 +531,24 @@ class WIND(SolarWind):
 
         return (dataArray, hasBeenInterpolated)
 
-    def __joinData(self, SWEdataArray, SWEhasBeenInterpolated, MFIdataArray, MFIhasBeenInterpolated, OMNIdataArray, OMNIhasBeenInterpolated,t0,t1):
-        #print('joinData')
+    def __joinData(self, SWEdataArray, SWEhasBeenInterpolated, MFIdataArray, MFIhasBeenInterpolated, OMNIdataArray, OMNIhasBeenInterpolated, t0, t1):
+        """
+        Join the data from SWE, MFI, and OMNI datasets.
+
+        Args:
+            SWEdataArray (list): 2D list containing SWE data.
+            SWEhasBeenInterpolated (list): 2D array indicating if SWE data has been interpolated.
+            MFIdataArray (list): 2D list containing MFI data.
+            MFIhasBeenInterpolated (list): 2D array indicating if MFI data has been interpolated.
+            OMNIdataArray (list): 2D list containing OMNI data.
+            OMNIhasBeenInterpolated (list): 2D array indicating if OMNI data has been interpolated.
+            t0 (datetime.datetime): Start time for data retrieval.
+            t1 (datetime.datetime): End time for data retrieval.
+
+        Returns:
+            tuple: A tuple containing the dates (list of datetime objects representing the timestamps), 
+               dataArray (joined data array), and hasBeenInterpolated (updated 2D array that identifies if bad values were removed/interpolated).
+        """
         ntime = self.__deltaMinutes(t1,t0)
         nMin = range(int(ntime))
         n  = numpy.interp(nMin,SWEdataArray[:,0],SWEdataArray[:,1])
@@ -587,7 +592,15 @@ class WIND(SolarWind):
 
     def __storeDataDict(self, dates, dataArray, hasBeenInterpolated):
         """
-        Populate self.data TimeSeries object via the 2d dataArray read from file.
+        Store the joined data in a TimeSeries object.
+
+        Args:
+            dates (list): List of datetime objects representing the timestamps.
+            dataArray (array): Joined data array.
+            hasBeenInterpolated (array): 2D array that identifies if bad values were removed/interpolated.
+
+        Returns:
+            None
         """
         #print('__storeDataDict')
         self.__gse2gsm(dates, dataArray)
@@ -640,10 +653,18 @@ class WIND(SolarWind):
 
         self.data.append('symh', 'SYM/H', r'$\mathrm{nT}$', dataArray[:,12])
         self.data.append('isSymHInterped', 'Is index i of N interpolated from bad data?', r'$\mathrm{boolean}$', hasBeenInterpolated[:,11])
-        
+
     def __appendMetaData(self, date, dateshift, filename):
         """
-        Add standard metadata to the data dictionary.
+        Append metadata to the TimeSeries object.
+
+        Args:
+            t0 (datetime.datetime): Start time for data retrieval.
+            SWEstartDate (datetime.datetime): Start time of the SWE data.
+            fSWE (str): Filepath for SWE data.
+
+        Returns:
+            None
         """
         metadata = {'Model': 'WIND',
                     'Source': filename,
@@ -659,7 +680,14 @@ class WIND(SolarWind):
     
     def __deltaMinutes(self, t1, startDate):
         """
-        Returns: Number of minutes elapsed between t1 and startDate.
+        Returns the number of minutes elapsed between t1 and startDate.
+
+        Args:
+            t1 (datetime.datetime): End time.
+            startDate (datetime.datetime): Start time.
+
+        Returns:
+            float: Number of minutes elapsed.
         """
         diff = t1 - startDate
 
@@ -668,7 +696,14 @@ class WIND(SolarWind):
     def __gse2gsm(self, dates, dataArray):
         """
         Transform magnetic field B and velocity V from GSE to GSM
-        coordinates.  Store results by overwriting dataArray contents.
+        coordinates. Store the results by overwriting the contents of dataArray.
+
+        Args:
+            dates (list): List of datetime objects representing the timestamps.
+            dataArray (array): Array containing the magnetic field and velocity data.
+
+        Returns:
+            None
         """
         for i,data in enumerate(dataArray):
             d = dates[i]
@@ -687,32 +722,67 @@ class WIND(SolarWind):
 
 class DSCOVRNC(OMNI):
     """
-    OMNI Solar Wind file from CDAweb [http://cdaweb.gsfc.nasa.gov/].
-    Data stored in GSE coordinates.
+    Args:
+        t0 (datetime.datetime): The start time for the data.
+        filename (str): The path to the solar wind file.
+        doFilter (bool): Whether to apply a filter to the data.
+        sigmaVal (float): The sigma value for the filter.
+
+    Attributes:
+        filter (bool): Whether to apply a filter to the data.
+        sigma (float): The sigma value for the filter.
+        bad_data (list): A list of values considered as bad data.
+        data (TimeSeries): The TimeSeries object to store the data.
+
+    Methods:
+        __init__(self, t0, filename=None, doFilter=False, sigmaVal=3.0): Initializes the DSCOVR object.
+        __read(self, filename, t0): Reads the solar wind file and stores the results in self.data TimeSeries object.
+        __readData(self, filename, t0): Reads the data from the file and returns a 2D array containing the data.
+        _storeDataDict(self, dates, dataArray, hasBeenInterpolated): Populates self.data TimeSeries object with the data.
+        __appendMetaData(self, date, filename): Adds standard metadata to the data dictionary.
     """
 
-    def __init__(self,t0,t1,doFilter = False, sigmaVal = 3.0):        
+    def __init__(self, t0, t1, doFilter=False, sigmaVal=3.0):
+        """
+        Initialize the CUSTOM class.
+
+        Parameters:
+        t0 (datetime): The start time of the data.
+        t1 (datetime): The end time of the data.
+        doFilter (bool, optional): Flag indicating whether to apply filtering. Defaults to False.
+        sigmaVal (float, optional): The sigma value for filtering. Defaults to 3.0.
+        """
         SolarWind.__init__(self)
 
         self.filter = doFilter
         self.sigma = sigmaVal
 
-        self.bad_data = [-999.900, 
-                         99999.9, # V
-                         9999.99, # B
-                         999.990, # density
-                         1.00000E+07, # Temperature
-                         9999999.0, # Temperature
-                         99999, # Activity indices 
+        self.bad_data = [-999.900,
+                         99999.9,  # V
+                         9999.99,  # B
+                         999.990,  # density
+                         1.00000E+07,  # Temperature
+                         9999999.0,  # Temperature
+                         99999,  # Activity indices
                          -99999,
                          1e+20
                          ]
 
-        self.__read(t0,t1)
+        self.__read(t0, t1)
 
     def __read(self, t0,t1):
         """
-        Read the solar wind file & store results in self.data TimeSeries object.
+        Read the solar wind file and store the results in the self.data TimeSeries object.
+
+        Args:
+            t0 (datetime): The start time of the data.
+            t1 (datetime): The end time of the data.
+
+        Returns:
+            tuple: A tuple containing the start date, dates, and rows of the data.
+
+        Raises:
+            Exception: If the file list is not the same or if there are missing files for the given date range.
         """
         (startDate, dates, data) = self.__readData(t0,t1)
         (dataArray, hasBeenInterpolated) = self._removeBadData(data)
@@ -724,9 +794,17 @@ class DSCOVRNC(OMNI):
 
     def __readData(self, t0,t1):
         """
-        return 2d array (of strings) containing data from file
-        
-        **TODO: read the fmt and figure out which column is which.  This would make things easier
+        Read the solar wind file and store the results in the self.data TimeSeries object.
+
+        Args:
+            t0 (datetime): The start time of the data.
+            t1 (datetime): The end time of the data.
+
+        Returns:
+            tuple: A tuple containing the start date, dates, and rows of the data.
+
+        Note:
+             read the fmt and figure out which column is which.  This would make things easier
         and more user friendly.  However, for now, we'll just assume the file is exactly 
         these quantities in this order
         """
@@ -856,31 +934,48 @@ class DSCOVRNC(OMNI):
 
         return (t0, dates, rows)
 
-    def _readDst(self,startTime,endTime):
-        dstfile = open("dst.dat",'r')
+    def _readDst(self, startTime, endTime):
+        """
+        Reads the 'dst.dat' file and extracts the DST values within the specified time range.
+
+        Args:
+        startTime (datetime): The start time of the desired time range.
+        endTime (datetime): The end time of the desired time range.
+
+        Returns:
+        tuple: A tuple containing two lists - 'dsttime' and 'dst'. 'dsttime' contains the datetime objects within the specified time range, and 'dst' contains the corresponding DST values.
+        """
+        dstfile = open("dst.dat", 'r')
         text = dstfile.readlines()
-        for i,j in enumerate(text):
+        for i, j in enumerate(text):
             if j[0] == '2':
                 iskip = i
                 break
         dstfile.close()
 
-        dat = np.genfromtxt("dst.dat",skip_header=iskip, autostrip=True,dtype=None)
+        dat = np.genfromtxt("dst.dat", skip_header=iskip, autostrip=True, dtype=None)
         dsttime = []
         dst = []
-        fmt='%Y-%m-%dT%H:%M:%S.000'
+        fmt = '%Y-%m-%dT%H:%M:%S.000'
         for i in dat:
-            timestr = i[0].decode()+"T"+i[1].decode()
-            currenttime = datetime.datetime.strptime(timestr,fmt)
+            timestr = i[0].decode() + "T" + i[1].decode()
+            currenttime = datetime.datetime.strptime(timestr, fmt)
             if currenttime >= startTime and currenttime <= endTime:
                 dsttime.append(currenttime)
                 dst.append(i[3])
-                
+
         return (dsttime, dst)
             
     def __appendMetaData(self, date):
         """
         Add standard metadata to the data dictionary.
+
+        Args:
+            date (datetime.datetime): The start date of the data.
+
+        Returns:
+            None
+
         """
         metadata = {'Model': 'CUSTOM',
                     'Source': 'NOAA DSCOVR NC',

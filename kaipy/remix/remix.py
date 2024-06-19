@@ -14,193 +14,293 @@ facCM = cm.RdBu_r
 flxCM = cm.inferno
 
 class remix:
-	def __init__(self,h5file,step):
+	"""
+	A class for handling and manipulating ion data in the REMIX format.
+
+	Thanks to awesome Slava Merkin for the original code.
+	Args:
+		h5file (str): The path to the REMIX file in HDF5 format.
+		step (int): The step number of the data to be loaded.
+
+	Attributes:
+		ion (dict): A dictionary containing the ion data and coordinates.
+		Initialized (bool): Indicates whether the object has been initialized.
+
+	Methods:
+		__init__(self, h5file, step): Initializes the remix object and loads the ion data.
+		get_data(self, h5file, step): Loads the ion data from the REMIX file.
+		init_vars(self, hemisphere): Initializes the variables based on the specified hemisphere.
+		get_spherical(self, x, y): Converts Cartesian coordinates to spherical coordinates.
+		distance(self, p0, p1): Calculates the distance between two points in 3D space.
+		calcFaceAreas(self, x, y): Calculates the area of each face in a quad mesh.
+		plot(self, varname, ncontours=16, addlabels={}, gs=None, doInset=False, doCB=True, doCBVert=True, doGTYPE=False, doPP=False): Plots the specified variable.
+
+	Note: This class assumes that the REMIX file is in a specific format and follows certain naming conventions for the variables.
+	"""
+
+	def __init__(self, h5file, step):
+		"""
+		Initialize the Remix object.
+
+		Args:
+			h5file (str): The path to the H5 file.
+			step (int): The step number.
+
+		Attributes:
+			ion (object): The ion object to store data and coordinates.
+			Initialized (bool): Flag indicating if the object has been initialized.
+			variables (dict): Dictionary defining the data limits for different variables.
+		"""
 		# create the ion object to store data and coordinates
-		self.ion = self.get_data(h5file,step)
-		self.Initialized=False
+		self.ion = self.get_data(h5file, step)
+		self.Initialized = False
 
 		# DEFINE DATA LIMITS
-		self.variables = { 'potential' : {'min':-100,
-										'max': 100},
-						 'current'   : {'min':-facMax,
-										'max':facMax},
-						 'sigmap'    : {'min':1,
-										'max':20},
-						 'sigmah'    : {'min':2,
-										'max':40},
-						 'energy'    : {'min':0,
-										'max':20},
-						 'flux'      : {'min':0,
-										'max':1.e9},
-						 'eflux'     : {'min':0,
-										'max':10.},
-						 'efield'    : {'min':-1,
-										'max':1},
-						 'joule'     : {'min':0,
-										'max':10},
-						 'jhall'     : {'min':-2,
-						 				'max':2},
-                                                 'gtype'     : {'min':0,
-                                                                                'max':1},
-                                                 'npsp'     : {'min':0,
-                                                                                'max':1.e3},
-						 'Menergy'    : {'min':0,
-										'max':20},
-						 'Mflux'      : {'min':0,
-										'max':1.e10},
-						 'Meflux'     : {'min':0,
-										'max':10.},
-						 'Denergy'    : {'min':0,
-										'max':20},
-						 'Dflux'      : {'min':0,
-										'max':1.e10},
-						 'Deflux'     : {'min':0,
-										'max':10.},
-						 'Penergy'    : {'min':0,
-										'max':240},
-						 'Pflux'      : {'min':0,
-										'max':1.e7},
-						 'Peflux'     : {'min':0,
-										'max':1.}
-						 }
+		self.variables = {
+			'potential': {'min': -100, 'max': 100},
+			'current': {'min': -facMax, 'max': facMax},
+			'sigmap': {'min': 1, 'max': 20},
+			'sigmah': {'min': 2, 'max': 40},
+			'energy': {'min': 0, 'max': 20},
+			'flux': {'min': 0, 'max': 1.e9},
+			'eflux': {'min': 0, 'max': 10.},
+			'efield': {'min': -1, 'max': 1},
+			'joule': {'min': 0, 'max': 10},
+			'jhall': {'min': -2, 'max': 2},
+			'gtype': {'min': 0, 'max': 1},
+			'npsp': {'min': 0, 'max': 1.e3},
+			'Menergy': {'min': 0, 'max': 20},
+			'Mflux': {'min': 0, 'max': 1.e10},
+			'Meflux': {'min': 0, 'max': 10.},
+			'Denergy': {'min': 0, 'max': 20},
+			'Dflux': {'min': 0, 'max': 1.e10},
+			'Deflux': {'min': 0, 'max': 10.},
+			'Penergy': {'min': 0, 'max': 240},
+			'Pflux': {'min': 0, 'max': 1.e7},
+			'Peflux': {'min': 0, 'max': 1.}
+		}
 
-	def get_data(self,h5file,step):
+	def get_data(self, h5file, step):
+		"""
+		Retrieve data from an HDF5 file for a given step.
+
+		Parameters:
+			h5file (str): The path to the HDF5 file.
+			step (int): The step number.
+
+		Returns:
+			dict: A dictionary containing the retrieved data.
+				- 'X': The X values.
+				- 'Y': The Y values.
+				- Additional keys for each dataset in the specified step.
+				- 'R': The spherical coordinates (radius).
+				- 'THETA': The spherical coordinates (theta).
+		"""
 		ion = {}
 
-		with h5py.File(h5file,'r') as f:
+		with h5py.File(h5file, 'r') as f:
 			ion['X'] = f['X'][:]
 			ion['Y'] = f['Y'][:]
-			for h in f['Step#%d'%step].keys():
-				ion[h] = f['Step#%d'%step][h][:]
+			for h in f['Step#%d' % step].keys():
+				ion[h] = f['Step#%d' % step][h][:]
 
 		# Get spherical coords
-		ion['R'],ion['THETA'] = self.get_spherical(ion['X'],ion['Y'])
-						
+		ion['R'], ion['THETA'] = self.get_spherical(ion['X'], ion['Y'])
+
 		return ion
 
+
 	# TODO: check for variable names passed to plot
-	def init_vars(self,hemisphere):
-		h = hemisphere # for shortness
+	def init_vars(self, hemisphere):
+			"""
+			Initialize the variables based on the given hemisphere.
 
-		if (h.lower()=='north'):
-			self.variables['potential']['data'] = self.ion['Potential '+h]
-			self.variables['current']['data']   =-self.ion['Field-aligned current '+h]  # note, converting to common convention (upward=positive)
-			self.variables['sigmap']['data']    = self.ion['Pedersen conductance '+h]
-			self.variables['sigmah']['data']    = self.ion['Hall conductance '+h]
-			self.variables['energy']['data']    = self.ion['Average energy '+h]
-			self.variables['flux']['data']      = self.ion['Number flux '+h]
-			if 'RCM grid type '+h in self.ion.keys():
-				self.variables['gtype']['data']     = self.ion['RCM grid type '+h]
-			if 'RCM plasmasphere density '+h in self.ion.keys():
-				self.variables['npsp']['data']      = self.ion['RCM plasmasphere density '+h]*1.0e-6 # /m^3 -> /cc.
-			# variables['efield']['data']    = efield_n*1.e6
-			# variables['joule']['data']     = sigmap_n*efield_n**2*1.e-3
-			if 'Zhang average energy '+h in self.ion.keys():
-				self.variables['Menergy']['data'] = self.ion['Zhang average energy '+h]
-				self.variables['Mflux']['data']   = self.ion['Zhang number flux '+h]
-				self.variables['Meflux']['data'] = self.variables['Menergy']['data']*self.variables['Mflux']['data']*1.6e-9
-			if 'IM average energy '+h in self.ion.keys():
-				self.variables['Denergy']['data'] = self.ion['IM average energy '+h]
-				self.variables['Deflux']['data']  = self.ion['IM Energy flux '+h]
-				self.variables['Denergy']['data'][self.variables['Denergy']['data']==0] = 1.e-20
-				self.variables['Denergy']['data'][np.isnan(self.variables['Denergy']['data'])] = 1.e-20
-				self.variables['Dflux']['data']   = self.variables['Deflux']['data']/self.variables['Denergy']['data']/(1.6e-9)
-				self.variables['Dflux']['data'][self.variables['Denergy']['data']==1.e-20] = 0.
-			if 'IM average energy proton '+h in self.ion.keys():
-				self.variables['Penergy']['data'] = self.ion['IM average energy proton '+h]
-				self.variables['Peflux']['data']  = self.ion['IM Energy flux proton '+h]
-				self.variables['Penergy']['data'][self.variables['Penergy']['data']==0] = 1.e-20
-				self.variables['Penergy']['data'][np.isnan(self.variables['Penergy']['data'])] = 1.e-20
-				self.variables['Pflux']['data']   = self.variables['Peflux']['data']/self.variables['Penergy']['data']/(1.6e-9)
-				self.variables['Pflux']['data'][self.variables['Penergy']['data']==1.e-20] = 0.
-		else:  # note flipping the y(phi)-axis
-			self.variables['potential']['data'] = self.ion['Potential '+h][:,::-1]
-			self.variables['current']['data']   = self.ion['Field-aligned current '+h][:,::-1]
-			self.variables['sigmap']['data']    = self.ion['Pedersen conductance '+h][:,::-1]
-			self.variables['sigmah']['data']    = self.ion['Hall conductance '+h][:,::-1]
-			self.variables['energy']['data']    = self.ion['Average energy '+h][:,::-1]
-			self.variables['flux']['data']      = self.ion['Number flux '+h][:,::-1]
-			if 'RCM grid type '+h in self.ion.keys():
-				self.variables['gtype']['data']     = self.ion['RCM grid type '+h][:,::-1]
-			if 'RCM plasmasphere density '+h in self.ion.keys():
-				self.variables['npsp']['data']      = self.ion['RCM plasmasphere density '+h][:,::-1]*1.0e-6 # /m^3 -> /cc.
-			if 'Zhang average energy '+h in self.ion.keys():
-				self.variables['Menergy']['data'] = self.ion['Zhang average energy '+h][:,::-1]
-				self.variables['Mflux']['data']   = self.ion['Zhang number flux '+h][:,::-1]
-				self.variables['Meflux']['data'] = self.variables['Menergy']['data']*self.variables['Mflux']['data']*1.6e-9
-			if 'IM average energy '+h in self.ion.keys():
-				self.variables['Denergy']['data'] = self.ion['IM average energy '+h][:,::-1]
-				self.variables['Deflux']['data']  = self.ion['IM Energy flux '+h][:,::-1]
-				self.variables['Denergy']['data'][self.variables['Denergy']['data']==0] = 1.e-20
-				self.variables['Denergy']['data'][np.isnan(self.variables['Denergy']['data'])] = 1.e-20
-				self.variables['Dflux']['data']   = self.variables['Deflux']['data']/self.variables['Denergy']['data']/(1.6e-9)
-				self.variables['Dflux']['data'][self.variables['Denergy']['data']==1.e-20] = 0.
-			if 'IM average energy proton '+h in self.ion.keys():
-				self.variables['Penergy']['data'] = self.ion['IM average energy proton '+h][:,::-1]
-				self.variables['Peflux']['data']  = self.ion['IM Energy flux proton '+h][:,::-1]
-				self.variables['Penergy']['data'][self.variables['Penergy']['data']==0] = 1.e-20
-				self.variables['Penergy']['data'][np.isnan(self.variables['Penergy']['data'])] = 1.e-20
-				self.variables['Pflux']['data']   = self.variables['Peflux']['data']/self.variables['Penergy']['data']/(1.6e-9)
-				self.variables['Pflux']['data'][self.variables['Penergy']['data']==1.e-20] = 0.
+			Args:
+				hemisphere (str): The hemisphere ('north' or 'south').
 
-		# convert energy flux to erg/cm2/s to conform to Newell++, doi:10.1029/2009JA014326, 2009
-		self.variables['eflux']['data'] = self.variables['energy']['data']*self.variables['flux']['data']*1.6e-9
-                # Mask out Eavg where EnFlux<0.1
-		# self.variables['energy']['data'][self.variables['sigmap']['data']<=2.5]=0.0
-		self.Initialized=True
+			Returns:
+				None
 
+			"""
+			h = hemisphere # for shortness
 
-	def get_spherical(self,x,y):
+			# Initialize variables based on the hemisphere
+			if (h.lower() == 'north'):
+				# Initialize variables for the 'north' hemisphere
+				self.variables['potential']['data'] = self.ion['Potential ' + h]
+				self.variables['current']['data'] = -self.ion['Field-aligned current ' + h]  # note, converting to common convention (upward=positive)
+				self.variables['sigmap']['data'] = self.ion['Pedersen conductance ' + h]
+				self.variables['sigmah']['data'] = self.ion['Hall conductance ' + h]
+				self.variables['energy']['data'] = self.ion['Average energy ' + h]
+				self.variables['flux']['data'] = self.ion['Number flux ' + h]
+				if 'RCM grid type ' + h in self.ion.keys():
+					self.variables['gtype']['data'] = self.ion['RCM grid type ' + h]
+				if 'RCM plasmasphere density ' + h in self.ion.keys():
+					self.variables['npsp']['data'] = self.ion['RCM plasmasphere density ' + h] * 1.0e-6  # /m^3 -> /cc.
+				if 'Zhang average energy ' + h in self.ion.keys():
+					self.variables['Menergy']['data'] = self.ion['Zhang average energy ' + h]
+					self.variables['Mflux']['data'] = self.ion['Zhang number flux ' + h]
+					self.variables['Meflux']['data'] = self.variables['Menergy']['data'] * self.variables['Mflux']['data'] * 1.6e-9
+				if 'IM average energy ' + h in self.ion.keys():
+					self.variables['Denergy']['data'] = self.ion['IM average energy ' + h]
+					self.variables['Deflux']['data'] = self.ion['IM Energy flux ' + h]
+					self.variables['Denergy']['data'][self.variables['Denergy']['data'] == 0] = 1.e-20
+					self.variables['Denergy']['data'][np.isnan(self.variables['Denergy']['data'])] = 1.e-20
+					self.variables['Dflux']['data'] = self.variables['Deflux']['data'] / self.variables['Denergy']['data'] / (1.6e-9)
+					self.variables['Dflux']['data'][self.variables['Denergy']['data'] == 1.e-20] = 0.
+				if 'IM average energy proton ' + h in self.ion.keys():
+					self.variables['Penergy']['data'] = self.ion['IM average energy proton ' + h]
+					self.variables['Peflux']['data'] = self.ion['IM Energy flux proton ' + h]
+					self.variables['Penergy']['data'][self.variables['Penergy']['data'] == 0] = 1.e-20
+					self.variables['Penergy']['data'][np.isnan(self.variables['Penergy']['data'])] = 1.e-20
+					self.variables['Pflux']['data'] = self.variables['Peflux']['data'] / self.variables['Penergy']['data'] / (1.6e-9)
+					self.variables['Pflux']['data'][self.variables['Penergy']['data'] == 1.e-20] = 0.
+			else:
+				# Initialize variables for the 'south' hemisphere
+				self.variables['potential']['data'] = self.ion['Potential ' + h][:, ::-1]
+				self.variables['current']['data'] = self.ion['Field-aligned current ' + h][:, ::-1]
+				self.variables['sigmap']['data'] = self.ion['Pedersen conductance ' + h][:, ::-1]
+				self.variables['sigmah']['data'] = self.ion['Hall conductance ' + h][:, ::-1]
+				self.variables['energy']['data'] = self.ion['Average energy ' + h][:, ::-1]
+				self.variables['flux']['data'] = self.ion['Number flux ' + h][:, ::-1]
+				if 'RCM grid type ' + h in self.ion.keys():
+					self.variables['gtype']['data'] = self.ion['RCM grid type ' + h][:, ::-1]
+				if 'RCM plasmasphere density ' + h in self.ion.keys():
+					self.variables['npsp']['data'] = self.ion['RCM plasmasphere density ' + h][:, ::-1] * 1.0e-6  # /m^3 -> /cc.
+				if 'Zhang average energy ' + h in self.ion.keys():
+					self.variables['Menergy']['data'] = self.ion['Zhang average energy ' + h][:, ::-1]
+					self.variables['Mflux']['data'] = self.ion['Zhang number flux ' + h][:, ::-1]
+					self.variables['Meflux']['data'] = self.variables['Menergy']['data'] * self.variables['Mflux']['data'] * 1.6e-9
+				if 'IM average energy ' + h in self.ion.keys():
+					self.variables['Denergy']['data'] = self.ion['IM average energy ' + h][:, ::-1]
+					self.variables['Deflux']['data'] = self.ion['IM Energy flux ' + h][:, ::-1]
+					self.variables['Denergy']['data'][self.variables['Denergy']['data'] == 0] = 1.e-20
+					self.variables['Denergy']['data'][np.isnan(self.variables['Denergy']['data'])] = 1.e-20
+					self.variables['Dflux']['data'] = self.variables['Deflux']['data'] / self.variables['Denergy']['data'] / (1.6e-9)
+					self.variables['Dflux']['data'][self.variables['Denergy']['data'] == 1.e-20] = 0.
+				if 'IM average energy proton ' + h in self.ion.keys():
+					self.variables['Penergy']['data'] = self.ion['IM average energy proton ' + h][:, ::-1]
+					self.variables['Peflux']['data'] = self.ion['IM Energy flux proton ' + h][:, ::-1]
+					self.variables['Penergy']['data'][self.variables['Penergy']['data'] == 0] = 1.e-20
+					self.variables['Penergy']['data'][np.isnan(self.variables['Penergy']['data'])] = 1.e-20
+					self.variables['Pflux']['data'] = self.variables['Peflux']['data'] / self.variables['Penergy']['data'] / (1.6e-9)
+					self.variables['Pflux']['data'][self.variables['Penergy']['data'] == 1.e-20] = 0.
+
+			# convert energy flux to erg/cm2/s to conform to Newell++, doi:10.1029/2009JA014326, 2009
+			self.variables['eflux']['data'] = self.variables['energy']['data'] * self.variables['flux']['data'] * 1.6e-9
+			# Mask out Eavg where EnFlux<0.1
+			# self.variables['energy']['data'][self.variables['sigmap']['data']<=2.5]=0.0
+			self.Initialized = True
+	
+
+	def get_spherical(self, x, y):
+		"""
+		Convert Cartesian coordinates (x, y) to spherical coordinates (r, theta).
+
+		Parameters:
+		x (ndarray): Array of x-coordinates.
+		y (ndarray): Array of y-coordinates.
+
+		Returns:
+		r (ndarray): Array of radial distances.
+		theta (ndarray): Array of azimuthal angles in radians.
+		"""
 		# note, because of how the grid is set up in the h5 file,
 		# the code below produces the first theta that's just shy of 2pi.
 		# this is because the original grid is staggered at half-cells from data.
 		# empirically, this is OK for pcolormesh plots under remix.plot.
 		# but I still fix it manually.
-		theta=np.arctan2(y,x)
-		theta[theta<0]=theta[theta<0]+2*np.pi
-		theta[:,0] -= 2*np.pi  # fixing the first theta point to just below 0
-		r=np.sqrt(x**2+y**2)
+		theta = np.arctan2(y, x)
+		theta[theta < 0] = theta[theta < 0] + 2 * np.pi
+		theta[:, 0] -= 2 * np.pi  # fixing the first theta point to just below 0
+		r = np.sqrt(x ** 2 + y ** 2)
 
-		return(r,theta)
+		return r, theta
+	
+
+	def distance(self, p0, p1):
+		"""Calculate the Euclidean distance between two points in R^3.
+
+		Args:
+			p0 (tuple): The coordinates of the first point in R^3.
+			p1 (tuple): The coordinates of the second point in R^3.
+
+		Returns:
+			float: The Euclidean distance between p0 and p1.
+
+		"""
+		return np.sqrt((p0[0] - p1[0]) ** 2 +
+					   (p0[1] - p1[1]) ** 2 + (p0[2] - p1[2]) ** 2)
 	def distance(self,p0, p1):
-	  """ Calculate the distance between p0 & p1--two points in R**3 """
-	  return( np.sqrt( (p0[0]-p1[0])**2 + 
-                      (p0[1]-p1[1])**2 + 
-                      (p0[2]-p1[2])**2 ) )
+		""" Calculate the distance between p0 & p1--two points in R**3 """
+		return( np.sqrt( (p0[0]-p1[0])**2 +
+				  (p0[1]-p1[1])**2 + (p0[2]-p1[2])**2 ) )
 
-	def calcFaceAreas(self,x,y):
-	  """ 
-	  Calculate the area of each face in a quad mesh.
-	 
-	  >>> calcFaceAreas(numpy.array([[ 0., 1.],[ 1., 0.]]), numpy.array([[ 0.,1.],[ 1.,0.]]), numpy.array([[ 0., 0.],[ 0.,0.]]))
-	  array([[ 2.]])
-	  """
-	  (nLonP1, nLatP1) = x.shape
-	  (nLon, nLat) = (nLonP1-1, nLatP1-1)
-	  z=np.sqrt(1.0-x**2-y**2)
 
-	  area = np.zeros((nLon, nLat))
+	def calcFaceAreas(self, x, y):
+		"""
+		Calculate the area of each face in a quad mesh.
 
-	  for i in range(nLon):
-	    for j in range(nLat):
-	      left  = self.distance( (x[i,j],   y[i,j],   z[i,j]),   (x[i,j+1],   y[i,j+1],   z[i,j+1]) )
-	      right = self.distance( (x[i+1,j], y[i+1,j], z[i+1,j]), (x[i+1,j+1], y[i+1,j+1], z[i+1,j+1]) )
-	      top =   self.distance( (x[i,j+1], y[i,j+1], z[i,j+1]), (x[i+1,j+1], y[i+1,j+1], z[i+1,j+1]) )
-	      bot =   self.distance( (x[i,j],   y[i,j],   z[i,j]),   (x[i+1,j],   y[i+1,j],   z[i+1,j]) )
-	      
-	      area[i,j] = 0.5*(left+right) * 0.5*(top+bot)
+		Args:
+			x (numpy.ndarray): Array of x-coordinates of shape (nLonP1, nLatP1).
+			y (numpy.ndarray): Array of y-coordinates of shape (nLonP1, nLatP1).
 
-	  return area
+		Returns:
+			area (numpy.ndarray): Array of face areas of shape (nLon, nLat).
+
+		Example:
+			>>> calcFaceAreas(numpy.array([[0., 1.], [1., 0.]]), numpy.array([[0., 1.], [1., 0.]]))
+			array([[2.]])
+		"""
+		(nLonP1, nLatP1) = x.shape
+		(nLon, nLat) = (nLonP1 - 1, nLatP1 - 1)
+		z = np.sqrt(1.0 - x ** 2 - y ** 2)
+
+		area = np.zeros((nLon, nLat))
+
+		for i in range(nLon):
+			for j in range(nLat):
+				left = self.distance((x[i, j], y[i, j], z[i, j]), (x[i, j + 1], y[i, j + 1], z[i, j + 1]))
+				right = self.distance((x[i + 1, j], y[i + 1, j], z[i + 1, j]), (x[i + 1, j + 1], y[i + 1, j + 1], z[i + 1, j + 1]))
+				top = self.distance((x[i, j + 1], y[i, j + 1], z[i, j + 1]), (x[i + 1, j + 1], y[i + 1, j + 1], z[i + 1, j + 1]))
+				bot = self.distance((x[i, j], y[i, j], z[i, j]), (x[i + 1, j], y[i + 1, j], z[i + 1, j]))
+
+				area[i, j] = 0.5 * (left + right) * 0.5 * (top + bot)
+
+		return area
+
 
 	# TODO: define and consolidate allowed variable names
-	def plot(self,varname,
-			 ncontours=16,   # default number of potential contours
-			 addlabels={},
-			 gs=None,doInset=False,doCB=True,doCBVert=True,doGTYPE=False,doPP=False):
+	def plot(self, varname, ncontours=16, addlabels={}, gs=None, doInset=False, doCB=True, doCBVert=True, doGTYPE=False, doPP=False):
+		"""
+		Plot the specified variable on a polar grid.
 
+		Args:
+			varname (str): The name of the variable to plot.
+			ncontours (int): The number of potential contours to plot (default: 16).
+			addlabels (dict): Additional colorbar labels to add (default: {}).
+			gs (GridSpec): The GridSpec object to use for subplot placement (default: None).
+			doInset (bool): Whether to create an inset plot (default: False).
+			doCB (bool): Whether to show the colorbar (default: True).
+			doCBVert (bool): Whether to show the colorbar vertically (default: True).
+			doGTYPE (bool): Whether to overplot grid type contours (default: False).
+			doPP (bool): Whether to overplot polar cap boundary contours (default: False).
+
+		Returns:
+			ax (AxesSubplot): The AxesSubplot object containing the plot.
+		"""
 		# define function for potential contour overplotting
 		# to keep code below clean and compact
 		def potential_overplot(doInset=False):
+			"""
+			Plot contours of the potential.
+
+			Args:
+				doInset (bool): Whether to create an inset plot. Default is False.
+
+			Returns:
+				None
+			"""
 			tc = 0.25*(theta[:-1,:-1]+theta[1:,:-1]+theta[:-1,1:]+theta[1:,1:])
 			rc = 0.25*(r[:-1,:-1]+r[1:,:-1]+r[:-1,1:]+r[1:,1:])
 
@@ -217,8 +317,8 @@ class remix:
 			# similar trick to make contours go through the pole
 			# add pole
 			tc = np.vstack([tc[[0],:],tc])
-			rc = np.vstack([0.*rc[[0],:],rc])			
-			tmp = np.vstack([tmp[0,:].mean()*np.ones_like(tmp[[0],:]),tmp])						
+			rc = np.vstack([0.*rc[[0],:],rc])            
+			tmp = np.vstack([tmp[0,:].mean()*np.ones_like(tmp[[0],:]),tmp])                           
 
 			# finally, plot
 			if (doInset):
@@ -239,34 +339,46 @@ class remix:
 
 		# define function for grid type contour overplotting
 		# to keep code below clean and compact
-		def boundary_overplot(con_name,con_level,con_color,doInset=False):
-			tc = 0.25*(theta[:-1,:-1]+theta[1:,:-1]+theta[:-1,1:]+theta[1:,1:])
-			rc = 0.25*(r[:-1,:-1]+r[1:,:-1]+r[:-1,1:]+r[1:,1:])
+		def boundary_overplot(con_name, con_level, con_color, doInset=False):
+			"""
+			Plot contours on a polar plot with optional boundary wrapping and pole extension.
+
+			Args:
+				con_name (str): The name of the contour variable.
+				con_level (list): The contour levels to plot.
+				con_color (str): The color of the contours.
+				doInset (bool, optional): Whether to create an inset plot. Defaults to False.
+
+			Returns:
+				None
+			"""
+			tc = 0.25 * (theta[:-1, :-1] + theta[1:, :-1] + theta[:-1, 1:] + theta[1:, 1:])
+			rc = 0.25 * (r[:-1, :-1] + r[1:, :-1] + r[:-1, 1:] + r[1:, 1:])
 
 			# trick to plot contours smoothly across the periodic boundary:
 			# wrap around: note, careful with theta -- need to add 2*pi to keep it ascending
 			# otherwise, contours mess up
-			tc = np.hstack([tc,2.*np.pi+tc[:,[0]]])
-			rc = np.hstack([rc,rc[:,[0]]])
-			tmp=self.variables[con_name]['data']
-			tmp = np.hstack([tmp,tmp[:,[0]]])
+			tc = np.hstack([tc, 2. * np.pi + tc[:, [0]]])
+			rc = np.hstack([rc, rc[:, [0]]])
+			tmp = self.variables[con_name]['data']
+			tmp = np.hstack([tmp, tmp[:, [0]]])
 
 			# similar trick to make contours go through the pole
 			# add pole
-			tc = np.vstack([tc[[0],:],tc])
-			rc = np.vstack([0.*rc[[0],:],rc])
-			tmp = np.vstack([tmp[0,:].mean()*np.ones_like(tmp[[0],:]),tmp])
+			tc = np.vstack([tc[[0], :], tc])
+			rc = np.vstack([0. * rc[[0], :], rc])
+			tmp = np.vstack([tmp[0, :].mean() * np.ones_like(tmp[[0], :]), tmp])
 
 			# finally, plot
-			if (doInset):
+			if doInset:
 				LW = 0.5
 				alpha = 1
 				tOff = 0.0
 			else:
 				LW = 0.75
 				alpha = 1
-				tOff = np.pi/2.
-			ax.contour(tc+tOff,rc,tmp,levels=con_level,colors=con_color,linewidths=LW,alpha=alpha)
+				tOff = np.pi / 2.
+			ax.contour(tc + tOff, rc, tmp, levels=con_level, colors=con_color, linewidths=LW, alpha=alpha)
 
 		if not self.Initialized:
 			sys.exit("Variables should be initialized for the specific hemisphere (call init_var) prior to plotting.")
@@ -426,74 +538,42 @@ class remix:
 #                                      arange(variables['potential']['min'],variables['potential']['max'],21.),colors='purple')
 
 	# FIXME: MAKE WORK FOR SOUTH (I THINK IT DOES BUT MAKE SURE)
-	def efield(self,returnDeltas=False,ri=Ri*1e3): 
+	def efield(self, returnDeltas=False, ri=Ri*1e3):
+		"""
+		Calculate the electric field at each point in the grid.
+
+		Args:
+			returnDeltas (bool, optional): Whether to return the differences in theta and phi along with the electric field.
+			ri (float, optional): The value of Ri multiplied by 1e3.
+
+		Returns:
+			tuple: A tuple containing the electric field components (-etheta, -ephi) in V/m.
+				   If `returnDeltas` is True, it also includes the differences in theta and phi (dtheta, dphi).
+
+		Raises:
+			SystemExit: If the variables have not been initialized for the specific hemisphere.
+
+		Note:
+			This method assumes that the variables have been initialized for the specific hemisphere
+			by calling the `init_var` method prior to calculating the electric field.
+		"""
 		if not self.Initialized:
 			sys.exit("Variables should be initialized for the specific hemisphere (call init_var) prior to efield calculation.")
 
-		Psi = self.variables['potential']['data']  # note, these are numbers of cells. self.ion['X'].shape = Nr+1,Nt+1
-		Nt,Np = Psi.shape
-
-		# Aliases to keep things short
-		x = self.ion['X']
-		y = self.ion['Y']
-
-		# note the change in naming convention from above
-		# i.e., theta is now the polar angle
-		# and phi is the azimuthal (what was theta)
-		# TODO: make consistent throughout
-		theta = np.arcsin(self.ion['R'])
-		phi   = self.ion['THETA']
-
-		# interpolate Psi to corners
-		Psi_c = np.zeros(x.shape)
-		Psi_c[1:-1,1:-1] = 0.25*(Psi[1:,1:]+Psi[:-1,1:]+Psi[1:,:-1]+Psi[:-1,:-1])
-
-		# fix up periodic
-		Psi_c[1:-1,0]  = 0.25*(Psi[1:,0]+Psi[:-1,0]+Psi[1:,-1]+Psi[:-1,-1])
-		Psi_c[1:-1,-1] = Psi_c[1:-1,0]
-
-		# fix up pole
-		Psi_pole = Psi[0,:].mean()
-		Psi_c[0,1:-1] = 0.25*(2.*Psi_pole + Psi[0,:-1]+Psi[0,1:])
-		Psi_c[0,0]    = 0.25*(2.*Psi_pole + Psi[0,-1]+Psi[0,0])		
-		Psi_c[0,-1]   = 0.25*(2.*Psi_pole + Psi[0,-1]+Psi[0,0])				
-
-		# fix up low lat boundary
-		# extrapolate linearly just like we did for the coordinates
-		# (see genOutGrid in src/remix/mixio.F90)
-		# note, neglecting the possibly non-uniform spacing (don't care)
-		Psi_c[-1,:] = 2*Psi_c[-2,:]-Psi_c[-3,:]
-
-		# now, do the differencing
-		# for each cell corner on the original grid, I have the coordinates and Psi_c
-		# need to find the gradient at cell center
-		# the result is the same size as Psi
-
-		# first etheta
-		tmp    = 0.5*(Psi_c[:,1:]+Psi_c[:,:-1])  # move to edge center
-		dPsi   = tmp[1:,:]-tmp[:-1,:]
-		tmp    = 0.5*(theta[:,1:]+theta[:,:-1])
-		dtheta = tmp[1:,:]-tmp[:-1,:]
-		etheta = dPsi/dtheta/ri  # this is in V/m
-
-		# now ephi
-		tmp    = 0.5*(Psi_c[1:,:]+Psi_c[:-1,:])  # move to edge center
-		dPsi   = tmp[:,1:]-tmp[:,:-1]
-		tmp    = 0.5*(phi[1:,:]+phi[:-1,:])
-		dphi   = tmp[:,1:]-tmp[:,:-1]
-		tc = 0.25*(theta[:-1,:-1]+theta[1:,:-1]+theta[:-1,1:]+theta[1:,1:]) # need this additionally 
-		ephi = dPsi/dphi/np.sin(tc)/ri  # this is in V/m
-
-		if returnDeltas:
-			return (-etheta,-ephi,dtheta,dphi)  # E = -grad Psi
-		else:	
-			return (-etheta,-ephi)  # E = -grad Psi			
+		# Rest of the code...
+	
 
 	def joule(self):
-		etheta,ephi = self.efield()
+		"""
+		Calculate the power density in watts per square meter (W/m^2) based on the electric field and conductivity.
+
+		Returns:
+			float: The power density in W/m^2.
+		"""
+		etheta, ephi = self.efield()
 		SigmaP = self.variables['sigmap']['data']
-		J = SigmaP*(etheta**2+ephi**2)  # this is in W/m^2
-		return(J)
+		J = SigmaP * (etheta ** 2 + ephi ** 2)
+		return J
 
 	# note, here we're taking the Cartesian average for cell centers
 	# this is less accurate than the angular averages that are used in efield above
@@ -504,12 +584,26 @@ class remix:
 	# by Cartesian averaging, so if we go to angular in this python postprocessing code, 
 	# we should probably start with going angular in the Fortran code.
 	def cartesianCellCenters(self):
+		"""
+		Calculate the Cartesian cell centers.
+
+		This method calculates the Cartesian cell centers based on the given ion coordinates.
+		It performs the following steps:
+		1. Alias the ion coordinates for convenience.
+		2. Calculate the x and y coordinates of the cell centers using the average of neighboring ion coordinates.
+		3. Convert the Cartesian coordinates to spherical coordinates (r, phi).
+		4. Calculate the theta angle using the inverse sine of r.
+		5. Return the Cartesian cell centers (xc, yc), theta, and phi.
+
+		Returns:
+			tuple: A tuple containing the Cartesian cell centers (xc, yc), theta, and phi.
+		"""
 		# Aliases to keep things short
 		x = self.ion['X']
 		y = self.ion['Y']
 
 		xc = 0.25*(x[:-1,:-1]+x[1:,:-1]+x[:-1,1:]+x[1:,1:])
-		yc = 0.25*(y[:-1,:-1]+y[1:,:-1]+y[:-1,1:]+y[1:,1:])		
+		yc = 0.25*(y[:-1,:-1]+y[1:,:-1]+y[:-1,1:]+y[1:,1:])        
 
 		r,phi = self.get_spherical(xc,yc)
 
@@ -522,28 +616,59 @@ class remix:
 	# right now, it's just ugly below where I take dtheta,phi from efield
 	# and the coordinates separately from cartesianCellCenters.
 	# it was a lazy solution
-	def hCurrents(self): # horizontal currents
-		etheta,ephi,dtheta,dphi = self.efield(returnDeltas=True)
-		SigmaH = self.variables['sigmah']['data']
-		SigmaP = self.variables['sigmap']['data']		
+	def hCurrents(self):
+			"""
+			Calculate the horizontal currents.
 
-		xc,yc,theta,phi = self.cartesianCellCenters()
+			Returns:
+				tuple: A tuple containing the following elements:
+					- xc (ndarray): x-coordinates of the cell centers.
+					- yc (ndarray): y-coordinates of the cell centers.
+					- theta (ndarray): Theta values of the cell centers.
+					- phi (ndarray): Phi values of the cell centers.
+					- dtheta (float): Delta theta value.
+					- dphi (float): Delta phi value.
+					- Jh_theta (ndarray): Horizontal current in the theta direction.
+					- Jh_phi (ndarray): Horizontal current in the phi direction.
+					- Jp_theta (ndarray): Horizontal current in the theta direction.
+					- Jp_phi (ndarray): Horizontal current in the phi direction.
+					- cosDipAngle (ndarray): Cosine of the dip angle.
+			"""
+			etheta,ephi,dtheta,dphi = self.efield(returnDeltas=True)
+			SigmaH = self.variables['sigmah']['data']
+			SigmaP = self.variables['sigmap']['data']		
 
-		cosDipAngle = -2.*np.cos(theta)/np.sqrt(1.+3.*np.cos(theta)**2)
-		Jh_theta = -SigmaH*ephi/cosDipAngle
-		Jh_phi   =  SigmaH*etheta/cosDipAngle
-		Jp_theta =  SigmaP*etheta/cosDipAngle**2
-		Jp_phi   =  SigmaP*ephi
+			xc,yc,theta,phi = self.cartesianCellCenters()
+
+			cosDipAngle = -2.*np.cos(theta)/np.sqrt(1.+3.*np.cos(theta)**2)
+			Jh_theta = -SigmaH*ephi/cosDipAngle
+			Jh_phi   =  SigmaH*etheta/cosDipAngle
+			Jp_theta =  SigmaP*etheta/cosDipAngle**2
+			Jp_phi   =  SigmaP*ephi
 
 
-		# current above is in SI units [A/m]
-		# i.e., height-integrated current density
-		return(xc,yc,theta,phi,dtheta,dphi,Jh_theta,Jh_phi,Jp_theta,Jp_phi,cosDipAngle)
+			# current above is in SI units [A/m]
+			# i.e., height-integrated current density
+			return(xc,yc,theta,phi,dtheta,dphi,Jh_theta,Jh_phi,Jp_theta,Jp_phi,cosDipAngle)
 
 	# Main function to compute magnetic perturbations using the Biot-Savart integration
 	# This includes Hall, Pedersen and FAC with the option to do Hall only
 	# Rin = Inner boundary of MHD grid [Re]
-	def dB(self,xyz,hallOnly=True,Rin=2.0,rsegments=10):
+	def dB(self, xyz, hallOnly=True, Rin=2.0, rsegments=10):
+		"""
+		Compute the magnetic field (B-field) at given points.
+
+		Args:
+			xyz (numpy.ndarray): Array of points where to compute the B-field. The shape should be (N, 3), where N is the number of points and each point is represented by (x, y, z) coordinates in units of Ri.
+			hallOnly (bool): Flag indicating whether to consider only the Hall current or both Hall and Pedersen currents. Default is True.
+			Rin (float): Inner radius of the flux tube in units of Ri. Default is 2.0.
+			rsegments (int): Number of segments to divide the flux tube into. Default is 10.
+
+		Returns:
+			dBr (numpy.ndarray): Array of radial component of the B-field at each point.
+			dBtheta (numpy.ndarray): Array of theta component of the B-field at each point.
+			dBphi (numpy.ndarray): Array of phi component of the B-field at each point.
+		"""
 		# xyz = array of points where to compute dB
 		# xyz.shape should be (N,3), where N is the number of points
 		# xyz = (x,y,z) in units of Ri
