@@ -2,14 +2,27 @@ import matplotlib as mpl
 import numpy as np
 import os
 
-#Pull colormap from text file
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-fIn = os.path.join(__location__,"cmDDiv.txt")
-Q = np.loadtxt(fIn,skiprows=1)
-cmDiv = mpl.colors.ListedColormap(Q/255.0)
+def load_colormap_from_file(file_path):
+    """
+    Load a colormap from a text file.
 
-fIn = os.path.join(__location__,"cmMLT.txt")
-Q = np.loadtxt(fIn,skiprows=1)
-cmMLT = mpl.colors.ListedColormap(Q/255.0)
+    Args:
+        file_path (str): The path to the text file containing the colormap data.
+
+    Returns:
+        matplotlib.colors.ListedColormap: The loaded colormap.
+    """
+    Q = np.loadtxt(file_path, skiprows=1)
+    return mpl.colors.ListedColormap(Q/255.0)
+
+# Load cmDiv colormap
+fIn = os.path.join(__location__, "cmDDiv.txt")
+cmDiv = load_colormap_from_file(fIn)
+
+# Load cmMLT colormap
+fIn = os.path.join(__location__, "cmMLT.txt")
+cmMLT = load_colormap_from_file(fIn)
+
 
