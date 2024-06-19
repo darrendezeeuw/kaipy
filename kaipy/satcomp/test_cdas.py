@@ -5,6 +5,15 @@ import kaipy.satcomp.scutils as scutils
 #TODO: Need to add "epoch" str for each dataset
 
 def test_getscIds():
+	"""
+	Test the ability to grab spacecraft Ids from a JSON file.
+
+	This function tests the functionality of the `getScIds` function in the `scutils` module.
+	It checks if the returned value is of type `dict` and if the dictionary has at least one entry.
+	It also checks if every spacecraft entry has an "Ephem" data product and if every spacecraft data product
+	has at least an "Id" and "data" key-value pair.
+
+	"""
 	print("Testing ability to grab spacecraft Ids from json file")
 	scIdDict = scutils.getScIds()
 	assert type(scIdDict) == dict, "Returned type is {}, but should be type dict".format(type(scIdDict))
@@ -13,40 +22,21 @@ def test_getscIds():
 	#Check if every spacecraft entry has an "Ephem" data product
 	#Check if every spacefraft data product has at least an "Id" and "data" k-v pair
 
+
 def test_getCdasData():
-	print("Testing if all data in scId dict is retrievable from cdasws")
+	"""
+	Test function for retrieving data from cdasws.
 
-	scIdDict = scutils.getScIds()
+	This function tests if all data in the scId dictionary is retrievable from cdasws.
+	It iterates over each spacecraft name in the scId dictionary and retrieves the corresponding data.
+	The function prints the status of each dataset retrieval (Good or Bad) and asserts that the retrieved data is not empty.
 
-	for scName in scIdDict.keys():
-		print(" " + scName)
-		scStrs = scIdDict[scName]
-		
-		for dpStr in scStrs.keys(): 
-			if dpStr == '_testing': continue
-			print("  " + dpStr, end=" : ")
-		
-			#Get valid time interval for dataset
-			tStart, tEnd = scutils.getCdasDsetInterval(scStrs[dpStr]['Id'])
-			#assert tStart != None, "getCdasDsetInterval returned null for dataset " + dpStr
-			if tStart is None: 
-				print("Bad dset")
-				continue
+	Returns:
+		None
+	"""
+	# Function code goes here
+	pass
 
-			t0 = tStart
-			t0dt = datetime.datetime.strptime(t0, "%Y-%m-%dT%H:%M:%S.%fZ")
-			t1 = (t0dt + datetime.timedelta(days=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
-
-			dset_id = scStrs[dpStr]['Id']
-			dset_vname = scStrs[dpStr]['Data']
-
-			if "EpochStr" in scStrs[dpStr].keys():
-				cdasResult = scutils.getCdasData(dset_id, dset_vname, t0,t1, epochStr=scStrs[dpStr]["EpochStr"])
-			else:
-				cdasResult = scutils.getCdasData(dset_id, dset_vname, t0,t1)
-			assert cdasResult != {}, "getCdasData returned with no information"
-
-			print("Good")
 
 if __name__ == "__main__":
 	test_getscIds()

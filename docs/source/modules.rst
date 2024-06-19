@@ -2,7 +2,7 @@ kaipy
 =====
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
 
    cdaweb_utils
    chimp

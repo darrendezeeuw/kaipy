@@ -5,7 +5,15 @@ import numpy as np
 import kaipy.kaiTools as kT
 
 
-def plotLambdas_Val_Spac(specDataList, yscale='log',L=None):
+def plotLambdas_Val_Spac(specDataList, yscale='log', L=None):
+	"""
+	Plot the values and spacing of lambda data.
+
+	Args:
+		specDataList (list or SpecData): A list of SpecData objects or a single SpecData object.
+		yscale (str, optional): The scale of the y-axis. Defaults to 'log'.
+		L (float, optional): The value of L. If provided, energy calculations will be performed. Defaults to None.
+	"""
 	doEnergy = True if L is not None else False
 	if doEnergy: 
 		bVol = kT.L_to_bVol(L)
@@ -49,7 +57,18 @@ def plotLambdas_Val_Spac(specDataList, yscale='log',L=None):
 		AxDiffs.set_ylabel(r"$\Delta\lambda$")
 	plt.show()
 
-def plotLambdasBySpec(specDataList, yscale='log',L=None):
+def plotLambdasBySpec(specDataList, yscale='log', L=None):
+	"""
+	Plot lambdas by spectrum.
+
+	Args:
+		specDataList (list or SpectrumData): A list of SpectrumData objects or a single SpectrumData object.
+		yscale (str, optional): The scale of the y-axis. Defaults to 'log'.
+		L (float, optional): The L-shell value. Defaults to None.
+
+	Returns:
+		None
+	"""
 	doEnergy = True if L is not None else False
 	if doEnergy:
 		bVol = kT.L_to_bVol(L)
@@ -60,20 +79,18 @@ def plotLambdasBySpec(specDataList, yscale='log',L=None):
 	for i in range(len(specDataList)):
 		if specDataList[i].name != "Plasmasphere":
 			specPlotList.append(specDataList[i])
-			
+
 	nSpecs = len(specPlotList)
 
-	fig = plt.figure(figsize=(10,5))
-	gs = gridspec.GridSpec(1,nSpecs)
-	#AxAlams = fig.add_subplot(gs[:,0])
-	#AxDiffs = fig.add_subplot(gs[:,1])
+	fig = plt.figure(figsize=(10, 5))
+	gs = gridspec.GridSpec(1, nSpecs)
 
 	for i in range(nSpecs):
 		specData = specPlotList[i]
 		chNum = np.array([i for i in range(specData.n)])
-		Ax = fig.add_subplot(gs[:,i])
+		Ax = fig.add_subplot(gs[:, i])
 		if doEnergy:
-			energies = np.abs(specData.alams)*vm*1E-3  # [ev -> keV]
+			energies = np.abs(specData.alams) * vm * 1E-3  # [ev -> keV]
 			energyDiff = np.diff(energies)
 			Ax.step(chNum, energies, label='Values')
 			Ax.step(chNum[:-1], energyDiff, label="Spacing")
@@ -93,8 +110,19 @@ def plotLambdasBySpec(specDataList, yscale='log',L=None):
 		plt.suptitle("Energy grid values and spacing\n@ L={}, bVol={:2.2f}, vm={:2.2f}".format(L, bVol, vm))
 	plt.show()
 
+
 def plotEnergyRange(specDataList, rInner=1.5, rOuter=15, rRes=100):
-	"""Plot energy range of each species as a function of L shell
+	"""
+	Plot energy range of each species as a function of L shell.
+
+	Args:
+		specDataList (list): List of species data.
+		rInner (float, optional): Inner radius of the L shell. Defaults to 1.5.
+		rOuter (float, optional): Outer radius of the L shell. Defaults to 15.
+		rRes (int, optional): Number of points to sample between rInner and rOuter. Defaults to 100.
+
+	Returns:
+		None
 	"""
 	rVals = np.linspace(rInner, rOuter, rRes)
 	bVols = np.array([kT.L_to_bVol(r) for r in rVals])
@@ -113,11 +141,10 @@ def plotEnergyRange(specDataList, rInner=1.5, rOuter=15, rRes=100):
 
 	allMax
 
-
 	fig = plt.figure(figsize=(10,5))
 	gs = gridspec.GridSpec(1,nSpecs)
 
-	for i in range(nSpecs):	
+	for i in range(nSpecs):    
 		specData = specPlotList[i]
 
 		lamMin = np.abs(specData.alams[0])
@@ -133,7 +160,7 @@ def plotEnergyRange(specDataList, rInner=1.5, rOuter=15, rRes=100):
 		Ax.set_ylim([0.8*allMin, 1.2*allMax])
 		Ax.grid(True)
 		Ax.set_title(specData.name)
-	plt.suptitle("Covered enery range w.r.t. dipole L-shell")
+	plt.suptitle("Covered energy range w.r.t. dipole L-shell")
 	plt.show()
 
 

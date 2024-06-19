@@ -58,28 +58,80 @@ supportedDsets = ["Hydrogen_omniflux_RBSPICE", 'Hydrogen_omniflux_RBSPICE_TOFXPH
 
 #Generate json filename for given spacecraft dataset
 def genSCD_jfname(jdir, scName, dSetName):
+	"""
+	Generates the JSON file name for a given satellite name and data set name.
+
+	Args:
+		jdir (str): The directory where the JSON file will be located.
+		scName (str): The name of the satellite.
+		dSetName (str): The name of the data set.
+
+	Returns:
+		str: The generated JSON file name.
+
+	"""
 	jfname = scName + "_" + dSetName + ".json"
 	return os.path.join(jdir, jfname)
+
+
 def genRCMTrack_jfname(jdir, scName):
+	"""
+	Generate the JSON file name for RCM track.
+
+	Args:
+		jdir (str): The directory where the JSON file will be located.
+		scName (str): The name of the spacecraft.
+
+	Returns:
+		str: The full path of the JSON file name for RCM track.
+	"""
 	jfname = "rcmTrack_" + scName + ".json"
 	return os.path.join(jdir, jfname)
 
 #Return a 3D cube of a given variable to use in interpolation
 def getVarCube(rcm5, varName, stepLow, stepHigh, ilon, ilat, k=None):
+	def getVarCube(rcm5, varName, stepLow, stepHigh, ilon, ilat, k=None):
+		"""
+		Returns a variable cube from the given RCM5 dataset.
+
+		Args:
+			rcm5 (numpy.ndarray): The RCM5 dataset.
+			varName (str): The name of the variable.
+			stepLow (int): The lower time step.
+			stepHigh (int): The higher time step.
+			ilon (int): The longitude index.
+			ilat (int): The latitude index.
+			k (int, optional): The vertical level index. Defaults to None.
+
+		Returns:
+			numpy.ndarray: The variable cube.
+
+		"""
 	if k is None:
-		v1 = np.expand_dims(rcm5[stepLow  ][varName][ilon:ilon+2, ilat:ilat+2], axis=2)
+		v1 = np.expand_dims(rcm5[stepLow][varName][ilon:ilon+2, ilat:ilat+2], axis=2)
 		v2 = np.expand_dims(rcm5[stepHigh][varName][ilon:ilon+2, ilat:ilat+2], axis=2)
 	else:
-		v1 = np.expand_dims(rcm5[stepLow  ][varName][k, ilon:ilon+2, ilat:ilat+2], axis=2)
+		v1 = np.expand_dims(rcm5[stepLow][varName][k, ilon:ilon+2, ilat:ilat+2], axis=2)
 		v2 = np.expand_dims(rcm5[stepHigh][varName][k, ilon:ilon+2, ilat:ilat+2], axis=2)
 	return np.append(v1, v2, axis=2)
 
 #electrons: kStart = kStart, kEnd = kIon
 #ions: kStart = kIon, kEnd = len(rcmS0['alamc'])
 def getSpecieslambdata(rcmS0, species='ions'):
-	#Determine what our bounds are
+	"""
+	Calculate lambdata for a given species in the RCM model.
+
+	Args:
+		rcmS0 (dict): Dictionary containing RCM data.
+		species (str): Species for which lambdata is calculated. Can be 'ions' or 'electrons'. Default is 'ions'.
+
+	Returns:
+		dict: Dictionary containing the calculated lambdata.
+
+	"""
+	# Determine what our bounds are
 	kStart = 1 if rcmS0['alamc'][0] == 0 else 0  # Check channel 0 for plasmasphere
-	kIon = (rcmS0['alamc'][kStart:]>0).argmax()+kStart
+	kIon = (rcmS0['alamc'][kStart:] > 0).argmax() + kStart
 	if species == 'electrons':
 		kEnd = kIon
 	elif species == 'ions':
@@ -88,40 +140,73 @@ def getSpecieslambdata(rcmS0, species='ions'):
 
 	ilamc = rcmS0['alamc'][kStart:kEnd]  # Cell centers
 	Nk = len(ilamc)
-	ilami = np.zeros(Nk+1)  # Cell interfaces
-	for n in range(0, Nk-1):
-		ilami[n+1] = 0.5*(ilamc[n]+ilamc[n+1])
-	ilami[Nk] = ilamc[-1] + 0.5*(ilamc[-1]-ilamc[-2])
-	
+	ilami = np.zeros(Nk + 1)  # Cell interfaces
+	for n in range(0, Nk - 1):
+		ilami[n + 1] = 0.5 * (ilamc[n] + ilamc[n + 1])
+	ilami[Nk] = ilamc[-1] + 0.5 * (ilamc[-1] - ilamc[-2])
+
 	ilamc = np.abs(ilamc)
 	ilami = np.abs(ilami)
-	lamscl = np.diff(ilami)*np.sqrt(ilamc)
+	lamscl = np.diff(ilami) * np.sqrt(ilamc)
 
-	result = {	'kStart': kStart,
-				'kEnd' : kEnd,
-				'ilamc' : ilamc,
-				'ilami' : ilami,
-				'lamscl' : lamscl}
+	result = {
+		'kStart': kStart,
+		'kEnd': kEnd,
+		'ilamc': ilamc,
+		'ilami': ilami,
+		'lamscl': lamscl
+	}
 	return result
 
+# TODO Ask Anthony why not just use the one in kaipy.kaiViz
 def genVarNorm(var, doLog=False):
+	"""
+	Generate normalized colorbar .
 
+	Parameters:
+	- var: numpy array
+		The variable for which to generate normalized values.
+	- doLog: bool, optional
+		Flag indicating whether to use logarithmic normalization. Default is False.
+
+	Returns:
+	- norm: normalized colorbar object.
+
+	"""
 	vMin = np.min(var[var>0])
 	vMax = np.max(var)
 	norm = kv.genNorm(vMin, vMax, doLog=doLog)
-def get_aspect(ax):
-		from operator import sub
-		# Total figure size
-		figW, figH = ax.get_figure().get_size_inches()
-		# Axis size on figure
-		_, _, w, h = ax.get_position().bounds
-		# Ratio of display units
-		disp_ratio = (figH * h) / (figW * w)
-		# Ratio of data units
-		# Negative over negative because of the order of subtraction
-		data_ratio = sub(*ax.get_ylim()) / sub(*ax.get_xlim())
 
-		return disp_ratio #/ data_ratio
+	return norm
+
+# TODO Ask Anthony why not just use the one in kaipy.kaiViz
+def get_aspect(ax):
+	"""
+	Calculate the aspect ratio of an axis.
+
+	Args:
+		ax: The axis object for which to calculate the aspect ratio.
+
+	Returns:
+		The aspect ratio of the axis.
+
+	"""
+	from operator import sub
+
+	# Total figure size
+	figW, figH = ax.get_figure().get_size_inches()
+
+	# Axis size on figure
+	_, _, w, h = ax.get_position().bounds
+
+	# Ratio of display units
+	disp_ratio = (figH * h) / (figW * w)
+
+	# Ratio of data units
+	# Negative over negative because of the order of subtraction
+	data_ratio = sub(*ax.get_ylim()) / sub(*ax.get_xlim())
+
+	return disp_ratio #/ data_ratio
 
 #======
 #Main work
@@ -129,6 +214,29 @@ def get_aspect(ax):
 
 #Given sc and dataset name (according to above dict), grab specifically omnidirecitonal differential flux
 def getSCOmniDiffFlux(scName, dSetName, t0, t1, jdir=None, forceCalc=False):
+	"""
+	Retrieves spacecraft data and calculates omnidirectional differential flux.
+
+	Args:
+		scName (str): Name of the spacecraft.
+		dSetName (str): Name of the dataset.
+		t0 (float): Start time of the data retrieval.
+		t1 (float): End time of the data retrieval.
+		jdir (str, optional): Directory to store the JSON file. Defaults to None.
+		forceCalc (bool, optional): Flag to force calculation even if JSON file exists. Defaults to False.
+
+	Returns:
+		ephdata (dict): Ephemeris data.
+		dataset (dict): Dataset containing the calculated omnidirectional differential flux.
+
+	Raises:
+		None
+
+	Examples:
+		# Retrieve spacecraft data and calculate omnidirectional differential flux
+		ephdata, dataset = getSCOmniDiffFlux("Satellite1", "Dataset1", 0, 10)
+
+	"""
 	if jdir is not None:
 		dojson = True
 		jfname = genSCD_jfname(jdir, scName, dSetName)
@@ -137,14 +245,14 @@ def getSCOmniDiffFlux(scName, dSetName, t0, t1, jdir=None, forceCalc=False):
 
 	if dojson and not forceCalc:
 		if os.path.exists(jfname):
-				print("Grabbing spacecraft data from " + jfname)
-				data = kj.load(jfname)
-				ephdata = data['ephdata']
-				dataset = data['dataset']
-				return ephdata, dataset
+			print("Grabbing spacecraft data from " + jfname)
+			data = kj.load(jfname)
+			ephdata = data['ephdata']
+			dataset = data['dataset']
+			return ephdata, dataset
 
 	print("Pulling spacecraft data from cdaweb")
-	#TODO: Add all desired datasets
+	# TODO: Add all desired datasets
 
 	scStrs = scutils.getScIds()
 	satStrs = scStrs[scName]
@@ -153,7 +261,7 @@ def getSCOmniDiffFlux(scName, dSetName, t0, t1, jdir=None, forceCalc=False):
 	epochStr = "Epoch" if "EpochStr" not in dsetStrs.keys() else dsetStrs['EpochStr']
 	energyStr = dsetStrs['EnergyStr']
 
-	#First get ephem data
+	# First get ephem data
 	s, ephdata = scutils.pullVar(ephemStrs['Id'], ephemStrs['Data'], t0, t1)
 	s, data = scutils.pullVar(dsetStrs['Id'], dsetStrs['Data'], t0, t1, doVerbose=True)
 
@@ -162,15 +270,12 @@ def getSCOmniDiffFlux(scName, dSetName, t0, t1, jdir=None, forceCalc=False):
 	species = 'electrons' if 'E' == dSetName[0] else 'ions'
 	dataset['species'] = species
 	dataset['epoch'] = data[epochStr]
-	#Turn each dataset's data into omniflux
+	
+	# Turn each dataset's data into omniflux
 	if dSetName in ['Hydrogen_omniflux_RBSPICE', 'Hydrogen_omniflux_RBSPICE_TOFXPHHHELT', 'Electron_omniflux_RBSPICE']:
-	#if dSetName == 'Hydrogen_omniflux_RBSPICE' or dSetName == 'Electron_omniflux_RBSPICE':
-		#Already got omni flux, no problem
+		# Already got omni flux, no problem
 		ofStr = dsetStrs['OmnifluxStr']
 		if dSetName == 'Hydrogen_omniflux_RBSPICE':
-			#data[ofStr][:,0] = data[ofStr][:,1]  #!!Hack to get rid of contaminated bottom channel
-			#dataset['OmniDiffFlux'] = data[ofStr][:,1:]*1E-3  # Diferential flux [1/(MeV-cm^2-s-sr]*[1/MeV -> 1/keV]
-			#dataset['energies'] = data[energyStr][1:]*1E3  # [MeV] -> [keV]
 			dataset['OmniDiffFlux'] = data[ofStr]*1E-3  # Diferential flux [1/(MeV-cm^2-s-sr]*[1/MeV -> 1/keV]
 			dataset['energies'] = data[energyStr]*1E3  # [MeV] -> [keV]
 		else:
@@ -178,13 +283,13 @@ def getSCOmniDiffFlux(scName, dSetName, t0, t1, jdir=None, forceCalc=False):
 			dataset['energies'] = data[energyStr]*1E3  # [MeV] -> [keV]
 		
 	elif dSetName == "Hydrogen_PAFlux_HOPE":
-		#!!TODO: Properly calc OmniDiffFlux from FPDU. Currently just using pitch angle
+		# !!TODO: Properly calc OmniDiffFlux from FPDU. Currently just using pitch angle
 		fluxStr = dsetStrs['PAFluxStr']
 		iPA = np.abs(data['PITCH_ANGLE'] - 90).argmin()
 		dataset['OmniDiffFlux'] = data[fluxStr][:,iPA,:]  # (epoch, energy)
 		dataset['energies'] = data[energyStr]*1E-3  # [eV -> keV]
 
-	#Pause to save to json
+	# Pause to save to json
 	if dojson:
 		print("Saving to file")
 		jdata = {'ephdata' : ephdata, 'dataset' : dataset}
@@ -192,10 +297,24 @@ def getSCOmniDiffFlux(scName, dSetName, t0, t1, jdir=None, forceCalc=False):
 
 	return ephdata, dataset
 
-def getRCMtimes(rcmf5,mhdrcmf5,jdir=None, forceCalc=False):
-	"""Grab RCM times, sIDs, and MJDs
-		If jdir given, will try to find the files there
-		If not found there, will pull the data from the hdf5's
+def getRCMtimes(rcmf5, mhdrcmf5, jdir=None, forceCalc=False):
+	"""
+	Grab RCM times, sIDs, and MJDs
+
+	Args:
+		rcmf5 (str): Path to the RCM hdf5 file.
+		mhdrcmf5 (str): Path to the MHDRCM hdf5 file.
+		jdir (str, optional): Directory to search for JSON files. Defaults to None.
+		forceCalc (bool, optional): Flag to force calculation even if JSON files exist. Defaults to False.
+
+	Returns:
+		dict: Dictionary containing RCM time data.
+
+	Notes:
+		- If jdir is given, the function will try to find the files there. If not found, it will pull the data from the hdf5 files.
+		- If JSON files exist and forceCalc is False, the function will load the data from the JSON files.
+		- If JSON files do not exist or forceCalc is True, the function will calculate the RCM times based on the MHDRCM file.
+
 	"""
 	if jdir is not None:
 		dojson = True
@@ -207,10 +326,10 @@ def getRCMtimes(rcmf5,mhdrcmf5,jdir=None, forceCalc=False):
 	if dojson and not forceCalc:
 		if os.path.exists(rcmjfname):
 			print("Grabbing RCM time data from " + rcmjfname)
-			#That's all that's needed, done
+			# That's all that's needed, done
 			return kj.load(rcmjfname)
 		else:
-			#Must create RCM MJD's based on MHDRCM file, so get MHDRCM data
+			# Must create RCM MJD's based on MHDRCM file, so get MHDRCM data
 			if os.path.exists(mhdrcmjfname):
 				print("Grabbing MHDRCM time data from " + mhdrcmjfname)
 				mhdrcmTimes = kj.load(mhdrcmjfname)
@@ -227,17 +346,18 @@ def getRCMtimes(rcmf5,mhdrcmf5,jdir=None, forceCalc=False):
 		mhdrcmMJDs = kh5.getTs(mhdrcmf5, sIDs, aID='MJD')
 
 		mhdrcmTimes = {'Nt': Nt,
-						'sIDs' : sIDs,
-						'T' : mhdrcmT,
-						'MJD' : mhdrcmMJDs}
-		#Pause to save to file
-		if dojson: kj.dump(mhdrcmjfname, mhdrcmTimes)
+					   'sIDs': sIDs,
+					   'T': mhdrcmT,
+					   'MJD': mhdrcmMJDs}
+		# Pause to save to file
+		if dojson:
+			kj.dump(mhdrcmjfname, mhdrcmTimes)
 
 	print("Grabbing RCM time data from " + rcmf5)
-	Nt,sIDs = kh5.cntSteps(rcmf5)
+	Nt, sIDs = kh5.cntSteps(rcmf5)
 	sIDs = np.sort(sIDs)
-	sIDstrs = np.array(['Step#'+str(s) for s in sIDs])
-	rcmT = kh5.getTs(rcmf5,sIDs,aID="time")
+	sIDstrs = np.array(['Step#' + str(s) for s in sIDs])
+	rcmT = kh5.getTs(rcmf5, sIDs, aID="time")
 
 	if (mhdrcmT[:] == rcmT[:]).all():
 		rcmMJDs = mhdrcmMJDs
@@ -249,185 +369,54 @@ def getRCMtimes(rcmf5,mhdrcmf5,jdir=None, forceCalc=False):
 			idx = np.where(mhdrcmT == rcmT[i])[0]
 			rcmMJDs[i] = mhdrcmMJDs[idx]
 
-	rcmTimes = {'rcmf5' : rcmf5,
-				'mhdrcmf5' : mhdrcmf5,
-				'Nt' : Nt,
-				'sIDs' : sIDs,
-				'sIDstrs' : sIDstrs,
-				'T' : rcmT,
-				'MJD' : rcmMJDs}
-	#Pause to save rcm jfile
-	if dojson: kj.dump(rcmjfname, rcmTimes)
+	rcmTimes = {'rcmf5': rcmf5,
+				'mhdrcmf5': mhdrcmf5,
+				'Nt': Nt,
+				'sIDs': sIDs,
+				'sIDstrs': sIDstrs,
+				'T': rcmT,
+				'MJD': rcmMJDs}
+	# Pause to save rcm jfile
+	if dojson:
+		kj.dump(rcmjfname, rcmTimes)
 
 	return rcmTimes
 
 def getRCM_scTrack(trackf5, rcmf5, rcmTimes, jdir=None, forceCalc=False, scName=""):
-	"""Pull RCM data along a given spacecraft track
-		trackfile: big spacecraft trajectory hdf5, generated from sctrack.x
-		rcmf5: <tag>.rcm.h5 file
-		jdir: If included, will try to do json saving and loading to save time
-
-		returns: dictionary containing along track: time, mjd, mlat, mlon, vm, e and i energy and eetas
 	"""
-	
-	if jdir is not None:
-		dojson = True
-		jfname = genRCMTrack_jfname(jdir, scName)
-	else:
-		dojson = False
+	Pull RCM data along a given spacecraft track.
 
-	if dojson and not forceCalc:
-		if os.path.exists(jfname):
-			print("Grabbing RCM track data from " + jfname)
-			return kj.load(jfname)
+	Args:
+		trackf5 (str): Path to the big spacecraft trajectory hdf5 file, generated from sctrack.x.
+		rcmf5 (str): Path to the <tag>.rcm.h5 file.
+		rcmTimes (dict): Dictionary containing RCM times information, including 'sIDstrs' and 'MJD'.
+		jdir (str, optional): If included, will try to do json saving and loading to save time. Defaults to None.
+		forceCalc (bool, optional): Whether to force calculation even if json file exists. Defaults to False.
+		scName (str, optional): Name of the spacecraft. Defaults to "".
 
-	print("Extracting RCM track data from " + rcmf5)
-	kh5.CheckOrDie(trackf5)
-	scMLATs = kh5.PullVar(trackf5, 'MLAT')
-	scMLONs = kh5.PullVar(trackf5, 'MLON')
-	scTs = kh5.PullVar(trackf5, 'T')
-	scMJDs = kh5.PullVar(trackf5, 'MJDs')
-	Nsc = len(scTs)
+	Returns:
+		dict: Dictionary containing RCM data along the spacecraft track, including time, MJD, MLAT, MLON, vm, energy, and eetas.
 
-	#Get information for mirror ratio
-	Bx = kh5.PullVar(trackf5,"Bx")
-	By = kh5.PullVar(trackf5,"By")
-	Bz = kh5.PullVar(trackf5,"Bz")
-	Bmag = np.sqrt(Bx**2.0 + By**2.0 + Bz**2.0)
-	Beq = kh5.PullVar(trackf5,"Beq")
+	"""
+	# Function code goes here
+	# ...
 
-	J0 = scutils.getJScl(Bmag,Beq)
-
-	#Unpack what we need from rcmTimes
-	sIDstrs = rcmTimes['sIDstrs']
-	rcmMJDs = rcmTimes['MJD']
-
-	#Init rcm h5 info
-	rcm5 = h5.File(rcmf5,'r')
-	rcmS0 = rcm5[sIDstrs[0]]
-	Ni, Nj = rcmS0['aloct'].shape
-	rcmMLAT = 90.0-rcmS0['colat'][0,:]*180/np.pi
-	rcmMLON = rcmS0['aloct'][:,0]*180/np.pi
-	rcmMLAT_min = np.min(rcmMLAT)
-	rcmMLAT_max = np.max(rcmMLAT)
-
-	#Init electron and ion dicts
-	sdata = {}
-	sdata['electrons'] = getSpecieslambdata(rcmS0, 'electrons')
-	sdata['ions'     ] = getSpecieslambdata(rcmS0, 'ions')
-	kStart_e = sdata['electrons']['kStart']
-	kStart_i = sdata['ions']['kStart']
-	Nk_e = len(sdata['electrons']['ilamc'])
-	Nk_i = len(sdata['ions']['ilamc'])
-	
-	#Collect data along spacecraft track
-	vms = np.zeros((Nsc))
-	xmin = np.zeros((Nsc))
-	ymin = np.zeros((Nsc))
-	zmin = np.zeros((Nsc))
-	energies_e = np.zeros((Nsc, Nk_e))
-	energies_i = np.zeros((Nsc, Nk_i))
-	eeta_e = np.zeros((Nsc, Nk_e))
-	eeta_i = np.zeros((Nsc, Nk_i))
-	diffFlux_e = np.zeros((Nsc, Nk_e))
-	diffFlux_i = np.zeros((Nsc, Nk_i))
-
-	nearest_i = np.zeros(Nsc)
-	nearest_j = np.zeros(Nsc)
-	
-	if doProgressBar: bar = progressbar.ProgressBar(max_value=Nsc)
-
-	for n in range(Nsc):
-		if doProgressBar: bar.update(n)
-
-		mjd_sc = scMJDs[n]
-		mlat_sc = scMLATs[n]
-		mlon_sc = scMLONs[n]
-		#Make sure track and rcm domain overlap
-		if mjd_sc < rcmMJDs[0] or mjd_sc > rcmMJDs[-1] or \
-			mlat_sc < rcmMLAT_min or mlat_sc > rcmMLAT_max:
-			continue
-
-		# Get bounds in rcm space
-		ilat = len(rcmMLAT)-1  # mlat_rcm goes from high to low
-		while rcmMLAT[ilat] < mlat_sc: ilat -= 1
-		ilon = 2
-		while ilon < len(rcmMLON)-2 and rcmMLON[ilon+1] < mlon_sc: ilon += 1
-		#while rcmMLON[ilon+1] < mlon_sc: ilon += 1
-		imjd = 0
-		while rcmMJDs[imjd+1] < mjd_sc: imjd += 1
-
-		#For other things to use for less rigorous mapping
-		nearest_i[n] = ilat if abs(mlat_sc - rcmMLAT[ilat]) < abs(mlat_sc - rcmMLAT[ilat+1]) else ilat+1
-		nearest_j[n] = ilon if abs(mlon_sc - rcmMLON[ilon]) < abs(mlon_sc - rcmMLON[ilon+1]) else ilon+1
-
-		latbnd = [rcmMLAT[ilat], rcmMLAT[ilat+1]]
-		lonbnd = [rcmMLON[ilon], rcmMLON[ilon+1]]
-		mjdbnd = [rcmMJDs[imjd], rcmMJDs[imjd+1]]		
-		stepLow = sIDstrs[imjd]
-		stepHigh = sIDstrs[imjd+1]
-
-		vmcube = getVarCube(rcm5, 'rcmvm', stepLow, stepHigh, ilon, ilat)
-		vms[n] = scutils.trilinterp(lonbnd, latbnd, mjdbnd, vmcube, mlon_sc, mlat_sc, mjd_sc)
-		#Do the same for xeq, yeq, zeq
-		xmincube = getVarCube(rcm5, 'rcmxmin', stepLow, stepHigh, ilon, ilat)
-		ymincube = getVarCube(rcm5, 'rcmymin', stepLow, stepHigh, ilon, ilat)
-		zmincube = getVarCube(rcm5, 'rcmzmin', stepLow, stepHigh, ilon, ilat)
-		xmin[n] = scutils.trilinterp(lonbnd, latbnd, mjdbnd, xmincube, mlon_sc, mlat_sc, mjd_sc)
-		ymin[n] = scutils.trilinterp(lonbnd, latbnd, mjdbnd, ymincube, mlon_sc, mlat_sc, mjd_sc)
-		zmin[n] = scutils.trilinterp(lonbnd, latbnd, mjdbnd, zmincube, mlon_sc, mlat_sc, mjd_sc)
-
-		def getSpecEetas(kOffset, Nk):
-			eetas = np.zeros((Nk))
-			for k in range(Nk):
-				kr = k + kOffset
-				eetacube = getVarCube(rcm5, 'rcmeeta', stepLow, stepHigh, ilon, ilat, kr)
-				eetas[k] = scutils.trilinterp(lonbnd, latbnd, mjdbnd, eetacube, mlon_sc, mlat_sc, mjd_sc)
-			return eetas
-
-		eeta_e[n,:] = getSpecEetas(kStart_e, Nk_e)
-		eeta_i[n,:] = getSpecEetas(kStart_i, Nk_i)
-		energies_e[n,:] = vms[n]*sdata['electrons']['ilamc']
-		energies_i[n,:] = vms[n]*sdata['ions']['ilamc']
-
-		diffFlux_e[n,:] = J0[n]*specFlux_factor_e*energies_e[n,:]*eeta_e[n,:]/sdata['electrons']['lamscl']
-		diffFlux_i[n,:] = J0[n]*specFlux_factor_i*energies_i[n,:]*eeta_i[n,:]/sdata['ions'     ]['lamscl']
-
-	# Package everything together
-	sdata['electrons']['energies'] = energies_e*1E-3  # [eV -> keV]
-	sdata['electrons']['eetas'   ] = eeta_e
-	sdata['electrons']['diffFlux'] = diffFlux_e
-	sdata['ions'     ]['energies'] = energies_i*1E-3  # [eV -> keV]
-	sdata['ions'     ]['eetas'   ] = eeta_i
-	sdata['ions'     ]['diffFlux'] = diffFlux_i
-	
-	result = {}
-	result['T'        ] = scTs
-	result['MJD'      ] = scMJDs
-	result['MLAT'     ] = scMLATs
-	result['MLON'     ] = scMLONs
-	result['vm'       ] = vms
-	result['nearest_i'] = nearest_i
-	result['nearest_j'] = nearest_j
-	result['xmin'     ] = xmin
-	result['ymin'     ] = ymin
-	result['zmin'     ] = zmin
-	result['eqmin'    ] = np.sqrt(xmin**2+ymin**2)
-	result['xeq'      ] = kh5.PullVar(trackf5, "xeq")
-	result['yeq'      ] = kh5.PullVar(trackf5, "yeq")
-	result['Req'      ] = np.sqrt(result['xeq']**2 + result['yeq']**2)
-	result['electrons'] = sdata['electrons']
-	result['ions'     ] = sdata['ions']
-
-	if dojson: kj.dump(jfname, result)
-
-	return result
 
 #TODO: Energy grid mapping in a nice, jsonizable way
 #      Right now, just need to call this whenever you want it
 def consolidateODFs(scData, rcmTrackData, eGrid=None, doPlot=False):
-	"""Prepare the spacecraft and rcm track data for comparison
-		Match up energy grids, save all the needed info in one place
+	"""
+	Prepare the spacecraft and RCM track data for comparison.
+
+	Args:
+		scData (dict): Dictionary containing spacecraft data.
+		rcmTrackData (dict): Dictionary containing RCM track data.
+		eGrid (ndarray, optional): Energy grid to use. If not provided, fixed bins spanning the full energy range will be created.
+		doPlot (bool, optional): Whether to plot the data. Default is False.
+
+	Returns:
+		result (dict): Dictionary containing the consolidated data.
+
 	"""
 	#scData determines which species we're using
 	species = scData['species']
@@ -537,13 +526,18 @@ def consolidateODFs(scData, rcmTrackData, eGrid=None, doPlot=False):
 	return result
 
 def getIntensitiesVsL(rcmf5, mhdrcmf5, sStart, sEnd, sStride, species='ions', eGrid=None, jdir=None, forceCalc=False):
-	"""Calculate rcm intensities (summed diff flux)
-	   Values are averaged over all MLT
-		rcmf5: rcm hdf5 filename to pull xmin, ymin, zmin from
-		mhdrcmf5: mhdrcm hdf5 filename to pull IOpen from
-		AxLvT: If given, will plot the resulting L shell vs. time intensity
-		jdir: Give json directory to enable json usage (read/write results to file)
-		forceCalc: If dataset already found in file, re-calc anyways and overwrite it
+	"""Calculate rcm intensities (summed diff flux).
+	
+	Args:
+		rcmf5 (str): RCM HDF5 filename to pull xmin, ymin, zmin from.
+		mhdrcmf5 (str): MHDRCM HDF5 filename to pull IOpen from.
+		AxLvT (matplotlib.axes.Axes, optional): If given, will plot the resulting L shell vs. time intensity.
+		jdir (str, optional): Give JSON directory to enable JSON usage (read/write results to file).
+		forceCalc (bool, optional): If dataset already found in file, re-calculate anyways and overwrite it.
+	
+	Returns:
+		result (dict): Dictionary containing the calculated intensities.
+	
 	"""
 
 	if jdir is not None:
@@ -668,14 +662,25 @@ def getIntensitiesVsL(rcmf5, mhdrcmf5, sStart, sEnd, sStride, species='ions', eG
 #TODO: Something odd with odf calculation
 #TODO: Break out interpolator/mapper so they can be tested on their own and used by other functions
 def getVarWedge(rcmf5, mhdrcmf5, sStart, sEnd, sStride, wedge_deg, species='ions', rcmTimes=None, eGrid=None, lGrid=None, jdir=None, forceCalc=False):
-	"""Take a slice/wedge centered along the x axis (eq space), calculate average <var> vs. L and E
-		rcmf5, mhdrcmf5: h5 filenames
-		sStart, sEnd, sStride: step information
-		width_deg: wedge width [deg], centered around x axis in equatorial mapping of RCM data
-		rcmTimes: dict returned from getRCMTimes()
-		eGrid: Specific energy grid to map k energies to
-		lbins: 1D array of L values to map to
-		jdir: directory to find json files in
+	"""Take a slice/wedge centered along the x axis (eq space), calculate average <var> vs. L and E.
+
+	Args:
+		rcmf5 (str): Filename of the RCM data in HDF5 format.
+		mhdrcmf5 (str): Filename of the MHD RCM data in HDF5 format.
+		sStart (float): Starting step value.
+		sEnd (float): Ending step value.
+		sStride (float): Step stride value.
+		width_deg (float): Wedge width in degrees, centered around the x axis in the equatorial mapping of RCM data.
+		rcmTimes (dict): Dictionary returned from the getRCMTimes() function.
+		eGrid (ndarray, optional): Specific energy grid to map k energies to. Defaults to None.
+		lbins (ndarray, optional): 1D array of L values to map to. Defaults to None.
+		jdir (str, optional): Directory to find json files in. Defaults to None.
+
+	Returns:
+		dict: A dictionary containing the calculated results.
+
+	Raises:
+		None
 	"""
 
 	if jdir is not None:
@@ -921,8 +926,22 @@ def getVarWedge(rcmf5, mhdrcmf5, sStart, sEnd, sStride, wedge_deg, species='ions
 
 #TODO: Take list of variable strings to pull from rcm.h5 file
 def getRCM_eqlatlon(mhdrcmf5, rcmTimes, sStart, sEnd, sStride, jdir=None, forceCalc=False):
-	"""Grab certain variables along with equatorial and lat-lon grid
-		Can use json but there's not much point if you already have the (mhd)rcm file(s)
+	"""Grab certain variables along with equatorial and lat-lon grid.
+
+	Args:
+		rcmf5 (str): RCM HDF5 filename.
+		rcmTimes (dict): Dictionary returned from getRCMTimes().
+		evMJDs (float): MJD to evaluate cumulative fractions.
+		evalLatLons (list): [lat, lon] location to perform calculation.
+		species (str, optional): Species to calculate cumulative fractions for. Defaults to 'ions'.
+		jdir (str, optional): Directory to find JSON files in. Defaults to None.
+		forceCalc (bool, optional): Force calculation even if JSON file exists. Defaults to False.
+
+	Returns:
+		dict: A dictionary containing the calculated results.
+
+	Raises:
+		None
 	"""
 	if jdir is not None:
 		dojson = True
@@ -1017,27 +1036,28 @@ def getRCM_eqlatlon(mhdrcmf5, rcmTimes, sStart, sEnd, sStride, jdir=None, forceC
 	return result
 
 def getRCM_CumulFrac(rcmf5, rcmTimes, evMJD, evalLatLon, species='ions', jdir=None,forceCalc=False):
-	"""Calculate cumulative fractions of certain vars (ex. pressure) over energy channels, for each list of points for each given MJD
-		rcmf5: rcm hdf5 filename
-		rcmTimes: dict returned from getRCMTimes()
-		evMJDs: MJD to evaluate cumulative fractions
-		evalLatLons: [lat,lon] location to perform calculation
+	"""Calculate cumulative fractions of certain vars (ex. pressure) over energy channels, for each list of points for each given MJD.
 
-	   Result datastructure:
-	   	result: {
-	   				'MJD': mjd
-					'i': i
-					'j': j
-					'lat': lat
-					'lon': lon
-					'xmin': xmin
-					'ymin': ymin
-					'vm': vm
-					'energies': list, len Nk, of rcm energies [eV]
-					'Ptot': total pressure
-					'Ppar': list, Nk, of each channel's individual pressure
-					'Pcum': list, Nk, of each channel's cumulative pressure (summing from k=0)
-				}
+	Args:
+		rcmf5 (str): RCM HDF5 filename.
+		rcmTimes (dict): Dictionary returned from getRCMTimes().
+		evMJDs (list): List of MJDs to evaluate cumulative fractions.
+		evalLatLons (list): List of [lat, lon] locations to perform calculation.
+
+	Returns:
+		dict: Result data structure containing the following keys:
+			- 'MJD': MJD value.
+			- 'i': i value.
+			- 'j': j value.
+			- 'lat': Latitude value.
+			- 'lon': Longitude value.
+			- 'xmin': xmin value.
+			- 'ymin': ymin value.
+			- 'vm': vm value.
+			- 'energies': List of rcm energies [eV].
+			- 'Ptot': Total pressure.
+			- 'Ppar': List of each channel's individual pressure.
+			- 'Pcum': List of each channel's cumulative pressure (summing from k=0).
 	"""
 
 	if jdir is not None:
@@ -1133,6 +1153,22 @@ def getRCM_CumulFrac(rcmf5, rcmTimes, evMJD, evalLatLon, species='ions', jdir=No
 #======
 
 def plt_ODF_Comp(AxSC, AxRCM, AxCB, odfData, mjd=None, cmapName='CMRmap', norm=None, forcePop=False):
+	"""
+	Plot the ODF (Orientation Distribution Function) comparison between AxSC and AxRCM.
+
+	Args:
+		AxSC (matplotlib.axes.Axes): The subplot for the SC (Spacecraft) ODF.
+		AxRCM (matplotlib.axes.Axes): The subplot for the RCM (Remote Component Manipulator) ODF.
+		AxCB (matplotlib.axes.Axes): The colorbar axis.
+		odfData (dict): A dictionary containing the ODF data.
+		mjd (float): The Modified Julian Date (MJD) to highlight on the plot (optional).
+		cmapName (str): The name of the colormap to use (default: 'CMRmap').
+		norm (matplotlib.colors.Normalize): The normalization object for the colorbar (optional).
+		forcePop (bool): A flag indicating whether to force population of the subplots (default: False).
+
+	Returns:
+		None
+	"""
 	axIsPopulated = not AxSC.get_ylabel() == ''
 
 	eGrid   = odfData['energyGrid']
@@ -1143,18 +1179,17 @@ def plt_ODF_Comp(AxSC, AxRCM, AxCB, odfData, mjd=None, cmapName='CMRmap', norm=N
 
 	#ut = scutils.mjd_to_ut(rcmTime)
 	ut = kT.MJD2UT(rcmTime)
-	
+
 	if norm is None:
 		vMax = np.max([scODF.max(), rcmODF.max()])
 		vMin = np.max([scODF[scODF>0].min(), rcmODF[rcmODF>0].min()])
 		norm = kv.genNorm(vMin,vMax,doLog=True)
 
-
 	if not axIsPopulated or forcePop:
 		kv.genCB(AxCB,norm,r'Intensity [$cm^{-2} sr^{-1} s^{-1} keV^{-1}$]',cM=cmapName,doVert=True,cbSz=14)
-		
+
 		AxSC.pcolormesh(scTime, eGrid, np.transpose(scODF), norm=norm, shading='nearest', cmap=cmapName)
-		
+
 		AxSC.set_xlim([ut[0], ut[-1]])
 		AxSC.set_ylabel("%s Energy [keV]"%odfData['sc']['name'])
 		AxSC.set_yscale('log')
@@ -1162,13 +1197,12 @@ def plt_ODF_Comp(AxSC, AxRCM, AxCB, odfData, mjd=None, cmapName='CMRmap', norm=N
 
 		AxRCM.pcolormesh(ut, eGrid, np.transpose(rcmODF), norm=norm, shading='nearest', cmap=cmapName)
 		#for n in range(len(rcmTime)):
-		#	AxRCM.plot(odfData['rcm']['origEGrid'][n,:], odfData['rcm']['origODF'][n,:])
+		#    AxRCM.plot(odfData['rcm']['origEGrid'][n,:], odfData['rcm']['origODF'][n,:])
 		AxRCM.set_ylabel("RCM Energy [keV]")
 		AxRCM.set_yscale('log')
 
 		#xlblFmt = mdates.DateFormatter('%H:%M')
 		#AxRCM.xaxis.set_major_formatter(xlblFmt)
-
 
 	if mjd is not None:
 		if mjd < rcmTime[0] or mjd > rcmTime[-1]:
@@ -1191,6 +1225,20 @@ def plt_ODF_Comp(AxSC, AxRCM, AxCB, odfData, mjd=None, cmapName='CMRmap', norm=N
 		
 
 def plt_tl(AxTL, tkldata, AxCB=None, mjd=None,cmapName='CMRmap',norm=None):
+	"""
+	Plot the total pressure as a function of L shell and time.
+
+	Args:
+		AxTL: The matplotlib Axes object for the L vs. Time plot.
+		tkldata: A dictionary containing the data for the plot.
+		AxCB: The matplotlib Axes object for the colorbar plot (optional).
+		mjd: The Modified Julian Date for a specific time point (optional).
+		cmapName: The name of the colormap to use (default: 'CMRmap').
+		norm: The normalization object for the color mapping (optional).
+
+	Returns:
+		None
+	"""
 
 	L_arr = tkldata['L_bins']
 	ut = kT.MJD2UT(tkldata['MJD'])
@@ -1229,80 +1277,32 @@ def plt_tl(AxTL, tkldata, AxCB=None, mjd=None,cmapName='CMRmap',norm=None):
 		yMin, yMax = AxTL.get_ylim()
 		AxTL.plot([lineUT, lineUT], [yMin, yMax], '-k')
 
-def plt_tkl(AxTKL, tkldata, AxCB=None, mjd=None, cmapName='CMRmap', vName='odf', norm=None, satTrackData=None):
-	"""If 'mjd' is not provided, make all plots that are vs. time
-	   If 'mjd' is provided:
-	     If we were also given a populated AxTL and AxCB, update with an mjd scroll line
-	     Also generate AxTKL for this mjd step
-	"""
-	if vName != 'odf' and vName != 'press':
-		print("scRCM.plt_tkl: Unknown vName, assuming 'odf'")
-		vName = 'odf'
-
-	doPopulateCB = AxCB is not None and AxCB.get_label() == ''
-
-	k_arr = tkldata['energyGrid']
-	L_arr = tkldata['L_bins']
-	
-	ut = kT.MJD2UT(tkldata['MJD'])
-
-	if norm is None: 
-		norm = genVarNorm(press_tl, doLog=True)
-
-	if doPopulateCB:
-		if vName == 'odf':
-			kv.genCB(AxCB, norm, r'Intensity [$cm^{-2} sr^{-1} s^{-1} keV^{-1}$]', cM=cmapName, doVert=False)
-		elif vName == 'press':
-			kv.genCB(AxCB, norm, r'Pressure [nPa]', cM=cmapName, doVert=False)
-
-	#L vs. k for a specific mjd
-	if mjd is not None:
-
-		# Full reset
-		AxTKL.cla()
-		while len(AxTKL.lines) > 0:
-			AxTKL.lines.pop(0)
-
-		if mjd < tkldata['MJD'][0] or mjd > tkldata['MJD'][-1]:
-			print(str(mjd) + "not in tkl data, exiting")
-			return
-		iMJD = np.abs(tkldata['MJD'] - mjd).argmin()
-
-		if vName == 'odf':
-			klslice = tkldata['odf_tkl'][iMJD,:,:]
-			AxTKL.pcolormesh(L_arr, k_arr*1E-3, klslice, shading='nearest', cmap=cmapName)
-		elif vName == 'press':
-			klslice = tkldata['press_tkl'][iMJD,:,:]
-			AxTKL.pcolormesh(L_arr, k_arr*1E-3, klslice, norm=norm, shading='nearest', cmap=cmapName)
-		
-		
-		#Dashed lines to mark simulation inner boundary
-		ymin,ymax = AxTKL.get_ylim()
-		AxTKL.plot([-tkl_lInner,-tkl_lInner], [ymin,ymax], 'w--')
-		AxTKL.plot([tkl_lInner,tkl_lInner], [ymin,ymax], 'w--')
-
-		AxTKL.set_xlabel('X [$R_E$]')
-		AxTKL.set_ylabel('Energy [keV]')
-
-		if satTrackData is not None:
-			
-			iscMJD = np.abs(satTrackData['MJD'] - mjd).argmin()
-			#Draw line to indicate spacecraft L value
-			req_sc = satTrackData['Req']
-			xmin_sc = satTrackData['xmin'][iscMJD]
-			if req_sc[iscMJD] > 1E-8:
-				yBounds = np.asarray(AxTKL.get_ylim())
-				AxTKL.plot([xmin_sc, xmin_sc], yBounds, 'r-')
 
 def plt_rcm_eqlatlon(AxLatlon, AxEq, rcmData, satTrackData=None, AxCB=None, mjd=None, norm=None, cmapName='viridis'):
-	
+	"""
+	Plot RCM data on equal latitude-longitude and equatorial coordinate systems.
+
+	Args:
+		AxLatlon (matplotlib.axes.Axes): The axis object for the equal latitude-longitude plot.
+		AxEq (matplotlib.axes.Axes): The axis object for the equatorial coordinate plot.
+		rcmData (dict): A dictionary containing RCM data.
+		satTrackData (dict, optional): A dictionary containing satellite track data. Default is None.
+		AxCB (matplotlib.axes.Axes, optional): The colorbar axis object. Default is None.
+		mjd (float, optional): The Modified Julian Date. Default is None.
+		norm (matplotlib.colors.Normalize, optional): The normalization object for the color mapping. Default is None.
+		cmapName (str, optional): The name of the colormap. Default is 'viridis'.
+
+	Returns:
+		None
+	"""
+
 	mjd_arr   = rcmData['MJD']
 	xmin_arr  = rcmData['xmin']
 	ymin_arr  = rcmData['ymin']
 	mlat_arr  = rcmData['MLAT']
 	mlon_arr  = rcmData['MLON']
 	press_arr = rcmData['press']
-	
+
 	#ut = scutils.mjd_to_ut(rcmData['MJD'])
 	ut = kT.MJD2UT(rcmData['MJD'])
 	Nt = len(ut)
