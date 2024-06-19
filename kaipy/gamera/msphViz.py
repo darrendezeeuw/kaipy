@@ -34,7 +34,17 @@ szBds["dm"]       = [-30.0 ,10.0,40.0/15.0]
 
 #Add different size options to argument
 def AddSizeArgs(parser):
-	parser.add_argument('-size',type=str,default="std",choices=szStrs,help="Domain bounds options (default: %(default)s)")
+	"""
+	Add size arguments to the parser.
+
+	Args:
+		parser (argparse.ArgumentParser): The argument parser object.
+
+	Returns:
+		None
+	"""
+	parser.add_argument('-size', type=str, default="std", choices=szStrs, help="Domain bounds options (default: %(default)s)")
+
 
 #Return domain size from parsed arguments
 def GetSizeBds(args):
@@ -199,7 +209,7 @@ def PlotLogicalErrRel(gsphP,gsphO,nStp,Ax,fieldNames,meanAxis,AxCB=None,doClear=
 			cbString = cbString + "J axis"
 		elif meanAxis == 2:
 			cbString = cbString + "K axis"
-		kv.genCB(AxCB,normAbs,cbString,cM=cmapAbs)
+		kv.genCB(AxCB,normRel,cbString,cM=cmapRel)
 	#Now do main plotting
 	if (doClear):
 		Ax.clear()
@@ -428,9 +438,10 @@ def plotPlane(gsph,data,xyBds,Ax,AxCB,var='D',vMin=None,vMax=None,doDeco=True,cm
 		AxCB.clear()
 	if (not midp):
 		if (vMin is None):
- 			vMin = np.min(data)
+			vMin = np.min(data)
 		if (vMax is None):
 			vMax = np.max(data)
+
 	else:
 		if ((vMin is None) and (vMax is None)):
 			vMax = np.max(np.abs([np.min(data),np.max(data)]))
@@ -458,7 +469,6 @@ def plotXZ(gsph,nStp,xzBds,Ax,AxCB,var='D',vMin=None,vMax=None,doDeco=True,cmap=
 	plotPlane(gsph,data,xzBds,Ax,AxCB,var,vMin=vMin,vMax=vMax,doDeco=doDeco,cmap=cmap,doLog=doLog,midp=midp)
 	if (doDeco):
 		kv.addEarth2D(ax=Ax)
-		Ax.set_xlabel('SM_X [Re]')
-		Ax.set_ylabel('SM-Z [Re]')
-
+	Ax.set_xlabel('SM_X [Re]')
+	Ax.set_ylabel('SM-Z [Re]')
 	return data
