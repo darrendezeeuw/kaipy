@@ -19,6 +19,16 @@ specFlux_factor_e = 1/np.pi/np.sqrt(8)*np.sqrt(ev/masse)*nt/rx/1.0e1  # [units/c
 TINY = 1.0e-8
 
 def updateFactors(rxNew):
+	"""
+	Update the factors used in calculations based on the given value of rx.
+
+	Parameters:
+	rxNew (float): The new value of rx in meters.
+
+	Returns:
+	None
+	"""
+
 	global rx
 	global pressure_factor
 	global specFlux_factor_i
@@ -37,9 +47,24 @@ def updateFactors(rxNew):
 #electrons: kStart = kStart, kEnd = kIon
 #ions: kStart = kIon, kEnd = len(rcmS0['alamc'])
 def getSpecieslambdata(rcmS0, species='ions'):
-	#Determine what our bounds are
+	"""
+	Calculate lambdas for a given species in the RCM model.
+
+	Args:
+		rcmS0 (dict): Dictionary containing RCM data.
+		species (str): Species for which to calculate lambdas. Default is 'ions'.
+
+	Returns:
+		dict: Dictionary containing the calculated lambdas and other information.
+			- kStart (int): Start index of the lambdas.
+			- kEnd (int): End index of the lambdas.
+			- ilamc (ndarray): Cell centers.
+			- ilami (ndarray): Cell interfaces.
+			- lamscl (ndarray): Calculated lambdas.
+	"""
+	# Determine what our bounds are
 	kStart = 1 if rcmS0['alamc'][0] == 0 else 0  # Check channel 0 for plasmasphere
-	kIon = (rcmS0['alamc'][kStart:]>0).argmax()+kStart
+	kIon = (rcmS0['alamc'][kStart:] > 0).argmax() + kStart
 	if species == 'electrons':
 		kEnd = kIon
 	elif species == 'ions':
@@ -48,20 +73,22 @@ def getSpecieslambdata(rcmS0, species='ions'):
 
 	ilamc = rcmS0['alamc'][kStart:kEnd]  # Cell centers
 	Nk = len(ilamc)
-	ilami = np.zeros(Nk+1)  # Cell interfaces
-	for n in range(0, Nk-1):
-		ilami[n+1] = 0.5*(ilamc[n]+ilamc[n+1])
-	ilami[Nk] = ilamc[-1] + 0.5*(ilamc[-1]-ilamc[-2])
-	
+	ilami = np.zeros(Nk + 1)  # Cell interfaces
+	for n in range(0, Nk - 1):
+		ilami[n + 1] = 0.5 * (ilamc[n] + ilamc[n + 1])
+	ilami[Nk] = ilamc[-1] + 0.5 * (ilamc[-1] - ilamc[-2])
+
 	ilamc = np.abs(ilamc)
 	ilami = np.abs(ilami)
-	lamscl = np.diff(ilami)*np.sqrt(ilamc)
+	lamscl = np.diff(ilami) * np.sqrt(ilamc)
 
-	result = {	'kStart': kStart,
-				'kEnd' : kEnd,
-				'ilamc' : ilamc,
-				'ilami' : ilami,
-				'lamscl' : lamscl}
+	result = {
+		'kStart': kStart,
+		'kEnd': kEnd,
+		'ilamc': ilamc,
+		'ilami': ilami,
+		'lamscl': lamscl
+	}
 	return result
 
 #------
@@ -69,7 +96,16 @@ def getSpecieslambdata(rcmS0, species='ions'):
 #------
 
 def getClosedRegionMask(s5):
+	"""
+	Returns a boolean mask indicating closed regions based on the given input.
 
+	Args:
+		s5 (dict): A dictionary containing the required data for the calculation.
+
+	Returns:
+		bool: A boolean mask indicating closed regions.
+
+	"""
 	rmin = np.sqrt(s5['rcmxmin'][:]**2 + s5['rcmymin'][:]**2)
 
 	mask = np.full(s5['rcmxmin'].shape, False)
@@ -81,49 +117,66 @@ def getClosedRegionMask(s5):
 # Cumulative pressure
 #------
 def getCumulPress(ilamc, vm, eetas, doFraction=False):
-	""" Returns 3D array of cumulative presures
-		ilamc: [Nk]       lambda values (Nk NOT the full number of energy channels, can be subset)
-		vm   : [Nj,Ni]    vm value
-		eetas: [Nk,Nj,Ni] eetas corresponding to ilamc values
-		doFraction: return cumulative pressure fraction instead of cumulative pressure
 	"""
+	Returns a 3D array of cumulative pressures.
 
+	Args:
+		ilamc (array-like): [Nk] lambda values (Nk NOT the full number of energy channels, can be subset)
+		vm (array-like): [Nj,Ni] vm value
+		eetas (array-like): [Nk,Nj,Ni] eetas corresponding to ilamc values
+		doFraction (bool, optional): If True, returns cumulative pressure fraction instead of cumulative pressure. 
+			Defaults to False.
+
+	Returns:
+		array-like: 3D array of cumulative pressures or cumulative pressure fractions.
+
+	"""
 	Nk = len(ilamc)
-	Nj,Ni = vm.shape
-	pCumul = np.zeros((Nk,Nj,Ni))
+	Nj, Ni = vm.shape
+	pCumul = np.zeros((Nk, Nj, Ni))
 
-	ilam_kji = ilamc[:,np.newaxis,np.newaxis]
+	ilam_kji = ilamc[:, np.newaxis, np.newaxis]
 	vm_kji = vm[np.newaxis, :, :]
 
-	pPar = pressure_factor*ilam_kji*eetas*vm_kji**2.5 * 1E9  # [Pa -> nPa], partial pressures for each channel
+	pPar = pressure_factor * ilam_kji * eetas * vm_kji ** 2.5 * 1E9  # [Pa -> nPa], partial pressures for each channel
 
-	pCumul[0] = pPar[0] # First bin's partial press = cumulative pressure
-	for k in range(1,Nk):
-		pCumul[k] = pCumul[k-1] + pPar[k]  # Get current cumulative pressure by adding this bin's partial onto last bin's cumulative
-	
+	pCumul[0] = pPar[0]  # First bin's partial press = cumulative pressure
+	for k in range(1, Nk):
+		pCumul[k] = pCumul[k - 1] + pPar[k]  # Get current cumulative pressure by adding this bin's partial onto last bin's cumulative
+
 	if not doFraction:
 		return pCumul
 	else:
-		return pCumul/pCumul[-1]
+		return pCumul / pCumul[-1]
+
 
 def getValAtLoc_linterp(val, xData, yData, getAxis='y'):
-	""" Use linear interpolation to find desired x/y values in data
-		val: x/y value to find y/x location of
-		xData/yData: 1D arrays of equal length
-		getAxis: desired axis. If 'y', assumes targets are x values, and visa versa
 	"""
-	
+	Use linear interpolation to find the desired x/y values in data.
+
+	Args:
+		val (float): The x/y value to find the y/x location of.
+		xData (list): 1D array of x-axis values.
+		yData (list): 1D array of y-axis values.
+		getAxis (str, optional): The desired axis. If 'y', assumes targets are x values, and vice versa. Defaults to 'y'.
+
+	Returns:
+		float: The interpolated location value.
+
+	"""
 	idx = 0
 	if getAxis == 'y': # target is x-axis value, find its location in xData
-		while xData[idx+1] < val: idx += 1
+		while xData[idx+1] < val:
+			idx += 1
 	elif getAxis == 'x': # target is y-axis value, find its location in yData
-		while yData[idx+1] < val: idx += 1
-	m = (yData[idx+1] - yData[idx])/(xData[idx+1] - xData[idx])
-	b = yData[idx] - m*xData[idx]
+		while yData[idx+1] < val:
+			idx += 1
+	m = (yData[idx+1] - yData[idx]) / (xData[idx+1] - xData[idx])
+	b = yData[idx] - m * xData[idx]
 	if getAxis == 'y':
-		loc = m*val + b
+		loc = m * val + b
 	elif getAxis == 'x':
-		loc = (val - b)/m
+		loc = (val - b) / m
 
 	return loc
 
