@@ -5,6 +5,9 @@ import numpy as np
 from kaipy.kaiTools import MJD2UT
 import itertools
 import kaipy.kdefs as kdefs
+import kaipy.kaiH5 as kh5
+from concurrent.futures import ProcessPoolExecutor, as_completed
+from alive_progress import alive_bar
 
 #Object to use to pull data from HDF5 structure (serial or mpi)
 
@@ -17,12 +20,32 @@ import kaipy.kdefs as kdefs
 idStr = "_0000_0000_0000.gam.h5"
 
 class GameraPipe(object):
+	"""
+	GameraPipe class represents a pipe object for Gamera.
 
+	Args:
+		fdir (str): Directory to h5 files.
+		ftag (str): Stub of h5 files.
+		doFast (bool): Flag indicating whether to use fast mode. Default is False.
+		doVerbose (bool): Flag indicating whether to print verbose output. Default is True.
+		doParallel (bool): Flag indicating whether to use parallel processing. Default is False.
+		nWorkers (int): Number of workers for parallel processing. Default is 4.
+	"""
 	#Initialize GP object
 	#fdir = directory to h5 files
 	#ftag = stub of h5 files
 	def __init__(self,fdir,ftag,doFast=False,doVerbose=True,doParallel=False,nWorkers=4):
+		"""
+		GameraPipe class represents a pipe object for Gamera.
 
+		Args:
+			fdir (str): Directory to h5 files.
+			ftag (str): Stub of h5 files.
+			doFast (bool): Flag indicating whether to use fast mode. Default is False.
+			doVerbose (bool): Flag indicating whether to print verbose output. Default is True.
+			doParallel (bool): Flag indicating whether to use parallel processing. Default is False.
+			nWorkers (int): Number of workers for parallel processing. Default is 4.
+		"""
 		self.fdir = fdir
 		self.ftag = ftag
 
@@ -65,8 +88,21 @@ class GameraPipe(object):
 		#Scrape data from directory
 		self.OpenPipe(doVerbose)
 
+
 	def OpenPipe(self,doVerbose=True):
-		import kaipy.kaiH5 as kh5
+		"""
+		Opens a pipe for reading data from a database file.
+
+		Parameters:
+			doVerbose (bool): Flag indicating whether to print verbose output. Default is True.
+
+		Returns:
+			None
+
+		Raises:
+			None
+
+		"""
 		if (doVerbose):
 			print("Opening pipe: %s : %s"%(self.fdir,self.ftag))
 
@@ -174,49 +210,181 @@ class GameraPipe(object):
 		self.GetGrid(doVerbose)
 		self.f0 = f0
 
-	def SetUnits(self,f0):
-		import h5py
-		with h5py.File(f0,'r') as hf:
-			uID = hf.attrs.get("UnitsID","CODE")
-		if (not isinstance(uID,str)):
+	def SetUnits(self, f0):
+		"""
+		Sets the units for the given file.
+
+		Args:
+			f0 (str): The file path.
+
+		Returns:
+			None
+		"""
+
+		uID = kh5.PullAttr(f0, "UnitsID")
+		#with h5py.File(f0, 'r') as hf:
+		#	uID = hf.attrs.get("UnitsID", "CODE")
+		if not isinstance(uID, str):
 			self.UnitsID = uID.decode('utf-8')
 
-	def GetGridParallel(self,doVerbose):
-		''' Parallel read of grid datasets
+	def GetGridParallel(self, doVerbose):
+			"""Parallel read of grid datasets
 
-		'''
-		import kaipy.kaiH5 as kh5
-		from concurrent.futures import ProcessPoolExecutor, as_completed
-		from alive_progress import alive_bar
+			This method performs a parallel read of grid datasets using multiple processes. It populates the `X`, `Y`, and `Z` arrays with the corresponding dataset values.
 
-		if (self.is2D):
-			self.X = np.zeros((self.Ni+1,self.Nj+1))
-			self.Y = np.zeros((self.Ni+1,self.Nj+1))
-			coords = [self.X,self.Y]
-		else:
-			self.X = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
-			self.Y = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
-			self.Z = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
-			coords = [(self.X,'X'),(self.Y,'Y'),(self.Z,'Z')]
+			Args:
+				doVerbose (bool): Flag indicating whether to display verbose output.
 
-		if (doVerbose):
-			#print("Del = (%d,%d,%d)"%(self.dNi,self.dNj,self.dNk))
-			titStr = "%s/Grid"%(self.ftag)
-		else:
-			titStr = None
+			Returns:
+				None
 
-		files = []
-		#print("Bounds = (%d,%d,%d,%d,%d,%d)"%(iS,iE,jS,jE,kS,kE))
-		for (i,j,k) in itertools.product(range(self.Ri),range(self.Rj),range(self.Rk)):
-			files.append(((self.fdir + "/" + kh5.genName(self.ftag,i,j,k,self.Ri,self.Rj,self.Rk),[i,j,k])))
-		
-		NrX = max(self.Nr,1)
+			"""
 
-		for data,vID in coords:
+
+			if (self.is2D):
+				self.X = np.zeros((self.Ni+1,self.Nj+1))
+				self.Y = np.zeros((self.Ni+1,self.Nj+1))
+				coords = [self.X,self.Y]
+			else:
+				self.X = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
+				self.Y = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
+				self.Z = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
+				coords = [(self.X,'X'),(self.Y,'Y'),(self.Z,'Z')]
+
+			if (doVerbose):
+				#print("Del = (%d,%d,%d)"%(self.dNi,self.dNj,self.dNk))
+				titStr = "%s/Grid"%(self.ftag)
+			else:
+				titStr = None
+
+			files = []
+			#print("Bounds = (%d,%d,%d,%d,%d,%d)"%(iS,iE,jS,jE,kS,kE))
+			for (i,j,k) in itertools.product(range(self.Ri),range(self.Rj),range(self.Rk)):
+				files.append(((self.fdir + "/" + kh5.genName(self.ftag,i,j,k,self.Ri,self.Rj,self.Rk),[i,j,k])))
+			
+			NrX = max(self.Nr,1)
+
+			for data,vID in coords:
+				datasets = []
+				with alive_bar(NrX,title=f"{titStr}/{vID}".ljust(kdefs.barLab),length=kdefs.barLen,bar=kdefs.barDef) as bar, \
+					ProcessPoolExecutor(max_workers=self.nWorkers) as executor:
+					futures = [executor.submit(kh5.PullVarLoc, fIn, vID, loc=loc) for fIn, loc in files]
+					for future in as_completed(futures):
+						datasets.append(future.result())
+						bar()
+				
+				for dataset,loc in datasets:
+					i = loc[0]
+					j = loc[1]
+					k = loc[2]
+
+					iS = i*self.dNi
+					jS = j*self.dNj
+					kS = k*self.dNk
+					iE = iS+self.dNi
+					jE = jS+self.dNj
+					kE = kS+self.dNk
+
+					if (self.is2D):
+						data[iS:iE+1,jS:jE+1] = dataset
+					else:
+						data[iS:iE+1,jS:jE+1,kS:kE+1] = dataset
+
+	def GetGrid(self, doVerbose):
+			"""Load Grid from Gamera HDF5 file
+
+			Args:
+				doVerbose (bool): Flag indicating whether to display verbose output.
+
+			Returns:
+				None
+
+			"""
+
+			if(not self.gridLoaded):
+				if (self.isMPI and self.doParallel):
+					self.GetGridParallel(doVerbose)
+				else:
+					if (self.is2D):
+						self.X = np.zeros((self.Ni+1,self.Nj+1))
+						self.Y = np.zeros((self.Ni+1,self.Nj+1))
+					else:
+						self.X = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
+						self.Y = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
+						self.Z = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
+					if (doVerbose):
+						#print("Del = (%d,%d,%d)"%(self.dNi,self.dNj,self.dNk))
+						titStr = "%s/Grid"%(self.ftag)
+					else:
+						titStr = None
+					NrX = max(self.Nr,1)
+					with alive_bar(NrX,title=titStr,length=kdefs.barLen) as bar:
+						for (i,j,k) in itertools.product(range(self.Ri),range(self.Rj),range(self.Rk)):
+							iS = i *self.dNi
+							jS = j *self.dNj
+							kS = k *self.dNk
+							iE = iS+self.dNi
+							jE = jS+self.dNj
+							kE = kS+self.dNk
+							#print("Bounds = (%d,%d,%d,%d,%d,%d)"%(iS,iE,jS,jE,kS,kE))
+							if (self.isMPI):
+								fIn = self.fdir + "/" + kh5.genName(self.ftag,i,j,k,self.Ri,self.Rj,self.Rk)
+							else:
+								fIn = self.fdir + "/" + self.ftag + ".h5"
+							if (self.is2D):
+								self.X[iS:iE+1,jS:jE+1] = kh5.PullVar(fIn,"X")
+								self.Y[iS:iE+1,jS:jE+1] = kh5.PullVar(fIn,"Y")
+							else:
+								self.X[iS:iE+1,jS:jE+1,kS:kE+1] = kh5.PullVar(fIn,"X")
+								self.Y[iS:iE+1,jS:jE+1,kS:kE+1] = kh5.PullVar(fIn,"Y")
+								self.Z[iS:iE+1,jS:jE+1,kS:kE+1] = kh5.PullVar(fIn,"Z")
+							bar()
+			else:
+				print("Grid Previously Loaded")
+			self.gridLoaded = True
+
+	def GetVarParallel(self,vID,sID=None,vScl=None,doVerb=True):
+			''' Parallel read of Var
+
+			This method performs a parallel read of a variable from the dataset.
+			
+
+			Args:
+				vID (str): The ID of the variable to read.
+				sID (int, optional): The step ID. Defaults to None.
+				vScl (float, optional): The scaling factor for the variable. Defaults to None.
+				doVerb (bool, optional): Whether to display progress bars and verbose output. Defaults to True.
+
+			Returns:
+				ndarray: The variable data as a NumPy array.
+
+			'''
+	
+			if (doVerb):
+				if (sID is None):
+					titStr = "%s/%s"%(self.ftag,vID)
+					
+				else:
+					titStr = "%s/Step#%d/%s"%(self.ftag,sID,vID)
+			else:
+				titStr = ''
+
+			if (self.is2D):
+				V = np.zeros((self.Ni,self.Nj))
+			else:
+				V = np.zeros((self.Ni,self.Nj,self.Nk))
+
+			files = []
+			#print("Bounds = (%d,%d,%d,%d,%d,%d)"%(iS,iE,jS,jE,kS,kE))
+			for (i,j,k) in itertools.product(range(self.Ri),range(self.Rj),range(self.Rk)):
+				files.append(((self.fdir + "/" + kh5.genName(self.ftag,i,j,k,self.Ri,self.Rj,self.Rk),[i,j,k])))
+			
+			NrX = max(self.Nr,1)
+
 			datasets = []
-			with alive_bar(NrX,title=f"{titStr}/{vID}".ljust(kdefs.barLab),length=kdefs.barLen,bar=kdefs.barDef) as bar, \
-				ProcessPoolExecutor(max_workers=self.nWorkers) as executor:
-				futures = [executor.submit(kh5.PullVarLoc, fIn, vID, loc=loc) for fIn, loc in files]
+			with alive_bar(NrX,title=titStr.ljust(kdefs.barLab),length=kdefs.barLen,bar=kdefs.barDef,disable=not doVerb) as bar, \
+					ProcessPoolExecutor(max_workers=self.nWorkers) as executor:
+				futures = [executor.submit(kh5.PullVarLoc, fIn, vID, sID, loc=loc) for fIn, loc in files]
 				for future in as_completed(futures):
 					datasets.append(future.result())
 					bar()
@@ -232,41 +400,55 @@ class GameraPipe(object):
 				iE = iS+self.dNi
 				jE = jS+self.dNj
 				kE = kS+self.dNk
-
+				
 				if (self.is2D):
-					data[iS:iE+1,jS:jE+1] = dataset
+					V[iS:iE,jS:jE] = dataset
 				else:
-					data[iS:iE+1,jS:jE+1,kS:kE+1] = dataset
+					V[iS:iE,jS:jE,kS:kE] = dataset
+			if (vScl is not None):
+				V = vScl*V
+			return V
 
-	def GetGrid(self,doVerbose):
-		''' Load Grid from Gamera HDF5 file
-		
-		'''
-		import kaipy.kaiH5 as kh5
-		from alive_progress import alive_bar
+	#Get 3D variable "vID" from Step# sID
+	def GetVar(self,vID,sID=None,vScl=None,doVerb=True):
+			def ReadVar(self, vID, sID=None, vScl=None, doVerb=True):
+				"""Reads a variable with the given name.
 
-		if(not self.gridLoaded):
-			if (self.isMPI and self.doParallel):
-				self.GetGridParallel(doVerbose)
+				Args:
+					vID (str): The name of the variable to be read.
+					sID (int, optional): The step ID. Default is None.
+					vScl (float, optional): The scaling factor for the variable. Default is None.
+					doVerb (bool, optional): A flag indicating whether to display progress bar and verbose output. Default is True.
+
+				Returns:
+					np.ndarray: The variable data read from the file.
+
+				"""
+
+
+			if (self.is2D):
+				V = np.zeros((self.Ni,self.Nj))
 			else:
-				if (self.is2D):
-					self.X = np.zeros((self.Ni+1,self.Nj+1))
-					self.Y = np.zeros((self.Ni+1,self.Nj+1))
+				V = np.zeros((self.Ni,self.Nj,self.Nk))
+
+			if (self.isMPI and self.doParallel):
+				V = self.GetVarParallel(vID,sID,vScl,doVerb)
+			else:
+				if (doVerb):
+					if (sID is None):
+						titStr = "%s/%s"%(self.ftag,vID)
+						
+					else:
+						titStr = "%s/Step#%d/%s"%(self.ftag,sID,vID)
 				else:
-					self.X = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
-					self.Y = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
-					self.Z = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
-				if (doVerbose):
-					#print("Del = (%d,%d,%d)"%(self.dNi,self.dNj,self.dNk))
-					titStr = "%s/Grid"%(self.ftag)
-				else:
-					titStr = None
+					titStr = ''
 				NrX = max(self.Nr,1)
-				with alive_bar(NrX,title=titStr,length=kdefs.barLen) as bar:
+				with alive_bar(NrX,title=titStr.ljust(kdefs.barLab),length=kdefs.barLen,disable=not doVerb) as bar:
 					for (i,j,k) in itertools.product(range(self.Ri),range(self.Rj),range(self.Rk)):
-						iS = i *self.dNi
-						jS = j *self.dNj
-						kS = k *self.dNk
+
+						iS = i*self.dNi
+						jS = j*self.dNj
+						kS = k*self.dNk
 						iE = iS+self.dNi
 						jE = jS+self.dNj
 						kE = kS+self.dNk
@@ -275,163 +457,91 @@ class GameraPipe(object):
 							fIn = self.fdir + "/" + kh5.genName(self.ftag,i,j,k,self.Ri,self.Rj,self.Rk)
 						else:
 							fIn = self.fdir + "/" + self.ftag + ".h5"
+
 						if (self.is2D):
-							self.X[iS:iE+1,jS:jE+1] = kh5.PullVar(fIn,"X")
-							self.Y[iS:iE+1,jS:jE+1] = kh5.PullVar(fIn,"Y")
+							V[iS:iE,jS:jE] = kh5.PullVar(fIn,vID,sID)
+
 						else:
-							self.X[iS:iE+1,jS:jE+1,kS:kE+1] = kh5.PullVar(fIn,"X")
-							self.Y[iS:iE+1,jS:jE+1,kS:kE+1] = kh5.PullVar(fIn,"Y")
-							self.Z[iS:iE+1,jS:jE+1,kS:kE+1] = kh5.PullVar(fIn,"Z")
+							V[iS:iE,jS:jE,kS:kE] = kh5.PullVar(fIn,vID,sID)
 						bar()
-		else:
-			print("Grid Previously Loaded")
-		self.gridLoaded = True
 
-	def GetVarParallel(self,vID,sID=None,vScl=None,doVerb=True):
-		''' Parallel read of Var
-		
-		'''
-		import kaipy.kaiH5 as kh5
-		from concurrent.futures import ProcessPoolExecutor, as_completed
-		from alive_progress import alive_bar
-	
-		if (doVerb):
-			if (sID is None):
-				titStr = "%s/%s"%(self.ftag,vID)
-				
-			else:
-				titStr = "%s/Step#%d/%s"%(self.ftag,sID,vID)
-		else:
-			titStr = ''
-
-		if (self.is2D):
-			V = np.zeros((self.Ni,self.Nj))
-		else:
-			V = np.zeros((self.Ni,self.Nj,self.Nk))
-
-		files = []
-		#print("Bounds = (%d,%d,%d,%d,%d,%d)"%(iS,iE,jS,jE,kS,kE))
-		for (i,j,k) in itertools.product(range(self.Ri),range(self.Rj),range(self.Rk)):
-			files.append(((self.fdir + "/" + kh5.genName(self.ftag,i,j,k,self.Ri,self.Rj,self.Rk),[i,j,k])))
-		
-		NrX = max(self.Nr,1)
-
-		datasets = []
-		with alive_bar(NrX,title=titStr.ljust(kdefs.barLab),length=kdefs.barLen,bar=kdefs.barDef,disable=not doVerb) as bar, \
-				ProcessPoolExecutor(max_workers=self.nWorkers) as executor:
-			futures = [executor.submit(kh5.PullVarLoc, fIn, vID, sID, loc=loc) for fIn, loc in files]
-			for future in as_completed(futures):
-				datasets.append(future.result())
-				bar()
-		
-		for dataset,loc in datasets:
-			i = loc[0]
-			j = loc[1]
-			k = loc[2]
-
-			iS = i*self.dNi
-			jS = j*self.dNj
-			kS = k*self.dNk
-			iE = iS+self.dNi
-			jE = jS+self.dNj
-			kE = kS+self.dNk
-			
-			if (self.is2D):
-				V[iS:iE,jS:jE] = dataset
-			else:
-				V[iS:iE,jS:jE,kS:kE] = dataset
-		if (vScl is not None):
-			V = vScl*V
-		return V
-
-	#Get 3D variable "vID" from Step# sID
-	def GetVar(self,vID,sID=None,vScl=None,doVerb=True):
-		''' Read Var with name vID
-
-		'''
-		import kaipy.kaiH5 as kh5
-		from alive_progress import alive_bar
-
-		if (self.is2D):
-			V = np.zeros((self.Ni,self.Nj))
-		else:
-			V = np.zeros((self.Ni,self.Nj,self.Nk))
-
-		if (self.isMPI and self.doParallel):
-			V = self.GetVarParallel(vID,sID,vScl,doVerb)
-		else:
-			if (doVerb):
-				if (sID is None):
-					titStr = "%s/%s"%(self.ftag,vID)
-					
-				else:
-					titStr = "%s/Step#%d/%s"%(self.ftag,sID,vID)
-			else:
-				titStr = ''
-			NrX = max(self.Nr,1)
-			with alive_bar(NrX,title=titStr.ljust(kdefs.barLab),length=kdefs.barLen,disable=not doVerb) as bar:
-				for (i,j,k) in itertools.product(range(self.Ri),range(self.Rj),range(self.Rk)):
-
-					iS = i*self.dNi
-					jS = j*self.dNj
-					kS = k*self.dNk
-					iE = iS+self.dNi
-					jE = jS+self.dNj
-					kE = kS+self.dNk
-					#print("Bounds = (%d,%d,%d,%d,%d,%d)"%(iS,iE,jS,jE,kS,kE))
-					if (self.isMPI):
-						fIn = self.fdir + "/" + kh5.genName(self.ftag,i,j,k,self.Ri,self.Rj,self.Rk)
-					else:
-						fIn = self.fdir + "/" + self.ftag + ".h5"
-
-					if (self.is2D):
-						V[iS:iE,jS:jE] = kh5.PullVar(fIn,vID,sID)
-
-					else:
-						V[iS:iE,jS:jE,kS:kE] = kh5.PullVar(fIn,vID,sID)
-					bar()
-
-		return V
+			return V
 
 
 	#FIXME: Currently pulling whole 3D array and then slicing, lazy
-	def GetSlice(self,vID,sID,ijkdir='idir',n=1,vScl=None,doVerb=True):
-		''' Get variable slice of constant i,j,k
-			Directions = idir/jdir/kdir strings
-			Indexing = (1,Nijk)
-		
-		'''
-		sDirs = ['IDIR','JDIR','KDIR']
+	def GetSlice(self, vID, sID, ijkdir='idir', n=1, vScl=None, doVerb=True):
+		"""Get variable slice of constant i, j, k
+		Directions = idir/jdir/kdir strings
+		Indexing = (1, Nijk)
+
+		Args:
+			vID (str): The variable ID.
+			sID (int): The step ID.
+			ijkdir (str, optional): The slice direction. Defaults to 'idir'.
+			n (int, optional): The slice index. Defaults to 1.
+			vScl (float, optional): The variable scale. Defaults to None.
+			doVerb (bool, optional): Whether to print verbose information. Defaults to True.
+
+		Returns:
+			Vs (ndarray): The sliced variable.
+
+		"""
+		sDirs = ['IDIR', 'JDIR', 'KDIR']
 		ijkdir = ijkdir.upper()
 
 		if (not (ijkdir in sDirs)):
 			print("Invalid slice direction, defaulting to I")
 			ijkdir = 'IDIR'
 		if (sID is None):
-			cStr = "Reading %s/%s"%(self.ftag,vID)
+			cStr = "Reading %s/%s" % (self.ftag, vID)
 		else:
-			cStr = "Reading %s/Step#%d/%s"%(self.ftag,sID,vID)
-		V = self.GetVar(vID,sID,vScl,doVerb=False)
-		#Now slice
-		np = n-1 #Convert from Fortran to Python indexing
+			cStr = "Reading %s/Step#%d/%s" % (self.ftag, sID, vID)
+		V = self.GetVar(vID, sID, vScl, doVerb=False)
+		# Now slice
+		np = n - 1  # Convert from Fortran to Python indexing
 		if (ijkdir == "IDIR"):
-			Vs = V[np,:,:]
-			sStr = "(%d,:,:)"%(n)
+			Vs = V[np, :, :]
+			sStr = "(%d,:,:)" % (n)
 		elif (ijkdir == "JDIR"):
-			Vs = V[:,np,:]
-			sStr = "(:,%d,:)"%(n)
+			Vs = V[:, np, :]
+			sStr = "(:,%d,:)" % (n)
 		elif (ijkdir == "KDIR"):
-			Vs = V[:,:,np]
-			sStr = "(:,:,%d)"%(n)
+			Vs = V[:, :, np]
+			sStr = "(:,:,%d)" % (n)
 		if (doVerb):
-			print(cStr+sStr)
+			print(cStr + sStr)
 		return Vs
 
 	#Wrappers for root variables (or just set sID to "None")
-	def GetRootVar(self,vID,vScl=None,doVerb=True):
-		V = self.GetVar(vID,sID=None,vScl=vScl,doVerb=doVerb)
+	def GetRootVar(self, vID, vScl=None, doVerb=True):
+		"""
+		Get the root variable with the given ID.
+
+		Args:
+			vID (str): The ID of the variable.
+			vScl (float, optional): The scale of the variable.
+			doVerb (bool, optional): Whether to perform verbose logging.
+
+		Returns:
+			np.ndarray: The root variable with the given ID.
+		"""
+		V = self.GetVar(vID, sID=None, vScl=vScl, doVerb=doVerb)
 		return V
+
 	
-	def GetRootSlice(self,vID,ijkdir='idir',n=1,vScl=None,doVerb=True):
-		Vs = self.GetSlice(vID,sID=None,ijkdir=ijkdir,n=n,vScl=vScl,doVerb=doVerb)
+	def GetRootSlice(self, vID, ijkdir='idir', n=1, vScl=None, doVerb=True):
+		"""
+		Retrieves the root slice of a given variable.
+
+		Args:
+			vID (int): The ID of the variable.
+			ijkdir (str): The direction of the slice. Defaults to 'idir'.
+			n (int): The number of slices to retrieve. Defaults to 1.
+			vScl (float): The scaling factor for the variable. Defaults to None.
+			doVerb (bool): Whether to print verbose output. Defaults to True.
+
+		Returns:
+			Vs: The root slice of the variable.
+		"""
+		Vs = self.GetSlice(vID, sID=None, ijkdir=ijkdir, n=n, vScl=vScl, doVerb=doVerb)
 		return Vs
