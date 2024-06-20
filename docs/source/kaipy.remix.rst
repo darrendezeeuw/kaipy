@@ -1,13 +1,13 @@
-remix package
-=============
+kaipy.remix package
+===================
 
 Submodules
 ----------
 
-remix.remix module
-------------------
+kaipy.remix.remix module
+------------------------
 
-.. automodule:: remix.remix
+.. automodule:: kaipy.remix.remix
    :members:
    :undoc-members:
    :show-inheritance:
@@ -15,7 +15,7 @@ remix.remix module
 Module contents
 ---------------
 
-.. automodule:: remix
+.. automodule:: kaipy.remix
    :members:
    :undoc-members:
    :show-inheritance:
