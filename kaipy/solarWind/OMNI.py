@@ -15,28 +15,61 @@ class OMNI(SolarWind):
     """
     OMNI Solar Wind file from CDAweb [http://cdaweb.gsfc.nasa.gov/].
     Data stored in GSE coordinates.
+
+    Parameters:
+        filename (str): The path to the OMNI Solar Wind file.
+        doFilter (bool): Flag indicating whether to apply coarse filtering to remove outliers.
+        sigmaVal (float): The number of standard deviations to use for the coarse filtering.
+
+    Attributes:
+        filter (bool): Flag indicating whether filtering is enabled.
+        sigma (float): The number of standard deviations used for filtering.
+        bad_data (list): List of values considered as bad data.
+        data (TimeSeries): TimeSeries object to store the solar wind data.
+
+    Methods:
+        __init__(self, filename=None, doFilter=False, sigmaVal=3.0): Initializes the OMNI object.
+        __read(self, filename): Reads the solar wind file and stores the results in self.data TimeSeries object.
+        __readData(self, fh): Reads the variables from the file and returns a 2D array containing the data.
+        __appendMetaData(self, date, filename): Adds standard metadata to the data dictionary.
+        _removeBadData(self, data, datanames=['Time','Bx','By','Bz','Vx','Vy','Vz','n','Temp','AE','AL','AU','SYMH','BowShockX','BowShockY','BowShockZ'], hasBeenInterpolated=None): Linearly interpolates over bad data in the data array.
+        _coarseFilter(self, dataArray, hasBeenInterpolated): Uses coarse noise filtering to remove outliers from the data array.
     """
 
-    def __init__(self, filename = None, doFilter = False, sigmaVal = 3.0):        
+    def __init__(self, filename=None, doFilter=False, sigmaVal=3.0):
+        """
+        Initialize the OMNI class.
+
+        Args:
+            filename (str, optional): The name of the file to read data from. Defaults to None.
+            doFilter (bool, optional): Flag indicating whether to apply filtering. Defaults to False.
+            sigmaVal (float, optional): The value of sigma for filtering. Defaults to 3.0.
+        """
         SolarWind.__init__(self)
 
         self.filter = doFilter
         self.sigma = sigmaVal
 
-        self.bad_data = [-999.900, 
-                         99999.9, # V
-                         9999.99, # B
-                         999.990, # density
-                         1.00000E+07, # Temperature
-                         9999999.0, # Temperature
-                         99999 # Activity indices 
+        self.bad_data = [-999.900,
+                         99999.9,  # V
+                         9999.99,  # B
+                         999.990,  # density
+                         1.00000E+07,  # Temperature
+                         9999999.0,  # Temperature
+                         99999  # Activity indices
                          ]
 
         self.__read(filename)
 
     def __read(self, filename):
         """
-        Read the solar wind file & store results in self.data TimeSeries object.
+        Read the solar wind file and store the results in the self.data TimeSeries object.
+
+        Args:
+            filename (str): The path to the OMNI Solar Wind file.
+
+        Returns:
+            None
         """
         (startDate, dates, data, datanames) = self.__readData(filename)
         (dataArray, hasBeenInterpolated) = self._removeBadData(data,datanames)
@@ -49,7 +82,17 @@ class OMNI(SolarWind):
         
     def __readData(self, fh):
         """
-        return 2d array (of strings) containing data from file
+        Read the solar wind file and store the results in the self.data TimeSeries object.
+
+        Args:
+            fh (file handle): The file handle of the OMNI Solar Wind file.
+
+        Returns:
+            tuple: A tuple containing the start date, dates, data, and datanames.
+            - start date (str): The start date of the data.
+            - dates (list): A list of dates.
+            - data (list): A 2D list containing the data.
+            - datanames (list): A list of variable names.
         """
         #pulling variables from file
         time=fh['Epoch']
@@ -89,6 +132,13 @@ class OMNI(SolarWind):
     def __appendMetaData(self, date, filename):
         """
         Add standard metadata to the data dictionary.
+
+        Args:
+            date (str): The start date of the data.
+            filename (str): The path to the OMNI Solar Wind file.
+
+        Returns:
+            None
         """
         metadata = {'Model': 'OMNI',
                     'Source': filename,
@@ -106,15 +156,16 @@ class OMNI(SolarWind):
         Linearly interpolate over bad data (defined by self.bad_data
         list) for each variable in dataStrs.
         
-        data: 2d list.  Each row is a list containing:
-          [nMinutes, Bx, By, Bz, Vx, Vy, Vz, rho, temp, ae, al, au, symh]
-
+        Args:
+            data (list): A 2D list containing the data.
+        
         Returns:
-          data: interpolated floating-point numpy array
-          hasBeenInterpolated: 2d array that identifies if bad values were removed/interpolated.
+            numpy.ndarray: Interpolated floating-point numpy array.
+            numpy.ndarray: 2D array that identifies if bad values were removed/interpolated.
 
-        NOTE: This is remarkably similar to __coarseFilter!
-          Refactoring to keep it DRY wouldn't be a bad idea. . .
+        Note:
+            This is remarkably similar to __coarseFilter!
+            Refactoring to keep it DRY wouldn't be a bad idea. . .
         """
         #assert( len(data[0]) == 13 )
         nvar = len(data[0])
@@ -168,26 +219,21 @@ class OMNI(SolarWind):
 
     def _coarseFilter(self, dataArray, hasBeenInterpolated):
         """
-         Use coarse noise filtering to remove values outside 3
-         deviations from mean of all values in the plotted time
-         interval.
+        Use coarse noise filtering to remove values outside 3
+        deviations from mean of all values in the plotted time
+        interval.
 
-         Parameters:
+        Args:
+            dataArray (numpy.ndarray): 2D numpy array. Each row is a list containing [nMinutes, Bx, By, Bz, Vx, Vy, Vz, rho, temp, ae, al, au, symh].
+            hasBeenInterpolated (numpy.ndarray): 2D boolean array. Each row is a list of boolean values denoting whether dataArray[:,1:9] was derived/interpolated from the raw data (i.e., bad points removed).
 
-           dataArray: 2d numpy array.  Each row is a list
-             containing [nMinutes, Bx, By, Bz, Vx, Vy, Vz, rho, temp, ae, al, au, symh]
+        Returns:
+            numpy.ndarray: Same structure as input array with bad elements removed.
+            numpy.ndarray: Same as input array with interpolated values stored.
 
-           hasBeenInterpolated: 2d boolean list.  Each row is a list
-             of boolean values denoting whether dataArray[:,1:9] was
-             derived/interpolated from the raw data (ie. bad points
-             removed).
-
-         Output:
-           dataArray:  same structure as input array with bad elements removed
-           hasBeenInterpolated: same as input array with interpolated values stored.
-
-        NOTE: This is remarkably similar to _removeBadData!
-          Refactoring to keep it DRY wouldn't be a bad idea. . .
+        Note:
+            This is remarkably similar to _removeBadData!
+            Refactoring to keep it DRY wouldn't be a bad idea...
         """
         
         stds = []
@@ -231,7 +277,14 @@ class OMNI(SolarWind):
 
     def _storeDataDict(self, dates, dataArray, hasBeenInterpolated):
         """
-        Populate self.data TimeSeries object via the 2d dataArray read from file.
+        Populate self.data TimeSeries object via the 2D dataArray read from file.
+
+        Args:
+            dates (list): A list of dates.
+            dataArray (numpy.ndarray): 2D numpy array containing the solar wind data.
+
+        Returns:
+            None
         """
         self._gse2gsm(dates, dataArray)
 
@@ -290,7 +343,14 @@ class OMNI(SolarWind):
 
     def _deltaMinutes(self, t1, startDate):
         """
-        Returns: Number of minutes elapsed between t1 and startDate.
+        Returns the number of minutes elapsed between t1 and startDate.
+
+        Args:
+            t1 (datetime.datetime): The end date and time.
+            startDate (datetime.datetime): The start date and time.
+
+        Returns:
+            float: The number of minutes elapsed.
         """
         diff = t1 - startDate
 
@@ -299,7 +359,14 @@ class OMNI(SolarWind):
     def _gse2gsm(self, dates, dataArray):
         """
         Transform magnetic field B and velocity V from GSE to GSM
-        coordinates.  Store results by overwriting dataArray contents.
+        coordinates. Store the results by overwriting the contents of the dataArray.
+
+        Args:
+            dates (list): A list of dates.
+            dataArray (numpy.ndarray): 2D numpy array containing the solar wind data.
+
+        Returns:
+            None
         """
         for i,data in enumerate(dataArray):
             d = dates[i]
@@ -324,35 +391,67 @@ class OMNI(SolarWind):
 
 class OMNIW(OMNI):
     """
-    OMNI Solar Wind file from CDAweb [http://cdaweb.gsfc.nasa.gov/].
+    OMNIW Solar Wind file from CDAweb [http://cdaweb.gsfc.nasa.gov/].
     Data stored in GSE coordinates.
+
+    Args:
+        fWIND (str): Path to the WIND file.
+        doFilter (bool): Flag indicating whether to apply filtering to the data.
+        sigmaVal (float): Sigma value for the filtering.
+        windowsize (int): Size of the window for data interpolation.
+
+    Attributes:
+        filter (bool): Flag indicating whether filtering is applied.
+        sigma (float): Sigma value for the filtering.
+        windowsize (int): Size of the window for data interpolation.
+        bad_data (list): List of values considered as bad data.
+        good_quality (list): List of values considered as good quality.
+        data (TimeSeries): TimeSeries object to store the solar wind data.
+
+    Methods:
+        __init__(self, fWIND=None, doFilter=False, sigmaVal=3.0, windowsize=5): Constructor method.
+        __read(self, fWIND): Read the solar wind file and store results in self.data TimeSeries object.
+        __readWData(self, fWIND): Read the WIND data from file.
+        __readOData(self, t0r, t1r): Read the OMNI data from CDAWeb.
+        __appendMetaData(self, date, filename): Add standard metadata to the data dictionary.
+        __combineData(self, Wdates, WdataArray, WhasBeenInterpolated, Odates, OdataArray, OhasBeenInterpolated): Combine the WIND and OMNI data.
+
     """
 
-    def __init__(self, fWIND = None, doFilter = False, sigmaVal = 3.0, windowsize = 5):        
+    def __init__(self, fWIND=None, doFilter=False, sigmaVal=3.0, windowsize=5):
+        """
+        Initialize the OMNI class.
+
+        Args:
+            fWIND (str): Path to the solar wind data file. Default is None.
+            doFilter (bool): Flag indicating whether to apply filtering. Default is False.
+            sigmaVal (float): Sigma value for filtering. Default is 3.0.
+            windowsize (int): Size of the window for filtering. Should be odd and centered on index. Default is 5.
+        """
         SolarWind.__init__(self)
 
         self.filter = doFilter
         self.sigma = sigmaVal
-        self.windowsize = windowsize # should be odd.  centered on index
-        
-        self.bad_data = [-999.900, 
-                         99999.9, # V
-                         9999.99, # B
-                         999.990, # density
-                         1.00000E+07, # Temperature
-                         9999999.0, # Temperature
-                         99999, # Activity indices 
-                         9999000, # SWE del_time
-                         -1e31 # SWE & MFI                      
-                         ]
-        self.good_quality = [4098,14338]
-        
+        self.windowsize = windowsize
+
+        self.bad_data = [-999.900, 99999.9, 9999.99, 999.990, 1.00000E+07, 9999999.0, 99999, 9999000, -1e31]
+        self.good_quality = [4098, 14338]
+
         print('Retrieving solar wind data from CDAWeb')
         self.__read(fWIND)
 
     def __read(self, fWIND):
         """
-        Read the solar wind file & store results in self.data TimeSeries object.
+        Read the solar wind file and store the results in the self.data TimeSeries object.
+
+        Args:
+            fWIND (str): Path to the solar wind data file.
+
+        Returns:
+            tuple: A tuple containing the start date, end date, WIND dates, and WIND data.
+
+        Raises:
+            Exception: If the WIND and OMNI data have different variables or different times.
         """
         (startDate, endDate, Wdates, Wdata) = self.__readWData(fWIND)
         (Odates, Odata) = self.__readOData(startDate,endDate)
@@ -369,11 +468,11 @@ class OMNIW(OMNI):
         
     def __readWData(self, fWIND):
         """
-        return 2d array (of strings) containing data from file
+        Returns a 2D array (of strings) containing data from the file.
         
-        **TODO: read the fmt and figure out which column is which.  This would make things easier
-        and more user friendly.  However, for now, we'll just assume the file is exactly 
-        these quantities in this order
+        TODO: Read the fmt and figure out which column is which. This would make things easier
+        and more user-friendly. However, for now, we'll just assume the file is exactly 
+        these quantities in this order.
         """
         
         cdas = CdasWs()
@@ -448,7 +547,14 @@ class OMNIW(OMNI):
 
     def __readOData(self, t0r,t1r):
         """
-        return 2d array (of strings) containing data from file
+        Returns a 2D array (of strings) containing data from the file.
+        
+        Args:
+            t0r (str): Start date in the format "%Y-%m-%dT%H:%M:%SZ".
+            t1r (str): End date in the format "%Y-%m-%dT%H:%M:%SZ".
+        
+        Returns:
+            tuple: A tuple containing the dates and rows of data.
         """
         
         cdas = CdasWs()
@@ -506,6 +612,14 @@ class OMNIW(OMNI):
     def __appendMetaData(self, date, filename):
         """
         Add standard metadata to the data dictionary.
+
+        Args:
+            date (str): Date of data processing.
+            filename (str): Name of the source file.
+
+        Returns:
+            None
+
         """
         metadata = {'Model': 'OMNIW',
                     'Source': filename,
@@ -520,9 +634,12 @@ class OMNIW(OMNI):
        
     def __combineData(self,Wdates,WdataArray,WhasBeenInterpolated,Odates,OdataArray,OhasBeenInterpolated):
         """
-        This combines the W data with the O data.
-        Starting with the OMNI data, if there is windowsize consecutive missing data
-        then use the W data to fill (if W data is good).
+        This method combines the W data with the O data.
+        Starting with the OMNI data, if there is a window of consecutive missing data
+        of size windowsize, then use the W data to fill in the missing values (if the W data is good).
+        
+        Returns:
+            tuple: A tuple containing the combined dates, dataArray, hasBeenInterpolated, and dataOrigin.
         """
         
         nvarW = len(WdataArray[0])
