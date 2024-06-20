@@ -9,6 +9,18 @@ from kaipy.solarWind.ols import ols
 class SolarWind(object):
     """
     Abstract base class for Solar Wind processing
+
+    This class serves as an abstract base class for Solar Wind processing. Derived classes should implement the necessary methods to read in Solar Wind data and store the results in a standard way using the `kaipy.TimeSeries` object. The derived classes should also make a call to the `_appendDerivedQuantities()` method to compute additional solar wind variables.
+
+    Attributes:
+        data (TimeSeries): The TimeSeries object that stores all the Solar Wind data.
+
+    Methods:
+        __init__(): Initializes the SolarWind object.
+        _getTiltAngle(dateTime): Get the tilt angle for the current Date & Time.
+        _gsm2sm(dateTime, x, y, z): Convert from GSM to SM coordinates for the current Date & Time.
+        bxFit(): Compute and return coefficients for a multiple linear regression fit of Bx to By & Bz.
+        _appendDerivedQuantities(): Calculate and append standard derived quantities to the data dictionary.
     """
 
     def __init__(self):
@@ -45,13 +57,13 @@ class SolarWind(object):
             
     def _getTiltAngle(self, dateTime):
         """
-        Get the tilt angle for the current Date & Time
+        Get the tilt angle for the current Date & Time.
 
-        Parameters:
-        - dateTime: The date and time for which the tilt angle is calculated.
+        Args:
+            dateTime (datetime): The date and time for which the tilt angle is calculated.
 
         Returns:
-        - The tilt angle in radians.
+            float: The tilt angle in radians.
         """
         (x,y,z) = kaipy.transform.SMtoGSM(0,0,1, dateTime)
 
@@ -59,16 +71,31 @@ class SolarWind(object):
 
     def _gsm2sm(self, dateTime, x,y,z):
         """
-        Convert from GSM to SM coordinates for the current Date & Time
+        Convert from GSM to SM coordinates for the current Date & Time.
+
+        Args:
+            dateTime (datetime): The date and time for which the coordinates are converted.
+
+        Returns:
+            tuple: The converted coordinates (x, y, z) in SM coordinates.
         """        
         return kaipy.transform.GSMtoSM(x,y,z, dateTime)
 
 
     def bxFit(self):
         """
-        Compute & return coefficients for a multiple linear regression fit of Bx to By & Bz.
+        Compute and return coefficients for a multiple linear regression fit of Bx to By & Bz.
 
-        Get the fit by applying the linear regression fit:
+        Args:
+            None
+
+        Returns:
+            numpy.ndarray: The coefficients of the linear regression fit.
+
+        Notes:
+            - The linear regression fit is applied to the Bx, By, and Bz data stored in the SolarWind object.
+            - Before performing the fit, the Bx, By, and Bz data are converted to SM coordinates.
+            - The fit is performed using the OLS (Ordinary Least Squares) method from the kaipy.solarWind.ols module.
         """
         # Before doing anything, convert to SM coordinates.
         bx_sm = []
@@ -121,9 +148,9 @@ class SolarWind(object):
 
     def _appendDerivedQuantities(self):
         """
-        Calculate & append standard derived quantities to the data dictionary.
-        
-        Note: single '_' underscore so this function can be called by derived classes
+        Calculate and append standard derived quantities to the data dictionary.
+
+        Note: single '_' underscore so this function can be called by derived classes.
         """
 
         # --- Magnetic Field magnitude

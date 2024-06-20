@@ -655,27 +655,27 @@ class WIND(SolarWind):
         self.data.append('isSymHInterped', 'Is index i of N interpolated from bad data?', r'$\mathrm{boolean}$', hasBeenInterpolated[:,11])
 
     def __appendMetaData(self, date, dateshift, filename):
-        """
-        Append metadata to the TimeSeries object.
+            """
+            Append metadata to the TimeSeries object.
 
-        Args:
-            t0 (datetime.datetime): Start time for data retrieval.
-            SWEstartDate (datetime.datetime): Start time of the SWE data.
-            fSWE (str): Filepath for SWE data.
+            Args:
+                date (datetime.datetime): The start date for the data retrieval.
+                dateshift (datetime.timedelta): The time difference between the start date and the SWE data start date.
+                filename (str): The filepath of the solar wind data.
 
-        Returns:
-            None
-        """
-        metadata = {'Model': 'WIND',
-                    'Source': filename,
-                    'Date processed': datetime.datetime.now(),
-                    'Start date': date,
-                    }
-        
-        self.data.append(key='meta',
-                         name='Metadata for WIND Solar Wind file',
-                         units='n/a',
-                         data=metadata)
+            Returns:
+                None
+            """
+            metadata = {'Model': 'WIND',
+                        'Source': filename,
+                        'Date processed': datetime.datetime.now(),
+                        'Start date': date,
+                        }
+            
+            self.data.append(key='meta',
+                             name='Metadata for WIND Solar Wind file',
+                             units='n/a',
+                             data=metadata)
 
     
     def __deltaMinutes(self, t1, startDate):

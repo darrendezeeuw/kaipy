@@ -11,59 +11,82 @@ import matplotlib.gridspec as gridspec
 import kaipy.kaiViz as kv
 import datetime
 
-def BasicPlot(VarDict,Xname,Yname,Xlabel=True,color='b'):
+def BasicPlot(VarDict, Xname, Yname, Xlabel=True, color='b'):
     """
-    Mostly a wrapper for plt.plot(...)
+    Plot a basic line graph using the given variables.
+
+    Args:
+        VarDict (dict): A dictionary containing the variables.
+        Xname (str): The name of the variable to be plotted on the x-axis.
+        Yname (str): The name of the variable to be plotted on the y-axis.
+        Xlabel (bool, optional): Whether to display the x-axis label. Defaults to True.
+        color (str or list, optional): The color(s) of the line(s) in the plot. Defaults to 'b'.
+
+    Raises:
+        Exception: If datetime time-axis elements are mixed with other types.
+
+    Returns:
+        None
+
+    Notes:
+        - The function uses plt.plot(...) to create the line graph.
+        - The y variable can be a time series of tuples/lists of variables to plot simultaneously,
+          using different colors.
+        - If Xname points to a list of datetime.datetime objects, the plot will be formatted as datetimes.
+        - If y['name'] is not a scalar, the y-axis label will only display the units.
+
+    Example:
+        >>> VarDict = {'X': {'name': 'Time', 'data': [1, 2, 3]}, 'Y': {'name': 'Value', 'data': [4, 5, 6], 'units': 'm'}}
+        >>> BasicPlot(VarDict, 'X', 'Y')
     """
-    x=VarDict[Xname]
-    y=VarDict[Yname]
-        
-    # y may be a time series of tuples/lists of variables to plot 
-    # simultaneously (e.g., vector components) using different colors
-    if (np.array(y['data'][0]).size > 1 and 
+
+    x = VarDict[Xname]
+    y = VarDict[Yname]
+
+    if (np.array(y['data'][0]).size > 1 and
         np.array(y['data'][0]).size == len(color) and
-        all([ylen == np.array(y['data'][0]).size for ylen in map(len,y['data'])]) ):
+        all([ylen == np.array(y['data'][0]).size for ylen in map(len, y['data'])])):
         for i in range(np.array(y['data'][0]).size):
             plt.plot(x['data'], [yts[i] for yts in y['data']], color=color[i])
     else:
-        plt.plot(x['data'],y['data'],color=color)
-            
-    # Xname may point to a list of datetime.datetime objects, in which case
-    # pyplot must be told to plot these as datetimes
+        plt.plot(x['data'], y['data'], color=color)
+
     if all([type(ts) == datetime.datetime for ts in x['data']]):
         dfmt = dates.DateFormatter('%m/%d/%y-%H:%M')
         plt.gca().xaxis.set_major_formatter(dfmt)
     elif any([type(ts) == datetime.datetime for ts in x['data']]):
         raise Exception('Cannot mix datetime time-axis elements with other types')
-    
-    
+
     if Xlabel:
-        #locs,labels=plt.xticks()
         xStr = x['name']
         if len(x['units']) > 0:
-            xStr += ' ['+x['units']+']'
+            xStr += ' [' + x['units'] + ']'
         plt.xlabel(xStr)
-    else: 
-        plt.xlabel(' ')
-        #locs,labels=plt.xticks()
-        #plt.xticks(locs,(' '))
-    
-    # y['name'] may not be a scalar
-    if (np.array(y['name']).size) > 1:
-        plt.ylabel('['+y['units']+']',fontsize='small')
     else:
-        plt.ylabel(y['name']+' ['+y['units']+']',fontsize='small')
+        plt.xlabel(' ')
+
+    if (np.array(y['name']).size) > 1:
+        plt.ylabel('[' + y['units'] + ']', fontsize='small')
+    else:
+        plt.ylabel(y['name'] + ' [' + y['units'] + ']', fontsize='small')
   
-def SummaryPlot(VarDict,Xname):
+def SummaryPlot(VarDict, Xname):
     """
     Plot every variable in VarDict.
 
     This is a simple wrapper around the more generic MultiPlotN.  This
     code may have problems with varDicts that store non-time series
-    data.  You've beeen warned.
+    data.  You've been warned.
+
+    Args:
+        VarDict (dict): A dictionary containing variables to be plotted. Each variable should be a dictionary with a 'data' key.
+        Xname (str): The name of the x-axis variable.
+
+    Returns:
+        None
     """
-    #Loop over elements in Dict to make sure they all have data 
-    plotVariables=[]
+    # Loop over elements in Dict to make sure they all have data 
+    plotVariables = []
     for var in VarDict.keys():
         if isinstance(VarDict[var], dict):
             if 'data' in VarDict[var]:
@@ -72,42 +95,67 @@ def SummaryPlot(VarDict,Xname):
     MultiPlotN([VarDict], Xname, plotVariables)
 
 
-def MultiPlot(VarDict,Xname,Items,color='b'):
-    """
-    Plot variables stored in TimeSeries object 'varDict'.
+def MultiPlot(VarDict, Xname, Items, color='b'):
+    def MultiPlot(VarDict, Xname, Items, color='b'):
+        """
+        Plot variables stored in TimeSeries object 'varDict'.
 
-    This is a simple wrapper around the more generic MultiPlotN.
-    """
-    MultiPlotN([VarDict], Xname, Items, [color],[])
+        This function is a simple wrapper around the more generic MultiPlotN function.
+
+        Args:
+            VarDict (TimeSeries): The TimeSeries object containing the variables to be plotted.
+            Xname (str): The name of the x-axis variable.
+            Items (list): A list of variable names to be plotted.
+            color (str, optional): The color of the plot. Defaults to 'b'.
+
+        Returns:
+            None
+        """
+    MultiPlotN([VarDict], Xname, Items, [color], [])
+
     
-def MultiPlot2(VarDict,VarDict2,Xname,Items,color1='b',color2='r'):
-    """
-    Plot items (stored in TimeSeries objects VarDict and VarDict2)
-    against one another.  One sub plot for each item.
+def MultiPlot2(VarDict, VarDict2, Xname, Items, color1='b', color2='r'):
+    def MultiPlot2(VarDict, VarDict2, Xname, Items, color1='b', color2='r'):
+        """
+        Plot items (stored in TimeSeries objects VarDict and VarDict2)
+        against one another. One sub plot is created for each item.
 
-    This is a simple wrapper around the more generic MultiPlotN.
-    """
+        Args:
+            VarDict (TimeSeries): A TimeSeries object containing the first set of data.
+            VarDict2 (TimeSeries): A TimeSeries object containing the second set of data.
+            Xname (str): The name of the x-axis variable.
+            Items (list): A list of items to plot against each other.
+            color1 (str, optional): The color of the plot for VarDict. Default is 'b' (blue).
+            color2 (str, optional): The color of the plot for VarDict2. Default is 'r' (red).
+
+        Returns:
+            None
+        """
     MultiPlotN([VarDict, VarDict2],
                Xname,
                Items,
                [color1, color2],
                [])
 
+
 def MultiPlotN(varDicts, Xname, variables, colors = [], legendLabels=[]):
     """
-    Creates one subplot for each variable.  Each subplot renders a plot
-    of that variable for each varDict passed.
+    Creates one subplot for each variable. Each subplot renders a plot
+    of that variable for each varDict passed.     
     
     For example:
-      - one varDict and 5 variables will give 5 subplots with one line each
-      - 5 varDicts and one variable will give 1 subplot with 5 lines
-    
-    Parameters:
-      varDicts:  List of TimeSeries data dictionaries
-      Xname:  key of horizontal axes label (must be defined in all varDicts)
-      variables:  List of keys to plot for each varDict
-      colors:  color of each line to be drawn
-      legendLabels: Display a legend on the plot    
+        one varDict and 5 variables will give 5 subplots with one line each
+        5 varDicts and one variable will give 1 subplot with 5 lines
+
+    Args:
+        varDicts (list): List of TimeSeries data dictionaries.
+        Xname (str): Key of horizontal axes label (must be defined in all varDicts).
+        variables (list): List of keys to plot for each varDict.
+        colors (list, optional): Color of each line to be drawn. Defaults to [].
+        legendLabels (list, optional): Display a legend on the plot. Defaults to [].
+
+    Returns:
+        None
     """
     nSubplots = len(variables)
 
@@ -168,8 +216,33 @@ def swQuickPlot(UT,D,Temp,Vx,Vy,Vz,Bx,By,Bz,SYMH,interped,fname,
                 title="Solar Wind",
                 doTrim=True,doEps=False,returnAxs=False):
     """
-    Plot solar wind n,T, dyn p, V, B and sym/h over time period specified by the user.
+    Plot solar wind parameters over a specified time period.
 
+    Args:
+        UT (array-like): Array of time values.
+        D (array-like): Array of solar wind density values.
+        Temp (array-like): Array of solar wind temperature values.
+        Vx (array-like): Array of solar wind velocity values in the x-direction.
+        Vy (array-like): Array of solar wind velocity values in the y-direction.
+        Vz (array-like): Array of solar wind velocity values in the z-direction.
+        Bx (array-like): Array of solar wind magnetic field values in the x-direction.
+        By (array-like): Array of solar wind magnetic field values in the y-direction.
+        Bz (array-like): Array of solar wind magnetic field values in the z-direction.
+        SYMH (array-like): Array of SYM/H values.
+        interped (array-like): Array indicating whether the data is interpolated or not.
+        fname (str): File name to save the plot.
+        xBS (array-like, optional): Array of Bow Shock position values in the x-direction.
+        yBS (array-like, optional): Array of Bow Shock position values in the y-direction.
+        zBS (array-like, optional): Array of Bow Shock position values in the z-direction.
+        t0fmt (str, optional): Format string for the time values in UT.
+        utfmt (str, optional): Format string for the x-axis labels.
+        title (str, optional): Title of the plot.
+        doTrim (bool, optional): Whether to trim the plot or not.
+        doEps (bool, optional): Whether to save the plot in EPS format or not.
+        returnAxs (bool, optional): Whether to return the axes objects or not.
+
+    Returns:
+        axDict (dict): Dictionary containing the axes objects if returnAxs is True.
     """
 
     utall = []
