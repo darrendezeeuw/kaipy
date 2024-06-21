@@ -42,9 +42,15 @@ def axEqual3d(ax):
 	ax.set_ylim3d([y_mean - plot_radius, y_mean + plot_radius])
 	ax.set_zlim3d([z_mean - plot_radius, z_mean + plot_radius])
 
+def create_command_line_parser():
+	"""Create the command-line argument parser.
 
-if __name__ == "__main__":
-	#Arg parsing
+	Create the parser for command-line arguments.
+
+	Returns:
+		argparse.ArgumentParser: Command-line argument parser for this script.
+	"""
+	#Defaults
 	id0 = 0
 	LW = 0.5
 	fs = 16
@@ -58,6 +64,15 @@ if __name__ == "__main__":
 	parser.add_argument('h5p',metavar='input.h5part',help="Input H5Part file")
 	parser.add_argument('-id',type=int,metavar="id",default=id0,help="Display particle trajectory w/ given ID (default: %(default)s)")
 
+	return parser
+
+
+if __name__ == "__main__":
+	#Defaults
+	LW = 0.5
+	fs = 16
+	# Set up the command-line parser.
+	parser = create_command_line_parser()
 	args = parser.parse_args()
 	fIn = args.h5p
 	id0 = args.id

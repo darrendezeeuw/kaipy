@@ -79,18 +79,11 @@ default_coord = 'SM'
 
 
 def create_command_line_parser():
-    """Create the command-line argument parser.
-    
-    Create the parser for command-line arguments.
+    """
+    Create the command-line argument parser.
 
-    Parameters
-    ----------
-    None
-
-    Returns
-    -------
-    parser : argparse.ArgumentParser
-        Command-line argument parser for this script.
+    Returns:
+        parser (argparse.ArgumentParser): Command-line argument parser for this script.
     """
     parser = argparse.ArgumentParser(
         description=description,

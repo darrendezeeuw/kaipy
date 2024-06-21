@@ -61,17 +61,11 @@ SPACECRAFT_COLOR = 'red'
 
 def create_command_line_parser():
     """Create the command-line argument parser.
-    
+
     Create the parser for command-line arguments.
 
-    Parameters
-    ----------
-    None
-
-    Returns
-    -------
-    parser : argparse.ArgumentParser
-        Command-line argument parser for this script.
+    Returns:
+        argparse.ArgumentParser: Command-line argument parser for this script.
     """
     parser = argparse.ArgumentParser(
         description=description,

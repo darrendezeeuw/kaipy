@@ -15,14 +15,19 @@ import kaipy.cmaps.kaimaps as kmaps
 import kaipy.gamera.deltabViz as dbViz
 import sys
 import os
+import errno
 import cartopy.crs as ccrs
 
-if __name__ == "__main__":
-	rad2deg = 180.0/np.pi
-	bMag = dbViz.dbMag
-	bLin = dbViz.dbLin
+def create_command_line_parser():
+	"""Create the command-line argument parser.
 
+	Create the parser for command-line arguments.
+
+	Returns:
+		argparse.ArgumentParser: Command-line argument parser for this script.
+	"""
 	#Defaults
+
 	fdir = os.getcwd()
 	ftag = "msphere"
 	oDir = "vid2D"
@@ -47,6 +52,16 @@ if __name__ == "__main__":
 	parser.add_argument('-Nblk' ,type=int,metavar="Nblk",default=Nblk,help="Number of job blocks (default: %(default)s)")
 	parser.add_argument('-nID' ,type=int,metavar="nID"  ,default=nID,help="Block ID of this job [1-Nblk] (default: %(default)s)")
 
+	return parser
+
+
+if __name__ == "__main__":
+		#Defaults
+	rad2deg = 180.0/np.pi
+	bMag = dbViz.dbMag
+	bLin = dbViz.dbLin
+	# Set up the command-line parser.
+	parser = create_command_line_parser()
 	#Finalize parsing
 	args = parser.parse_args()
 	fdir = args.d

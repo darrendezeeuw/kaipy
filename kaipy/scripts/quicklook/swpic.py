@@ -8,15 +8,21 @@ import os
 import datetime
 import sys
 
+def create_command_line_parser():
+	"""Create the command-line argument parser.
 
-if __name__ == "__main__":
+	Create the parser for command-line arguments.
+
+	Returns:
+		argparse.ArgumentParser: Command-line argument parser for this script.
+	"""
 	#Defaults
 	fdir = os.getcwd()
 	swtag = "bcwind.h5"
 	imgtype = 'png'
 
 	MainS = """Creates simple multi-panel figure for the 
-	solar wind conditions within the  bcwind file and saves it as swBCplot.pdf
+	solar wind conditions with the  bcwind file and saves it as swBCplot.imgtype
 	"""
 
 	parser = argparse.ArgumentParser(description=MainS, formatter_class=RawTextHelpFormatter)
@@ -24,6 +30,13 @@ if __name__ == "__main__":
 	parser.add_argument('-id',type=str,metavar="swid",default=swtag,help="Solar wind file used (default: %(default)s)")
 	parser.add_argument('-type',type=str,metavar="type",default=imgtype,help="Image type (default: %(default)s)")
 
+	return parser
+
+if __name__ == "__main__":
+	#Defaults
+
+	# Set up the command-line parser.
+	parser = create_command_line_parser()
 	#Finalize parsing
 	args = parser.parse_args()
 	fdir = args.d

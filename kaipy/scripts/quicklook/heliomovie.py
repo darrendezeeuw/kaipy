@@ -126,22 +126,11 @@ SPACECRAFT_COLORS = list(mpl.colors.TABLEAU_COLORS.keys())
 
 
 def create_command_line_parser():
-    """Create the command-line argument parser.
+    """
+    Create the command-line argument parser.
 
-    Create the parser for command-line arguments.
-
-    Parameters
-    ----------
-    None
-
-    Returns
-    -------
-    parser : argparse.ArgumentParser
-        Command-line argument parser for this script.
-
-    Raises
-    ------
-    None
+    Returns:
+        argparse.ArgumentParser: Command-line argument parser for this script.
     """
     parser = argparse.ArgumentParser(
         description=description,

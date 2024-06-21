@@ -19,23 +19,25 @@ import os
 import errno
 
 cLW = 0.25
+def create_command_line_parser():
+	"""Create the command-line argument parser.
 
-if __name__ == "__main__":
+	Create the parser for command-line arguments.
+
+	Returns:
+		argparse.ArgumentParser: Command-line argument parser for this script.
+	"""
 	#Defaults
 	fdir = os.getcwd()
 	ftag = "msphere"
 	oDir = "vid2D"
-	doDen = False
 	ts = 0    #[min]
 	te = 200  #[min]
 	dt = 60.0 #[sec]
-	doBig = False #[Use big window]
 	noIon = False
 	noRCM = False
-	doMPI = False #[Add MPI tiling]
 	Nblk = 1 #Number of blocks
 	nID = 1 #Block ID of this job
-	noMPI = False
 	doJy = False
 	doBz = False
 	doBigRCM = False
@@ -63,6 +65,16 @@ if __name__ == "__main__":
 
 	mviz.AddSizeArgs(parser)
 
+	return parser
+
+if __name__ == "__main__":
+	#Defaults
+	doDen = False
+	doMPI = False #[Add MPI tiling]
+	doBig = False #[Use big window]
+	noMPI = False
+	# Set up the command-line parser.
+	parser = create_command_line_parser()
 	#Finalize parsing
 	args = parser.parse_args()
 	fdir = args.d
