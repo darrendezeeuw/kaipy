@@ -59,6 +59,31 @@ The quicklook directory has scripts that are used to quickly look at the data. T
 .. autoprogram:: vizTrj:create_command_line_parser()
     :prog: vizTrj.py
 
+Preprocessing
+-------------
+The preprocessing directory has scripts that are used to setup MAGE simulations including grid generation and solar wind input file. The scripts are:
+
+.. autoprogram:: cda2wind:create_command_line_parser()
+    :prog: cda2wind.py
+
+.. autoprogram:: genLFM:create_command_line_parser()
+    :prog: genLFM.py
+
+.. autoprogram:: genRCM:create_command_line_parser()
+    :prog: genRCM.py
+
+.. .. autoprogram:: INIGenerator:parse_args()
+..     :prog: INIGenerator.py
+
+.. .. autoprogram:: wsa2gamera:parser
+..     :prog: wsa2gamera.py
+
+.. .. autoprogram:: wsa2TDgamera:create_command_line_parser()
+..     :prog: wsa2TDgamera.py
+
+.. autoprogram:: XMLGenerator:create_command_line_parser()
+    :prog: XMLGenerator.py
+
 
 
 

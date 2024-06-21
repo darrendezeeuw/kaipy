@@ -23,10 +23,15 @@ PFLAV = 2
 EFUDGE = 1./3.
 PFUDGE = 0.0
 
+def create_command_line_parser():
+	"""Create the command-line argument parser.
 
-if __name__ == "__main__":
+	Create the parser for command-line arguments.
 
-	#Arg parsing
+	Returns:
+		argparse.ArgumentParser: Command-line argument parser for this script.
+	"""
+	#Defaults
 	fOut = "rcmconfig.h5"
 	num_e  = 39
 	num_p  = 120
@@ -61,7 +66,12 @@ if __name__ == "__main__":
 	parser.add_argument('-maxKp', type=int,default=maxKp, help="Max. Kp index allowed in the electron wave model, integer only (default: %(default)s)")	
 	parser.add_argument('-i', type=str,default=fOut,metavar="fIn", help="Input file name when addWM is true (default: %(default)s)")
 
+	return parser
 
+if __name__ == "__main__":
+
+	# Set up the command-line parser.
+	parser = create_command_line_parser()
 	#Finalize parsing
 	args = parser.parse_args()
 	fOut = args.o

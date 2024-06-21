@@ -91,7 +91,13 @@ def getPrevDayF107(t0):
 
     return prevF107
 
-if __name__ == "__main__":
+def create_command_line_parser():
+    """Create the command-line argument parser.
+
+    Returns:
+        argparse.ArgumentParser: Command-line argument parser for this script.
+    """
+    #Defaults
     fOut = "bcwind.h5"
     mod = "LFM"
     t0Str="2010-01-01T00:00:00"
@@ -105,8 +111,7 @@ if __name__ == "__main__":
     doEps = False
 
     #Usually f107   above 300 is not reliable. The daily value could be distorted by flare emissions even if the flare may only last a short time during a day.
-    maxf107  = 300.0
-    minMfast = 1.5
+
 
     MainS = """ This script does several things:
                   1. Fetch OMNI data from CDAWeb between the specified times (must be at least 2 hours in length)
@@ -140,6 +145,14 @@ if __name__ == "__main__":
     parser.add_argument('-f107', type=float,default=None,help="Set f10.7 value to use in bcwind file. Only used if no data available. (default: %(default)s)")
     parser.add_argument('-kp',   type=float,default=None,help="Set Kp value to use in bcwind file. Only used if no data available. (default: %(default)s)")
     parser.add_argument('-safe', action='store_true',default=False,help="Run in SAFE mode. Does not create the h5 file if certain conditions are not met (default: %(default)s)")
+
+    return parser
+
+if __name__ == "__main__":
+    #Defaults
+    maxf107  = 300.0
+    minMfast = 1.5
+    parser = create_command_line_parser()
     #Finalize parsing
     args = parser.parse_args()
 

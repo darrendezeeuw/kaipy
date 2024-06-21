@@ -347,10 +347,15 @@ def create_xml_template(ini_file, xml_file):
 
     print("\n\nTemplate creation complete!\n\n")
 
+def create_command_line_parser():
+    """Create the command-line argument parser.
 
-if __name__ == "__main__":
-    """Convert a .ini file to a .xml file."""
+    Create the parser for command-line arguments.
 
+    Returns:
+        argparse.ArgumentParser: Command-line argument parser for this script.
+    """
+    #Defaults
     # Create the command-line argument parser.
     parser = argparse.ArgumentParser(description="Convert Kaiju .ini files to XML configuration or XML configuration template files.")
     parser.add_argument("-t", dest="template", help="Path to .xml file as source template")
@@ -359,6 +364,13 @@ if __name__ == "__main__":
     parser.add_argument("-d", "--debug", help="Activate debug mode", action="store_true")
     parser.add_argument("-v", "--verbose", help="Activate verbose execution mode", action="store_true")
 
+    return parser
+
+
+if __name__ == "__main__":
+    """Convert a .ini file to a .xml file."""
+    # Set up the command-line parser.
+    parser = create_command_line_parser()
     # Parse the commmand-line arguments.
     args = parser.parse_args()
 

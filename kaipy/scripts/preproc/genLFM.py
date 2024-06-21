@@ -17,21 +17,21 @@ rParams = {
 
 #"H": '<ring gid="lfm" doRing="T" Nr="16" Nc1="8" Nc2="16" Nc3="32" Nc4="32" Nc5="64" Nc6="64" Nc7="64" Nc8="64" Nc9="128" Nc10="128" Nc11="128" Nc12="128" Nc13="256" Nc14="256" Nc15="256" Nc16="256"/>'
 
+def create_command_line_parser():
+	"""Create the command-line argument parser.
 
-if __name__ == "__main__":
+	Create the parser for command-line arguments.
 
-#Arg parsing
-	Nc0 = 8 #Number of outer i cells to cut out from LFM grid (OCT)
-	fIn = "./lfmG"
-	doEpsY = True
-	TINY = 1.0e-8
+	Returns:
+		argparse.ArgumentParser: Command-line argument parser for this script.
+	"""
+	#Defaults
+
 	Rin = 2.0
 	Rout = 0.0
 	#List of grids
 	gStrs = ['D','Q','O','H']
-	gLabs = ["Double","Quad","Oct","Hex"]
-	Nij0 = 48
-	Nk0  = 64
+
 
 	MainS = """Generates LFM-style HDF5 grid for Gamera
 	Grid types (gid)
@@ -49,6 +49,21 @@ if __name__ == "__main__":
 	parser.add_argument('-Rout',type=float,metavar="Rout",default=Rout ,help="Sunward outer radius (default: %(default)s)")
 	parser.add_argument('-vizG', action='store_true', default=False,help="Show 2D figure w/ ghosts (default: %(default)s)")
 
+	return parser
+
+
+if __name__ == "__main__":
+	#Defaults asdf 
+	Nc0 = 8 #Number of outer i cells to cut out from LFM grid (OCT)
+	fIn = "./lfmG"
+	doEpsY = True
+	TINY = 1.0e-8
+	gLabs = ["Double","Quad","Oct","Hex"]
+	gStrs = ['D','Q','O','H']
+	Nij0 = 48
+	Nk0  = 64
+	# Set up the command-line parser.
+	parser = create_command_line_parser()
 	#Finalize parsing
 	args = parser.parse_args()
 	gid = args.gid
