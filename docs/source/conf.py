@@ -13,6 +13,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../../kaipy'))
+sys.path.insert(1, os.path.abspath('../../kaipy/scripts/quicklook'))
 
 
 # -- Project information -----------------------------------------------------
@@ -33,6 +34,7 @@ release = '1.0.0'
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
+    'sphinxcontrib.autoprogram',
     'sphinx_rtd_theme'
 ]
 
