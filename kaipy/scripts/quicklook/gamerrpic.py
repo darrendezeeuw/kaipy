@@ -17,8 +17,14 @@ import os
 import errno
 
 cLW = 0.25
+def create_command_line_parser():
+	"""Create the command-line argument parser.
 
-if __name__ == "__main__":
+	Create the parser for command-line arguments.
+
+	Returns:
+		argparse.ArgumentParser: Command-line argument parser for this script.
+	"""
 	#Defaults
 	fdir1 = os.getcwd()
 	ftag1 = "msphere"
@@ -26,8 +32,7 @@ if __name__ == "__main__":
 	ftag2 = "msphere"
 	nStp=1
 	fieldNames = "Bx, By, Bz"
-	doMPI = False #[Add MPI tiling]
-	noMPI = False
+
 
 	MainS = """Creates simple multi-panel figure for Gamera magnetosphere run
 	Left Panel - Residual vertical magnetic field
@@ -45,6 +50,14 @@ if __name__ == "__main__":
 
 	mviz.AddSizeArgs(parser)
 
+	return parser
+
+if __name__ == "__main__":
+	#Defaults
+	doMPI = False #[Add MPI tiling]
+	noMPI = False
+	# Set up the command-line parser.
+	parser = create_command_line_parser()
 	#Finalize parsing
 	args = parser.parse_args()
 	fdir1 = args.d1

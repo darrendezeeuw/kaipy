@@ -21,25 +21,14 @@ import subprocess
 import shutil
 
 cLW = 0.25
+def create_command_line_parser():
+	"""Create the command-line argument parser.
 
-def makeMovie(frame_dir,movie_name):
-	frame_pattern = frame_dir + "/vid.%04d.png"
-	movie_file = os.getcwd() + "/" + movie_name + ".mp4"
-	ffmpegExe = "ffmpeg"
-	if shutil.which(ffmpegExe) is None:
-		ffmpegExe = "ffmpeg4"
-		if shutil.which(ffmpegExe) is None:
-			print("Could not find any ffmpeg executable. Video will not be generated.")
-			return
+	Create the parser for command-line arguments.
 
-	cmd = [
-	    ffmpegExe, "-nostdin", "-i", frame_pattern,
-	    "-vcodec", "libx264", "-crf", "14", "-profile:v", "high", "-pix_fmt", "yuv420p",
-	    movie_file,"-y"
-	]
-	subprocess.run(cmd, check=True)
-
-if __name__ == "__main__":
+	Returns:
+		argparse.ArgumentParser: Command-line argument parser for this script.
+	"""
 	#Defaults
 	fdir1 = os.getcwd()
 	ftag1 = "msphere"
@@ -51,7 +40,6 @@ if __name__ == "__main__":
 	dt = 60.0 #[sec]
 	Nblk = 1 #Number of blocks
 	nID = 1 #Block ID of this job
-	noMPI = False # Don't add MPI tiling
 	noLog = False
 	fieldNames = "Bx, By, Bz"
 	doVerb = False
@@ -81,6 +69,30 @@ if __name__ == "__main__":
 
 	mviz.AddSizeArgs(parser)
 
+	return parser
+
+def makeMovie(frame_dir,movie_name):
+	frame_pattern = frame_dir + "/vid.%04d.png"
+	movie_file = os.getcwd() + "/" + movie_name + ".mp4"
+	ffmpegExe = "ffmpeg"
+	if shutil.which(ffmpegExe) is None:
+		ffmpegExe = "ffmpeg4"
+		if shutil.which(ffmpegExe) is None:
+			print("Could not find any ffmpeg executable. Video will not be generated.")
+			return
+
+	cmd = [
+	    ffmpegExe, "-nostdin", "-i", frame_pattern,
+	    "-vcodec", "libx264", "-crf", "14", "-profile:v", "high", "-pix_fmt", "yuv420p",
+	    movie_file,"-y"
+	]
+	subprocess.run(cmd, check=True)
+
+if __name__ == "__main__":
+	#Defaults
+	noMPI = False # Don't add MPI tiling
+	# Set up the command-line parser.
+	parser = create_command_line_parser()
 	#Finalize parsing
 	args = parser.parse_args()
 	fdir1 = args.d1

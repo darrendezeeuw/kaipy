@@ -17,24 +17,42 @@ from astropy.time import Time
 import os
 import kaipy.kaiH5 as kaiH5
 
-if __name__ == "__main__":
+def create_command_line_parser():
+    """Create the command-line argument parser.
+
+    Create the parser for command-line arguments.
+
+    Returns:
+        argparse.ArgumentParser: Command-line argument parser for this script.
+    """
     #Defaults
     fdir = os.getcwd()
     ftag = "msphere"
     swfname = "bcwind.h5"
     tpad = 8 #Number of hours beyond MHD to plot
-    iMax = -1
+
     doDPS = False
     MainS = """Creates simple plot comparing SYM-H from OMNI dataset to Gamera-RCM.
     Need to run or point to directory that has the bcwind and msphere.gam files of interest
     """
-
     parser = argparse.ArgumentParser(description=MainS, formatter_class=RawTextHelpFormatter)
     parser.add_argument('-d',type=str,metavar="directory",default=fdir,help="Directory to read from (default: %(default)s)")
     parser.add_argument('-id',type=str,metavar="runid",default=ftag,help="RunID of data (default: %(default)s)")
     parser.add_argument('-tpad',type=float,metavar="time padding",default=tpad,help="Time beyond MHD data (in hours) to plot (default: %(default)s)")
     parser.add_argument('-swfile',type=str,metavar='filename',default=swfname,help="Solar wind file name (default: %(default)s)")
     parser.add_argument('--dps',action='store_true',help="Also plot the DPS Dst (default: %(default)s)")
+
+
+    return parser
+
+if __name__ == "__main__":
+
+    #Defaults
+    iMax = -1
+    
+    # Set up the command-line parser.
+    parser = create_command_line_parser()
+
     #Finalizing parsing
     args = parser.parse_args()
     fdir = args.d

@@ -14,10 +14,16 @@ from matplotlib import rcParams, cycler
 
 import argparse
 from argparse import RawTextHelpFormatter
+def create_command_line_parser():
+	"""Create the command-line argument parser.
 
-if __name__ == "__main__":
+	Create the parser for command-line arguments.
+
+	Returns:
+		argparse.ArgumentParser: Command-line argument parser for this script.
+	"""
+	#Defaults
 	ftag = "msphere"
-	cmap = plt.cm.plasma
 	timeStr = ""
 	locStr = "-5,0,0"
 	numSamples = 6
@@ -30,7 +36,15 @@ if __name__ == "__main__":
 	parser.add_argument('-t',type=str,metavar="times",default=timeStr,help="Comma-separated times (in hours) to plot (example: 1,2,4,6). Ignores numSamples")
 	parser.add_argument('-l',type=str,metavar="loc",default=locStr,help="Comma-separated x,y,z values for equatorial location (default: %(default)s)")
 	parser.add_argument('-i',action='store_true',default=False,help="Flag to plot ions instead of electrons (default: %(default)s)")
-	
+
+	return parser
+
+if __name__ == "__main__":
+	#Defaults
+	cmap = plt.cm.plasma
+	# Set up the command-line parser.
+	parser = create_command_line_parser()
+	#Finalize parsing	
 	args = parser.parse_args()
 	ftag = args.id
 	numSamples = args.n

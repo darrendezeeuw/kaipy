@@ -34,12 +34,17 @@ density_factor = nt/re
 specFlux_factor = 1/np.pi/np.sqrt(8)*np.sqrt(ev/massi)*nt/re/1.0e1  # [units/cm^2/keV/str]
 precipSpecFlux_factor = 1/nT2T/(m2cm**2)/(4*np.pi)
 
-if __name__ == "__main__":
+def create_command_line_parser():
+	"""Create the command-line argument parser.
 
+	Create the parser for command-line arguments.
+
+	Returns:
+		argparse.ArgumentParser: Command-line argument parser for this script.
+	"""
 	varChoices = [VOPT_SF, VOPT_PSF, VOPT_D, VOPT_P]
 
 	ftag = "msphere"
-	cmap = plt.cm.plasma
 	timeStr = ""
 	locStr = "-5,0,0"
 	numSamples = 6
@@ -54,6 +59,14 @@ if __name__ == "__main__":
 	parser.add_argument('-l',type=str,metavar="loc",default=locStr,help="Comma-separated x,y,z values for equatorial location (default: %(default)s)")
 	parser.add_argument('-e',action='store_true',default=False,help="Flag to plot electrons instead of ions (default: %(default)s)")
 	parser.add_argument('-v',choices=varChoices,default=varStr,help="Variable to plot (default: %(default)s)")
+
+	return parser
+
+if __name__ == "__main__":
+	#Defaults
+	cmap = plt.cm.plasma
+	# Set up the command-line parser.
+	parser = create_command_line_parser()
 	args = parser.parse_args()
 	ftag = args.id
 	numSamples = args.n
