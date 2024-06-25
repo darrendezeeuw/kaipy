@@ -10,7 +10,7 @@ def plotLambdas_Val_Spac(specDataList, yscale='log', L=None):
 	Plot the values and spacing of lambda data.
 
 	Args:
-		specDataList (list or SpecData): A list of SpecData objects or a single SpecData object.
+		specDataList (list): A list of Species objects (ideally from an initialized alamData.specs).
 		yscale (str, optional): The scale of the y-axis. Defaults to 'log'.
 		L (float, optional): The value of L. If provided, energy calculations will be performed. Defaults to None.
 	"""
@@ -59,10 +59,10 @@ def plotLambdas_Val_Spac(specDataList, yscale='log', L=None):
 
 def plotLambdasBySpec(specDataList, yscale='log', L=None):
 	"""
-	Plot lambdas by spectrum.
+	Plot lambdas by species individually.
 
 	Args:
-		specDataList (list or SpectrumData): A list of SpectrumData objects or a single SpectrumData object.
+		specDataList (list): A list of Species objects (ideally from an initialized alamData.specs).
 		yscale (str, optional): The scale of the y-axis. Defaults to 'log'.
 		L (float, optional): The L-shell value. Defaults to None.
 

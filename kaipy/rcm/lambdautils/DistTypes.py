@@ -108,12 +108,12 @@ class DT_Wolf(DistType):
 
     def genAlamsFromSpecies(self, sP):
         """
-        Generate Alams from Species.
+        Generate Alams from SpecParams object.
 
-        This method generates Alams based on the given Species object.
+        This method generates Alams based on the given SpecParams object.
 
         Parameters:
-        - sP: The Species object containing the necessary information.
+        - sP: The SpecParams object containing the necessary information.
 
         Returns:
         - The generated Alams.
@@ -180,7 +180,7 @@ class ValueSpec:
 
     def __post_init__(self):
         """
-        Initializes the ValueSpec object and performs validation.
+        Validates the ValueSpec object after initialization.
 
         If the scaleType is not one of ['lin', 'log', 'spacing_lin'], it defaults to 'lin'.
         If neither n nor c is provided, and the scaleType is 'lin', c defaults to 1.
@@ -205,7 +205,7 @@ class ValueSpec:
             list: A list of values based on the scale type and other attributes of the ValueSpec object.
         """
         if self.scaleType == 'lin':
-            line = np.linspace(sL.start, sL.end, sL.n, endpoint=doEnd)
+            line = np.linspace(self.start, self.end, self.n, endpoint=doEnd)
         elif self.scaleType == 'log':
             lbase = self.c
             sign = 1 if self.start > 0 else -1
@@ -246,23 +246,28 @@ class DT_ValueSpec(DistType):
     specList: List[ValueSpec] = None
 
     def __post_init__(self):
+        """
+        Validates the DT_ValueSpec object after initialization.
+        Requires that the last value of ValueSpec i equals the first value of ValueSpec i+1
+
+        """
         self.name = "ValueSpec"
         # Check to see if all slopes are contiguous
         if len(self.specList) > 1:
             tol = 1E-4
             for i in range(len(self.specList)-1):
                 if np.abs(self.specList[i].end - self.specList[i+1].start) > tol:
-                    print("Error creating a DistType_SlopeSpec: SlopeSpec[{}].end ({}) != SlopeSpec[{}].start ({}). Undefined behavior"\
+                    print("Error creating a DistType_ValueSpec: ValueSpec[{}].end ({}) != ValueSpec[{}].start ({}). Undefined behavior"\
                         .format(i, self.specList[i].end, i+1, self.specList[i+1].start))
 
     def genAlamsFromSpecies(self, sP):
         """Generates alams from species parameters, adjusting the endpoints if necessary.
 
         Args:
-            sP: Species parameters object.
+            sP: SpecParams object.
 
         Returns:
-            List[float]: List of alams.
+            List[float]: List of alam values in eV.
 
         """
         # See if end points match up
@@ -276,7 +281,7 @@ class DT_ValueSpec(DistType):
         return self.genAlams(sP.n, sP.amin,sP.amax)
 
     def genAlams(self, n, amin, amax):
-        """Generates alams based on the slope specifications.
+        """Generates alams based on the Value specifications.
 
         Args:
             n (int): Number of alams to generate.
