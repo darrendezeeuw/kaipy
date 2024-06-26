@@ -48,10 +48,10 @@ def updateFactors(rxNew):
 #ions: kStart = kIon, kEnd = len(rcmS0['alamc'])
 def getSpecieslambdata(rcmS0, species='ions'):
 	"""
-	Calculate lambdas for a given species in the RCM model.
+	Generates useful lambda information for a given species in the RCM model.
 
 	Args:
-		rcmS0 (dict): Dictionary containing RCM data.
+		rcmS0 (h5py.Group): Step#X group from an rcm.h5 output file.
 		species (str): Species for which to calculate lambdas. Default is 'ions'.
 
 	Returns:
@@ -100,7 +100,7 @@ def getClosedRegionMask(s5):
 	Returns a boolean mask indicating closed regions based on the given input.
 
 	Args:
-		s5 (dict): A dictionary containing the required data for the calculation.
+		s5 (h5py.Group): An rcm.h5 Step#X group containing the required data for the calculation.
 
 	Returns:
 		bool: A boolean mask indicating closed regions.
@@ -128,7 +128,7 @@ def getCumulPress(ilamc, vm, eetas, doFraction=False):
 			Defaults to False.
 
 	Returns:
-		array-like: 3D array of cumulative pressures or cumulative pressure fractions.
+		array-like: [Nk, Nj, Ni] array of cumulative pressures or cumulative pressure fractions.
 
 	"""
 	Nk = len(ilamc)
