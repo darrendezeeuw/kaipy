@@ -21,10 +21,10 @@ import kaipy.kaixdmf as kxmf
 
 def addRCMGeom(Geom, dimInfo, rcmInfo, sID):
 	"""
-	Add RCM geometry to Geom.
+	Add RCM geometry to Geom xdmf object.
 
 	Args:
-		Geom (object): The Geom object to add the RCM geometry to.
+		Geom (object): The Geom xdmf object to add the RCM geometry to.
 		dimInfo (dict): A dictionary containing dimension information.
 		rcmInfo (dict): A dictionary containing RCM information.
 		sID (int): The step ID.
@@ -66,10 +66,10 @@ def addRCMGeom(Geom, dimInfo, rcmInfo, sID):
 
 def addRCMVars(Grid, dimInfo, rcmInfo, sID):
 	"""
-	Used with the mhdrcm presets to add links to given RCM variables.
+	Used with the mhdrcm presets to add links to given RCM variables onto provided Geom xdmf object.
 
 	Args:
-		Grid: The grid object.
+		Grid: The grid xdmf object.
 		dimInfo: A dictionary containing dimension information.
 		rcmInfo: A dictionary containing RCM information.
 		sID: The step ID.

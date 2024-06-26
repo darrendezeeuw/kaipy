@@ -9,11 +9,11 @@ import kaipy.kaiH5 as kh5
 #Geom is topology subelement, iDims is grid size string
 def AddGrid(fname, Geom, iDims, coordStrs):
 	"""
-	Add a grid to the given geometry.
+	Add a grid to the given Geometry xdmf element.
 
 	Args:
 		fname (str): The file name.
-		Geom (Element): The geometry element to add the grid to.
+		Geom (Element): The geometry xdmf element to add the grid to.
 		iDims (str): The dimensions of the grid.
 		coordStrs (list): A list of coordinate strings.
 
@@ -33,7 +33,7 @@ def AddGrid(fname, Geom, iDims, coordStrs):
 #Add data to slice
 def AddData(Grid, fname, vID, vLoc, xDims, s0=None):
 	"""
-	AddData function adds data to the given Grid.
+	AddData function adds data to the given Grid xdmf element.
 
 	Parameters:
 		Grid: The parent element to which the data will be added.
@@ -41,7 +41,7 @@ def AddData(Grid, fname, vID, vLoc, xDims, s0=None):
 		vID: The ID of the attribute.
 		vLoc: The location of the attribute.
 		xDims: The dimensions of the data item.
-		s0: The step number (optional).
+		s0: The step number (integer, optional). If not provided, will point to data in root of h5 file.
 
 	Returns:
 		None
@@ -98,7 +98,7 @@ def getRootVars(fname, gDims):
 
 	Args:
 		fname (str): The path to the HDF5 file.
-		gDims (tuple): The global dimensions of the data.
+		gDims (list[int]): The global dimensions of the data.
 
 	Returns:
 		tuple: A tuple containing two lists - `vIds` and `vLocs`.
@@ -135,7 +135,7 @@ def getVars(fname, gId, gDims, recursive=False):
 	Parameters:
 		fname (str): The path to the HDF5 file.
 		gId (str): The group ID.
-		gDims (list): The dimensions of the group.
+		gDims (list[int]): The dimensions of the group.
 		recursive (bool, optional): Flag indicating whether to recursively retrieve variables from subgroups. Defaults to False.
 
 	Returns:
@@ -194,7 +194,7 @@ def AddVectors(Grid, fname, vIds, cDims, vDims, Nd, nStp):
 		cDims: The cell dimensions.
 		vDims: The vector dimensions.
 		Nd: The number of dimensions.
-		nStp: The number of steps.
+		nStp: The step number.
 
 	Returns:
 		None

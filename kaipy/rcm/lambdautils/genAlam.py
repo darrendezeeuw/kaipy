@@ -12,13 +12,13 @@ import kaipy.rcm.lambdautils.DistTypes as dT
 
 def getAlamMinMax(alams):
     """
-    Calculate the minimum and maximum values for a given list of alams.
+    Given the 'cell-center' alam values, calculate the min and max bounds for each channel
 
     Args:
-        alams (list): A list of alams.
+        alams (list): A list of cell-centered alam values.
 
     Returns:
-        tuple: A tuple containing two lists - the minimum values (amin) and the maximum values (amax).
+        tuple: A tuple containing two lists - the minimum values (amin) and the maximum values (amax) for each channel.
     """
 
     amin = np.array([])
@@ -82,7 +82,7 @@ def genPsphereSpecies():
     Generate a species object for the Plasmasphere.
 
     Returns:
-        aD.Species: The species object for the Plasmasphere.
+        aD.Species: The Species object for the Plasmasphere.
     """
     params = dT.DT_Manual(name='Plasmasphere')
     return aD.Species(1, [0], [0], [0], 1, 0, params=params, name='Plasmasphere')
