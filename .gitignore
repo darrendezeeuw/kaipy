@@ -7,6 +7,9 @@
 node_modules/
 dist/
 
+# vscode IDE data
+.vscode/
+
 # Compiled Java class files
 *.class
 
@@ -48,3 +51,5 @@ Thumbs.db
 *.mov
 *.wmv
 
+# Python pip build files.
+kaipy.egg-info/*

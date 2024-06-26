@@ -22,7 +22,7 @@ def saveRCMConfig(alamData, params=None, fname='rcmconfig.h5'):
 
 	Args:
 		alamData: The RCM configuration data to be saved.
-		params: Additional parameters to be saved (optional).
+		params: The parameters used to generate the lambda data (optional).
 		fname: The filename of the HDF5 file (default: 'rcmconfig.h5').
 	"""
 	f5 = h5.File(fname, 'w')

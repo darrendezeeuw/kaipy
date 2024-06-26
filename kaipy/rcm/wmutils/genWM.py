@@ -6,13 +6,13 @@ import os
 
 def genWM(params):
         """
-        Generate WM (Weighted Model) using the given parameters.
+        Generate WM (Wave Model: Chorus wave) using the given parameters.
 
         Args:
                 params (dict): A dictionary containing the parameters for generating the WM.
 
         Returns:
-                object: The generated WM object.
+                object: The returns from genChorus function.
 
         Raises:
                 None
@@ -41,7 +41,7 @@ def genWM(params):
 # Writes arrays to file in rcmconfig.h5 format
 def genh5(fIn, fOut, inputParams):
         """
-        Generate an HDF5 file with data and attributes based on the input parameters.
+        Write the wave model to an HDF5 file (rcmconfig.h5) with data and attributes based on the input parameters.
 
         Args:
                 fIn (str): The input HDF5 file path.
@@ -78,13 +78,13 @@ def genh5(fIn, fOut, inputParams):
 #read parameters of the polynomial fit, Wang+,2023
 def readPoly(fIn):
         """
-        Read a polygon from a file.
+        Read a polynomial fit parameters of chorus wave from an input file.
 
         Args:
                 fIn (str): The path to the input file.
 
         Returns:
-                tuple: A tuple containing the length of each row and a numpy array representing the polygon.
+                tuple: A tuple containing the length of each row and a numpy array of the parameter table.
 
         """
         table = []
@@ -168,7 +168,7 @@ def ReSample(L, MLT, Qp, xMLT):
                 xMLT (float): Magnetic local time value to resample at.
 
         Returns:
-                array-like: Resampled data.
+                array-like: 2D (L,MLT) smoothed inupt data resampled in the MLT dimension.
 
         Raises:
                 None

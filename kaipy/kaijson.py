@@ -53,6 +53,7 @@ def customhook(dct):
 
 	This function is used as a hook for the `json.loads` function to customize the decoding process.
 	It handles specific cases for datetime objects, numpy arrays, and numpy base variable types.
+	Assumes formatting defined in CustomEncoder.
 
 	Parameters:
 		dct (dict): The dictionary representing the JSON object being decoded.

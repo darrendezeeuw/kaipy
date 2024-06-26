@@ -570,6 +570,8 @@ def getIntensitiesVsL(rcmf5, mhdrcmf5, sStart, sEnd, sStride, species='ions', eG
 	alamData = getSpecieslambdata(rcmS0, species)
 
 	alams_kxx = alamData['ilamc'][:, np.newaxis, np.newaxis]
+	kStart = alamData['kStart']
+	kEnd   = alamData['kEnd']
 	Nk = kEnd - kStart
 
 	nlbins = 50
