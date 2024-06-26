@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+
+[project]
+name = "kaipy"
+version = "1.0.0"
+authors = [
+    {name = "Eric Winter", email = "eric.winter@jhuapl.edu"},
+]
+description = "Python software for CGS MAGE"
+readme = "README.md"
+requires-python = ">=3.8, <=3.10"
+keywords = ["CGS", "MAGE", "KAIJU"]
+license = {text = "MIT"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "alive_progress",
+    "astropy",
+    "cdasws",
+    "configparser",
+    "h5py",
+    "matplotlib",
+    "pandas",
+    "progressbar",
+    "pyhdf",
+    "pyspedas",
+    "pytest",
+    "spacepy",
+    "sunpy",
+]
