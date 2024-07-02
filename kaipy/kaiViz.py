@@ -371,12 +371,11 @@ class MidpointNormalize(Normalize):
     Returns:
         normalized_value (numpy.ma.masked_array): The normalized value(s) within the range [0, 1].
 
-    Example usage:
-        ```
-        norm = MidpointNormalize(vmin=0, vmax=10, midpoint=5)
-        normalized_value = norm(7)
-        print(normalized_value)  # Output: 0.7
-        ```
+    Examples:
+    >>> norm = MidpointNormalize(vmin=0, vmax=10, midpoint=5)
+    >>> normalized_value = norm(7)
+    >>> print(normalized_value)  # Output: 0.7
+
     """
 
     def __init__(self, vmin=None, vmax=None, midpoint=None, clip=False):

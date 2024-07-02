@@ -188,13 +188,13 @@ def RampUp(r, rC, lC):
 	"""
 	Calculate the ramp-up value based on the given parameters.
 
-	Parameters:
-	- r: The input value.
-	- rC: The center value for the ramp-up.
-	- lC: The length of the ramp-up.
+	Args:
+		r (float): The input value.
+		rC (float): The center value for the ramp-up.
+		lC (float): The length of the ramp-up.
 
 	Returns:
-	- M: The ramp-up value.
+		float: The ramp-up value.
 
 	"""
 	rScl = (r - rC) / lC
@@ -293,19 +293,19 @@ def GenKSph(Ni=Ni0,Nj=Nj0,Nk=Nk0,Rin=5,Rout=40,tMin=0.2,tMax=0.8):
 	"""
 	Generate a spherical grid in 3D.
 
-	Parameters:
-	- Ni (int): Number of grid points in the radial direction.
-	- Nj (int): Number of grid points in the polar angle direction.
-	- Nk (int): Number of grid points in the azimuthal angle direction.
-	- Rin (float): Inner radius of the grid.
-	- Rout (float): Outer radius of the grid.
-	- tMin (float): Minimum polar angle of the grid.
-	- tMax (float): Maximum polar angle of the grid.
+	Args:
+		Ni: Number of grid points in the radial direction.
+		Nj: Number of grid points in the polar angle direction.
+		Nk: Number of grid points in the azimuthal angle direction.
+		Rin: Inner radius of the grid.
+		Rout: Outer radius of the grid.
+		tMin: Minimum polar angle of the grid.
+		tMax: Maximum polar angle of the grid.
 
 	Returns:
-	- X3 (ndarray): X-coordinate values of the grid points.
-	- Y3 (ndarray): Y-coordinate values of the grid points.
-	- Z3 (ndarray): Z-coordinate values of the grid points.
+		X3: X-coordinate values of the grid points.
+		Y3: Y-coordinate values of the grid points.
+		Z3: Z-coordinate values of the grid points.
 	"""
 	#Number of nodes with ghost corners
 	Ngi = Ni+1+2*Ng
@@ -342,19 +342,19 @@ def GenKSphNonU(Ni=Ni0,Nj=Nj0,Nk=Nk0,Rin=5,Rout=40,tMin=0.2,tMax=0.8):
 	"""
 	Generate a non-uniform spherical grid.
 
-	Parameters:
-	- Ni (int): Number of nodes in the radial direction.
-	- Nj (int): Number of nodes in the polar angle direction.
-	- Nk (int): Number of nodes in the azimuthal angle direction.
-	- Rin (float): Inner radius of the grid.
-	- Rout (float): Outer radius of the grid.
-	- tMin (float): Minimum value of the polar angle.
-	- tMax (float): Maximum value of the polar angle.
+	Args:
+		Ni (int): Number of nodes in the radial direction.
+		Nj (int): Number of nodes in the polar angle direction.
+		Nk (int): Number of nodes in the azimuthal angle direction.
+		Rin (float): Inner radius of the grid.
+		Rout (float): Outer radius of the grid.
+		tMin (float): Minimum value of the polar angle.
+		tMax (float): Maximum value of the polar angle.
 
 	Returns:
-	- X3 (ndarray): x-coordinates of the grid points.
-	- Y3 (ndarray): y-coordinates of the grid points.
-	- Z3 (ndarray): z-coordinates of the grid points.
+		X3 (ndarray): x-coordinates of the grid points.
+		Y3 (ndarray): y-coordinates of the grid points.
+		Z3 (ndarray): z-coordinates of the grid points.
 	"""
 	
 	#Number of nodes with ghost corners

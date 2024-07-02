@@ -647,27 +647,26 @@ def AddIonBoxes(gs, ion):
 	ax = ion.plot('current', gs=gsRM[-dY-wXY:-dY, dX:dX+wXY], doInset=True)
 
 def plotPlane(gsph, data, xyBds, Ax, AxCB, var='D', vMin=None, vMax=None, doDeco=True, cmap='viridis', doLog=False, midp=None):
-	def plotPlane(gsph, data, xyBds, Ax, AxCB, var='D', vMin=None, vMax=None, doDeco=True, cmap='viridis', doLog=False, midp=None):
-		"""
-		Base plotting routine for gsph plane
+	"""
+	Base plotting routine for gsph plane
 
-		Args:
-			gsph (object): The gsph object representing the plane.
-			data (array): The data to be plotted.
-			xyBds (tuple): The bounds of the x and y axes.
-			Ax (object): The axis on which to plot the plane.
-			AxCB (object): The colorbar axis.
-			var (str, optional): The variable to be plotted (default is 'D').
-			vMin (float, optional): The minimum value for the colorbar (default is None).
-			vMax (float, optional): The maximum value for the colorbar (default is None).
-			doDeco (bool, optional): Whether to apply decorations to the plot (default is True).
-			cmap (str, optional): The colormap to be used (default is 'viridis').
-			doLog (bool, optional): Whether to use logarithmic scaling for the colorbar (default is False).
-			midp (float, optional): The midpoint value for the colorbar (default is None).
+	Args:
+		gsph (object): The gsph object representing the plane.
+		data (array): The data to be plotted.
+		xyBds (tuple): The bounds of the x and y axes.
+		Ax (object): The axis on which to plot the plane.
+		AxCB (object): The colorbar axis.
+		var (str, optional): The variable to be plotted (default is 'D').
+		vMin (float, optional): The minimum value for the colorbar (default is None).
+		vMax (float, optional): The maximum value for the colorbar (default is None).
+		doDeco (bool, optional): Whether to apply decorations to the plot (default is True).
+		cmap (str, optional): The colormap to be used (default is 'viridis').
+		doLog (bool, optional): Whether to use logarithmic scaling for the colorbar (default is False).
+		midp (float, optional): The midpoint value for the colorbar (default is None).
 
-		Returns:
-			None
-		"""
+	Returns:
+		None
+	"""
 	if (AxCB is not None):
 		AxCB.clear()
 	if (not midp):
