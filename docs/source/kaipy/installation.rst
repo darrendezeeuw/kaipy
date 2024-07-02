@@ -10,7 +10,7 @@ Conda Installation
 1. Download Miniconda Installer
 
    - Visit the `Miniconda Downloads <https://docs.conda.io/en/latest/miniconda.html>`_ page.
-   - Select the Linux installer for Python 2.x or 3.x as per your requirements.
+   - Select the installer for Python 3.x as per your requirements.
 
 2. Open a Terminal
 
@@ -53,7 +53,7 @@ Conda Installation
 Creating Environment
 ~~~~~~~~~~~~~~~~~~~~~
 
-Create python 3.8 environment
+Create python environment.  We support using python 3.8 through python 3.10.
 
 .. note::
 
@@ -65,14 +65,6 @@ Create python 3.8 environment
 
 Installing kaipy
 ~~~~~~~~~~~~~~~~~~~
-
-.. warning::
-
-   cartopy requires geos which doesn't install properly via the pip install. Use the command below if you face the issue.
-
-    .. code-block:: bash
-
-        conda install -c conda-forge cartopy
 
 To install kaipy, run the following command:
 
