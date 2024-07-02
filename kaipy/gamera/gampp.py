@@ -410,62 +410,62 @@ class GameraPipe(object):
 			return V
 
 	#Get 3D variable "vID" from Step# sID
-	def GetVar(self,vID,sID=None,vScl=None,doVerb=True):
-			def ReadVar(self, vID, sID=None, vScl=None, doVerb=True):
-				"""Reads a variable with the given name.
 
-				Args:
-					vID (str): The name of the variable to be read.
-					sID (int, optional): The step ID. Default is None.
-					vScl (float, optional): The scaling factor for the variable. Default is None.
-					doVerb (bool, optional): A flag indicating whether to display progress bar and verbose output. Default is True.
+	def ReadVar(self, vID, sID=None, vScl=None, doVerb=True):
+		"""Reads a variable with the given name.
 
-				Returns:
-					np.ndarray: The variable data read from the file.
+		Args:
+			vID (str): The name of the variable to be read.
+			sID (int, optional): The step ID. Default is None.
+			vScl (float, optional): The scaling factor for the variable. Default is None.
+			doVerb (bool, optional): A flag indicating whether to display progress bar and verbose output. Default is True.
 
-				"""
+		Returns:
+			np.ndarray: The variable data read from the file.
+
+		"""
 
 
-			if (self.is2D):
-				V = np.zeros((self.Ni,self.Nj))
-			else:
-				V = np.zeros((self.Ni,self.Nj,self.Nk))
+		if (self.is2D):
+			V = np.zeros((self.Ni,self.Nj))
+		else:
+			V = np.zeros((self.Ni,self.Nj,self.Nk))
 
-			if (self.isMPI and self.doParallel):
-				V = self.GetVarParallel(vID,sID,vScl,doVerb)
-			else:
-				if (doVerb):
-					if (sID is None):
-						titStr = "%s/%s"%(self.ftag,vID)
-						
-					else:
-						titStr = "%s/Step#%d/%s"%(self.ftag,sID,vID)
+		if (self.isMPI and self.doParallel):
+			V = self.GetVarParallel(vID,sID,vScl,doVerb)
+		else:
+			if (doVerb):
+				if (sID is None):
+					titStr = "%s/%s"%(self.ftag,vID)
+					
 				else:
-					titStr = ''
-				NrX = max(self.Nr,1)
-				with alive_bar(NrX,title=titStr.ljust(kdefs.barLab),length=kdefs.barLen,disable=not doVerb) as bar:
-					for (i,j,k) in itertools.product(range(self.Ri),range(self.Rj),range(self.Rk)):
+					titStr = "%s/Step#%d/%s"%(self.ftag,sID,vID)
+			else:
+				titStr = ''
+			NrX = max(self.Nr,1)
+			with alive_bar(NrX,title=titStr.ljust(kdefs.barLab),length=kdefs.barLen,disable=not doVerb) as bar:
+				for (i,j,k) in itertools.product(range(self.Ri),range(self.Rj),range(self.Rk)):
 
-						iS = i*self.dNi
-						jS = j*self.dNj
-						kS = k*self.dNk
-						iE = iS+self.dNi
-						jE = jS+self.dNj
-						kE = kS+self.dNk
-						#print("Bounds = (%d,%d,%d,%d,%d,%d)"%(iS,iE,jS,jE,kS,kE))
-						if (self.isMPI):
-							fIn = self.fdir + "/" + kh5.genName(self.ftag,i,j,k,self.Ri,self.Rj,self.Rk)
-						else:
-							fIn = self.fdir + "/" + self.ftag + ".h5"
+					iS = i*self.dNi
+					jS = j*self.dNj
+					kS = k*self.dNk
+					iE = iS+self.dNi
+					jE = jS+self.dNj
+					kE = kS+self.dNk
+					#print("Bounds = (%d,%d,%d,%d,%d,%d)"%(iS,iE,jS,jE,kS,kE))
+					if (self.isMPI):
+						fIn = self.fdir + "/" + kh5.genName(self.ftag,i,j,k,self.Ri,self.Rj,self.Rk)
+					else:
+						fIn = self.fdir + "/" + self.ftag + ".h5"
 
-						if (self.is2D):
-							V[iS:iE,jS:jE] = kh5.PullVar(fIn,vID,sID)
+					if (self.is2D):
+						V[iS:iE,jS:jE] = kh5.PullVar(fIn,vID,sID)
 
-						else:
-							V[iS:iE,jS:jE,kS:kE] = kh5.PullVar(fIn,vID,sID)
-						bar()
+					else:
+						V[iS:iE,jS:jE,kS:kE] = kh5.PullVar(fIn,vID,sID)
+					bar()
 
-			return V
+		return V
 
 
 	#FIXME: Currently pulling whole 3D array and then slicing, lazy
