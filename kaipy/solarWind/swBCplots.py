@@ -96,46 +96,44 @@ def SummaryPlot(VarDict, Xname):
 
 
 def MultiPlot(VarDict, Xname, Items, color='b'):
-    def MultiPlot(VarDict, Xname, Items, color='b'):
-        """
-        Plot variables stored in TimeSeries object 'varDict'.
+    """
+    Plot variables stored in TimeSeries object 'varDict'.
 
-        This function is a simple wrapper around the more generic MultiPlotN function.
+    This function is a simple wrapper around the more generic MultiPlotN function.
 
-        Args:
-            VarDict (TimeSeries): The TimeSeries object containing the variables to be plotted.
-            Xname (str): The name of the x-axis variable.
-            Items (list): A list of variable names to be plotted.
-            color (str, optional): The color of the plot. Defaults to 'b'.
+    Args:
+        VarDict (TimeSeries): The TimeSeries object containing the variables to be plotted.
+        Xname (str): The name of the x-axis variable.
+        Items (list): A list of variable names to be plotted.
+        color (str, optional): The color of the plot. Defaults to 'b'.
 
-        Returns:
-            None
-        """
+    Returns:
+        None
+    """
     MultiPlotN([VarDict], Xname, Items, [color], [])
 
     
 def MultiPlot2(VarDict, VarDict2, Xname, Items, color1='b', color2='r'):
-    def MultiPlot2(VarDict, VarDict2, Xname, Items, color1='b', color2='r'):
-        """
-        Plot items (stored in TimeSeries objects VarDict and VarDict2)
-        against one another. One sub plot is created for each item.
+    """
+    Plot items (stored in TimeSeries objects VarDict and VarDict2)
+    against one another. One sub plot is created for each item.
 
-        Args:
-            VarDict (TimeSeries): A TimeSeries object containing the first set of data.
-            VarDict2 (TimeSeries): A TimeSeries object containing the second set of data.
-            Xname (str): The name of the x-axis variable.
-            Items (list): A list of items to plot against each other.
-            color1 (str, optional): The color of the plot for VarDict. Default is 'b' (blue).
-            color2 (str, optional): The color of the plot for VarDict2. Default is 'r' (red).
+    Args:
+        VarDict (TimeSeries): A TimeSeries object containing the first set of data.
+        VarDict2 (TimeSeries): A TimeSeries object containing the second set of data.
+        Xname (str): The name of the x-axis variable.
+        Items (list): A list of items to plot against each other.
+        color1 (str, optional): The color of the plot for VarDict. Default is 'b' (blue).
+        color2 (str, optional): The color of the plot for VarDict2. Default is 'r' (red).
 
-        Returns:
-            None
-        """
+    Returns:
+        None
+    """
     MultiPlotN([VarDict, VarDict2],
-               Xname,
-               Items,
-               [color1, color2],
-               [])
+                Xname,
+                Items,
+                [color1, color2],
+                [])
 
 
 def MultiPlotN(varDicts, Xname, variables, colors = [], legendLabels=[]):

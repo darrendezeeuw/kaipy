@@ -40,14 +40,27 @@ def getGrid(fIn, do4D=False):
 		return xx, yy, Ki, Kc
 	
 	
-def getSlc(fIn,nStp=0,vID="jPSD",doWrap=False):
-	gID = "Step#%d"%(nStp)
-	with h5py.File(fIn,'r') as hf:
+def getSlc(fIn, nStp=0, vID="jPSD", doWrap=False):
+	"""
+	Retrieve a slice of data from an HDF5 file.
+
+	Args:
+		fIn (str): The path to the HDF5 file.
+		nStp (int): The step number.
+		vID (str): The variable ID.
+		doWrap (bool): Whether to wrap the data.
+
+	Returns:
+		V (ndarray): The retrieved slice of data.
+	"""
+	gID = "Step#%d" % (nStp)
+	with h5py.File(fIn, 'r') as hf:
 		V = hf[gID][vID][()].T
 	if (doWrap):
 		return kv.reWrap(V)
 	else:
 		return V
+
 
 #Pressure anisotropy
 #doAsym : Px/Pz-1
