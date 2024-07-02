@@ -81,7 +81,7 @@ class TPInfo(H5Info):
 	"""
 
 	def __init__(self, fname:str, noSubsec:bool=True):
-		super.__init__(fname, noSubsec)
+		super().__init__(fname, noSubsec)
 		with h5py.File(self.fname) as tp5:
 			ids = tp5[self.stepStrs[0]]['id']
 			self.Ntp = ids.shape[0]
