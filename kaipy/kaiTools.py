@@ -62,6 +62,37 @@ def MJD2UT(mjd):
 	else:
 		return [datetime.datetime.strptime(UT[n], isotfmt) for n in range(len(UT))]
 
+def utIdx(utList,ut):
+	""" 
+	Finds the index of the closest datetime within an array of datetimes
+
+	Parameters:
+		utList (List[datetime.datetime]): List of datetimes to find index within
+		ut (datetime.datetime): datetime to find closest index to
+
+	Returns:
+		Single integer value of the closest index within 'utList' to 'ut'
+	"""
+	return np.array([np.abs((utList[n]-ut).total_seconds()) for n in range(len(utList))]).argmin()
+
+def pntIdx_2D(X2D, Y2D, pnt):
+	"""
+	Finds i, j, index within 'X2D' and 'Y2D' closest to 'pnt'
+	Assumes cartesian coordinate system
+		
+	Parameters:
+		X2D (ndarray[float]): 2D array of X values
+		Y2D (ndarray[float]): 2D array of Y values
+		pnt (List[float])   : [x, y] point to find closest index to
+
+	Returns:
+		Tuple of closest i, j index to point 'pnt'
+	"""
+	distSq = (X2D-pnt[0])**2 + (Y2D-pnt[1])**2  # Each source point's euclidian distance from 'pnt'
+	aMinFlattened = distSq.argmin()  # Index of min distance, if it was a flattened array
+	i, j = np.unravel_index(aMinFlattened, X2D.shape)  # Convert back into i,j location
+	return i, j
+
 def getRunInfo(fdir, ftag):
 	"""
 	Get information about the run.

@@ -114,7 +114,7 @@ def getRootVars(fname, gDims):
 			doV = True
 			if ("Step" in vID or kdefs.grpTimeCache in vID):
 				doV = False
-			if ((vID == "X") or (vID == "Y") or (vID == "Z")):
+			if ((vID == "X") or (vID == "Y") or (vID == "Z") or (type(hf[k]) != h5py._hl.group.Group)):  # Ignore root geom and root Groups
 				doV = False
 			if (doV):
 				Nv = hf[k].shape
