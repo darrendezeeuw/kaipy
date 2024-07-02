@@ -25,7 +25,15 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 ###############################################################################
 
 def Time2Float(x):
-    """Converts datetime to float, so that interpolation/smoothing can be performed"""
+    """
+    Converts datetime to float, so that interpolation/smoothing can be performed
+
+    Args:
+        x (datetime): The datetime object to be converted to float
+
+    Returns:
+        float: The float representation of the input datetime object
+    """
     if (type(x) == np.ndarray) or (type(x) == list):
         emptyarray = []
         for i in x:
@@ -36,10 +44,17 @@ def Time2Float(x):
     else:
         return (x - datetime.datetime(1970, 1, 1, 0)).total_seconds()
 
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-
 def Float2Time(x):
-    """Converts array back to datetime so that it can be plotted with time on the axis"""
+    """
+    Converts a float or an array of floats to datetime objects.
+    
+    Parameters:
+        x (float or array-like): The input float or array of floats to be converted.
+        
+    Returns:
+        datetime or ndarray: If the input is a single float, returns a datetime object representing the corresponding timestamp.
+                             If the input is an array of floats, returns an ndarray of datetime objects representing the corresponding timestamps.
+    """
     if (type(x) == np.ndarray) or (type(x) == list):
         emptyarray = []
         for i in x:
@@ -50,40 +65,43 @@ def Float2Time(x):
     else:
         return datetime.datetime.utcfromtimestamp(x)
 
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-
 def interp_tri(xy):
     """
-    do first part of griddata calculation so it can be done only once for the
-    main grid rather than being called every time we need to do the
-    interpolation for each path (this speeds the code up significantly)
-    use interp_grid for the second part
-    from stackoverflow.com/questions/20915502/
+    Perform the first part of the griddata calculation, which only needs to be done once for the main grid.
+    This function creates a Delaunay triangulation object based on the given points.
+
+    Args:
+        xy (array-like): The input points for the triangulation.
+
+    Returns:
+        Delaunay: The Delaunay triangulation object.
+
+    References:
+        - Stack Overflow: https://stackoverflow.com/questions/20915502/
     """
     tri = qhull.Delaunay(xy)
     return tri
 
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-
 def interp_grid(values, tri, uv, d=2):
     """
-    grid interpolation - done for each connection
-    This is esentially what griddata does but with the first part of the
+    Perform grid interpolation for each connection.
+
+    This function is essentially what griddata does, but with the first part of the
     triangulation separated out (in interp_tri) so it can be performed just
     once for the E-field grid. Then this part is for finding the interpolated
-    values for all the paths along each of the connections
-    Doing it this way gave ~7x speed improvement for a uniform field
-    Inputs
-    ------
-    values : np.array
-       values for each point on the grid - i.e. the E-field values
-    tri : scipy.spatial.qhull.Delaunay
-       from interp_grid
-    uv : np.array
-       new grid positions for interpolation - i.e. pathsteps along the
-       connection
-    d : scalar, default = 2
-       ?? dimensions? would be 3 for a 3d grid
+    values for all the paths along each of the connections.
+
+    This approach provides a ~7x speed improvement for a uniform field.
+
+    Args:
+        values (np.array): Values for each point on the grid, i.e., the E-field values.
+        tri (scipy.spatial.qhull.Delaunay): Triangulation object obtained from interp_grid.
+        uv (np.array): New grid positions for interpolation, i.e., path steps along the connection.
+        d (scalar, optional): Number of dimensions. Would be 3 for a 3D grid. Defaults to 2.
+
+    Returns:
+        np.array: Interpolated values for the given grid positions.
+
     """
     simplex = tri.find_simplex(uv)
     vertices = np.take(tri.simplices, simplex, axis=0)
@@ -93,30 +111,33 @@ def interp_grid(values, tri, uv, d=2):
     return np.einsum('nj,nj->n', np.take(values, vertices),
                      np.hstack((bary, 1 - bary.sum(axis=1, keepdims=True))))
 
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-
 def FetchSMData(user, start, numofdays, savefolder, badfrac=0.1, nanflags=True, doDB=True, ncpus=1):
-    """Retrieve all available SuperMagnet data for a specified period
-    If data has not already been downloaded, fetches data from Supermag
-    
-    Parameters
-    -----------
-    user = username for downloading SuperMag Data
-    start = start day (datetime obj)
-    numofdays = number of days from start to download
-    savefolder = folder where downloaded data will be saved as json. This function
-        looks here first for saved data before downloading.
-    badfrac = tolerable fraction of data that is 99999.0. Sites with more bad data
-        than this fraction will be ignored
-    nanflags = will set 99999.0 values to nans if True (True by default)    
-    doDB = Whether to pull the pre-baselined values from supermag
+    def FetchSMData(user, start, numofdays, savefolder, badfrac=0.1, nanflags=True, doDB=True):
+        """
+        Retrieve all available SuperMagnet data for a specified period.
+        If data has not already been downloaded, fetches data from Supermag.
 
-    Returns
-    -----------
-    Dictionary which has the following data as keys:
-    {td, sitenames, glon, glat, mlon, mlat, mcolat, 
-                BNm, BEm, BZm, BNg, BEg, BZg, MLT, DECL, SZA}
-    """
+        Parameters:
+        user: str
+            Username for downloading SuperMag Data.
+        start: datetime
+            Start day.
+        numofdays: int
+            Number of days from start to download.
+        savefolder: str
+            Folder where downloaded data will be saved as json. This function looks here first for saved data before downloading.
+        badfrac: float, optional
+            Tolerable fraction of data that is 99999.0. Sites with more bad data than this fraction will be ignored. Default is 0.1.
+        nanflags: bool, optional
+            If True, set 99999.0 values to NaNs. Default is True.
+        doDB: bool, optional
+            Whether to pull the pre-baselined values from Supermag. Default is True.
+
+        Returns:
+        dict:
+            Dictionary which has the following data as keys:
+            {'td', 'sitenames', 'glon', 'glat', 'mlon', 'mlat', 'mcolat', 'BNm', 'BEm', 'BZm', 'BNg', 'BEg', 'BZg', 'MLT', 'DECL', 'SZA'}
+        """
 
     if (doDB):
         smFlags = "all,delta=start,baseline=all"
@@ -250,10 +271,24 @@ def FetchSMData(user, start, numofdays, savefolder, badfrac=0.1, nanflags=True, 
              'BNg':BNg[i], 'BEg':BEg[i], 'BZg':BZg[i], 'mlt':MLT[i], 'decl':DECL[i], 'sza':SZA[i]}     
     return output
 
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-
 def doFetch(user, startstr, numofdays, smFlags, badfrac, iii):
+    """
+    Fetches data using SuperMAG API.
 
+    Args:
+        user (str): The user name.
+        startstr (str): The start date in string format.
+        numofdays (int): The number of days to fetch data for.
+        smFlags (str): The flag string.
+        badfrac (float): The fraction of bad values allowed.
+        iii (int): The station number.
+
+    Returns:
+        tuple: A tuple containing the following elements:
+            - status (bool): The status of the data fetch.
+            - badindex (bool): Indicates if there are too many bad values.
+            - master (list or str): The fetched data or 'BAD' if fetch failed.
+    """
     print("Fetching: ", iii)
     #ZZZ
 
@@ -275,34 +310,42 @@ def doFetch(user, startstr, numofdays, smFlags, badfrac, iii):
         badindex = False
         master = ['BAD']
 
-    return status,badindex,master
-
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+    return status, badindex, master
 
 def MJD2Str(m0):
-    """Returns timestrings and datetime objects for simulation float"""
+    """Returns timestrings and datetime objects for simulation MJD
+
+    Args:
+        m0 (float): The simulation float representing the Modified Julian Date (MJD).
+
+    Returns:
+        tuple: A tuple containing the time string and datetime object.
+            - tStr (str): The formatted time string in the format "HH:MM:SS MM/DD/YYYY".
+            - dtObj (datetime): The datetime object corresponding to the simulation float.
+
+    """
     dtObj = Time(m0,format='mjd').datetime
     tStr = dtObj.strftime("%H:%M:%S") + " " +  dtObj.strftime("%m/%d/%Y")
     return tStr, dtObj
 
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-
 def ReadSimData(filename, quiet = True):
-    """Read in all of the needed ground mag data from a .h5 file
-    
-    Parameters
-    -----------
-    filename = address of .h5 delta-b object
-    
-    Output
-    -----------
-    dictionary of:
-    td = time for each step
-    glon, glat = geo coordinates
-    mlt = magnetic local time
-    smlon,smlat = sm coordinates
-    dBt, dBp, dBr = Btheta (*-1), phi, radius
-    dBn = magnetic North component
+    """Reads in all of the needed ground magnetic data from a .h5 file.
+
+    Args:
+        filename (str): The address of the .h5 delta-b object.
+
+    Returns:
+        dict: A dictionary containing the following keys:
+            - td (array): Time for each step.
+            - glon (array): Geographic longitude.
+            - glat (array): Geographic latitude.
+            - mlt (array): Magnetic local time.
+            - smlon (array): SM coordinates (longitude).
+            - smlat (array): SM coordinates (latitude).
+            - dBt (array): Btheta component (multiplied by -1).
+            - dBp (array): Bphi component.
+            - dBr (array): Bradius component.
+            - dBn (array): Northward deflection (dot product of dB and minus thetheta unit vector).
     """
     f = h5py.File(filename, 'r')
 
@@ -367,23 +410,20 @@ def ReadSimData(filename, quiet = True):
     
     return output
 
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-
 def FetchSMIndices(user, start, numofdays, wanted = 'ALL'):
-    """Retrieve SME, SML, SMU indices from SuperMag
+    def FetchSMIndices(user, start, numofdays, wanted=None):
+        """
+        Retrieve SME, SML, SMU indices from SuperMag
 
-    Parameters
-    -----------
-    user = username for downloading SuperMag Data
-    start = start day (datetime obj)
-    numofdays = number of days from start to download
-    wanted = list of wanted attrs (e.g., ['SME', 'SML']
-        downloads all by default
+        Args:
+            user (str): Username for downloading SuperMag Data.
+            start (datetime): Start day.
+            numofdays (int): Number of days from start to download.
+            wanted (list, optional): List of wanted attributes. Defaults to None.
 
-    Returns
-    -----------
-    output = dictionary of wanted values as arrays + 'td' array
-    """
+        Returns:
+            dict: Dictionary of wanted values as arrays + 'td' array.
+        """
     #ZZZ
     status, vals = smapi.SuperMAGGetIndices(user, start, 86400*numofdays, 'all', FORMAT='list')
 
@@ -406,84 +446,83 @@ def FetchSMIndices(user, start, numofdays, wanted = 'ALL'):
 
     return output
 
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-
 def CalculateSMRBins(mlt, B, mlat):
-    """Calculate SMR and bins for a given mlt, B, and mlat
+    """
+    Calculate SMR and bins for a given mlt, B, and mlat
     Does the latitudinal scaling
 
-    Parameters
-    -----------
-    mlt = array of magnetic local time
-    B = array of B
-    mlat = array of magnetic latitudes
+    Args:
+        mlt (array): Array of magnetic local time.
+        B (array): Array of B.
+        mlat (array): Array of magnetic latitudes.
 
-    Returns
-    -----------
-    SMR = calculated SMR (SYMH equivalent) as array
-    SMR00, SMR06, SMR12, SMR18 = 6-hour SMR bins as arrays
+    Returns:
+        tuple: A tuple containing the following arrays:
+            - SMR (array): Calculated SMR (SYMH equivalent).
+            - SMR00 (array): 6-hour SMR bin for 00:00-06:00 MLT.
+            - SMR06 (array): 6-hour SMR bin for 06:00-12:00 MLT.
+            - SMR12 (array): 6-hour SMR bin for 12:00-18:00 MLT.
+            - SMR18 (array): 6-hour SMR bin for 18:00-00:00 MLT.
     """
     latscaling = np.array([np.cos(np.deg2rad(mlat))])
     Bnorth = np.copy(B)/latscaling
-
     ind = np.abs(mlat) <= 50
     BNorthSMR = Bnorth.T[ind].T
-    mltSMR    = np.copy(mlt).T[ind].T
-
-    ind1 = (mltSMR >= 21) + (mltSMR <  3)      
-    ind2 = (mltSMR >= 3)  * (mltSMR < 9)
-    ind3 = (mltSMR >= 9)  * (mltSMR < 15)
+    mltSMR = np.copy(mlt).T[ind].T
+    ind1 = (mltSMR >= 21) + (mltSMR < 3)
+    ind2 = (mltSMR >= 3) * (mltSMR < 9)
+    ind3 = (mltSMR >= 9) * (mltSMR < 15)
     ind4 = (mltSMR >= 15) * (mltSMR < 21)
-
     B1, B2, B3, B4, SMR = [], [], [], [], []
     for i in range(BNorthSMR.shape[0]):
-
         bin1 = np.nanmean(BNorthSMR[i][ind1[i]])
         bin2 = np.nanmean(BNorthSMR[i][ind2[i]])
         bin3 = np.nanmean(BNorthSMR[i][ind3[i]])
         bin4 = np.nanmean(BNorthSMR[i][ind4[i]])
-
         B1.append(bin1)
         B2.append(bin2)
         B3.append(bin3)
         B4.append(bin4)
-        
         SMR.append(bin1 + bin2 + bin3 + bin4)
-
     SMR, B1, B2, B3, B4 = np.array(SMR)/4., np.array(B1), np.array(B2), np.array(B3), np.array(B4)
-
     return SMR, B1, B2, B3, B4
 
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-
 def InterpolateSimData(SIM, SM):
-    """Interpolates simulated data to SuperMag station coordinates, and calculates 
+    """
+    Interpolates simulated data to SuperMag station coordinates, and calculates 
     different indices (SME/U/L/R).
 
     This function first interpolates sim data so that it is on the same timestamps
     as the SM data, then interpolates to the same geographic positions. Then it calculates 
     SME/U/L/R for the SM interpolated data, + all simulated data (superSME/U/L/R).
     
-    Parameters
-    -----------
-    SIM = dictionary of simulated data (from ReadSimData())
-    SM  = dictionary of supermag data (from FetchSMData())
+    Args:
+        SIM (dict): Dictionary of simulated data (from ReadSimData()).
+        SM (dict): Dictionary of supermag data (from FetchSMData()).
     
-    Output
-    -----------
-    dictionary of 
-    td = timestamps
-    glon, glat, mlon, mlat = Supermag coordinates
-    dBn, dBt, dBp = interpolated magnetic components
-    mlt = interpolated mlt
-
-    dBnsmall, mltsmall = simulated data for all points, but limited to Supermag timestamps
-
-    SME/U/L/R = indices at interpolated points
-    superSME/U/L/R = indices using all data
-    
-    SMRbins = list of 4 bins using interpolated data(SMR00/06/12/18)
-    superSMRbins = as before with all data
+    Returns:
+        dict: Dictionary containing the following keys:
+            - td: Timestamps.
+            - glon: Supermag longitude coordinates.
+            - glat: Supermag latitude coordinates.
+            - mlon: Magnetic longitude coordinates.
+            - mlat: Magnetic latitude coordinates.
+            - dBn: Interpolated northward deflection (dot product of dB and minus thetheta unit vector)
+            - dBt: Interpolated magnetic theta component.
+            - dBp: Interpolated magnetic phi component.
+            - mlt: Interpolated magnetic local time.
+            - dBnsmall: Simulated data for all points, but limited to Supermag timestamps.
+            - mltsmall: Simulated data for all points, but limited to Supermag timestamps.
+            - SME: SME index at interpolated points.
+            - SMU: SMU index at interpolated points.
+            - SML: SML index at interpolated points.
+            - SMR: SMR index at interpolated points.
+            - superSME: SME index using all data.
+            - superSMU: SMU index using all data.
+            - superSML: SML index using all data.
+            - superSMR: SMR index using all data.
+            - SMRbins: List of 4 bins using interpolated data (SMR00/06/12/18).
+            - superSMRbins: List of 4 bins using all data (SMR00/06/12/18).
     """
 
     # find limits of overlapping data
@@ -556,59 +595,48 @@ def InterpolateSimData(SIM, SM):
               'superSMRbins':[SMR00, SMR06, SMR12, SMR18]}
 
     return output
-
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
  
 def SMContourPlotPrep(mlt, td, bx):
-    """Bins max and min Bn to make hourly SMU/SML contour plots 
-    
-    Parameters
-    -----------
-    mlt = magnetic local time array
-    td  = array of datetime
-    bx = array of Bx (magnetic north component)
-    
-    Output:
-    -----------
-    hourbins = array of 1.5*hour (24.5, 23.5...)
-    SMUbig = array of binned SMU values
-    SMLbig = array of binned SML values
     """
-
+    Bins max and min Bn to make hourly SMU/SML contour plots 
+    
+    Args:
+        mlt (array): Magnetic local time array.
+        td (array): Array of datetime.
+        bx (array): Array of Bx (magnetic north component).
+    
+    Returns:
+        tuple: Tuple containing:
+            - hourbins (array): Array of 1.5*hour (24.5, 23.5...).
+            - SMUbig (array): Array of binned SMU values.
+            - SMLbig (array): Array of binned SML values.
+    """
+    hourbins = np.arange(24, 0, -1) + 0.5
     SMUbig = np.zeros((24, len(td)))    # 24 3-hour bins, for each min
     SMLbig = np.zeros((24, len(td)))    # 24 3-hour bins, for each min
-
-    hourbins = np.arange(24, 0, -1) + 0.5
-
     for i, hour in enumerate(hourbins):
-        #print(i)
         diff1 = np.abs(mlt - hour) <= 1.5
         diff2 = np.abs(mlt + 24 - hour) <= 1.5
         diff3 = np.abs(mlt - 24 - hour) <= 1.5
-
         ind = diff1 + diff2 + diff3
         bx2 = np.copy(bx)
         bx2[np.invert(ind)] = np.nan
-
         SMUbig[i] = np.nanmax(bx2, axis = 1)
         SMLbig[i] = np.nanmin(bx2, axis = 1)
-
     return hourbins, SMUbig, SMLbig
 
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-
 def MakeContourPlots(SM, SMinterp, maxx = 'default', fignumber = 1):
-    """Makes hourly contour plots for SMU/SML
+    """
+    Makes hourly contour plots for SMU/SML
     
-    Parameters
-    -----------
-    SM, SMinterp = SM and interpolated dictionaries
-    maxx = absolute max value for colorbar. If left as 'default', will adapt to data
-    fignumber = number of figure
+    Args:
+        SM (dict): Dictionary containing SM data.
+        SMinterp (dict): Dictionary containing interpolated SM data.
+        maxx (float, optional): Absolute max value for colorbar. If left as 'default', will adapt to data. Defaults to 'default'.
+        fignumber (int, optional): Number of figure. Defaults to 1.
 
-    Output:
-    -----------
-    Tasty contour plot
+    Returns:
+        None
     """
 
     # Real data
@@ -688,50 +716,59 @@ def MakeContourPlots(SM, SMinterp, maxx = 'default', fignumber = 1):
     cb.set_label("Mag Perturbation (nT)", fontsize = qqq)
     plt.show()
 
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+def MakeIndicesPlot(SMI, SMinterp, fignumber=1):
+    """
+    Plot the indices using the given data.
 
-def MakeIndicesPlot(SMI, SMinterp, fignumber = 1):
+    Args:
+        SMI (dict): Dictionary containing the real indices data.
+        SMinterp (dict): Dictionary containing the interpolated and super indices data.
+        fignumber (int): Figure number for the plot (default is 1).
+
+    Returns:
+        None
+    """
     fig = plt.figure(fignumber)
     plt.clf()
 
     ax1 = plt.subplot(311)
-    plt.plot(SMinterp['td'], SMinterp['SME'], 'r', label = 'interpolated')
+    plt.plot(SMinterp['td'], SMinterp['SME'], 'r', label='interpolated')
     plt.plot(SMinterp['td'], SMinterp['SMU'], 'r')
     plt.plot(SMinterp['td'], SMinterp['SML'], 'r')
 
-    plt.plot(SMinterp['td'], SMinterp['superSME'], 'g', label = 'super')
+    plt.plot(SMinterp['td'], SMinterp['superSME'], 'g', label='super')
     plt.plot(SMinterp['td'], SMinterp['superSMU'], 'g')
     plt.plot(SMinterp['td'], SMinterp['superSML'], 'g')
 
-    plt.plot(SMI['td'], SMI['SME'], 'b', label = 'real')
+    plt.plot(SMI['td'], SMI['SME'], 'b', label='real')
     plt.plot(SMI['td'], SMI['SMU'], 'b')
     plt.plot(SMI['td'], SMI['SML'], 'b')
     plt.grid(True)
     plt.legend()
     plt.xlim([SMinterp['td'][0], SMinterp['td'][-1]])
-    plt.ylabel("SME/U/L", fontsize = 20)
+    plt.ylabel("SME/U/L", fontsize=20)
 
     ax2 = plt.subplot(312)
-    plt.plot(SMinterp['td'], SMinterp['SMR'], 'r', label = 'interpolated')
-    plt.plot(SMinterp['td'], SMinterp['superSMR'], 'g', label = 'super')
-    plt.plot(SMI['td'], SMI['smr'], 'b', label = 'real')
+    plt.plot(SMinterp['td'], SMinterp['SMR'], 'r', label='interpolated')
+    plt.plot(SMinterp['td'], SMinterp['superSMR'], 'g', label='super')
+    plt.plot(SMI['td'], SMI['smr'], 'b', label='real')
     plt.grid(True)
     plt.legend()
     plt.xlim([SMinterp['td'][0], SMinterp['td'][-1]])
-    plt.ylabel("SMR", fontsize = 20)
+    plt.ylabel("SMR", fontsize=20)
 
     ax3 = plt.subplot(313)
-    plt.plot(SMinterp['td'], SMinterp['SMRbins'][0], 'r', label = 'interpolated')
+    plt.plot(SMinterp['td'], SMinterp['SMRbins'][0], 'r', label='interpolated')
     plt.plot(SMinterp['td'], SMinterp['SMRbins'][1], 'r')
     plt.plot(SMinterp['td'], SMinterp['SMRbins'][2], 'r')
     plt.plot(SMinterp['td'], SMinterp['SMRbins'][3], 'r')
 
-    plt.plot(SMinterp['td'], SMinterp['superSMRbins'][0], 'g', label = 'super')
+    plt.plot(SMinterp['td'], SMinterp['superSMRbins'][0], 'g', label='super')
     plt.plot(SMinterp['td'], SMinterp['superSMRbins'][1], 'g')
     plt.plot(SMinterp['td'], SMinterp['superSMRbins'][2], 'g')
     plt.plot(SMinterp['td'], SMinterp['superSMRbins'][3], 'g')
 
-    plt.plot(SMI['td'], SMI['smr00'], 'b', label = 'real')
+    plt.plot(SMI['td'], SMI['smr00'], 'b', label='real')
     plt.plot(SMI['td'], SMI['smr06'], 'b')
     plt.plot(SMI['td'], SMI['smr12'], 'b')
     plt.plot(SMI['td'], SMI['smr18'], 'b')
@@ -739,26 +776,25 @@ def MakeIndicesPlot(SMI, SMinterp, fignumber = 1):
     plt.xlim([SMinterp['td'][0], SMinterp['td'][-1]])
     plt.legend()
     plt.grid(True)
-    plt.ylabel("SMR 6-hour bins", fontsize = 20)
+    plt.ylabel("SMR 6-hour bins", fontsize=20)
     plt.show()
 
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-
 def Z_Tensor_1D(resistivities, thicknesses, frequencies):
-    """Calculate 1D Z-Tensor for given ground resistivity profile.
-    Parameters
-    -----------
-    resistivities = array or list of resistivity values in Ohm.m
-    thicknesses = array or list of thicknesses in m.
-        **len(resistivities) must be len(thicknesses) + 1**
-    frequencies = array or list of frequencies to get response of
-    
-    Returns
-    -----------
-    Z = complex array of Z tensor values
-    
+    """
+    Calculate 1D Z-Tensor for given ground resistivity profile.
+
+    Args:
+        resistivities (array or list): Resistivity values in Ohm.m.
+        thicknesses (array or list): Thicknesses in m.
+            **len(resistivities) must be len(thicknesses) + 1**
+        frequencies (array or list): Frequencies to get response of.
+
+    Returns:
+        Z (complex array): Z tensor values.
+
     Taken from:
-    http://www.digitalearthlab.com/tutorial/tutorial-1d-mt-forward/"""
+    http://www.digitalearthlab.com/tutorial/tutorial-1d-mt-forward/
+    """
     
     if len(resistivities) != len(thicknesses) + 1:
         print("Length of inputs incorrect!")
@@ -803,25 +839,26 @@ def Z_Tensor_1D(resistivities, thicknesses, frequencies):
         #master_res.append((absZ * absZ)/(mu * w))
     return np.array(master_Z)
 
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-
 def E_Field_1D(bx, by, resistivities, thicknesses, timestep = 60., Z = None, calc_Z = True, pad = True, padnum = 150):
-    """Calculate horizontal E-field components given Bx, By, resistivities and thicknesses.
-    
-    Parameters
-    -----------
-    bx, by = array of Bx, By timeseries in nT
-    resistivities = array or list of resistivity values in Ohm.m
-    thicknesses = array or list of thicknesses in m.
-        **len(resistivities) must be len(thicknesses) + 1**
-    timestep = time between samples (default is 60. for minute sampling)
-    
-    Z = complex Z-tensor array. If not supplied, Z will be calculated from input
-        resistivities and thicknesses
-    
-    Returns
-    -----------
-    ext, eyt = arrays of electric field components in mV/km"""
+    """
+    Calculate horizontal E-field components given Bx, By, resistivities, and thicknesses.
+
+    Parameters:
+        bx (array): Array of Bx timeseries in nT.
+        by (array): Array of By timeseries in nT.
+        resistivities (array or list): Array or list of resistivity values in Ohm.m.
+        thicknesses (array or list): Array or list of thicknesses in m.
+            **len(resistivities) must be len(thicknesses) + 1**
+        timestep (float): Time between samples (default is 60. for minute sampling).
+        Z (complex array): Complex Z-tensor array. If not supplied, Z will be calculated from input resistivities and thicknesses.
+        calc_Z (bool): Flag to calculate Z if not supplied (default is True).
+        pad (bool): Flag to pad the input data (default is True).
+        padnum (int): Number of points to pad at the beginning and end of the input data (default is 150).
+
+    Returns:
+        ext (array): Array of electric field components in mV/km.
+        eyt (array): Array of electric field components in mV/km.
+    """
     
     if pad == False:
         new_bx = bx
@@ -850,28 +887,27 @@ def E_Field_1D(bx, by, resistivities, thicknesses, timestep = 60., Z = None, cal
         return ext, eyt
     else:
         return ext[padnum:-padnum], eyt[padnum:-padnum]
-        
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
 def EField1DCalculation(BX, BY, TD):
-    """Calculates Ex and Ey using a resistive 1-D ground model
+    """
+    Calculates Ex and Ey using a resistive 1-D ground model.
 
-    This function assumes that it is given 60 second data
-    
-    **WARNING** and time-series with nans will return all nans for that location
+    This function assumes that it is given 60 second data.
+
+    **WARNING** and time-series with nans will return all nans for that location.
     I'm not sure what the best way to handle these are, probably a linear interpolation
-    before calculating E-fields
-    
-    Also, be wary of FFT edge values at start and end of E-field calculation
+    before calculating E-fields.
 
-    Parameters
-    -----------
-    BX, BY = arrays of Bx(north) and By(east) from SM functions (e.g., SM['dBn'])
-    TD = timedate array
+    Also, be wary of FFT edge values at start and end of E-field calculation.
 
-    Returns
-    -----------
-    EX, EY = arrays of Ex, Ey in mV/km, same shape as input Bx, By
+    Parameters:
+        BX (array): Array of Bx(north) from SM functions (e.g., SM['dBn']).
+        BY (array): Array of By(east) from SM functions (e.g., SM['dBe']).
+        TD (array): Timedate array.
+
+    Returns:
+        EX (array): Array of Ex in mV/km, same shape as input Bx.
+        EY (array): Array of Ey in mV/km, same shape as input By.
     """
     Qres = np.array([500., 150., 20., 300., 100., 10., 1.])
     Qthick = 1000. * np.array([4., 6., 5., 65., 300., 200.])
@@ -896,8 +932,7 @@ def EField1DCalculation(BX, BY, TD):
         print("E-field calc: ", i)
 
     return EX, EY
-    
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+
 """
 # EXAMPLE RUN
 user = 'blakese' # username for Supermag downloads
