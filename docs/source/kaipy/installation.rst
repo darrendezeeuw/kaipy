@@ -74,7 +74,7 @@ Installing kaipy
 
         conda install -c conda-forge cartopy
 
-To install tiegcmpy, run the following command:
+To install kaipy, run the following command:
 
 .. code-block:: bash
 

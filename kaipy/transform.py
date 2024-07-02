@@ -1,20 +1,23 @@
 """
-NOTE: This module is stripped down to only stuff that is currently used in kaipy.
-The few remaining routines only wrap spacepy
-
 This module provides coordinate transformations relevant to geospace modeling.
-Many/most of these are wrappers to external C or Fortran libraries, employing
-the NumPy vectorize() method to handle ndarray inputs when appropriate.
+Many of these transformations are wrappers to external C or Fortran libraries, 
+using the NumPy vectorize() method to handle ndarray inputs when appropriate.
 
-#K: Ripped out everything but,
+Note:
+    This module is stripped down to only stuff that is currently used in kaipy.
+    The few remaining routines only wrap spacepy.
+    
+    #K: Ripped out everything
 
-x,y,z = SMtoGSM(x,y,z,dateTime)   - convert from solar magnetic to geocentric
-                                    solar magnetospheric coordinates
-x,y,z = GSMtoSM(x,y,z,dateTime)   - convert from geocentric solar magnetospheric
-                                    to solar magnetic coordinates
-x,y,z = GSEtoGSM(x,y,z,dateTime)  - convert from geocentric solar ecliptic to
-                                    geocentric magnetospheric coordinates
-
+Functions:
+    x, y, z = SMtoGSM(x, y, z, dateTime)
+        Convert from solar magnetic to geocentric solar magnetospheric coordinates.
+        
+    x, y, z = GSMtoSM(x, y, z, dateTime)
+        Convert from geocentric solar magnetospheric to solar magnetic coordinates.
+        
+    x, y, z = GSEtoGSM(x, y, z, dateTime)
+        Convert from geocentric solar ecliptic to geocentric magnetospheric coordinates.
 """
 
 import numpy as np

@@ -33,7 +33,7 @@ def create_command_line_parser():
 
     doDPS = False
     MainS = """Creates simple plot comparing SYM-H from OMNI dataset to Gamera-RCM.
-    Need to run or point to directory that has the bcwind and msphere.gam files of interest
+    Need to run or point to directory that has the bcwind and msphere.gam files of interest.  Note this calculation only includes the magnetospheric currents and does not include the ionospheric currents or the FACS.  It should be used with CAUTION and never in a scientific publication.
     """
     parser = argparse.ArgumentParser(description=MainS, formatter_class=RawTextHelpFormatter)
     parser.add_argument('-d',type=str,metavar="directory",default=fdir,help="Directory to read from (default: %(default)s)")
