@@ -847,34 +847,33 @@ def upFlux(M):
 
 #Upscale gas variable (G) on grid X,Y,Z (w/ ghosts) to doubled grid
 def upGas(G,dV0,dVu,vID="Gas"):
-	def upGas(G, dV0, dVu, vID="Gas"):
-		"""
-		Upscales the given gas variables.
+	"""
+	Upscales the given gas variables.
 
-		Args:
-			G (numpy.ndarray): The gas variables to be upscaled.
-			dV0 (numpy.ndarray): The volume of each cell in the original grid.
-			dVu (numpy.ndarray): The volume of each cell in the upscaled grid.
-			vID (str, optional): Identifier for the gas variables. Default is "Gas".
+	Args:
+		G (numpy.ndarray): The gas variables to be upscaled.
+		dV0 (numpy.ndarray): The volume of each cell in the original grid.
+		dVu (numpy.ndarray): The volume of each cell in the upscaled grid.
+		vID (str, optional): Identifier for the gas variables. Default is "Gas".
 
-		Returns:
-			Gu (numpy.ndarray): The upscaled gas variables.
+	Returns:
+		Gu (numpy.ndarray): The upscaled gas variables.
 
-		"""
-		#Chop out outer two cells, upscale inside
-		cG = G[:,:,2:-2,2:-2,2:-2]
-		cdV0 = dV0[2:-2,2:-2,2:-2]
-		Ns, Nv, Nk, Nj, Ni = cG.shape
-		
-		Gu = np.zeros((Ns, Nv, 2*Nk, 2*Nj, 2*Ni))
-		print("Upscaling %s variables ..." % (vID))
-		#Loop over coarse grid
-		for s in range(Ns):
-			for v in range(Nv):
-				print("\tUpscaling Species %d, Variable %d" % (s, v))
-				Gu[s, v, :, :, :] = upVarCC(cG[s, v, :, :, :], cdV0, dVu)
-		return Gu
+	"""
+	#Chop out outer two cells, upscale inside
+	cG = G[:,:,2:-2,2:-2,2:-2]
+	cdV0 = dV0[2:-2,2:-2,2:-2]
+	Ns, Nv, Nk, Nj, Ni = cG.shape
 	
+	Gu = np.zeros((Ns, Nv, 2*Nk, 2*Nj, 2*Ni))
+	print("Upscaling %s variables ..." % (vID))
+	#Loop over coarse grid
+	for s in range(Ns):
+		for v in range(Nv):
+			print("\tUpscaling Species %d, Variable %d" % (s, v))
+			Gu[s, v, :, :, :] = upVarCC(cG[s, v, :, :, :], cdV0, dVu)
+	return Gu
+
 #Upscale Bxyz on grid X,Y,Z (w/ ghosts) to doubled grid
 def upCCMag(B,dV0,dVu,vID="Bxyz"):
 	"""

@@ -18,6 +18,7 @@ class remix:
 	A class for handling and manipulating ion data in the REMIX format.
 
 	Thanks to awesome Slava Merkin for the original code.
+	
 	Args:
 		h5file (str): The path to the REMIX file in HDF5 format.
 		step (int): The step number of the data to be loaded.
@@ -35,7 +36,8 @@ class remix:
 		calcFaceAreas(self, x, y): Calculates the area of each face in a quad mesh.
 		plot(self, varname, ncontours=16, addlabels={}, gs=None, doInset=False, doCB=True, doCBVert=True, doGTYPE=False, doPP=False): Plots the specified variable.
 
-	Note: This class assumes that the REMIX file is in a specific format and follows certain naming conventions for the variables.
+	Note: 
+		This class assumes that the REMIX file is in a specific format and follows certain naming conventions for the variables.
 	"""
 
 	def __init__(self, h5file, step):
@@ -198,12 +200,12 @@ class remix:
 		Convert Cartesian coordinates (x, y) to spherical coordinates (r, theta).
 
 		Parameters:
-		x (ndarray): Array of x-coordinates.
-		y (ndarray): Array of y-coordinates.
+			x (ndarray): Array of x-coordinates.
+			y (ndarray): Array of y-coordinates.
 
 		Returns:
-		r (ndarray): Array of radial distances.
-		theta (ndarray): Array of azimuthal angles in radians.
+			r (ndarray): Array of radial distances.
+			theta (ndarray): Array of azimuthal angles in radians.
 		"""
 		# note, because of how the grid is set up in the h5 file,
 		# the code below produces the first theta that's just shy of 2pi.

@@ -112,32 +112,31 @@ def interp_grid(values, tri, uv, d=2):
                      np.hstack((bary, 1 - bary.sum(axis=1, keepdims=True))))
 
 def FetchSMData(user, start, numofdays, savefolder, badfrac=0.1, nanflags=True, doDB=True, ncpus=1):
-    def FetchSMData(user, start, numofdays, savefolder, badfrac=0.1, nanflags=True, doDB=True):
-        """
-        Retrieve all available SuperMagnet data for a specified period.
-        If data has not already been downloaded, fetches data from Supermag.
+    """
+    Retrieve all available SuperMagnet data for a specified period.
+    If data has not already been downloaded, fetches data from Supermag.
 
-        Parameters:
-        user: str
-            Username for downloading SuperMag Data.
-        start: datetime
-            Start day.
-        numofdays: int
-            Number of days from start to download.
-        savefolder: str
-            Folder where downloaded data will be saved as json. This function looks here first for saved data before downloading.
-        badfrac: float, optional
-            Tolerable fraction of data that is 99999.0. Sites with more bad data than this fraction will be ignored. Default is 0.1.
-        nanflags: bool, optional
-            If True, set 99999.0 values to NaNs. Default is True.
-        doDB: bool, optional
-            Whether to pull the pre-baselined values from Supermag. Default is True.
+    Parameters:
+    user: str
+        Username for downloading SuperMag Data.
+    start: datetime
+        Start day.
+    numofdays: int
+        Number of days from start to download.
+    savefolder: str
+        Folder where downloaded data will be saved as json. This function looks here first for saved data before downloading.
+    badfrac: float, optional
+        Tolerable fraction of data that is 99999.0. Sites with more bad data than this fraction will be ignored. Default is 0.1.
+    nanflags: bool, optional
+        If True, set 99999.0 values to NaNs. Default is True.
+    doDB: bool, optional
+        Whether to pull the pre-baselined values from Supermag. Default is True.
 
-        Returns:
-        dict:
-            Dictionary which has the following data as keys:
-            {'td', 'sitenames', 'glon', 'glat', 'mlon', 'mlat', 'mcolat', 'BNm', 'BEm', 'BZm', 'BNg', 'BEg', 'BZg', 'MLT', 'DECL', 'SZA'}
-        """
+    Returns:
+    dict:
+        Dictionary which has the following data as keys:
+        {'td', 'sitenames', 'glon', 'glat', 'mlon', 'mlat', 'mcolat', 'BNm', 'BEm', 'BZm', 'BNg', 'BEg', 'BZg', 'MLT', 'DECL', 'SZA'}
+    """
 
     if (doDB):
         smFlags = "all,delta=start,baseline=all"
@@ -411,19 +410,18 @@ def ReadSimData(filename, quiet = True):
     return output
 
 def FetchSMIndices(user, start, numofdays, wanted = 'ALL'):
-    def FetchSMIndices(user, start, numofdays, wanted=None):
-        """
-        Retrieve SME, SML, SMU indices from SuperMag
+    """
+    Retrieve SME, SML, SMU indices from SuperMag
 
-        Args:
-            user (str): Username for downloading SuperMag Data.
-            start (datetime): Start day.
-            numofdays (int): Number of days from start to download.
-            wanted (list, optional): List of wanted attributes. Defaults to None.
+    Args:
+        user (str): Username for downloading SuperMag Data.
+        start (datetime): Start day.
+        numofdays (int): Number of days from start to download.
+        wanted (list, optional): List of wanted attributes. Defaults to None.
 
-        Returns:
-            dict: Dictionary of wanted values as arrays + 'td' array.
-        """
+    Returns:
+        dict: Dictionary of wanted values as arrays + 'td' array.
+    """
     #ZZZ
     status, vals = smapi.SuperMAGGetIndices(user, start, 86400*numofdays, 'all', FORMAT='list')
 
