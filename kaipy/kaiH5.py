@@ -2,10 +2,99 @@ import h5py
 import numpy as np
 import os, sys, subprocess
 from alive_progress import alive_bar, alive_it
+from dataclasses import dataclass
+from dataclasses_json import dataclass_json
+from typing import List
+import datetime
+from astropy.time import Time
 #Import kaipy modules
 import kaipy.kdefs as kdefs
 import kaipy.kaiTools as ktools
 
+
+#------
+# Data Containers
+#------
+
+class H5Info(object):
+	""" 
+	Class to hold model data information from h5 output files
+
+	Args:
+		h5fname (str): .h5 filename to scrape info from
+		noSubsec (bool): Whether or not UTs should include subseconds (optional, default: True)
+
+	Attributes:
+		fname (str): .h5 filename the rest of the info came from
+		steps (List[int]): list of step numbers
+		stepStrs (List[str]): list of step strings in Step#X h5.Group format
+		Nt (int): Number of time steps
+		times (List[float]): List of times corresponding to each step
+			Units: Unchanged from file, likely seconds
+		MJDs (List[float]): List of MJDs corresponding to each step
+		UTs (List[float]): List of UTs corresponding to each step
+			May or may not include subseconds based on constructor args
+	"""
+
+	def __init__(self, h5fname: str, noSubsec:bool=True):
+		# h5fname = h5fname.split('/')[-1]
+		self.fname = h5fname
+		self.Nt, self.steps = cntSteps(self.fname)
+		self.stepStrs = ['Step#'+str(s) for s in self.steps]
+		self.times = getTs(self.fname, self.steps, "time")
+		self.MJDs  = getTs(self.fname, self.steps, "MJD" )
+
+		f5 = h5py.File(h5fname)
+		if noSubsec:
+			ut_arr = np.zeros(self.Nt, dtype=datetime.datetime)
+			for i,mjd in enumerate(self.MJDs):
+				UTStr = Time(mjd,format='mjd').isot
+				utTrim = UTStr.split('.')[0]
+				UT = datetime.datetime.strptime(utTrim,'%Y-%m-%dT%H:%M:%S')
+				ut_arr[i] = UT
+		else:
+			ut_arr = ktools.MJD2UT(self.MJDs)
+
+		self.UTs = ut_arr
+
+		f5.close()
+
+	def printStepInfo(self) -> None:
+		"""
+		Prints a summary of step info for the contained data
+
+		Args: None
+
+		Returns: None
+		"""
+		print("Step Info for {}:".format(self.fname))
+		print("  Step start/end/stride : {} / {} / {}".format(self.steps[0], self.steps[-1], self.steps[1]-self.steps[0]))
+		print("  Time start/end/stride : {:1.2f} / {:1.2f} / {:1.2f}".format(self.times[0], self.times[-1], self.times[1]-self.times[0]))
+		print("  MJD  start/end        : {:1.8f} / {:1.8f}".format(self.MJDs[0], self.MJDs[-1]))
+		print("  UT   start/end        : {} / {}".format(self.UTs[0], self.UTs[-1]))
+
+
+class TPInfo(H5Info):
+	"""
+	Extension of H5Info for test particle files
+
+	Attributes:
+		Ntp (int): Number of test particles
+		id2idxMap (Dict{int:}): Dict to help map TP id to its index
+	"""
+
+	def __init__(self, fname:str, noSubsec:bool=True):
+		super.__init__(fname, noSubsec)
+		with h5py.File(self.fname) as tp5:
+			ids = tp5[self.stepStrs[0]]['id']
+			self.Ntp = ids.shape[0]
+			self.id2idxMap = {}
+			for i in range(self.Ntp):
+				self.id2idxMap[int(ids[i])] = int(i)
+
+#------
+# General functions
+#------
 
 #Generate MPI-style name
 def genName(bStr, i, j, k, Ri, Rj, Rk, nRes=None):
