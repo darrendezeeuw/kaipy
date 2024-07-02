@@ -2,9 +2,6 @@ import h5py
 import numpy as np
 import os, sys, subprocess
 from alive_progress import alive_bar, alive_it
-from dataclasses import dataclass
-from dataclasses_json import dataclass_json
-from typing import List
 import datetime
 from astropy.time import Time
 #Import kaipy modules
