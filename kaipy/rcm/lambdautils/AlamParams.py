@@ -90,8 +90,8 @@ class AlamParams:
 	# These can help to determine some things for higher-level lambda generators
 	#tiote: Optional[float] = None  # Ratio of ion temperature to electron temperature
 	#ktMax: Optional[float] = None  # Energy in eV
-	emine: Optional[float]
-	eminp: Optional[float]
-	emaxe: Optional[float]
-	emaxp: Optional[float]
-	L_kt: Optional[float]
+	emine: Optional[float] = None
+	eminp: Optional[float] = None
+	emaxe: Optional[float] = None
+	emaxp: Optional[float] = None
+	L_kt : Optional[float] = None
