@@ -253,7 +253,7 @@ def fetch_satellite_magnetic_northern_footprint_position(spacecraft, when):
 
     Fetches the positions of the northern magnetic footprint for a spacecraft
     at a specified time. Data is fetched from CDAWeb. The first returned
-    positions are assumed to correspond to the requested value of "when".
+    position is assumed to correspond to the requested value of "when".
 
     Args:
         spacecraft (str): CDAWeb-compliant spacecraft ID.
@@ -338,7 +338,7 @@ def fetch_satellite_magnetic_southern_footprint_position(spacecraft, when):
 
     Fetches the positions of the southern magnetic footprint for a spacecraft
     at a specified time. Data is fetched from CDAWeb. The first returned
-    positions are assumed to correspond to the requested value of "when".
+    position is assumed to correspond to the requested value of "when".
 
     Args:
         spacecraft (str): CDAWeb-compliant spacecraft ID.
@@ -495,7 +495,7 @@ def fetch_helio_spacecraft_HGS_trajectory(spacecraft, t_start, t_end, mjdc):
 def fetch_helio_spacecraft_trajectory(sc_id, t_start, t_end):
     """Fetches the trajectory of a spacecraft in a time range.
 
-    Fetches the trajectory of a spacecraft in a time range, in the HGS
+    Fetches the trajectory of a spacecraft in a time range, in the default
     frame. Data is fetched from CDAWeb.
 
     Args:
