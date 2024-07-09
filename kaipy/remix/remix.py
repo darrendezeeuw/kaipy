@@ -562,7 +562,64 @@ class remix:
 		if not self.Initialized:
 			sys.exit("Variables should be initialized for the specific hemisphere (call init_var) prior to efield calculation.")
 
-		# Rest of the code...
+		Psi = self.variables['potential']['data']  # note, these are numbers of cells. self.ion['X'].shape = Nr+1,Nt+1
+		Nt,Np = Psi.shape
+
+		# Aliases to keep things short
+		x = self.ion['X']
+		y = self.ion['Y']
+
+		# note the change in naming convention from above
+		# i.e., theta is now the polar angle
+		# and phi is the azimuthal (what was theta)
+		# TODO: make consistent throughout
+		theta = np.arcsin(self.ion['R'])
+		phi   = self.ion['THETA']
+
+		# interpolate Psi to corners
+		Psi_c = np.zeros(x.shape)
+		Psi_c[1:-1,1:-1] = 0.25*(Psi[1:,1:]+Psi[:-1,1:]+Psi[1:,:-1]+Psi[:-1,:-1])
+
+		# fix up periodic
+		Psi_c[1:-1,0]  = 0.25*(Psi[1:,0]+Psi[:-1,0]+Psi[1:,-1]+Psi[:-1,-1])
+		Psi_c[1:-1,-1] = Psi_c[1:-1,0]
+
+		# fix up pole
+		Psi_pole = Psi[0,:].mean()
+		Psi_c[0,1:-1] = 0.25*(2.*Psi_pole + Psi[0,:-1]+Psi[0,1:])
+		Psi_c[0,0]    = 0.25*(2.*Psi_pole + Psi[0,-1]+Psi[0,0])		
+		Psi_c[0,-1]   = 0.25*(2.*Psi_pole + Psi[0,-1]+Psi[0,0])				
+
+		# fix up low lat boundary
+		# extrapolate linearly just like we did for the coordinates
+		# (see genOutGrid in src/remix/mixio.F90)
+		# note, neglecting the possibly non-uniform spacing (don't care)
+		Psi_c[-1,:] = 2*Psi_c[-2,:]-Psi_c[-3,:]
+
+		# now, do the differencing
+		# for each cell corner on the original grid, I have the coordinates and Psi_c
+		# need to find the gradient at cell center
+		# the result is the same size as Psi
+
+		# first etheta
+		tmp    = 0.5*(Psi_c[:,1:]+Psi_c[:,:-1])  # move to edge center
+		dPsi   = tmp[1:,:]-tmp[:-1,:]
+		tmp    = 0.5*(theta[:,1:]+theta[:,:-1])
+		dtheta = tmp[1:,:]-tmp[:-1,:]
+		etheta = dPsi/dtheta/ri  # this is in V/m
+
+		# now ephi
+		tmp    = 0.5*(Psi_c[1:,:]+Psi_c[:-1,:])  # move to edge center
+		dPsi   = tmp[:,1:]-tmp[:,:-1]
+		tmp    = 0.5*(phi[1:,:]+phi[:-1,:])
+		dphi   = tmp[:,1:]-tmp[:,:-1]
+		tc = 0.25*(theta[:-1,:-1]+theta[1:,:-1]+theta[:-1,1:]+theta[1:,1:]) # need this additionally 
+		ephi = dPsi/dphi/np.sin(tc)/ri  # this is in V/m
+
+		if returnDeltas:
+			return (-etheta,-ephi,dtheta,dphi)  # E = -grad Psi
+		else:	
+			return (-etheta,-ephi)  # E = -grad Psi	
 	
 
 	def joule(self):
