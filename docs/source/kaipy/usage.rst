@@ -91,7 +91,7 @@ Mode: CLI
 ---------
 The Kaipy package also comes with a command line interface that allows you to run scripts to analyze MAGE model data.  The CLI is a great way to automate the analysis of large datasets.  The CLI is run from the terminal and has a variety of options to customize the analysis. 
 
-A complete list of the available scripts can be found at the `Scripts documentation <https://kaipy.readthedocs.io/en/latest/scripts.html>`_.
+A complete list of the available scripts can be found at the `Scripts documentation <https://kaipy-docs.readthedocs.io/en/latest/scripts.html>`_.
 
 The quicklook directory has numerous scripts that can be used to generate plots and movies of the MAGE model output.  For example the `msphpic.py` command makes a summary moive of the magnetosphere while the `mixpic.py` command makes a summary movie of the ionosphere.
 
