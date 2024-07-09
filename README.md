@@ -1,11 +1,11 @@
 # README #
 
-Kaipy is a python package designed to assist with analysis and visualization of data produced by the [Multiscale Atmosphhere Geospace Environment Model](https://cgs.jhuapl.edu/Models/mage.php) developed by the [Center for Geospace Storms](https://cgs.jhuapl.edu/)
+Kaipy is a python package designed to assist with analysis and visualization of data produced by the [Multiscale Atmosphere Geospace Environment Model](https://cgs.jhuapl.edu/Models/mage.php) developed by the [Center for Geospace Storms](https://cgs.jhuapl.edu/)
 
 ### What is this repository for? ###
 
 * Package Quick summary
-* Version 0.1
+* Version 1.0.1
 
 ### How do I get set up? ###
 
@@ -15,7 +15,7 @@ Kaipy is a python package designed to assist with analysis and visualization of 
 
 ### Contribution guidelines ###
 
-* All contributions should be made by making a branch of the development branch and submiting a pull request.
+* All contributions should be made by forking this repository and submiting a pull request.
 
 
 ### Who do I talk to? ###
