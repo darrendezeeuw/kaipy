@@ -696,6 +696,32 @@ def get_aspect(ax):
 
     return disp_ratio #/ data_ratio
 
+def setBndsByAspect(ax, bnds, axis='x', aspect=1):
+    """ 
+    Given bounds of one axis, set the other bounds of Axes object such that aspect ratio and Axes box size is perserved
+    
+    Parameters:
+        ax: Axes object to set bounds for
+        bnds (List[float]): [axMin, axMax] min/max bounds for fixed axis
+        axis (str): ('x' or 'y') axis that fixed bounds are applied to
+        aspect: x:y aspect ratio to preserve
+    """
+    boxRatio = get_aspect(ax)
+    da = bnds[1] - bnds[0]
+    
+    if axis=='x':
+        db = aspect*boxRatio*da
+        bMin = -db/2
+        bMax = db/2
+        ax.set_xlim(bnds)
+        ax.set_ylim([bMin, bMax])
+    else:
+        db = 1/aspect*boxRatio*da
+        bMin = -db/2
+        bMax = db/2
+        ax.set_xlim([bMin, bMax])
+        ax.set_ylim(bnds)
+
 
 # Methods specific for comparing gamhelio output to data from heliospheric
 # spacecraft.
