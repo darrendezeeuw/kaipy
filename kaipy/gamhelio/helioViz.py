@@ -239,7 +239,7 @@ def PlotjMagV(
     (different) fixed spatial orientation. The conversion maps points in the
     GH(MJDc) frame to the HGS(MJD_plot) frame, which is almost a rotation about
     the z-axis, but also accounting for the Earth's orbit and other
-    astronommical and geodetic parameters.
+    astronomical and geodetic parameters.
 
     Parameters
     ----------
@@ -1132,7 +1132,7 @@ def PlotjD(
     (different) fixed spatial orientation. The conversion maps points in the
     GH(MJDc) frame to the HGS(MJD_plot) frame, which is almost a rotation about
     the z-axis, but also accounting for the Earth's orbit and other
-    astronommical and geodetic parameters.
+    astronomical and geodetic parameters.
 
     Parameters
     ----------
@@ -1356,7 +1356,7 @@ def PlotjTemp(
     (different) fixed spatial orientation. The conversion maps points in the
     GH(MJDc) frame to the HGS(MJD_plot) frame, which is almost a rotation about
     the z-axis, but also accounting for the Earth's orbit and other
-    astronommical and geodetic parameters.
+    astronomical and geodetic parameters.
 
     Parameters
     ----------
@@ -1578,7 +1578,7 @@ def PlotjBr(
     (different) fixed spatial orientation. The conversion maps points in the
     GH(MJDc) frame to the HGS(MJD_plot) frame, which is almost a rotation about
     the z-axis, but also accounting for the Earth's orbit and other
-    astronommical and geodetic parameters.
+    astronomical and geodetic parameters.
 
     Parameters
     ----------
@@ -1677,7 +1677,7 @@ def PlotEqBx(
     (different) fixed spatial orientation. The conversion maps points in the
     GH(MJDc) frame to the HGS(MJD_plot) frame, which is almost a rotation about
     the z-axis, but also accounting for the Earth's orbit and other
-    astronommical and geodetic parameters.
+    astronomical and geodetic parameters.
 
     Parameters
     ----------
@@ -1801,7 +1801,7 @@ def PlotEqBy(
     (different) fixed spatial orientation. The conversion maps points in the
     GH(MJDc) frame to the HGS(MJD_plot) frame, which is almost a rotation about
     the z-axis, but also accounting for the Earth's orbit and other
-    astronommical and geodetic parameters.
+    astronomical and geodetic parameters.
 
     Parameters
     ----------
@@ -1923,7 +1923,7 @@ def PlotEqBz(
     (different) fixed spatial orientation. The conversion maps points in the
     GH(MJDc) frame to the HGS(MJD_plot) frame, which is almost a rotation about
     the z-axis, but also accounting for the Earth's orbit and other
-    astronommical and geodetic parameters.
+    astronomical and geodetic parameters.
 
     Parameters
     ----------
