@@ -1,6 +1,6 @@
 Usage
 =====
-The Kaipy package comes with a variety of tools to help you load and analyze data from the MAGE model. This page will walk you through the basic usage of the package.  This includes using the API to load datasets and create plots as well a using the command line interface to run scripts.
+The Kaipy package comes with a variety of tools to help you load and analyze data from the MAGE model. This page will walk you through the basic usage of the package.  This includes using the API to load datasets and create plots as well as using the command line interface to run scripts.
 
 Mode: API
 ---------
@@ -16,7 +16,7 @@ In order to load data for the GAMERA and MIX components of the MAGE model you wi
     import kaipy.remix.remix as remix
     import os
 
-Start by importing the magnetosphere data. You will need to set the `fdir` varible to the directory containing the output from a MAGE magnetosphere run. The `ftag` varible will need to be set to the name that identifies the MAGE ouput.  For example
+Start by importing the magnetosphere data. You will need to set the `fdir` variable to the directory containing the output from a MAGE magnetosphere run. The `ftag` variable will need to be set to the name that identifies the MAGE ouput.  For example
 
 .. code-block:: python
 
@@ -41,9 +41,9 @@ Importing the ionospheric data from REMIX follow the same format as the import o
 
 Plots
 ~~~~~
-The msphViz portion of the kaipy library has numerous routines for visualizing the magnetosphere. Here will demostrate usage of plotXY and plotXZ which make plots of the equatorial and meridonal cuts of the magnetosphere. For both of these routines and others in system you need to provide the instance of the magnetosphere object, the step number you want to display, the extent of the domain, and two sets of axes. The first axes object is for the plot and the second is for the colorbar. For plotXZ we will use the minimal set arguments which results in a plot density. For the PlotXY example we will specify options so that we end up with Vx on Red/Blue color palette with a mid point normalization.
+The msphViz portion of the kaipy library has numerous routines for visualizing the magnetosphere. Here will demostrate usage of plotXY and plotXZ which make plots of the equatorial and meridional cuts of the magnetosphere. For both of these routines and others in system you need to provide the instance of the magnetosphere object, the step number you want to display, the extent of the domain, and two sets of axes. The first axes object is for the plot and the second is for the colorbar. For plotXZ we will use the minimal set arguments which results in a plot density. For the plotXY example we will specify options so that we end up with Vx on Red/Blue color palette with a mid point normalization.
 
-First the PlotXZ example
+First the plotXZ example
 
 .. code-block:: python
     
@@ -60,7 +60,7 @@ First the PlotXZ example
     :width: 400px
     :align: center
     
-And for the PlotXY example
+And for the plotXY example
 
 .. code-block:: python
     
@@ -76,7 +76,7 @@ And for the PlotXY example
     :width: 400px
     :align: center
 
-The mix object includes extensive plotting routine that has the capability for numerous varibles with excellent choices for the color tables. It also takes advantage of the mix objects ability to calculate dervied quanties, such as magnetic perturbations and electric fields. Unlike the magnetosphere plotting routines it has option to take a gridspec object instead of an axes object. It also has the option be made an inset plot so that it can be easily combined with a magnetosphere plot.
+The mix object includes an extensive plotting routine that has the capability for numerous variables with excellent choices for the color tables. It also takes advantage of the mix object's ability to calculate derived quanties, such as magnetic perturbations and electric fields. Unlike the magnetosphere plotting routines it has the option to take a gridspec object instead of an axes object. It also has the option be made an inset plot so that it can be easily combined with a magnetosphere plot.
 
 .. code-block:: python
     
@@ -93,7 +93,7 @@ The Kaipy package also comes with a command line interface that allows you to ru
 
 A complete list of the available scripts can be found at the `Scripts documentation <https://kaipy-docs.readthedocs.io/en/latest/scripts.html>`_.
 
-The quicklook directory has numerous scripts that can be used to generate plots and movies of the MAGE model output.  For example the `msphpic.py` command makes a summary moive of the magnetosphere while the `mixpic.py` command makes a summary movie of the ionosphere.
+The quicklook directory has numerous scripts that can be used to generate plots and movies of the MAGE model output.  For example the `msphpic.py` command makes a summary movie of the magnetosphere while the `mixpic.py` command makes a summary movie of the ionosphere.
 
 .. autoprogram:: msphpic:create_command_line_parser()
     :prog: msphpic.py

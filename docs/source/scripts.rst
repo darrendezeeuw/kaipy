@@ -41,12 +41,6 @@ The quicklook directory has scripts that are used to quickly look at the data. T
 .. autoprogram:: rcmpic:create_command_line_parser()
     :prog: rcmpic.py
 
-.. autoprogram:: rcmDataProbe:create_command_line_parser()
-    :prog: rcmDataProbe.py
-
-.. autoprogram:: rcmPrecipSpecFlux:create_command_line_parser()
-    :prog: rcmPrecipSpecFlux.py
-
 .. autoprogram:: rcmPrecipSpecFlux:create_command_line_parser()
     :prog: rcmPrecipSpecFlux.py
 
