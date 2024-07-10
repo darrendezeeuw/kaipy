@@ -181,8 +181,55 @@ def genFatEgg(Ni=Ni0,Nj=Nj0,Rin=3.0,Rout=30.0,xtail=250,NumSph=5,TINY=1.0e-8,A=0
 		tuple: A tuple containing the x-coordinates and y-coordinates of the grid points.
 
 	"""
-	# Rest of the code...
+	#Get ellipse parameters
+	x0,a,b = Egglipses(Ni,Nj,Rin,Rout,xtail,NumSph)
 
+	xSun = np.max(x0+a) #Forward boundary
+	xBack = np.abs(np.min(x0-a)) #Back boundary
+
+	#Eta is index (0,1) for theta mapping
+	eta = np.linspace(0+TINY,1.0-TINY,Nj+1)
+	L = np.pi
+	xC = 0.5*np.pi #Any warping is symmetric
+
+	#theta = np.linspace(0+TINY,np.pi-TINY,Nj+1)
+	xx = np.zeros((Ni+1,Nj+1))
+	yy = np.zeros((Ni+1,Nj+1))
+	tau0 = 0.35
+	
+	di = Ni/8
+	i1 = Ni-di
+	
+	AScl = 3*A
+
+	for i in range(Ni+1):
+		#Calculate theta profile for this shell
+		xTi = np.abs(x0[i]-a[i])
+		
+		theta = L*eta + A*(xC-L*eta)*(1-eta)*eta #Lines of constant phi
+		if (xTi>xSun):
+			#Outer region, keep tailward near-axis region packed tightly
+			Ai = A - (A-AScl)*RampUp(xTi,xSun,xBack)
+			thTail = L*eta + Ai*(xC-L*eta)*(1-eta)*eta
+			#Only use back half (past half-way)
+			theta[Nj//2:] = thTail[Nj//2:]
+
+		for j in range(Nj+1):
+			th = theta[j]
+			Ae = (np.cos(th)/a[i])**2.0 + (np.sin(th)/b[i])**2.0
+			Be = -2*np.cos(th)*x0[i]/a[i]**2.0
+			Ce = x0[i]**2.0/a[i]**2.0 - 1.0
+			r = (-Be+np.sqrt(Be*Be-4*Ae*Ce))/(2*Ae)
+
+			xx[i,j] = r*np.cos(th)
+			
+			taui = min(tau0*RampUp(1.0*i,i1,di),1.0)
+			tauscl = taui*(xx[i,j])/a[i]
+			tau = min(1.0+tauscl,1)
+			yy[i,j] = r*np.sin(th)/np.sqrt(tau)				
+
+
+	return xx,yy
 
 def RampUp(r, rC, lC):
 	"""
