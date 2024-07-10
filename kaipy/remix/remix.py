@@ -619,8 +619,7 @@ class remix:
 		if returnDeltas:
 			return (-etheta,-ephi,dtheta,dphi)  # E = -grad Psi
 		else:	
-			return (-etheta,-ephi)  # E = -grad Psi	
-	
+			return (-etheta,-ephi)  # E = -grad Psi			
 
 	def joule(self):
 		"""

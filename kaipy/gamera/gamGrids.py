@@ -181,6 +181,7 @@ def genFatEgg(Ni=Ni0,Nj=Nj0,Rin=3.0,Rout=30.0,xtail=250,NumSph=5,TINY=1.0e-8,A=0
 		tuple: A tuple containing the x-coordinates and y-coordinates of the grid points.
 
 	"""
+	#Get ellipse parameters
 	x0,a,b = Egglipses(Ni,Nj,Rin,Rout,xtail,NumSph)
 
 	xSun = np.max(x0+a) #Forward boundary
@@ -229,7 +230,6 @@ def genFatEgg(Ni=Ni0,Nj=Nj0,Rin=3.0,Rout=30.0,xtail=250,NumSph=5,TINY=1.0e-8,A=0
 
 
 	return xx,yy
-
 
 def RampUp(r, rC, lC):
 	"""
