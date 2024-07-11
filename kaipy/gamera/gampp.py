@@ -221,7 +221,7 @@ class GameraPipe(object):
 			None
 		"""
 
-		uID = kh5.PullAttr(f0, "UnitsID")
+		uID = kh5.PullAtt(f0, "UnitsID")
 		#with h5py.File(f0, 'r') as hf:
 		#	uID = hf.attrs.get("UnitsID", "CODE")
 		if not isinstance(uID, str):
@@ -411,7 +411,7 @@ class GameraPipe(object):
 
 	#Get 3D variable "vID" from Step# sID
 
-	def ReadVar(self, vID, sID=None, vScl=None, doVerb=True):
+	def GetVar(self, vID, sID=None, vScl=None, doVerb=True):
 		"""Reads a variable with the given name.
 
 		Args:

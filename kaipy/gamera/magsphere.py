@@ -22,42 +22,41 @@ rmStr = "mixtest"
 #Assuming LFM/EGG type grid
 class GamsphPipe(GameraPipe):
 	#Initialize object, rely on base class, take optional unit identifier
-	class ClassName:
-		def __init__(self, fdir, ftag, doFast=False, uID="Earth"):
-			"""
-			Initialize the magnetosphere object.
+	def __init__(self, fdir, ftag, doFast=False, uID="Earth"):
+		"""
+		Initialize the magnetosphere object.
 
-			Args:
-				fdir (str): The directory path.
-				ftag (str): The file tag.
-				doFast (bool, optional): Whether to enable fast mode. Defaults to False.
-				uID (str, optional): The ID of the magnetosphere. Defaults to "Earth".
-			"""
-			print("Initializing %s magnetosphere"%(uID))
-			#TODO: Add different unit/planet options here
-			self.MagM = -EarthM0g*1.0e+5
-			self.bScl = 4.58    #->nT
-			self.pScl = 1.67e-2 #->nPa
-			self.vScl = 1.0e+2  #-> km/s
-			self.tScl = 63.8    #->seconds
+		Args:
+			fdir (str): The directory path.
+			ftag (str): The file tag.
+			doFast (bool, optional): Whether to enable fast mode. Defaults to False.
+			uID (str, optional): The ID of the magnetosphere. Defaults to "Earth".
+		"""
+		print("Initializing %s magnetosphere"%(uID))
+		#TODO: Add different unit/planet options here
+		self.MagM = -EarthM0g*1.0e+5
+		self.bScl = 4.58    #->nT
+		self.pScl = 1.67e-2 #->nPa
+		self.vScl = 1.0e+2  #-> km/s
+		self.tScl = 63.8    #->seconds
 
-			#New mix stuff
-			self.hasRemix  = False #Remix data present (new format)
-			self.mixPipe = None
+		#New mix stuff
+		self.hasRemix  = False #Remix data present (new format)
+		self.mixPipe = None
 
-			#Old mix stuff
-			self.tRMScl = 63.8 #->seconds, for Remix time scaling
-			
-			self.hasRemixO = False #Remix data present (old format)
-			self.Nrm = 0 #Number of remix outputs
+		#Old mix stuff
+		self.tRMScl = 63.8 #->seconds, for Remix time scaling
+		
+		self.hasRemixO = False #Remix data present (old format)
+		self.Nrm = 0 #Number of remix outputs
 
-			#2D equatorial grid, stretched polar (Ni,Nj*2+1)
-			self.xxi = [] ; self.yyi = []
-			self.xxc = [] ; self.yyc = []
+		#2D equatorial grid, stretched polar (Ni,Nj*2+1)
+		self.xxi = [] ; self.yyi = []
+		self.xxc = [] ; self.yyc = []
 
-			GameraPipe.__init__(self,fdir,ftag,doFast=doFast)
+		GameraPipe.__init__(self,fdir,ftag,doFast=doFast)
 
-			self.Rin = self.xxi[0,0]
+		self.Rin = self.xxi[0,0]
 		
 	def OpenPipe(self, doVerbose=True):
 		"""
