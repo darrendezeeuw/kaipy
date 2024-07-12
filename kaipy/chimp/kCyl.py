@@ -7,19 +7,19 @@ import kaipy.kaiViz as kv
 #Get grid from K-Cyl
 def getGrid(fIn, do4D=False):
 	"""
-	Retrieve grid data from an HDF5 file.
+	Retrieve grid data (2D equatorial location, energy, pitch angle) from an HDF5 file containing PSD output.
 
 	Args:
-		fIn (str): The path to the HDF5 file.
-		do4D (bool, optional): Flag indicating whether to retrieve 4D data. Default is False.
+		fIn (str): The path to the PSD HDF5 file.
+		do4D (bool, optional): Flag indicating whether to retrieve 4D grid (including pitch angle). Default is False.
 
 	Returns:
-		xx (ndarray): X-coordinate values of the grid.
-		yy (ndarray): Y-coordinate values of the grid.
-		Ki (ndarray): Original 3D data.
-		Kc (ndarray): Averaged 3D data.
-		Ai (ndarray, optional): Original 4D data. Only returned if do4D is True.
-		Ac (ndarray, optional): Averaged 4D data. Only returned if do4D is True.
+		xx (ndarray): X-coordinates of the equatorail grid.
+		yy (ndarray): Y-coordinates of the equatorail grid.
+		Ki (ndarray): 1D array of energy grid at cell edges.
+		Kc (ndarray): 1D array of energy grid at cell centers.
+		Ai (ndarray, optional): 1D array of pitch angle grid at cell edges. Only returned if do4D is True.
+		Ac (ndarray, optional): 1D array of pitch angle grid at cell centers. Only returned if do4D is True.
 	"""
 	with h5py.File(fIn, 'r') as hf:
 		X3 = hf["X"][()].T
@@ -42,13 +42,13 @@ def getGrid(fIn, do4D=False):
 	
 def getSlc(fIn, nStp=0, vID="jPSD", doWrap=False):
 	"""
-	Retrieve a slice of data from an HDF5 file.
+	Retrieve a specified variable at a given time step of data from an HDF5 file.
 
 	Args:
 		fIn (str): The path to the HDF5 file.
 		nStp (int): The step number.
 		vID (str): The variable ID.
-		doWrap (bool): Whether to wrap the data.
+		doWrap (bool)  : Flag indicating whether to add an extra layer in phi to the cell-centered grid coordinates. Useful for contour plots in polar coordinates. Default is False.
 
 	Returns:
 		V (ndarray): The retrieved slice of data.
@@ -68,13 +68,13 @@ def getSlc(fIn, nStp=0, vID="jPSD", doWrap=False):
 
 def PIso(fIn, nStp=0, pCut=1.0e-3, doAsym=False):
 	"""
-	Calculate the isotropy parameter for a given input file.
+	Calculate the pressure anisotropy for a given input file.
 
 	Args:
 		fIn (str): The input file path.
 		nStp (int, optional): The number of steps. Default is 0.
-		pCut (float, optional): The cutoff value. Default is 1.0e-3.
-		doAsym (bool, optional): Flag to calculate asymmetric isotropy parameter. Default is False.
+		pCut (float, optional): The minimum pressure value to consider. Default is 1.0e-3.
+		doAsym (bool, optional): Flag to calculate Pxy/Pz-1, otherwise it will return Pxy/(Pxy+Pz). Default is False.
 
 	Returns:
 		pR (numpy.ndarray): The calculated isotropy parameter.
@@ -104,23 +104,23 @@ def PIso(fIn, nStp=0, pCut=1.0e-3, doAsym=False):
 #Equatorial grids (option for wrapping for contours)
 def getEQGrid(fIn, doCenter=False, doWrap=False):
 	"""
-	Get the equidistant grid coordinates from an HDF5 file.
+	Get the equatorial grid coordinates from an HDF5 file.
 
 	Args:
 		fIn (str): The path to the HDF5 file.
-		doCenter (bool): Flag indicating whether to center the grid coordinates. Default is False.
-		doWrap (bool): Flag indicating whether to wrap the grid coordinates. Default is False.
+		doCenter (bool): Flag indicating whether to output the cell centered grid coordinates. Default is False.
+		doWrap (bool)  : Flag indicating whether to add an extra layer in phi to the cell-centered grid coordinates. Useful for contour plots in polar coordinates. Default is False.
 
 	Returns:
 		If doCenter is False:
-			xx (ndarray): The x-coordinates of the grid.
-			yy (ndarray): The y-coordinates of the grid.
+			xx (ndarray): The x-coordinates of the grid at the cell edges.
+			yy (ndarray): The y-coordinates of the grid at the cell edges.
 		If doCenter is True and doWrap is False:
-			xxc (ndarray): The centered x-coordinates of the grid.
-			yyc (ndarray): The centered y-coordinates of the grid.
-		If doCenter and doWrap are both True:
-			xxc (ndarray): The wrapped and centered x-coordinates of the grid.
-			yyc (ndarray): The wrapped and centered y-coordinates of the grid.
+			xxc (ndarray): The cell centered x-coordinates of the grid.
+			yyc (ndarray): The cell centered y-coordinates of the grid.
+		If doWrap is True:
+			xxc (ndarray): The wrapped and cell centered x-coordinates of the grid.
+			yyc (ndarray): The wrapped and cell centered y-coordinates of the grid.
 	"""
 	if doWrap:
 		doCenter = True

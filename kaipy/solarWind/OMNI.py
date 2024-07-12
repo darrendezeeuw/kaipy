@@ -13,13 +13,13 @@ import re
 
 class OMNI(SolarWind):
     """
-    OMNI Solar Wind file from CDAweb [http://cdaweb.gsfc.nasa.gov/].
-    Data stored in GSE coordinates.
+    Processes OMNI Solar Wind data from CDAweb [http://cdaweb.gsfc.nasa.gov/].
+    Data stored as a kaipy.solarWind.SolarWind object in GSE coordinates.
 
     Parameters:
-        filename (str): The path to the OMNI Solar Wind file.
-        doFilter (bool): Flag indicating whether to apply coarse filtering to remove outliers.
-        sigmaVal (float): The number of standard deviations to use for the coarse filtering.
+        filename (str): The path to the OMNI Solar Wind data.
+        doFilter (bool): Flag indicating whether to apply coarse filtering to remove outliers. Default is set to False.
+        sigmaVal (float): The number of standard deviations to use for the coarse filtering. Default is to remove data points 3 standard deviation from the mean if doFilter is True.
 
     Attributes:
         filter (bool): Flag indicating whether filtering is enabled.
@@ -29,7 +29,7 @@ class OMNI(SolarWind):
 
     Methods:
         __init__(self, filename=None, doFilter=False, sigmaVal=3.0): Initializes the OMNI object.
-        __read(self, filename): Reads the solar wind file and stores the results in self.data TimeSeries object.
+        __read(self, filename): Reads the solar wind data and stores the results in self.data as TimeSeries objects.
         __readData(self, fh): Reads the variables from the file and returns a 2D array containing the data.
         __appendMetaData(self, date, filename): Adds standard metadata to the data dictionary.
         _removeBadData(self, data, datanames=['Time','Bx','By','Bz','Vx','Vy','Vz','n','Temp','AE','AL','AU','SYMH','BowShockX','BowShockY','BowShockZ'], hasBeenInterpolated=None): Linearly interpolates over bad data in the data array.
@@ -219,8 +219,8 @@ class OMNI(SolarWind):
 
     def _coarseFilter(self, dataArray, hasBeenInterpolated):
         """
-        Use coarse noise filtering to remove values outside 3
-        deviations from mean of all values in the plotted time
+        Use coarse noise filtering to remove values outside the number
+        deviations (set by self.sigma) from mean of all values in the plotted time
         interval.
 
         Args:
@@ -247,7 +247,7 @@ class OMNI(SolarWind):
             # deviations from the mean set by self.sigma (default = 3)
             lastValidIndex = -1
             for curIndex,row in enumerate(dataArray):
-                # Are we outside 3 sigma from mean?
+                # Are we outside set # of deviations from mean?
                 if abs(means[varIdx-1] - row[varIdx]) > self.sigma*stds[varIdx-1]:
                     hasBeenInterpolated[curIndex, varIdx-1] = True
                     if (curIndex == len(dataArray)-1):
