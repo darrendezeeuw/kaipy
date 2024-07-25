@@ -30,6 +30,7 @@ class RCMSpeciesInfo(object):
 		self.kEnd   = kEnd
 		self.alamc  = alamc
 
+
 class RCMInfo(kh5.H5Info):
 	"""
 	Extends H5Info to grab RCM-specific info
@@ -73,11 +74,13 @@ class RCMInfo(kh5.H5Info):
 				kEnd = kPnt
 				self.species.append(
 					RCMSpeciesInfo(
-						(kEnd - kStart), flav,  #[N, flav
+						(kEnd - kStart), flav,  #N, flav
 						kStart, kEnd,
 						alamc[kStart:kEnd]
 					)
 				)
+
+
 	def __test__(self, config_fname):
 		"""
 		Performs a test on an already-populated object to ensure its species info matches that in the provided file
