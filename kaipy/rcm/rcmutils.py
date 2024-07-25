@@ -21,6 +21,10 @@ class RCMSpeciesInfo(object):
 		kEnd   (int): Ending index +1 in Nk-length arrays
 					    This way, array[kStart:kEnd] gives entire species
 		alamc  List(float): List of grid-centered lambda values in units of [eV * (Rx/nT)**(2/3)]
+
+	Contains:
+		Args
+		alami List(float): List of lambda grid corner values in units of [eV * (Rx/nT)**(2/3)]
 	"""
 
 	def __init__(self, N, flav, kStart, kEnd, alamc):
@@ -29,6 +33,11 @@ class RCMSpeciesInfo(object):
 		self.kStart = kStart
 		self.kEnd   = kEnd
 		self.alamc  = alamc
+		self.alami  = np.zeros(N + 1)  # Cell interfaces
+		if N > 1:  # Trap for 1-cell plasmasphere
+			for n in range(0, N - 1):
+				self.alami[n + 1] = 0.5 * (alamc[n] + alamc[n + 1])
+			self.alami[N] = alamc[-1] + 0.5 * (alamc[-1] - alamc[-2])
 
 
 class RCMInfo(kh5.H5Info):
@@ -37,6 +46,10 @@ class RCMInfo(kh5.H5Info):
 
 	Additional Args:
 		config_fname (str): Full path to rcmconfig.h5 file. Used to get species information
+
+	Contains:
+		Nk: Total number of lambda channels for all species
+		species List(RCMSpeciesInfo): Species information within provided file
 	"""
 
 	def __init__(self, h5fname, config_fname, noSubsec=True):
@@ -79,6 +92,7 @@ class RCMInfo(kh5.H5Info):
 						alamc[kStart:kEnd]
 					)
 				)
+		self.Nk = Nk
 
 
 	def __test__(self, config_fname):
