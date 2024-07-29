@@ -183,7 +183,9 @@ def FetchSMData(user, start, numofdays, savefolder, badfrac=0.1, nanflags=True, 
                     # get rid of data if too many bad values
                     if np.sum(quickvals>999990.0) >= badfrac*len(quickvals):
                         badindex.append(False)
-                        print(iii, "BAD")
+                        #print(iii, "BAD")
+                        if np.shape(A)[0] == 0:
+                            A = np.array(['BAD'] * numofdays * 1440)
                     else:
                         badindex.append(True)
 
@@ -206,7 +208,8 @@ def FetchSMData(user, start, numofdays, savefolder, badfrac=0.1, nanflags=True, 
             print("Error invalid ncpu count: ",ncpus)
 
         badindex = np.array(badindex)
-        master, stations = np.array(master)[badindex], np.array(stations)[badindex]
+        master = np.array(master)[badindex]
+        stations = np.array(stations)[badindex]
 
         print("Done Fetching")
 
@@ -289,7 +292,7 @@ def doFetch(user, startstr, numofdays, smFlags, badfrac, iii):
             - badindex (bool): Indicates if there are too many bad values.
             - master (list or str): The fetched data or 'BAD' if fetch failed.
     """
-    print("Fetching: ", iii)
+    print("Fetching: ", iii.strip())
     #ZZZ
 
     status, A = smapi.SuperMAGGetData(user, startstr, extent=86400*numofdays,
@@ -301,7 +304,8 @@ def doFetch(user, startstr, numofdays, smFlags, badfrac, iii):
         # get rid of data if too many bad values
         if np.sum(quickvals>999990.0) >= badfrac*len(quickvals):
             badindex = False
-            print(iii, "BAD")
+            if np.shape(A)[0] == 0:
+                A = np.array(['BAD'] * numofdays * 1440)
         else:
             badindex = True
 
