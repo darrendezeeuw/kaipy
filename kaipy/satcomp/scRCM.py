@@ -398,8 +398,158 @@ def getRCM_scTrack(trackf5, rcmf5, rcmTimes, jdir=None, forceCalc=False, scName=
 		dict: Dictionary containing RCM data along the spacecraft track, including time, MJD, MLAT, MLON, vm, energy, and eetas.
 
 	"""
-	# Function code goes here
-	# ...
+	if jdir is not None:
+		dojson = True
+		jfname = genRCMTrack_jfname(jdir, scName)
+	else:
+		dojson = False
+
+	if dojson and not forceCalc:
+		if os.path.exists(jfname):
+			print("Grabbing RCM track data from " + jfname)
+			return kj.load(jfname)
+
+	print("Extracting RCM track data from " + rcmf5)
+	kh5.CheckOrDie(trackf5)
+	scMLATs = kh5.PullVar(trackf5, 'MLAT')
+	scMLONs = kh5.PullVar(trackf5, 'MLON')
+	scTs = kh5.PullVar(trackf5, 'T')
+	scMJDs = kh5.PullVar(trackf5, 'MJDs')
+	Nsc = len(scTs)
+
+	#Get information for mirror ratio
+	Bx = kh5.PullVar(trackf5,"Bx")
+	By = kh5.PullVar(trackf5,"By")
+	Bz = kh5.PullVar(trackf5,"Bz")
+	Bmag = np.sqrt(Bx**2.0 + By**2.0 + Bz**2.0)
+	Beq = kh5.PullVar(trackf5,"Beq")
+
+	J0 = scutils.getJScl(Bmag,Beq)
+
+	#Unpack what we need from rcmTimes
+	sIDstrs = rcmTimes['sIDstrs']
+	rcmMJDs = rcmTimes['MJD']
+
+	#Init rcm h5 info
+	rcm5 = h5.File(rcmf5,'r')
+	rcmS0 = rcm5[sIDstrs[0]]
+	Ni, Nj = rcmS0['aloct'].shape
+	rcmMLAT = 90.0-rcmS0['colat'][0,:]*180/np.pi
+	rcmMLON = rcmS0['aloct'][:,0]*180/np.pi
+	rcmMLAT_min = np.min(rcmMLAT)
+	rcmMLAT_max = np.max(rcmMLAT)
+
+	#Init electron and ion dicts
+	sdata = {}
+	sdata['electrons'] = getSpecieslambdata(rcmS0, 'electrons')
+	sdata['ions'     ] = getSpecieslambdata(rcmS0, 'ions')
+	kStart_e = sdata['electrons']['kStart']
+	kStart_i = sdata['ions']['kStart']
+	Nk_e = len(sdata['electrons']['ilamc'])
+	Nk_i = len(sdata['ions']['ilamc'])
+	
+	#Collect data along spacecraft track
+	vms = np.zeros((Nsc))
+	xmin = np.zeros((Nsc))
+	ymin = np.zeros((Nsc))
+	zmin = np.zeros((Nsc))
+	energies_e = np.zeros((Nsc, Nk_e))
+	energies_i = np.zeros((Nsc, Nk_i))
+	eeta_e = np.zeros((Nsc, Nk_e))
+	eeta_i = np.zeros((Nsc, Nk_i))
+	diffFlux_e = np.zeros((Nsc, Nk_e))
+	diffFlux_i = np.zeros((Nsc, Nk_i))
+
+	nearest_i = np.zeros(Nsc)
+	nearest_j = np.zeros(Nsc)
+	
+	if doProgressBar: bar = progressbar.ProgressBar(max_value=Nsc)
+
+	for n in range(Nsc):
+		if doProgressBar: bar.update(n)
+
+		mjd_sc = scMJDs[n]
+		mlat_sc = scMLATs[n]
+		mlon_sc = scMLONs[n]
+		#Make sure track and rcm domain overlap
+		if mjd_sc < rcmMJDs[0] or mjd_sc > rcmMJDs[-1] or \
+			mlat_sc < rcmMLAT_min or mlat_sc > rcmMLAT_max:
+			continue
+
+		# Get bounds in rcm space
+		ilat = len(rcmMLAT)-1  # mlat_rcm goes from high to low
+		while rcmMLAT[ilat] < mlat_sc: ilat -= 1
+		ilon = 2
+		while ilon < len(rcmMLON)-2 and rcmMLON[ilon+1] < mlon_sc: ilon += 1
+		#while rcmMLON[ilon+1] < mlon_sc: ilon += 1
+		imjd = 0
+		while rcmMJDs[imjd+1] < mjd_sc: imjd += 1
+
+		#For other things to use for less rigorous mapping
+		nearest_i[n] = ilat if abs(mlat_sc - rcmMLAT[ilat]) < abs(mlat_sc - rcmMLAT[ilat+1]) else ilat+1
+		nearest_j[n] = ilon if abs(mlon_sc - rcmMLON[ilon]) < abs(mlon_sc - rcmMLON[ilon+1]) else ilon+1
+
+		latbnd = [rcmMLAT[ilat], rcmMLAT[ilat+1]]
+		lonbnd = [rcmMLON[ilon], rcmMLON[ilon+1]]
+		mjdbnd = [rcmMJDs[imjd], rcmMJDs[imjd+1]]		
+		stepLow = sIDstrs[imjd]
+		stepHigh = sIDstrs[imjd+1]
+
+		vmcube = getVarCube(rcm5, 'rcmvm', stepLow, stepHigh, ilon, ilat)
+		vms[n] = scutils.trilinterp(lonbnd, latbnd, mjdbnd, vmcube, mlon_sc, mlat_sc, mjd_sc)
+		#Do the same for xeq, yeq, zeq
+		xmincube = getVarCube(rcm5, 'rcmxmin', stepLow, stepHigh, ilon, ilat)
+		ymincube = getVarCube(rcm5, 'rcmymin', stepLow, stepHigh, ilon, ilat)
+		zmincube = getVarCube(rcm5, 'rcmzmin', stepLow, stepHigh, ilon, ilat)
+		xmin[n] = scutils.trilinterp(lonbnd, latbnd, mjdbnd, xmincube, mlon_sc, mlat_sc, mjd_sc)
+		ymin[n] = scutils.trilinterp(lonbnd, latbnd, mjdbnd, ymincube, mlon_sc, mlat_sc, mjd_sc)
+		zmin[n] = scutils.trilinterp(lonbnd, latbnd, mjdbnd, zmincube, mlon_sc, mlat_sc, mjd_sc)
+
+		def getSpecEetas(kOffset, Nk):
+			eetas = np.zeros((Nk))
+			for k in range(Nk):
+				kr = k + kOffset
+				eetacube = getVarCube(rcm5, 'rcmeeta', stepLow, stepHigh, ilon, ilat, kr)
+				eetas[k] = scutils.trilinterp(lonbnd, latbnd, mjdbnd, eetacube, mlon_sc, mlat_sc, mjd_sc)
+			return eetas
+
+		eeta_e[n,:] = getSpecEetas(kStart_e, Nk_e)
+		eeta_i[n,:] = getSpecEetas(kStart_i, Nk_i)
+		energies_e[n,:] = vms[n]*sdata['electrons']['ilamc']
+		energies_i[n,:] = vms[n]*sdata['ions']['ilamc']
+
+		diffFlux_e[n,:] = J0[n]*specFlux_factor_e*energies_e[n,:]*eeta_e[n,:]/sdata['electrons']['lamscl']
+		diffFlux_i[n,:] = J0[n]*specFlux_factor_i*energies_i[n,:]*eeta_i[n,:]/sdata['ions'     ]['lamscl']
+
+	# Package everything together
+	sdata['electrons']['energies'] = energies_e*1E-3  # [eV -> keV]
+	sdata['electrons']['eetas'   ] = eeta_e
+	sdata['electrons']['diffFlux'] = diffFlux_e
+	sdata['ions'     ]['energies'] = energies_i*1E-3  # [eV -> keV]
+	sdata['ions'     ]['eetas'   ] = eeta_i
+	sdata['ions'     ]['diffFlux'] = diffFlux_i
+	
+	result = {}
+	result['T'        ] = scTs
+	result['MJD'      ] = scMJDs
+	result['MLAT'     ] = scMLATs
+	result['MLON'     ] = scMLONs
+	result['vm'       ] = vms
+	result['nearest_i'] = nearest_i
+	result['nearest_j'] = nearest_j
+	result['xmin'     ] = xmin
+	result['ymin'     ] = ymin
+	result['zmin'     ] = zmin
+	result['eqmin'    ] = np.sqrt(xmin**2+ymin**2)
+	result['xeq'      ] = kh5.PullVar(trackf5, "xeq")
+	result['yeq'      ] = kh5.PullVar(trackf5, "yeq")
+	result['Req'      ] = np.sqrt(result['xeq']**2 + result['yeq']**2)
+	result['electrons'] = sdata['electrons']
+	result['ions'     ] = sdata['ions']
+
+	if dojson: kj.dump(jfname, result)
+
+	return result
 
 
 #TODO: Energy grid mapping in a nice, jsonizable way
