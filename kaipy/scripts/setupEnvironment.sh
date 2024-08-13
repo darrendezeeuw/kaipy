@@ -10,8 +10,8 @@
 # https://stackoverflow.com/questions/9901210/bash-source0-equivalent-in-zsh
 SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]:-${(%):-%x}}" )" &> /dev/null && pwd )"
 
-# strip off the "/scripts" folder to get to the root of the repository
-ROOT_DIR="$(echo "$SCRIPT_DIR" | sed 's:/scripts$::')"
+# strip off the "/kaipy/scripts" folder to get to the root of the repository
+ROOT_DIR="$(echo "$SCRIPT_DIR" | sed 's:/kaipy/scripts$::')"
 
 # using only export= and not export+= to work with bash and zsh
 export KAIPYHOME="$ROOT_DIR"

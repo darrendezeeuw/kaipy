@@ -14,6 +14,7 @@ Kaipy documentation!
    kaipy/installation
    kaipy/requirements
    kaipy/usage
+   kaipy/developers
    scripts
    modules
 

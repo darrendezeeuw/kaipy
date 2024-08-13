@@ -9,12 +9,15 @@
  
 set rootdir = `dirname $0`
 set SCRIPT_DIR = `cd $rootdir && pwd`
-  
-# strip off the "/scripts" folder to get to the root of the repository
-set ROOT_DIR = `cd $rootdir/.. && pwd`
-  
+echo $SCRIPT_DIR 
+
+# strip off the "/kaipy/scripts" folder to get to the root of the repository
+set ROOT_DIR = `cd $rootdir/../.. && pwd`
+echo $ROOT_DIR 
 setenv KAIPYHOME $ROOT_DIR
+echo $KAIPYHOME
 
-setenv PYTHONPATH $KAIPYHOME:$PYTHONPATH
-
-setenv PATH $PATH:$KAIPYHOME/scripts:$KAIPYHOME/scripts/datamodel:$KAIPYHOME/scripts/helio:$KAIPYHOME/scripts/legacy:$KAIPYHOME/scripts/preproc:$KAIPYHOME/scripts/postproc:$KAIPYHOME/scripts/quicklook
+setenv PYTHONPATH ${KAIPYHOME}:${PYTHONPATH}
+echo $PYTHONPATH
+setenv PATH ${PATH}:${SCRIPT_DIR}:${SCRIPT_DIR}/datamodel:${SCRIPT_DIR}/helio:${SCRIPT_DIR}/preproc:${SCRIPT_DIR}/postproc:${SCRIPT_DIR}/quicklook
+echo $PATH
