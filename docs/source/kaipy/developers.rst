@@ -6,7 +6,7 @@ Clone repository
 ---------
 The first step is to clone the Kaipy repository.  You can do this by running the following command in your terminal:
 ```bash
-git clone https://wiltbemj@bitbucket.org/aplkaiju/kaipy.git
+git clone https://bitbucket.org/aplkaiju/kaipy.git
 ```
 
 Install python dependencies
