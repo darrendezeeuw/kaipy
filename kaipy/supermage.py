@@ -112,7 +112,7 @@ def interp_grid(values, tri, uv, d=2):
     return np.einsum('nj,nj->n', np.take(values, vertices),
                      np.hstack((bary, 1 - bary.sum(axis=1, keepdims=True))))
 
-def FetchSMData(user, start, numofdays, savefolder, badfrac=0.1, nanflags=True, doDB=True, ncpus=1):
+def FetchSMData(user, start, numofdays, savefolder, badfrac=0.1, nanflags=True, ncpus=1):
     """
     Retrieve all available SuperMagnet data for a specified period.
     If data has not already been downloaded, fetches data from Supermag.
@@ -130,8 +130,6 @@ def FetchSMData(user, start, numofdays, savefolder, badfrac=0.1, nanflags=True, 
         Tolerable fraction of data that is 99999.0. Sites with more bad data than this fraction will be ignored. Default is 0.1.
     nanflags: bool, optional
         If True, set 99999.0 values to NaNs. Default is True.
-    doDB: bool, optional
-        Whether to pull the pre-baselined values from Supermag. Default is True.
 
     Returns:
     dict:
@@ -139,10 +137,9 @@ def FetchSMData(user, start, numofdays, savefolder, badfrac=0.1, nanflags=True, 
         {'td', 'sitenames', 'glon', 'glat', 'mlon', 'mlat', 'mcolat', 'BNm', 'BEm', 'BZm', 'BNg', 'BEg', 'BZg', 'MLT', 'DECL', 'SZA'}
     """
 
-    if (doDB):
-        smFlags = "all,delta=start,baseline=all"
-    else:
-        smFlags = "all"
+    #Get all data, apply yearly baselining. But no longer do delta=start, which subtracts first value from all values
+    smFlags = "all,baseline=all" #Removing delta=start
+
         
     # Look at all saved .jsons
     filenames = [x for x in sorted(os.listdir(savefolder)) if '.json' in x]
