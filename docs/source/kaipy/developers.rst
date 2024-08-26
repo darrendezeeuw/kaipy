@@ -5,33 +5,43 @@ Kaipy developers will need to use a different setup process then users.  This se
 Clone repository
 ---------
 The first step is to clone the Kaipy repository.  You can do this by running the following command in your terminal:
-```bash
-git clone https://bitbucket.org/aplkaiju/kaipy.git
-```
+
+.. code-block:: bash
+
+    git clone https://bitbucket.org/aplkaiju/kaipy.git
+
+For beta testers using the kaipy-private repository and the kaiju-private repository you will need to switch both repositories to the `kaipy-amputation` branch.  
 
 Install python dependencies
 ---------
 Next you will need to install the dependencies for Kaipy.  You can do this by running the following command in your terminal after navigating to the Kaipy repository:
-```bash
-conda create --name kaipy-repo python=3.8
-conda activate kaipy-repo
-pip install -r requirements.txt
-```
+
+.. code-block:: bash
+
+    conda create --name kaipy-repo python=3.8
+    conda activate kaipy-repo
+    pip install -r requirements.txt
 
 Setup environment variables
 ---------
 Finally you will need to setup the environment variables for Kaipy.  You can do this by running the following command in your terminal after navigating to the Kaipy repository:
 
 For bash shell:
-```bash
-cd kaipy/scripts
-source setupEnvironment.sh
-python checkkaipypath.py
-```
+
+.. code-block:: bash
+
+    cd kaipy/scripts
+    source setupEnvironment.sh
+    python checkkaipypath.py
+
+
 For csh shell:
-```csh 
-cd kaipy/scripts
-source setupEnvironment.csh
-python checkkaipypath.py
-```
+
+.. code-block:: csh
+
+    cd kaipy/scripts
+    source setupEnvironment.csh
+    python checkkaipypath.py
+
+
 The `checkkaipypath.py` script will check that the environment variables have been set correctly, by printing out the directory beginning with `kaipy` that is in your `PYTHONPATH`.
