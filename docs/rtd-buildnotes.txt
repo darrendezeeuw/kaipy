@@ -3,12 +3,13 @@ This file contains notes for the build process of kaipy on ReadTheDocs
 First you need to have sphinx and the RTD Theme installed
 
 pip install sphinx
-pip install sphinx-rtd-Theme
+pip install sphinx-rtd-theme
+pip install sphinxcontrib-autoprogram
 
 sphinx-quickstart has already been run from the docs directory to create
 the starting point for the documentation.  
 
-We have made source part of the repo, but not made buil part of the repo.
+We have made source part of the repo, but not made build part of the repo.
 This choice was made because RTD reconstructs the build directory during install process
 
 All docstrings must follow Google Style so that the napolean option will work with autodoc
