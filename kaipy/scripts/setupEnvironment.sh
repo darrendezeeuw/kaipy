@@ -18,4 +18,4 @@ export KAIPYHOME="$ROOT_DIR"
 
 export PYTHONPATH="$KAIPYHOME:$PYTHONPATH"
 
-export PATH="$PATH:$KAIPYHOME/scripts:$KAIPYHOME/scripts/datamodel:$KAIPYHOME/scripts/helio:$KAIPYHOME/scripts/legacy:$KAIPYHOME/scripts/preproc:$KAIPYHOME/scripts/postproc:$KAIPYHOME/scripts/quicklook"
+export PATH="$PATH:$KAIPYHOME/kaipy/scripts:$KAIPYHOME/kaipy/scripts/datamodel:$KAIPYHOME/kaipy/scripts/helio:$KAIPYHOME/kaipy/scripts/legacy:$KAIPYHOME/kaipy/scripts/preproc:$KAIPYHOME/kaipy/scripts/postproc:$KAIPYHOME/kaipy/scripts/quicklook"
