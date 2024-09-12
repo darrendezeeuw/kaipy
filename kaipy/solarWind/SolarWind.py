@@ -8,16 +8,16 @@ from kaipy.solarWind.ols import ols
 
 class SolarWind(object):
     """
-    Abstract base class for Solar Wind processing
+    This class serves as an abstract base class for Solar Wind processing. 
 
-    This class serves as an abstract base class for Solar Wind processing. Derived classes should implement the necessary methods to read in Solar Wind data and store the results in a standard way using the `kaipy.TimeSeries` object. The derived classes should also make a call to the `_appendDerivedQuantities()` method to compute additional solar wind variables.
+    Derived classes should implement the necessary methods to read in Solar Wind data and store the results in a standard way using the `kaipy.solarWind.TimeSeries` object. The derived classes should also make a call to the `_appendDerivedQuantities()` method to compute additional solar wind variables.
 
     Attributes:
         data (TimeSeries): The TimeSeries object that stores all the Solar Wind data.
 
     Methods:
-        __init__(): Initializes the SolarWind object.
-        _getTiltAngle(dateTime): Get the tilt angle for the current Date & Time.
+        __init__(): Initializes the SolarWind object. See file for variables that must be set.
+        _getTiltAngle(dateTime): Get the tilt angle with respect to season for the current Date & Time.
         _gsm2sm(dateTime, x, y, z): Convert from GSM to SM coordinates for the current Date & Time.
         bxFit(): Compute and return coefficients for a multiple linear regression fit of Bx to By & Bz.
         _appendDerivedQuantities(): Calculate and append standard derived quantities to the data dictionary.
@@ -26,7 +26,7 @@ class SolarWind(object):
     def __init__(self):
         """
         Derived classes must read in Solar Wind data and store the
-        results in a standard way via the a kaipy.TimeSeries object.
+        results in a standard way via the a kaipy.solarWind.TimeSeries object.
         Variables that must be set are:
 
         key       |  name                         |  units

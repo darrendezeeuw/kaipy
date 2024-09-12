@@ -6,6 +6,8 @@ from kaipy.kdefs import *
 # 3rd party
 import numpy
 from cdasws import CdasWs
+from pyspedas import kyoto
+from pytplot import get_data
 
 # Standard
 import datetime
@@ -13,13 +15,13 @@ import re
 
 class OMNI(SolarWind):
     """
-    OMNI Solar Wind file from CDAweb [http://cdaweb.gsfc.nasa.gov/].
-    Data stored in GSE coordinates.
+    Processes OMNI Solar Wind data from CDAweb [http://cdaweb.gsfc.nasa.gov/].
+    Data stored as a kaipy.solarWind.SolarWind object in GSE coordinates.
 
     Parameters:
-        filename (str): The path to the OMNI Solar Wind file.
-        doFilter (bool): Flag indicating whether to apply coarse filtering to remove outliers.
-        sigmaVal (float): The number of standard deviations to use for the coarse filtering.
+        filename (str): The path to the OMNI Solar Wind data.
+        doFilter (bool): Flag indicating whether to apply coarse filtering to remove outliers. Default is set to False.
+        sigmaVal (float): The number of standard deviations to use for the coarse filtering. Default is to remove data points 3 standard deviation from the mean if doFilter is True.
 
     Attributes:
         filter (bool): Flag indicating whether filtering is enabled.
@@ -29,7 +31,7 @@ class OMNI(SolarWind):
 
     Methods:
         __init__(self, filename=None, doFilter=False, sigmaVal=3.0): Initializes the OMNI object.
-        __read(self, filename): Reads the solar wind file and stores the results in self.data TimeSeries object.
+        __read(self, filename): Reads the solar wind data and stores the results in self.data as TimeSeries objects.
         __readData(self, fh): Reads the variables from the file and returns a 2D array containing the data.
         __appendMetaData(self, date, filename): Adds standard metadata to the data dictionary.
         _removeBadData(self, data, datanames=['Time','Bx','By','Bz','Vx','Vy','Vz','n','Temp','AE','AL','AU','SYMH','BowShockX','BowShockY','BowShockZ'], hasBeenInterpolated=None): Linearly interpolates over bad data in the data array.
@@ -219,8 +221,8 @@ class OMNI(SolarWind):
 
     def _coarseFilter(self, dataArray, hasBeenInterpolated):
         """
-        Use coarse noise filtering to remove values outside 3
-        deviations from mean of all values in the plotted time
+        Use coarse noise filtering to remove values outside the number
+        deviations (set by self.sigma) from mean of all values in the plotted time
         interval.
 
         Args:
@@ -240,14 +242,14 @@ class OMNI(SolarWind):
         means = []
         nvar = len(dataArray[0])
         for varIdx in range(1,nvar):
-            stds.append( dataArray[:,varIdx].std() )
-            means.append( dataArray[:,varIdx].mean() )
+            stds.append( numpy.nanstd(dataArray[:,varIdx]) )
+            means.append( numpy.nanmean(dataArray[:,varIdx]) )
             
             # Linearly interpolate over data that exceeds # of standard
             # deviations from the mean set by self.sigma (default = 3)
             lastValidIndex = -1
             for curIndex,row in enumerate(dataArray):
-                # Are we outside 3 sigma from mean?
+                # Are we outside set # of deviations from mean?
                 if abs(means[varIdx-1] - row[varIdx]) > self.sigma*stds[varIdx-1]:
                     hasBeenInterpolated[curIndex, varIdx-1] = True
                     if (curIndex == len(dataArray)-1):
@@ -389,6 +391,71 @@ class OMNI(SolarWind):
             data[14] = bs_gsm[1]
             data[15] = bs_gsm[2]
 
+    def _readDst(self,startTime,endTime):
+        """
+        Reads the 'dst.dat' file and extracts the DST values within the specified time range.
+
+        Args:
+        startTime (datetime): The start time of the desired time range.
+        endTime (datetime): The end time of the desired time range.
+
+        Returns:
+        tuple: A tuple containing two lists - 'dsttime' and 'dst'. 'dsttime' contains the datetime objects within the specified time range, and 'dst' contains the corresponding DST values.
+        """
+        dstfile = open("dst.dat",'r')
+        text = dstfile.readlines()
+        for i,j in enumerate(text):
+            if j[0] == '2':
+                iskip = i
+                break
+        dstfile.close()
+
+        dat = numpy.genfromtxt("dst.dat",skip_header=iskip, autostrip=True,dtype=None,encoding='utf-8')
+        dsttime = []
+        dst = []
+        fmt='%Y-%m-%dT%H:%M:%S.000'
+        for i in dat:
+            timestr = i[0]+"T"+i[1]
+            currenttime = datetime.datetime.strptime(timestr,fmt)
+            if currenttime >= startTime and currenttime <= endTime:
+                dsttime.append(currenttime)
+                dst.append(i[3])
+
+        return (dsttime, dst)
+
+    def _getDst(self,startTime,endTime):
+        """
+        Obtains DST values within the specified time range via pyspedas
+
+        Args:
+        startTime (datetime): The start time of the desired time range.
+        endTime (datetime): The end time of the desired time range.
+
+        Returns:
+        tuple: A tuple containing two lists - 'dsttime' and 'dst'. 'dsttime' contains the datetime objects within the specified time range, and 'dst' contains the corresponding DST values.
+        """
+        # round start String down
+        startStr = startTime.strftime('%Y-%m-%d')
+        aware_start = startTime.replace(tzinfo=datetime.timezone.utc)
+        # round end string up
+        endStr   = (endTime + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
+        aware_end = endTime.replace(tzinfo=datetime.timezone.utc)
+
+        dst_vars = kyoto.dst(trange=[startStr,endStr])
+        dat = get_data('kyoto_dst')
+
+        dsttime = []
+        dst = []
+        for i in range(len(dat[0])):
+            currenttime = datetime.datetime.fromtimestamp(dat[0][i],datetime.timezone.utc)
+            currenttime = currenttime.astimezone(datetime.timezone.utc)
+            if currenttime >= aware_start and currenttime <= aware_end:
+                dt = datetime.datetime(currenttime.year,currenttime.month,currenttime.day,currenttime.hour,currenttime.minute,currenttime.second)
+                dsttime.append(dt)
+                dst.append(dat[1][i])
+        return (dsttime, dst)
+
+
 class OMNIW(OMNI):
     """
     OMNIW Solar Wind file from CDAweb [http://cdaweb.gsfc.nasa.gov/].
@@ -433,10 +500,19 @@ class OMNIW(OMNI):
         self.filter = doFilter
         self.sigma = sigmaVal
         self.windowsize = windowsize
-
-        self.bad_data = [-999.900, 99999.9, 9999.99, 999.990, 1.00000E+07, 9999999.0, 99999, 9999000, -1e31]
-        self.good_quality = [4098, 14338]
-
+        
+        self.bad_data = [-999.900, 
+                         99999.9, # V
+                         9999.99, # B
+                         999.990, # density
+                         1.00000E+07, # Temperature
+                         9999999.0, # Temperature
+                         99999, # Activity indices 
+                         9999000, # SWE del_time
+                         -1e31 # SWE & MFI                      
+                         ]
+        self.good_quality = [4098,14338]
+        
         print('Retrieving solar wind data from CDAWeb')
         self.__read(fWIND)
 

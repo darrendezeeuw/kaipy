@@ -2,8 +2,123 @@ import numpy as np
 import h5py as h5
 
 import kaipy.kdefs as kd
+import kaipy.kaiH5 as kh5
 
 
+#------
+# Data containers
+#------
+
+class RCMSpeciesInfo(object):
+	"""
+	Container for RCM species
+
+	Args:
+		N      (int): Number of energy channels
+		flav   (int): Species "flavor
+					    e.g. 1 = electrons, 2 = protons
+		kStart (int): Starting index in Nk-length arrays (e.g. eeta)
+		kEnd   (int): Ending index +1 in Nk-length arrays
+					    This way, array[kStart:kEnd] gives entire species
+		alamc  List(float): List of grid-centered lambda values in units of [eV * (Rx/nT)**(2/3)]
+
+	Contains:
+		Args
+		alami List(float): List of lambda grid corner values in units of [eV * (Rx/nT)**(2/3)]
+	"""
+
+	def __init__(self, N, flav, kStart, kEnd, alamc):
+		self.N      = N
+		self.flav   = flav
+		self.kStart = kStart
+		self.kEnd   = kEnd
+		self.alamc  = alamc
+		self.alami  = np.zeros(N + 1)  # Cell interfaces
+		if N > 1:  # Trap for 1-cell plasmasphere
+			for n in range(0, N - 1):
+				self.alami[n + 1] = 0.5 * (alamc[n] + alamc[n + 1])
+			self.alami[N] = alamc[-1] + 0.5 * (alamc[-1] - alamc[-2])
+
+
+class RCMInfo(kh5.H5Info):
+	"""
+	Extends H5Info to grab RCM-specific info
+
+	Additional Args:
+		config_fname (str): Full path to rcmconfig.h5 file. Used to get species information
+
+	Contains:
+		Nk: Total number of lambda channels for all species
+		species List(RCMSpeciesInfo): Species information within provided file
+	"""
+
+	def __init__(self, h5fname, config_fname, noSubsec=True):
+		super().__init__(h5fname, noSubsec)
+		
+		# Populate species info
+		self.species = []
+		with h5.File(config_fname) as f5:
+			alamc = f5['alamc'][:]
+			flavs = f5['ikflavc'][:]
+			Nk = len(alamc)
+
+			kPnt = 0
+			# Check for plasmasphere
+			if abs(alamc[0]) < 1e-12:
+				self.species.append(
+					RCMSpeciesInfo(
+						1, flavs[0],  # N, flav
+						0, 1,  # kStart, kEnd
+						[0]  # alamc
+  					)
+				)
+				kPnt += 1
+			# Scrape remaining species
+			doContinue = True
+			while doContinue:
+				# Each iteration collects information of the next species as defined in rcmconfig
+				kStart = kPnt
+				flav = flavs[kStart]
+				while flavs[kPnt] == flav and kPnt < Nk-1: kPnt += 1  
+					# First condition moves to start of next species, second condition and condition below handles last species in the list
+				if kPnt == Nk-1: 
+					kPnt += 1
+					doContinue = False
+				kEnd = kPnt
+				self.species.append(
+					RCMSpeciesInfo(
+						(kEnd - kStart), flav,  #N, flav
+						kStart, kEnd,
+						alamc[kStart:kEnd]
+					)
+				)
+		self.Nk = Nk
+
+
+	def __test__(self, config_fname):
+		"""
+		Performs a test on an already-populated object to ensure its species info matches that in the provided file
+
+		Args:
+			config_fname (str): Full path to rcmconfig.h5
+
+		Returns:
+			result (bool): Whether test passes or not
+		"""
+
+		with h5.File(config_fname, 'r') as f5:
+			alamc = f5['alamc'][:]
+			flavs = f5['ikflavc'][:]
+			testPass = True
+			for spc in self.species:
+				if not np.all(flavs[spc.kStart:spc.kEnd] == spc.flav):
+					# If False, we are mixing species together
+					testPass = False
+				if (not np.all(alamc[spc.kStart:spc.kEnd] == spc.alamc)):
+					testPass = False
+				if spc.N != len(spc.alamc):
+					testPass = False
+			return testPass
 #------
 # Factors
 #------

@@ -1,6 +1,6 @@
 """
-Generate plots of 1d time series data stored as pyLTR.TimeSeries
-objects.  See examples/TimeSeriesPlots.py for usage.
+Generate plots of 1d time series data stored as kaipy.solarWind.TimeSeries
+objects.  See scritps/preproc/cda2wind.py for example usage.
 """
 from kaipy.solarWind.TimeSeries import TimeSeries
 import datetime
@@ -17,8 +17,8 @@ def BasicPlot(VarDict, Xname, Yname, Xlabel=True, color='b'):
 
     Args:
         VarDict (dict): A dictionary containing the variables.
-        Xname (str): The name of the variable to be plotted on the x-axis.
-        Yname (str): The name of the variable to be plotted on the y-axis.
+        Xname (str): The name of the variable in the dictionary to be plotted on the x-axis.
+        Yname (str): The name of the variable in the dictionary to be plotted on the y-axis.
         Xlabel (bool, optional): Whether to display the x-axis label. Defaults to True.
         color (str or list, optional): The color(s) of the line(s) in the plot. Defaults to 'b'.
 
@@ -72,7 +72,7 @@ def BasicPlot(VarDict, Xname, Yname, Xlabel=True, color='b'):
   
 def SummaryPlot(VarDict, Xname):
     """
-    Plot every variable in VarDict.
+    Plots every variable in VarDict.
 
     This is a simple wrapper around the more generic MultiPlotN.  This
     code may have problems with varDicts that store non-time series

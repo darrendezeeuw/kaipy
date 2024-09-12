@@ -12,6 +12,7 @@ import math
 import datetime
 import json
 from multiprocessing import Pool
+import pandas as pd
 
 #### NEED TO POINT TO SUPERMAG API SCRIPT
 #### /glade/p/hao/msphere/gamshare/supermag/supermag_api.py 
@@ -111,7 +112,7 @@ def interp_grid(values, tri, uv, d=2):
     return np.einsum('nj,nj->n', np.take(values, vertices),
                      np.hstack((bary, 1 - bary.sum(axis=1, keepdims=True))))
 
-def FetchSMData(user, start, numofdays, savefolder, badfrac=0.1, nanflags=True, doDB=True, ncpus=1):
+def FetchSMData(user, start, numofdays, savefolder, badfrac=0.1, nanflags=True, ncpus=1):
     """
     Retrieve all available SuperMagnet data for a specified period.
     If data has not already been downloaded, fetches data from Supermag.
@@ -129,8 +130,6 @@ def FetchSMData(user, start, numofdays, savefolder, badfrac=0.1, nanflags=True, 
         Tolerable fraction of data that is 99999.0. Sites with more bad data than this fraction will be ignored. Default is 0.1.
     nanflags: bool, optional
         If True, set 99999.0 values to NaNs. Default is True.
-    doDB: bool, optional
-        Whether to pull the pre-baselined values from Supermag. Default is True.
 
     Returns:
     dict:
@@ -138,10 +137,9 @@ def FetchSMData(user, start, numofdays, savefolder, badfrac=0.1, nanflags=True, 
         {'td', 'sitenames', 'glon', 'glat', 'mlon', 'mlat', 'mcolat', 'BNm', 'BEm', 'BZm', 'BNg', 'BEg', 'BZg', 'MLT', 'DECL', 'SZA'}
     """
 
-    if (doDB):
-        smFlags = "all,delta=start,baseline=all"
-    else:
-        smFlags = "all"
+    #Get all data, apply yearly baselining. But no longer do delta=start, which subtracts first value from all values
+    smFlags = "all,baseline=all" #Removing delta=start
+
         
     # Look at all saved .jsons
     filenames = [x for x in sorted(os.listdir(savefolder)) if '.json' in x]
@@ -182,7 +180,9 @@ def FetchSMData(user, start, numofdays, savefolder, badfrac=0.1, nanflags=True, 
                     # get rid of data if too many bad values
                     if np.sum(quickvals>999990.0) >= badfrac*len(quickvals):
                         badindex.append(False)
-                        print(iii, "BAD")
+                        #print(iii, "BAD")
+                        if np.shape(A)[0] == 0:
+                            A = np.array(['BAD'] * numofdays * 1440)
                     else:
                         badindex.append(True)
 
@@ -205,7 +205,8 @@ def FetchSMData(user, start, numofdays, savefolder, badfrac=0.1, nanflags=True, 
             print("Error invalid ncpu count: ",ncpus)
 
         badindex = np.array(badindex)
-        master, stations = np.array(master)[badindex], np.array(stations)[badindex]
+        master = np.array(master)[badindex]
+        stations = np.array(stations)[badindex]
 
         print("Done Fetching")
 
@@ -288,7 +289,7 @@ def doFetch(user, startstr, numofdays, smFlags, badfrac, iii):
             - badindex (bool): Indicates if there are too many bad values.
             - master (list or str): The fetched data or 'BAD' if fetch failed.
     """
-    print("Fetching: ", iii)
+    print("Fetching: ", iii.strip())
     #ZZZ
 
     status, A = smapi.SuperMAGGetData(user, startstr, extent=86400*numofdays,
@@ -300,7 +301,8 @@ def doFetch(user, startstr, numofdays, smFlags, badfrac, iii):
         # get rid of data if too many bad values
         if np.sum(quickvals>999990.0) >= badfrac*len(quickvals):
             badindex = False
-            print(iii, "BAD")
+            if np.shape(A)[0] == 0:
+                A = np.array(['BAD'] * numofdays * 1440)
         else:
             badindex = True
 
@@ -501,6 +503,7 @@ def InterpolateSimData(SIM, SM):
     Returns:
         dict: Dictionary containing the following keys:
             - td: Timestamps.
+            - sitenames: Supermag site names.
             - glon: Supermag longitude coordinates.
             - glat: Supermag latitude coordinates.
             - mlon: Magnetic longitude coordinates.
@@ -508,6 +511,7 @@ def InterpolateSimData(SIM, SM):
             - dBn: Interpolated northward deflection (dot product of dB and minus thetheta unit vector)
             - dBt: Interpolated magnetic theta component.
             - dBp: Interpolated magnetic phi component.
+            - dBr: Interpolated magnetic radial component.
             - mlt: Interpolated magnetic local time.
             - dBnsmall: Simulated data for all points, but limited to Supermag timestamps.
             - mltsmall: Simulated data for all points, but limited to Supermag timestamps.
@@ -536,13 +540,14 @@ def InterpolateSimData(SIM, SM):
 
     # interpolate the simulated values so that the times match real timestamps (i.e., on each minute exactly)
     newdBn = np.zeros((len(SMtdf), SIM['dBn'].shape[1]))
-    newmlt, newdBt, newdBp = np.copy(newdBn), np.copy(newdBn), np.copy(newdBn)
+    newmlt, newdBt, newdBp, newdBr = np.copy(newdBn), np.copy(newdBn), np.copy(newdBn), np.copy(newdBn)
 
     for i,v in enumerate(SIM['dBn'].T):
         newdBn[:,i] = np.interp(SMtdf, SIMtdf, v)
         newmlt[:,i] = np.interp(SMtdf, SIMtdf, SIM['mlt'].T[i])
         newdBt[:,i] = np.interp(SMtdf, SIMtdf, SIM['dBt'].T[i])
         newdBp[:,i] = np.interp(SMtdf, SIMtdf, SIM['dBp'].T[i])
+        newdBr[:,i] = np.interp(SMtdf, SIMtdf, SIM['dBr'].T[i])
 
     # now interpolate to the SM coordinates
     sim_points = np.vstack((SIM['glon'], SIM['glat'])).T
@@ -551,7 +556,7 @@ def InterpolateSimData(SIM, SM):
 
     # make empty arrays: len(smalltd) steps * len(SM['glon']) sites
     interp_dBt = np.zeros((len(smalltd), len(SM['glon'])))
-    interp_dBn, interp_dBp = np.copy(interp_dBt), np.copy(interp_dBt)
+    interp_dBn, interp_dBp, interp_dBr  = np.copy(interp_dBt), np.copy(interp_dBt), np.copy(interp_dBt)
     #interp_dBp, interp_dBr, interp_dBn = np.copy(interp_dBt), np.copy(interp_dBt), np.copy(interp_dBt)
     interp_smlon, interp_mlt = np.copy(interp_dBt), np.copy(interp_dBt)
 
@@ -560,6 +565,7 @@ def InterpolateSimData(SIM, SM):
         interp_mlt[i] = interp_grid(newmlt[i], interptri, wanted_points)
         interp_dBt[i] = interp_grid(newdBt[i], interptri, wanted_points)
         interp_dBp[i] = interp_grid(newdBp[i], interptri, wanted_points)
+        interp_dBr[i] = interp_grid(newdBr[i], interptri, wanted_points)
 
         if (i%10) == 0:
             pass
@@ -585,8 +591,8 @@ def InterpolateSimData(SIM, SM):
     SMRi, SMR00i, SMR06i, SMR12i, SMR18i = CalculateSMRBins(interp_mlt, interp_dBn, SM['mlat'])
     SMR, SMR00, SMR06, SMR12, SMR18 = CalculateSMRBins(newmlt, newdBn, SIM['glat'])
 
-    output = {'td':smalltd, 'glon':SM['glon'], 'glat':SM['glat'], 'mlon':SM['mlon'], 'mlat':SM['mlat'],
-              'dBn':interp_dBn, 'dBt':interp_dBt, 'dBp':interp_dBp, 'mlt':interp_mlt, 
+    output = {'td':smalltd, 'sitenames':SM['sitenames'], 'glon':SM['glon'], 'glat':SM['glat'], 'mlon':SM['mlon'], 'mlat':SM['mlat'],
+              'dBn':interp_dBn, 'dBt':interp_dBt, 'dBp':interp_dBp, 'dBr':interp_dBr, 'mlt':interp_mlt, 
               'dBnsmall':newdBn, 'mltsmall':newmlt, 'SMU':SMU_calc, 
               'SME':SME_calc, 'SML':SML_calc, 'superSME':SME_calc2, 'superSML':SML_calc2, 'superSMU':SMU_calc2,
               'SMR':SMRi, 'SMRbins':[SMR00i, SMR06i, SMR12i, SMR18i], 'superSMR':SMR, 
@@ -931,6 +937,45 @@ def EField1DCalculation(BX, BY, TD):
 
     return EX, EY
 
+def SMdict_to_df(SM, sitenames=None, geo_names=['glat', 'glon', 'mlat', 'mlon', 'mcolat'],
+                  var_names=['BNm', 'BEm', 'BZm', 'BNg', 'BEg', 'BZg', 'mlt', 'decl', 'sza']):
+    """
+    Convert a dictionary of SuperMag magnetometer (SM) data to a pandas DataFrame.
+
+    Args:
+        SM (dict): Dictionary containing the solar wind magnetometer data.
+        sitenames (list or None): List of site names. If None, the function will use the 'sitenames' key from the SM dictionary.
+        geo_names (list): List of names for the geographic information columns in the resulting DataFrame.
+        var_names (list): List of names for the variable columns in the resulting DataFrame.
+
+    Returns:
+        combined_data (pandas.DataFrame): DataFrame containing the combined data from the SM dictionary.
+
+    """
+    if sitenames is None:
+        sitenames = SM['sitenames']
+    times = SM['td']
+    geo_info = pd.DataFrame({
+        geoname: SM[geoname]
+        for geoname in geo_names
+    }, index=sitenames)
+
+    data = {
+        site: pd.DataFrame({
+            varname: SM[varname][:, i]
+            for varname in var_names
+        }, index=times)
+        for i, site in enumerate(sitenames)
+    }
+    combined_data = pd.concat(data.values(), keys=data.keys(), names=['site', 'time'])
+    combined_data = (combined_data
+                    .reset_index(level='site')
+                    .merge(geo_info, left_on='site', right_index=True)
+                    .set_index('site', append=True)
+                    .swaplevel('site', 'time')
+                    .sort_index()
+    )
+    return combined_data
 """
 # EXAMPLE RUN
 user = 'blakese' # username for Supermag downloads

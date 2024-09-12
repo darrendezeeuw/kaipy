@@ -520,7 +520,7 @@ def upGas(X, Y, Z, G, Xu, Yu, Zu):
 #Upscale RCMCPL variable
 def upRCMCpl(Q, N=1):
 	"""
-	Upscales the input array `Q` for the Rice Convection Model Plasma Varible (RCM).
+	Upscales the input array `Q` for the Rice Convection Model Plasma Variable (RCM).
 
 	Args:
 		Q (numpy.ndarray): The input array to be upscaled.

@@ -4,9 +4,11 @@ import matplotlib.cm as cm
 import numpy as np
 import sys
 
-Ri = 6.5  # radius of ionosphere in 1000km
-Re = 6.38 # radius of Earth in 1000km
-mu0o4pi = 1.e-7 # mu0=4pi*10^-7 => mu0/4pi=10^-7
+from kaipy.kdefs import RionE, REarth
+
+Ri      = RionE          # radius of ionosphere in 1000km
+Re      = REarth*1.e-6   # radius of Earth in 1000km
+mu0o4pi = 1.e-7          # mu0=4pi*10^-7 => mu0/4pi=10^-7
 
 #Setting globals here to grab them from other modules
 facMax = 1.5
@@ -17,8 +19,6 @@ class remix:
 	"""
 	A class for handling and manipulating ion data in the REMIX format.
 
-	Thanks to awesome Slava Merkin for the original code.
-	
 	Args:
 		h5file (str): The path to the REMIX file in HDF5 format.
 		step (int): The step number of the data to be loaded.
@@ -28,13 +28,44 @@ class remix:
 		Initialized (bool): Indicates whether the object has been initialized.
 
 	Methods:
-		__init__(self, h5file, step): Initializes the remix object and loads the ion data.
-		get_data(self, h5file, step): Loads the ion data from the REMIX file.
-		init_vars(self, hemisphere): Initializes the variables based on the specified hemisphere.
-		get_spherical(self, x, y): Converts Cartesian coordinates to spherical coordinates.
-		distance(self, p0, p1): Calculates the distance between two points in 3D space.
-		calcFaceAreas(self, x, y): Calculates the area of each face in a quad mesh.
-		plot(self, varname, ncontours=16, addlabels={}, gs=None, doInset=False, doCB=True, doCBVert=True, doGTYPE=False, doPP=False): Plots the specified variable.
+		__init__(self, h5file, step)
+			Initializes the remix object and loads the ion data.
+
+		get_data(self, h5file, step)
+			Loads the ion data from the REMIX file.
+	
+		init_vars(self, hemisphere)
+			Initializes the variables based on the specified hemisphere.
+	
+		get_spherical(self, x, y)
+			Converts Cartesian coordinates to spherical coordinates.
+	
+		distance(self, p0, p1)
+			Calculates the Euclidean distance between two points in R^3.
+	
+		calcFaceAreas(self, x, y)
+			Calculates the area of each face in a quad mesh.
+	
+		plot(self, varname, ncontours=16, addlabels={}, gs=None, doInset=False, doCB=True, doCBVert=True, doGTYPE=False, doPP=False)
+			Plots the specified variable.
+	
+		efield(self, returnDeltas=False, ri=Ri*1e3)
+			Calculates the electric field at each point in the grid.
+	
+		joule(self)
+			Calculates the power density in watts per square meter (W/m^2) based on the electric field and conductivity.
+	
+		cartesianCellCenters(self)
+			Calculates the Cartesian cell centers.
+	
+		hCurrents(self)
+			Calculates the horizontal currents.
+	
+		dB(self, xyz, hallOnly=True, Rin=2.0, rsegments=10)
+			Computes the magnetic field (B-field) at given points.
+	
+		BSFluxTubeInt(self,xyz,Rinner,rsegments = 10)
+			Computes flux-tube Biot-Savart integral \int dl bhat x r'/|r'|^3.
 
 	Note: 
 		This class assumes that the REMIX file is in a specific format and follows certain naming conventions for the variables.
@@ -57,7 +88,7 @@ class remix:
 		self.ion = self.get_data(h5file, step)
 		self.Initialized = False
 
-		# DEFINE DATA LIMITS
+		# define default data limits for plotting
 		self.variables = {
 			'potential': {'min': -100, 'max': 100},
 			'current': {'min': -facMax, 'max': facMax},
@@ -114,85 +145,85 @@ class remix:
 
 	# TODO: check for variable names passed to plot
 	def init_vars(self, hemisphere):
-			"""
-			Initialize the variables based on the given hemisphere.
+		"""
+		Initialize the variables based on the given hemisphere.
 
-			Args:
-				hemisphere (str): The hemisphere ('north' or 'south').
+		Args:
+			hemisphere (str): The hemisphere ('north' or 'south').
 
-			Returns:
-				None
+		Returns:
+			None
 
-			"""
-			h = hemisphere # for shortness
+		"""
+		h = hemisphere.upper() # for shortness
 
-			# Initialize variables based on the hemisphere
-			if (h.lower() == 'north'):
-				# Initialize variables for the 'north' hemisphere
-				self.variables['potential']['data'] = self.ion['Potential ' + h]
-				self.variables['current']['data'] = -self.ion['Field-aligned current ' + h]  # note, converting to common convention (upward=positive)
-				self.variables['sigmap']['data'] = self.ion['Pedersen conductance ' + h]
-				self.variables['sigmah']['data'] = self.ion['Hall conductance ' + h]
-				self.variables['energy']['data'] = self.ion['Average energy ' + h]
-				self.variables['flux']['data'] = self.ion['Number flux ' + h]
-				if 'RCM grid type ' + h in self.ion.keys():
-					self.variables['gtype']['data'] = self.ion['RCM grid type ' + h]
-				if 'RCM plasmasphere density ' + h in self.ion.keys():
-					self.variables['npsp']['data'] = self.ion['RCM plasmasphere density ' + h] * 1.0e-6  # /m^3 -> /cc.
-				if 'Zhang average energy ' + h in self.ion.keys():
-					self.variables['Menergy']['data'] = self.ion['Zhang average energy ' + h]
-					self.variables['Mflux']['data'] = self.ion['Zhang number flux ' + h]
-					self.variables['Meflux']['data'] = self.variables['Menergy']['data'] * self.variables['Mflux']['data'] * 1.6e-9
-				if 'IM average energy ' + h in self.ion.keys():
-					self.variables['Denergy']['data'] = self.ion['IM average energy ' + h]
-					self.variables['Deflux']['data'] = self.ion['IM Energy flux ' + h]
-					self.variables['Denergy']['data'][self.variables['Denergy']['data'] == 0] = 1.e-20
-					self.variables['Denergy']['data'][np.isnan(self.variables['Denergy']['data'])] = 1.e-20
-					self.variables['Dflux']['data'] = self.variables['Deflux']['data'] / self.variables['Denergy']['data'] / (1.6e-9)
-					self.variables['Dflux']['data'][self.variables['Denergy']['data'] == 1.e-20] = 0.
-				if 'IM average energy proton ' + h in self.ion.keys():
-					self.variables['Penergy']['data'] = self.ion['IM average energy proton ' + h]
-					self.variables['Peflux']['data'] = self.ion['IM Energy flux proton ' + h]
-					self.variables['Penergy']['data'][self.variables['Penergy']['data'] == 0] = 1.e-20
-					self.variables['Penergy']['data'][np.isnan(self.variables['Penergy']['data'])] = 1.e-20
-					self.variables['Pflux']['data'] = self.variables['Peflux']['data'] / self.variables['Penergy']['data'] / (1.6e-9)
-					self.variables['Pflux']['data'][self.variables['Penergy']['data'] == 1.e-20] = 0.
-			else:
-				# Initialize variables for the 'south' hemisphere
-				self.variables['potential']['data'] = self.ion['Potential ' + h][:, ::-1]
-				self.variables['current']['data'] = self.ion['Field-aligned current ' + h][:, ::-1]
-				self.variables['sigmap']['data'] = self.ion['Pedersen conductance ' + h][:, ::-1]
-				self.variables['sigmah']['data'] = self.ion['Hall conductance ' + h][:, ::-1]
-				self.variables['energy']['data'] = self.ion['Average energy ' + h][:, ::-1]
-				self.variables['flux']['data'] = self.ion['Number flux ' + h][:, ::-1]
-				if 'RCM grid type ' + h in self.ion.keys():
-					self.variables['gtype']['data'] = self.ion['RCM grid type ' + h][:, ::-1]
-				if 'RCM plasmasphere density ' + h in self.ion.keys():
-					self.variables['npsp']['data'] = self.ion['RCM plasmasphere density ' + h][:, ::-1] * 1.0e-6  # /m^3 -> /cc.
-				if 'Zhang average energy ' + h in self.ion.keys():
-					self.variables['Menergy']['data'] = self.ion['Zhang average energy ' + h][:, ::-1]
-					self.variables['Mflux']['data'] = self.ion['Zhang number flux ' + h][:, ::-1]
-					self.variables['Meflux']['data'] = self.variables['Menergy']['data'] * self.variables['Mflux']['data'] * 1.6e-9
-				if 'IM average energy ' + h in self.ion.keys():
-					self.variables['Denergy']['data'] = self.ion['IM average energy ' + h][:, ::-1]
-					self.variables['Deflux']['data'] = self.ion['IM Energy flux ' + h][:, ::-1]
-					self.variables['Denergy']['data'][self.variables['Denergy']['data'] == 0] = 1.e-20
-					self.variables['Denergy']['data'][np.isnan(self.variables['Denergy']['data'])] = 1.e-20
-					self.variables['Dflux']['data'] = self.variables['Deflux']['data'] / self.variables['Denergy']['data'] / (1.6e-9)
-					self.variables['Dflux']['data'][self.variables['Denergy']['data'] == 1.e-20] = 0.
-				if 'IM average energy proton ' + h in self.ion.keys():
-					self.variables['Penergy']['data'] = self.ion['IM average energy proton ' + h][:, ::-1]
-					self.variables['Peflux']['data'] = self.ion['IM Energy flux proton ' + h][:, ::-1]
-					self.variables['Penergy']['data'][self.variables['Penergy']['data'] == 0] = 1.e-20
-					self.variables['Penergy']['data'][np.isnan(self.variables['Penergy']['data'])] = 1.e-20
-					self.variables['Pflux']['data'] = self.variables['Peflux']['data'] / self.variables['Penergy']['data'] / (1.6e-9)
-					self.variables['Pflux']['data'][self.variables['Penergy']['data'] == 1.e-20] = 0.
+		# Initialize variables based on the hemisphere
+		if (h == 'NORTH'):
+			# Initialize variables for the 'north' hemisphere
+			self.variables['potential']['data'] = self.ion['Potential ' + h]
+			self.variables['current']['data'] = -self.ion['Field-aligned current ' + h]  # note, converting to common convention (upward=positive)
+			self.variables['sigmap']['data'] = self.ion['Pedersen conductance ' + h]
+			self.variables['sigmah']['data'] = self.ion['Hall conductance ' + h]
+			self.variables['energy']['data'] = self.ion['Average energy ' + h]
+			self.variables['flux']['data'] = self.ion['Number flux ' + h]
+			if 'RCM grid type ' + h in self.ion.keys():
+				self.variables['gtype']['data'] = self.ion['RCM grid type ' + h]
+			if 'RCM plasmasphere density ' + h in self.ion.keys():
+				self.variables['npsp']['data'] = self.ion['RCM plasmasphere density ' + h] * 1.0e-6  # /m^3 -> /cc.
+			if 'Zhang average energy ' + h in self.ion.keys():
+				self.variables['Menergy']['data'] = self.ion['Zhang average energy ' + h]
+				self.variables['Mflux']['data'] = self.ion['Zhang number flux ' + h]
+				self.variables['Meflux']['data'] = self.variables['Menergy']['data'] * self.variables['Mflux']['data'] * 1.6e-9
+			if 'IM average energy ' + h in self.ion.keys():
+				self.variables['Denergy']['data'] = self.ion['IM average energy ' + h]
+				self.variables['Deflux']['data'] = self.ion['IM Energy flux ' + h]
+				self.variables['Denergy']['data'][self.variables['Denergy']['data'] == 0] = 1.e-20
+				self.variables['Denergy']['data'][np.isnan(self.variables['Denergy']['data'])] = 1.e-20
+				self.variables['Dflux']['data'] = self.variables['Deflux']['data'] / self.variables['Denergy']['data'] / (1.6e-9)
+				self.variables['Dflux']['data'][self.variables['Denergy']['data'] == 1.e-20] = 0.
+			if 'IM average energy proton ' + h in self.ion.keys():
+				self.variables['Penergy']['data'] = self.ion['IM average energy proton ' + h]
+				self.variables['Peflux']['data'] = self.ion['IM Energy flux proton ' + h]
+				self.variables['Penergy']['data'][self.variables['Penergy']['data'] == 0] = 1.e-20
+				self.variables['Penergy']['data'][np.isnan(self.variables['Penergy']['data'])] = 1.e-20
+				self.variables['Pflux']['data'] = self.variables['Peflux']['data'] / self.variables['Penergy']['data'] / (1.6e-9)
+				self.variables['Pflux']['data'][self.variables['Penergy']['data'] == 1.e-20] = 0.
+		else:
+			# Initialize variables for the 'south' hemisphere
+			self.variables['potential']['data'] = self.ion['Potential ' + h][:, ::-1]
+			self.variables['current']['data'] = self.ion['Field-aligned current ' + h][:, ::-1]
+			self.variables['sigmap']['data'] = self.ion['Pedersen conductance ' + h][:, ::-1]
+			self.variables['sigmah']['data'] = self.ion['Hall conductance ' + h][:, ::-1]
+			self.variables['energy']['data'] = self.ion['Average energy ' + h][:, ::-1]
+			self.variables['flux']['data'] = self.ion['Number flux ' + h][:, ::-1]
+			if 'RCM grid type ' + h in self.ion.keys():
+				self.variables['gtype']['data'] = self.ion['RCM grid type ' + h][:, ::-1]
+			if 'RCM plasmasphere density ' + h in self.ion.keys():
+				self.variables['npsp']['data'] = self.ion['RCM plasmasphere density ' + h][:, ::-1] * 1.0e-6  # /m^3 -> /cc.
+			if 'Zhang average energy ' + h in self.ion.keys():
+				self.variables['Menergy']['data'] = self.ion['Zhang average energy ' + h][:, ::-1]
+				self.variables['Mflux']['data'] = self.ion['Zhang number flux ' + h][:, ::-1]
+				self.variables['Meflux']['data'] = self.variables['Menergy']['data'] * self.variables['Mflux']['data'] * 1.6e-9
+			if 'IM average energy ' + h in self.ion.keys():
+				self.variables['Denergy']['data'] = self.ion['IM average energy ' + h][:, ::-1]
+				self.variables['Deflux']['data'] = self.ion['IM Energy flux ' + h][:, ::-1]
+				self.variables['Denergy']['data'][self.variables['Denergy']['data'] == 0] = 1.e-20
+				self.variables['Denergy']['data'][np.isnan(self.variables['Denergy']['data'])] = 1.e-20
+				self.variables['Dflux']['data'] = self.variables['Deflux']['data'] / self.variables['Denergy']['data'] / (1.6e-9)
+				self.variables['Dflux']['data'][self.variables['Denergy']['data'] == 1.e-20] = 0.
+			if 'IM average energy proton ' + h in self.ion.keys():
+				self.variables['Penergy']['data'] = self.ion['IM average energy proton ' + h][:, ::-1]
+				self.variables['Peflux']['data'] = self.ion['IM Energy flux proton ' + h][:, ::-1]
+				self.variables['Penergy']['data'][self.variables['Penergy']['data'] == 0] = 1.e-20
+				self.variables['Penergy']['data'][np.isnan(self.variables['Penergy']['data'])] = 1.e-20
+				self.variables['Pflux']['data'] = self.variables['Peflux']['data'] / self.variables['Penergy']['data'] / (1.6e-9)
+				self.variables['Pflux']['data'][self.variables['Penergy']['data'] == 1.e-20] = 0.
 
-			# convert energy flux to erg/cm2/s to conform to Newell++, doi:10.1029/2009JA014326, 2009
-			self.variables['eflux']['data'] = self.variables['energy']['data'] * self.variables['flux']['data'] * 1.6e-9
-			# Mask out Eavg where EnFlux<0.1
-			# self.variables['energy']['data'][self.variables['sigmap']['data']<=2.5]=0.0
-			self.Initialized = True
+		# convert energy flux to erg/cm2/s to conform to Newell++, doi:10.1029/2009JA014326, 2009
+		self.variables['eflux']['data'] = self.variables['energy']['data'] * self.variables['flux']['data'] * 1.6e-9
+		# Mask out Eavg where EnFlux<0.1
+		# self.variables['energy']['data'][self.variables['sigmap']['data']<=2.5]=0.0
+		self.Initialized = True
 	
 
 	def get_spherical(self, x, y):
@@ -233,11 +264,6 @@ class remix:
 		"""
 		return np.sqrt((p0[0] - p1[0]) ** 2 +
 					   (p0[1] - p1[1]) ** 2 + (p0[2] - p1[2]) ** 2)
-	def distance(self,p0, p1):
-		""" Calculate the distance between p0 & p1--two points in R**3 """
-		return( np.sqrt( (p0[0]-p1[0])**2 +
-				  (p0[1]-p1[1])**2 + (p0[2]-p1[2])**2 ) )
-
 
 	def calcFaceAreas(self, x, y):
 		"""
@@ -260,6 +286,7 @@ class remix:
 
 		area = np.zeros((nLon, nLat))
 
+		#TODO: I hate explicit loops in python, this should be vectorized
 		for i in range(nLon):
 			for j in range(nLat):
 				left = self.distance((x[i, j], y[i, j], z[i, j]), (x[i, j + 1], y[i, j + 1], z[i, j + 1]))
@@ -562,8 +589,64 @@ class remix:
 		if not self.Initialized:
 			sys.exit("Variables should be initialized for the specific hemisphere (call init_var) prior to efield calculation.")
 
-		# Rest of the code...
-	
+		Psi = self.variables['potential']['data']  # note, these are numbers of cells. self.ion['X'].shape = Nr+1,Nt+1
+		Nt,Np = Psi.shape
+
+		# Aliases to keep things short
+		x = self.ion['X']
+		y = self.ion['Y']
+
+		# note the change in naming convention from above
+		# i.e., theta is now the polar angle
+		# and phi is the azimuthal (what was theta)
+		# TODO: make consistent throughout
+		theta = np.arcsin(self.ion['R'])
+		phi   = self.ion['THETA']
+
+		# interpolate Psi to corners
+		Psi_c = np.zeros(x.shape)
+		Psi_c[1:-1,1:-1] = 0.25*(Psi[1:,1:]+Psi[:-1,1:]+Psi[1:,:-1]+Psi[:-1,:-1])
+
+		# fix up periodic
+		Psi_c[1:-1,0]  = 0.25*(Psi[1:,0]+Psi[:-1,0]+Psi[1:,-1]+Psi[:-1,-1])
+		Psi_c[1:-1,-1] = Psi_c[1:-1,0]
+
+		# fix up pole
+		Psi_pole = Psi[0,:].mean()
+		Psi_c[0,1:-1] = 0.25*(2.*Psi_pole + Psi[0,:-1]+Psi[0,1:])
+		Psi_c[0,0]    = 0.25*(2.*Psi_pole + Psi[0,-1]+Psi[0,0])		
+		Psi_c[0,-1]   = 0.25*(2.*Psi_pole + Psi[0,-1]+Psi[0,0])				
+
+		# fix up low lat boundary
+		# extrapolate linearly just like we did for the coordinates
+		# (see genOutGrid in src/remix/mixio.F90)
+		# note, neglecting the possibly non-uniform spacing (don't care)
+		Psi_c[-1,:] = 2*Psi_c[-2,:]-Psi_c[-3,:]
+
+		# now, do the differencing
+		# for each cell corner on the original grid, I have the coordinates and Psi_c
+		# need to find the gradient at cell center
+		# the result is the same size as Psi
+
+		# first etheta
+		tmp    = 0.5*(Psi_c[:,1:]+Psi_c[:,:-1])  # move to edge center
+		dPsi   = tmp[1:,:]-tmp[:-1,:]
+		tmp    = 0.5*(theta[:,1:]+theta[:,:-1])
+		dtheta = tmp[1:,:]-tmp[:-1,:]
+		etheta = dPsi/dtheta/ri  # this is in V/m
+
+		# now ephi
+		tmp    = 0.5*(Psi_c[1:,:]+Psi_c[:-1,:])  # move to edge center
+		dPsi   = tmp[:,1:]-tmp[:,:-1]
+		tmp    = 0.5*(phi[1:,:]+phi[:-1,:])
+		dphi   = tmp[:,1:]-tmp[:,:-1]
+		tc = 0.25*(theta[:-1,:-1]+theta[1:,:-1]+theta[:-1,1:]+theta[1:,1:]) # need this additionally 
+		ephi = dPsi/dphi/np.sin(tc)/ri  # this is in V/m
+
+		if returnDeltas:
+			return (-etheta,-ephi,dtheta,dphi)  # E = -grad Psi
+		else:	
+			return (-etheta,-ephi)  # E = -grad Psi			
 
 	def joule(self):
 		"""
@@ -582,7 +665,7 @@ class remix:
 	# furthermore, I'm lazily mixing this with dtheta,dphi that came from efield in hCurrents
 	# TODO: this should be fixed by pulling out the cell-centered tc,pc, and dtheta,dphi
 	# from the efield calculation and using throughout.
-	# note, however, that the staggered grid for storage is currently create in the remix Fortran code
+	# note, however, that the staggered grid for storage is currently created in the remix Fortran code
 	# by Cartesian averaging, so if we go to angular in this python postprocessing code, 
 	# we should probably start with going angular in the Fortran code.
 	def cartesianCellCenters(self):
@@ -656,6 +739,7 @@ class remix:
 	# Main function to compute magnetic perturbations using the Biot-Savart integration
 	# This includes Hall, Pedersen and FAC with the option to do Hall only
 	# Rin = Inner boundary of MHD grid [Re]
+	# See Slava's paper notes
 	def dB(self, xyz, hallOnly=True, Rin=2.0, rsegments=10):
 		"""
 		Compute the magnetic field (B-field) at given points.
@@ -780,16 +864,20 @@ class remix:
 		return(dBr,dBtheta,dBphi)
 
 	# FIXME: Make work for SOUTH
-	# Flux-tube Biot-Savart integral \int dl bhat x r'/|r'|^3
 	def BSFluxTubeInt(self,xyz,Rinner,rsegments = 10):
-		# xyz = array of points where to compute dB  (same as above in dB)
-		# xyz.shape should be (N,3), where N is the number of points
-		# xyz = (x,y,z) in units of Ri
-		#
-		# Rinner is the radius of the inner boundary of the MHD domain
-		# expressed in Ri
-		#
-		# rsegments: how many segments to break the fluxtube into between ionosphere and Rinner
+		"""
+		Compute flux-tube Biot-Savart integral \int dl bhat x r'/|r'|^3
+
+		Args:
+			xyz (numpy.ndarray): array of points where to compute dB  (same as above in dB). xyz.shape should be (N,3), where N is the number of points. xyz = (x,y,z) in units of Ri
+			Rinner (float): The radius of the inner boundary of the MHD domain expressed in Ri
+
+		Returns:
+			intx (float): x component of the flux tube integral
+			inty (float): y component of the flux tube integral
+			intz (float): z component of the flux tube integral		
+		"""
+		
 
 		if len(xyz.shape)!=2:
 			sys.exit("dB input assumes the array of points of (N,3) size.")			
@@ -862,117 +950,3 @@ class remix:
 		intz = np.sum( dl*(bx*Ry - by*Rx)/R**3,axis=0)
 
 		return(intx,inty,intz)
-
-
-
-# Code below is from old mix scripts.
-# Keeping for further development but commenting out for now.
-
-# The function is deprecated as of 10-25-10 and is left here only for
-# backward compatibility. Use get_time_series for extracting cpcp and
-# other quantities as funcitons of time.
-# def get_cpcp_time_series(directory):
-# 	from pylab import sort
-# 	import glob,datetime
-
-# 	files = glob.glob(directory+'*_mix_*.hdf')
-
-# 	time   = []
-# 	cpcp_n = []
-# 	cpcp_s = []
-# 	for file in sort(files):
-# 		print(file)
-# 		(simtime,
-# 		 x,y,
-# 		 psi_n,psi_s,
-# 		 fac_n,fac_s,
-# 		 sigmap_n,sigmap_s,
-# 		 sigmah_n,sigmah_s,
-# 		 energy_n,energy_s,
-# 		 flux_n,flux_s) = get_data(file)
-	
-# 		cpcp_n.append(psi_n.max()-psi_n.min())
-# 		cpcp_s.append(psi_s.max()-psi_s.min())
-		
-# 		t = datetime.datetime(simtime[0],simtime[1],simtime[2],
-# 							  simtime[3],simtime[4],simtime[5])
-# 		time.append(t)
-
-
-# 	return (time,cpcp_n,cpcp_s)
-
-# def get_time_series(directory):
-# 	from pylab import sort,sqrt,nonzero
-# 	import glob,datetime
-# 	import integrate
-
-# 	files = glob.glob(directory+'*_mix_*.hdf')
-
-
-# 	ri=6500.e3
-# 	# Pre-compute some constants:
-# 	(simtime,x,y,psi_n,psi_s,fac_n,fac_s,sigmap_n,sigmap_s,sigmah_n,sigmah_s,
-# 	 energy_n,energy_s,flux_n,flux_s) = get_data(files[0])
-# 	x[:,0]=0.0
-# 	y[:,0]=0.0
-# 	z=sqrt(1.0-x**2-y**2)
-# 	areaSphere = integrate.calcFaceAreas(x,y,z)*ri*ri
-
-# 	time   = []
-# 	cpcp_n = []
-# 	cpcp_s = []
-# 	fac_pos_n = []
-# 	fac_neg_n = []
-# 	fac_pos_s = []
-# 	fac_neg_s = []
-
-# 	for file in sort(files):
-# 		(simtime,
-# 		 x,y,
-# 		 psi_n,psi_s,
-# 		 fac_n,fac_s,
-# 		 sigmap_n,sigmap_s,
-# 		 sigmah_n,sigmah_s,
-# 		 energy_n,energy_s,
-# 		 flux_n,flux_s) = get_data(file)
-	
-# 		cpcp_n.append(psi_n.max()-psi_n.min())
-# 		cpcp_s.append(psi_s.max()-psi_s.min())
-
-# 		pfac = fac_n.copy()
-# 		locs = nonzero(fac_n < 0)
-# 		pfac[locs] = 0.0
-# 		val = areaSphere*pfac[0:180,0:26]
-# 		fac_pos_n.append(val.sum()*1.e-12)
-
-# 		pfac = fac_n.copy()
-# 		locs = nonzero(fac_n > 0)
-# 		pfac[locs] = 0.0
-# 		val = areaSphere*pfac[0:180,0:26]
-# 		fac_neg_n.append(-val.sum()*1.e-12)
-
-
-# 		pfac = fac_s.copy()
-# 		locs = nonzero(fac_s < 0)
-# 		pfac[locs] = 0.0
-# 		val = areaSphere*pfac[0:180,0:26]
-# 		fac_pos_s.append(val.sum()*1.e-12)
-
-# 		pfac = fac_s.copy()
-# 		locs = nonzero(fac_s > 0)
-# 		pfac[locs] = 0.0
-# 		val = areaSphere*pfac[0:180,0:26]
-# 		fac_neg_s.append(-val.sum()*1.e-12)
-
-		
-# 		t = datetime.datetime(simtime[0],simtime[1],simtime[2],
-# 							  simtime[3],simtime[4],simtime[5])
-# 		time.append(t)
-
-# 	return (time,cpcp_n,cpcp_s,fac_pos_n,fac_neg_n,fac_pos_s,fac_neg_s)
-
-
-
-
-
-
