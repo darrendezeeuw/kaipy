@@ -212,7 +212,7 @@ def makePlot(i, remixFile, nStp):
         axs[0] = ion.plot('current', gs=gs[0, 0])
         axs[1] = ion.plot('sigmap', gs=gs[0, 1])
         axs[2] = ion.plot('sigmah', gs=gs[0, 2])
-        axs[3] = ion.plot('joule', gs=gs[1, 0])
+        axs[3] = ion.plot('potential', gs=gs[1, 0])
         axs[4] = ion.plot('energy', gs=gs[1, 1])
         if do_nflux:
             axs[5] = ion.plot('flux', gs=gs[1, 2],doGTYPE=do_GTYPE,doPP=do_PP)
