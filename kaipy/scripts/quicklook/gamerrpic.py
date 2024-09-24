@@ -32,7 +32,7 @@ def create_command_line_parser():
 	ftag2 = "msphere"
 	nStp=1
 	fieldNames = "Bx, By, Bz"
-
+	noMPI = False
 
 	MainS = """Creates simple multi-panel figure for Gamera magnetosphere run
 	Left Panel - Residual vertical magnetic field
@@ -55,7 +55,6 @@ def create_command_line_parser():
 if __name__ == "__main__":
 	#Defaults
 	doMPI = False #[Add MPI tiling]
-	noMPI = False
 	# Set up the command-line parser.
 	parser = create_command_line_parser()
 	#Finalize parsing
