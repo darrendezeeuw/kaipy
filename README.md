@@ -12,6 +12,10 @@ as planetary magnetospheres and the solar wind.
 
 [https://kaipy-docs.readthedocs.io/en/latest/](https://kaipy-docs.readthedocs.io/en/latest/)
 
+### License ###
+
+Kaipy is distributed under the [BSD 3-Clause license](LICENSE.md).
+
 ### What is this repository for? ###
 
 * Package Quick summary
