@@ -35,4 +35,4 @@ pip from [https://pypi.org/project/kaipy/](PyPi).
 
 ### Who do I talk to? ###
 
-* For more information about the kaipy project contact [Michael Wiltberger](mailto:wiltbemj@ucar.edu?subject=Kaipy).
+* For more information about the Kaipy project contact [Michael Wiltberger](mailto:wiltbemj@ucar.edu?subject=Kaipy).
