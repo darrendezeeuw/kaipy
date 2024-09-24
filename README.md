@@ -10,6 +10,7 @@ as planetary magnetospheres and the solar wind.
 
 ### Documentation ###
 
+Current docuementation for this package avilable via our Read The Docs website.
 [https://kaipy-docs.readthedocs.io/en/latest/](https://kaipy-docs.readthedocs.io/en/latest/)
 
 ### License ###
@@ -18,8 +19,7 @@ Kaipy is distributed under the [BSD 3-Clause license](LICENSE.md).
 
 ### What is this repository for? ###
 
-* Package Quick summary
-* Version 1.0.1
+This repository provides a pathway for access to the source code used to implment the kaipy python package mostly commonly installed via pip from [https://pypi.org/project/kaipy/](PyPi).
 
 ### How do I get set up? ###
 
