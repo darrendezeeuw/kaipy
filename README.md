@@ -1,15 +1,12 @@
 # README #
 
-This is a Python package for analysis and visualization of simulation
+Kaipy is a Python package for analysis and visualization of simulation
 results from a scientific software package Kaiju. Kaiju includes the
 [Multiscale Atmosphere-Geospace Environment (MAGE)
-model](https://cgs.jhuapl.edu/Models/mage.php) developed by the NASA
+](https://cgs.jhuapl.edu/Models/mage.php) model developed by the NASA
 DRIVE [Center for Geospace Storms](https://cgs.jhuapl.edu/) as well as
-other scientific software for simulation of space plasma systems such
-as planetary magnetospheres and the solar wind. Kaipy is a Python
-package that is used for analysis and visualization of data produced
-by Kaiju model simulations.
-
+other scientific software for simulation of heliospheric environments such
+as planetary magnetospheres and the solar wind. 
 
 ### Documentation ###
 
