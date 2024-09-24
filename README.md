@@ -25,7 +25,7 @@ pip from [https://pypi.org/project/kaipy/](PyPi).
 ### How do I get set up? ###
 
 * Install python verison 3.8.
-* pip install kaipy.
+* ```pip install kaipy```.
 
 
 ### Contribution guidelines ###
