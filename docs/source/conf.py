@@ -21,7 +21,7 @@ sys.path.insert(2, os.path.abspath('../../kaipy/scripts/preproc'))
 
 project = 'Kaipy'
 copyright = '2023 - JHU/APL, NSF NCAR, and Rice University'
-author = 'Michael Wiltberger'
+author = 'Kaiju Team'
 
 # The full version, including alpha/beta/rc tags
 release = '1.0.0'
