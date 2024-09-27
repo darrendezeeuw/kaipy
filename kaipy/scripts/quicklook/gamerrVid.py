@@ -116,6 +116,7 @@ def makeImage(i,gsph1,gsph2,tOut,doVerb,xyBds,fnList,oDir,errTimes,errListRel,er
 	AxB.tick_params(axis='y',which='both',colors=relColor,left=True,right=True,labelleft=True,labelright=False)
 	AxB2.set_ylabel('Per-Cell Mean Absolute Error',color=absColor)
 	#AxB2.yaxis.tick_right()
+	AxB2.yaxis.set_label_position("right")
 	AxB2.tick_params(axis='y',which='both',colors=absColor,left=True,right=True,labelleft=False,labelright=True)
 	AxB.set_title("'" + fieldNames + "' Per-Cell Error Over Time")
 	
