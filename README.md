@@ -14,7 +14,7 @@ Current documentation for this package available via our [Read The Docs website]
 
 ### License ###
 
-Kaipy is distributed under the [BSD 3-Clause license](LICENSE.md).
+Kaipy is distributed under the [BSD 3-Clause license](https://bitbucket.org/aplkaiju/kaipy/src/master/LICENSE.md).
 
 ### What is this repository for? ###
 
@@ -24,7 +24,6 @@ pip from [https://pypi.org/project/kaipy/](PyPi).
 
 ### How do I get set up? ###
 
-* Install python verison 3.8.
 * ```pip install kaipy```.
 
 
