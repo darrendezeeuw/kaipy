@@ -22,11 +22,10 @@ from astropy.convolution import convolve, Gaussian2DKernel
 import h5py
 import numpy as np
 from scipy import interpolate
-# import matplotlib.pyplot as plt
 
 # Import project modules.
 from kaipy.gamera import gamGrids as gg
-from kaipy.gamhelio.wsa2gamera import params
+from kaipy.gamhelio.wsa2gamera import params as ini_params
 from kaipy.gamhelio.lib import wsa
 from kaipy.kdefs import JD2MJD, Mp_cgs, kbltz, Tsolar, Day2s, Rsolar, vc_cgs
 
@@ -71,6 +70,28 @@ def create_command_line_parser(description: str):
     return parser
 
 
+def read_config_file(path: str):
+    """Read the configuration file.
+
+    Read the configuration file. It can be in .ini or .json format.
+
+    Parameters
+    ----------
+    path : str
+        Path to configuration file
+
+    Returns
+    -------
+    prm : params.params
+        params object containing the configuration content
+
+    Raises
+    ------
+    None
+    """
+    # prm = ini_params.params(args["ConfigFileName"])
+
+
 def wsa2gamera(args):
     """Convert WSA FITS output files to gamhelio format.
 
@@ -96,7 +117,7 @@ def wsa2gamera(args):
     # ------------------------------------------------------------------------
 
     # Read the configuration file.
-    prm = params.params(args["ConfigFileName"])
+    prm = ini_params.params(args["ConfigFileName"])
 
     # Fetch individual parameters.
     Ng = prm.Nghost
