@@ -16,8 +16,6 @@ Eric Winter
 # Import standard modules.
 import argparse
 import os
-# import os,sys,glob
-# import time
 
 # Import 3rd-party modules.
 from astropy.convolution import convolve, Gaussian2DKernel
@@ -28,7 +26,7 @@ from scipy import interpolate
 
 # Import project modules.
 from kaipy.gamera import gamGrids as gg
-from kaipy.gamhelio.wsa2gamera import params as params
+from kaipy.gamhelio.wsa2gamera import params
 from kaipy.gamhelio.lib import wsa
 from kaipy.kdefs import JD2MJD, Mp_cgs, kbltz, Tsolar, Day2s, Rsolar, vc_cgs
 
@@ -92,8 +90,8 @@ def wsa2gamera(args):
     None
     """
     # Local convenience variables.
-    debug = args["debug"]
-    verbose = args["verbose"]
+    # debug = args["debug"]
+    # verbose = args["verbose"]
 
     # ------------------------------------------------------------------------
 
@@ -102,7 +100,7 @@ def wsa2gamera(args):
 
     # Fetch individual parameters.
     Ng = prm.Nghost
-    gamma = prm.gamma
+    # gamma = prm.gamma
     # Temperature in the current sheet for pressure balance calculation
     TCS = prm.TCS
     # Density in the current sheet for pressure balance calculation
@@ -118,8 +116,8 @@ def wsa2gamera(args):
     Nk = prm.Nk
 
     # Conversions from wsa to gamera units.
-    cms2kms = 1.e-5 # cm/s => km/s
-    Gs2nT = 1.e5    # Gs => nT
+    cms2kms = 1.e-5  # cm/s => km/s
+    Gs2nT = 1.e5     # Gs => nT
     # Conversion for E field  1 statV/cm = 3.e7 mV/m
     eScl = 3.e7
 
@@ -141,7 +139,7 @@ def wsa2gamera(args):
     (jd_c, phi_wsa_v, theta_wsa_v, phi_wsa_c, theta_wsa_c, bi_wsa, v_wsa,
      n_wsa, T_wsa) = wsa.read(ffits, prm.densTempInfile, prm.normalized)
     # Units of WSA input
-    # bi_wsa in [Gs] 
+    # bi_wsa in [Gs]
     # v_wsa in [cm/s]
     # n_wsa in [g cm-3]
     # T_wsa in [K]
@@ -176,9 +174,9 @@ def wsa2gamera(args):
     # Calculate phi and theta in physical domain (excluding ghost cells).
     P = np.arctan2(y[Ng:-Ng, Ng:-Ng, :], x[Ng:-Ng, Ng:-Ng, :])
     P[P < 0] = P[P < 0] + 2*np.pi
-    # P = P % (2*np.pi)  # sometimes the very first point may be a very
-                        # small negative number, which the above call sets
-                        # to 2*pi. This takes care of it.
+    # sometimes the very first point may be a very small negative number,
+    # which the above call sets to 2*pi. This takes care of it.
+    # P = P % (2*np.pi)
     T = np.arccos(z[Ng:-Ng, Ng:-Ng, :]/r[Ng:-Ng, Ng:-Ng, :])
 
     # Compute the grid for inner i-ghost region; output to innerbc.h5.
@@ -202,7 +200,7 @@ def wsa2gamera(args):
     br = fbi(Pc[:, 0, 0], Tc[0, :, 0])
 
     # Smoothing
-    if not prm.gaussSmoothWidth == 0:
+    if prm.gaussSmoothWidth != 0:
         gauss = Gaussian2DKernel(width=prm.gaussSmoothWidth)
         br = convolve(br, gauss, boundary="extend")
 
@@ -218,7 +216,7 @@ def wsa2gamera(args):
 
     # Not interpolating temperature, but calculating from the total pressure
     # balance AFTER interpolating br and rho to the gamera grid
-    # n_CS*k*T_CS = n*k*T + Br^2/8pi  
+    # n_CS*k*T_CS = n*k*T + Br^2/8pi
     temp = (nCS*kbltz*TCS - br**2/8./np.pi)*Mp_cgs/rho/kbltz
     # temperature in [K]
 
@@ -238,8 +236,8 @@ def wsa2gamera(args):
         Pc[:, 0, 0], Tc[0, :, 0], vr, kx=1, ky=1
     )
 
-    br_kface = fbi(P[:-1, 0, 0], Tc[0, :, 0])  #(Nk,Nj)
-    vr_kface = fv(P[:-1, 0, 0], Tc[0, :, 0])   #(Nk,Nj)
+    br_kface = fbi(P[:-1, 0, 0], Tc[0, :, 0])  # (Nk,Nj)
+    vr_kface = fv(P[:-1, 0, 0], Tc[0, :, 0])   # (Nk,Nj)
 
     # before applying scaling inside ghost region
     # get br values to the left of an edge for E_theta calculation
@@ -256,13 +254,15 @@ def wsa2gamera(args):
     # Calculating E-field component on k_edges in [mV/m]
     # E_theta = B_phi*Vr/c = - Omega*R*sin(theta)/Vr*Br * Vr/c =
     # - Omega*R*sin(theta)*Br/c
-    omega = 2*np.pi/(Tsolar*Day2s) # [1/s]
+    omega = 2*np.pi/(Tsolar*Day2s)  # [1/s]
     # Theta at centers of k-faces (== theta at kedges)
-    Tcf = 0.25*(T[:, :-1, :-1] + T[:, 1:, 1:] + T[:, :-1, 1:] + T[:, 1:,: -1])
+    Tcf = 0.25*(T[:, :-1, :-1] + T[:, 1:, 1:] + T[:, :-1, 1:] +
+                T[:, 1:, : -1])
     et_kedge = -omega*R0*Rsolar*np.sin(
-        Tcf[:-1, :, Ng-1])*br_kedge/vc_cgs  #[statV/cm]
+        Tcf[:-1, :, Ng-1])*br_kedge/vc_cgs  # [statV/cm]
 
-    # Unit conversion agreement. Input to GAMERA innerbc.h5 has units V[km/s], Rho[cm-3], T[K], B[nT], E[mV/m]
+    # Unit conversion agreement. Input to GAMERA innerbc.h5 has units V[km/s],
+    # Rho[cm-3], T[K], B[nT], E[mV/m]
     vr *= cms2kms
     vr_kface *= cms2kms
     rho /= Mp_cgs
@@ -278,13 +278,13 @@ def wsa2gamera(args):
         grname = "Step#0"
         grp = hf.create_group(grname)
         grp.attrs.create("MJD", mjd_c)
-        grp.create_dataset("vr",data=vr)
-        grp.create_dataset("vr_kface",data=vr_kface) # size (Nk,Nj,Ng)
-        grp.create_dataset("rho",data=rho)
-        grp.create_dataset("temp",data=temp)
-        grp.create_dataset("br",data=br)
-        grp.create_dataset("br_kface",data=br_kface) # size (Nk,Nj,Ng)
-        grp.create_dataset("et_kedge",data=et_kedge)  # size (Nk, Nj)
+        grp.create_dataset("vr", data=vr)
+        grp.create_dataset("vr_kface", data=vr_kface)  # size (Nk,Nj,Ng)
+        grp.create_dataset("rho", data=rho)
+        grp.create_dataset("temp", data=temp)
+        grp.create_dataset("br", data=br)
+        grp.create_dataset("br_kface", data=br_kface)  # size (Nk,Nj,Ng)
+        grp.create_dataset("et_kedge", data=et_kedge)  # size (Nk, Nj)
     hf.close()
 
 
