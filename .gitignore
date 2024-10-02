@@ -57,7 +57,3 @@ Thumbs.db
 
 # Python pip build files.
 kaipy.egg-info/*
-
-# Binary data files
-*.h5
-*.fits
