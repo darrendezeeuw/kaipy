@@ -12,6 +12,7 @@ dist/
 
 # vscode IDE data
 .vscode/
+.env
 
 # Compiled Java class files
 *.class
