@@ -13,8 +13,10 @@ Eric Winter (eric.winter@jhuapl.edu)
 
 # Import standard modules.
 import argparse
+from jinja2 import Template
 import os
-import subprocess
+import re
+# import subprocess
 
 # Import 3rd-party modules.
 # import matplotlib as mpl
@@ -36,7 +38,7 @@ DEFAULT_SUPERMAG_USER = os.getlogin()
 # Location of template XML file.
 XML_TEMPLATE = os.path.join(
     os.environ["KAIPYHOME"], "kaipy", "scripts", "postproc",
-    "calcdb.xml.template"
+    "calcdb-template.xml"
 )
 
 # Name of XML file read by calcdb.x.
@@ -101,7 +103,12 @@ def filename_to_runid(filename: str):
 
     Parse the runid from a MAGE results file name.
 
-    The runid is all text before the first period or underscore in the name.
+    For a result file from an MPI run, the runid is all text before the
+    underscore before the set of 6 underscore-separated 4-digit sequences at
+    the end of the name and the terminal .gam.h5 string.
+
+    For a result file from a serial run, the runid is the name of the file,
+    less the .gam.h5 extension.
 
     Parameters
     ----------
@@ -117,9 +124,18 @@ def filename_to_runid(filename: str):
     ------
     None
     """
-    parts = filename.split(".")
-    parts = parts[0].split("_")
-    runid = parts[0]
+    # Check to see if the result file is for an MPI run. If not, it must be
+    # for a serial run.
+    mpi_pattern = (
+        r"^(.+)_(\d{4})_(\d{4})_(\d{4})_(\d{4})_(\d{4})_(\d{4})\.gam.h5$"
+    )
+    serial_pattern = r"^(.+)\.gam.h5$"
+    mpi_re = re.compile(mpi_pattern)
+    serial_re = re.compile(serial_pattern)
+    m = mpi_re.match(filename)
+    if not m:
+        m = serial_re.match(filename)
+    runid = m.groups()[0]
     return runid
 
 
@@ -134,6 +150,8 @@ def create_xml_file(runid: str, mpixml: str, fdir: str):
         runid for MAGE results file.
     mpixml : str
         Name of XML run file in results directory.
+    fdir : str
+        Path to results directory.
 
     Returns
     -------
@@ -145,28 +163,25 @@ def create_xml_file(runid: str, mpixml: str, fdir: str):
     None
     """
     # Read the template file.
-    with open(XML_TEMPLATE, "r", encoding="utf-8") as t:
-        lines = t.readlines()
+    with open(XML_TEMPLATE, "r", encoding="utf-8") as f:
+        template_content = f.read()
+    template = Template(template_content)
 
-    # Process the template here.
-    # <HACK>
-    # This should be done with a proper templating package.
-    lines[3] = lines[3].replace("RUNID", runid)
-    lines[5] = lines[5].replace("EBFILE", runid)
-    lines[5] = lines[5].replace("ISMPI", "true")
-    if mpixml is not None:
-        _, _, Ri, Rj, Rk = kaiTools.getRunInfo(fdir, runid)
-        lines[6] = lines[6].replace("RI", str(Ri))
-        lines[6] = lines[6].replace("RJ", str(Rj))
-        lines[6] = lines[6].replace("RK", str(Rk))
-    else:
-        lines[6] = "\n"
-    # </HACK>
+    # Fill in the template information.
+    options = {}
+    options["runid"] = runid
+    options["ebfile"] = runid
+    options["ismpi"] = "true"
+    _, _, Ri, Rj, Rk = kaiTools.getRunInfo(fdir, runid)
+    options["Ri"] = Ri
+    options["Rj"] = Rj
+    options["Rk"] = Rk
 
-    # Write out the processed Xcompute_ground_delta_BML.
+    # Render the template.
     xml_file = XML_FILENAME_TEMPLATE.replace("RUNID", runid)
+    xml_content = template.render(options)
     with open(xml_file, "w", encoding="utf-8") as f:
-        f.writelines(lines)
+        f.write(xml_content)
 
     # Return the name of the XML file.
     return xml_file
@@ -176,7 +191,7 @@ def compute_ground_delta_B(runid: str, mpixml: str, fdir: str):
     """Compute ground delta B values for a MAGE run.
 
     Compute ground delta B values for a MAGE run. The computation is done with
-    the program calcdb.x.
+    the program calcdb.x, which must be in the current command PATH.
 
     Parameters
     ----------
@@ -198,13 +213,13 @@ def compute_ground_delta_B(runid: str, mpixml: str, fdir: str):
     xml_file = create_xml_file(runid, mpixml, fdir)
 
     # Run the command to compute ground delta B values.
-    cmd = "calcdb.x"
-    args = [xml_file]
+    # cmd = "calcdb.x"
+    # args = [xml_file]
     # subprocess.run([cmd] + args)
 
     # Compute the name of the file containing the delta B values.
-    delta_B_file = runid + ".deltab.h5"
-    return delta_B_file
+    # delta_B_file = runid + ".deltab.h5"
+    # return delta_B_file
 
 
 def run_supermag_comparison(args: dict):
