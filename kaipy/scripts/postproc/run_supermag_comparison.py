@@ -13,18 +13,19 @@ Eric Winter (eric.winter@jhuapl.edu)
 
 # Import standard modules.
 import argparse
-from jinja2 import Template
 import os
 import re
-# import subprocess
+import subprocess
+import sys
 
 # Import 3rd-party modules.
-# import matplotlib as mpl
-# import matplotlib.pyplot as plt
+from jinja2 import Template
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 
 # Import project-specific modules.
 from kaipy import kaiTools
-# import kaipy.supermage as sm
+import kaipy.supermage as sm
 
 
 # Program constants and defaults
@@ -44,14 +45,14 @@ XML_TEMPLATE = os.path.join(
 # Name of XML file read by calcdb.x.
 XML_FILENAME_TEMPLATE = "calcdb_RUNID.xml"
 
-# # Number of microseconds in a second.
-# MICROSECONDS_PER_SECOND = 1e6
+# Number of microseconds in a second.
+MICROSECONDS_PER_SECOND = 1e6
 
-# # Number of seconds in a day.
-# SECONDS_PER_DAY = 86400
+# Number of seconds in a day.
+SECONDS_PER_DAY = 86400
 
-# # Location of SuperMag cache folder.
-# SUPERMAG_CACHE_FOLDER = os.path.join(os.environ["HOME"], "supermag")
+# Location of SuperMag cache folder.
+SUPERMAG_CACHE_FOLDER = os.path.join(os.environ["HOME"], "supermag")
 
 
 def create_command_line_parser():
@@ -76,11 +77,6 @@ def create_command_line_parser():
     parser.add_argument(
         "--debug", "-d", action="store_true",
         help="Print debugging output (default: %(default)s)."
-    )
-    parser.add_argument(
-        "--mpixml", type=str, default=None,
-        help="If results from an MPI run, provide XML filename for run "
-             "(default: %(default)s)."
     )
     parser.add_argument(
         "--smuser", type=str, default=DEFAULT_SUPERMAG_USER,
@@ -139,7 +135,7 @@ def filename_to_runid(filename: str):
     return runid
 
 
-def create_xml_file(runid: str, mpixml: str, fdir: str):
+def create_xml_file(runid: str, fdir: str):
     """Create the XML input file for calcdb.x from a template.
 
     Create the XML input file for calcdb.x from a template.
@@ -148,8 +144,6 @@ def create_xml_file(runid: str, mpixml: str, fdir: str):
     ----------
     runid : str
         runid for MAGE results file.
-    mpixml : str
-        Name of XML run file in results directory.
     fdir : str
         Path to results directory.
 
@@ -187,7 +181,7 @@ def create_xml_file(runid: str, mpixml: str, fdir: str):
     return xml_file
 
 
-def compute_ground_delta_B(runid: str, mpixml: str, fdir: str):
+def compute_ground_delta_B(runid: str, fdir: str):
     """Compute ground delta B values for a MAGE run.
 
     Compute ground delta B values for a MAGE run. The computation is done with
@@ -197,8 +191,8 @@ def compute_ground_delta_B(runid: str, mpixml: str, fdir: str):
     ----------
     runid : str
         runid for MAGE results file.
-    mpixml : str
-        Name of XML run file in results directory.
+    fdir : str
+        Path to directory containing results.
 
     Returns
     -------
@@ -210,16 +204,16 @@ def compute_ground_delta_B(runid: str, mpixml: str, fdir: str):
     None
     """
     # Create the XML file for calcdb.x from the template.
-    xml_file = create_xml_file(runid, mpixml, fdir)
+    xml_file = create_xml_file(runid, fdir)
 
     # Run the command to compute ground delta B values.
-    # cmd = "calcdb.x"
-    # args = [xml_file]
-    # subprocess.run([cmd] + args)
+    cmd = "calcdb.x"
+    args = [xml_file]
+    subprocess.run([cmd] + args, check=True)
 
     # Compute the name of the file containing the delta B values.
-    # delta_B_file = runid + ".deltab.h5"
-    # return delta_B_file
+    delta_B_file = runid + ".deltab.h5"
+    return delta_B_file
 
 
 def run_supermag_comparison(args: dict):
@@ -240,9 +234,8 @@ def run_supermag_comparison(args: dict):
     ------
     None
     """
-    # Local convenience variables.
+    # Local convenience variables. FIX FOR DEFAULTS.
     debug = args["debug"]
-    mpixml = args["mpixml"]
     smuser = args["smuser"]
     verbose = args["verbose"]
     mage_results_path = args["mage_results_path"]
@@ -266,70 +259,76 @@ def run_supermag_comparison(args: dict):
     # Compute the ground delta B values for this run.
     if verbose:
         print("Computing ground delta B values.")
-    delta_B_file = compute_ground_delta_B(runid, mpixml, mage_results_dir)
+    delta_B_file = compute_ground_delta_B(runid, mage_results_dir)
     if debug:
         print(f"delta_B_file = {delta_B_file}")
 
-#     # Read the delta B values.
-#     SIM = sm.ReadSimData(delta_B_file)
-#     if debug:
-#         print("SIM = %s" % SIM)
+    # Read the delta B values.
+    SIM = sm.ReadSimData(delta_B_file)
+    if debug:
+        print("SIM = %s" % SIM)
 
-#     # Fetch the SuperMag indices for the desired time range.
+    # Fetch the SuperMag indices for the desired time range.
 
-#     # Fetch the start time (as a datetime object) of simulation data.
-#     start = SIM["td"][0]
-#     if debug:
-#         print("start = %s" % start)
+    # Fetch the start time (as a datetime object) of simulation data.
+    start = SIM["td"][0]
+    if debug:
+        print(f"start = {start}")
 
-#     # Compute the duration of the simulated data, in seconds, then days.
-#     duration = SIM["td"][-1] - SIM["td"][0]
-#     duration_seconds = duration.seconds + duration.microseconds/MICROSECONDS_PER_SECOND
-#     numofdays = duration_seconds/SECONDS_PER_DAY
-#     if debug:
-#         print("duration = %s" % duration)
-#         print("duration_seconds = %s" % duration_seconds)
-#         print("numofdays = %s" % numofdays)
+    # Compute the duration of the simulated data, in seconds, then days.
+    duration = SIM["td"][-1] - SIM["td"][0]
+    duration_seconds = (
+        duration.seconds + duration.microseconds/MICROSECONDS_PER_SECOND
+    )
+    numofdays = duration_seconds/SECONDS_PER_DAY
+    if debug:
+        print(f"duration = {duration}")
+        print(f"duration_seconds = {duration_seconds}")
+        print(f"numofdays = {numofdays}")
 
-#     # Fetch the SuperMag indices for this time period.
-#     if verbose:
-#         print("Fetching SuperMag indices.")
-#     SMI  = sm.FetchSMIndices(smuser, start, numofdays)
-#     if debug:
-#         print("SMI = %s" % SMI)
+    # Fetch the SuperMag indices for this time period.
+    if verbose:
+        print("Fetching SuperMag indices.")
+    SMI = sm.FetchSMIndices(smuser, start, numofdays)
+    if debug:
+        print(f"SMI = {SMI}")
 
-#     # Fetch the SuperMag data for this time period.
-#     if verbose:
-#         print("Fetching SuperMag data.")
-#     SM = sm.FetchSMData(smuser, start, numofdays,
-#                         savefolder=SUPERMAG_CACHE_FOLDER)
-#     if debug:
-#         print("SM = %s" % SM)
+    # Fetch the SuperMag data for this time period.
+    if verbose:
+        print("Fetching SuperMag data.")
+    SM = sm.FetchSMData(smuser, start, numofdays,
+                        savefolder=SUPERMAG_CACHE_FOLDER)
+    if debug:
+        print("SM = %s" % SM)
 
-#     # Interpolate the simulated delta B to the measurement times from SuperMag.
-#     if verbose:
-#         print("Interpolating simulated data to SuperMag times.")
-#     SMinterp = sm.InterpolateSimData(SIM, SM)
-#     if debug:
-#         print("SMinterp = %s" % SMinterp)
+    # Abort if no data was found.
+    if len(SM["td"]) == 0:
+        print("No SuperMag data found for requested time period, aborting.")
+        sys.exit(1)
 
+    # Interpolate the simulated delta B to the measurement times from SuperMag.
+    if verbose:
+        print("Interpolating simulated data to SuperMag times.")
+    SMinterp = sm.InterpolateSimData(SIM, SM)
+    if debug:
+        print("SMinterp = %s" % SMinterp)
 
-#     # Create the plots in memory.
-#     mpl.use("Agg")
+    # Create the plots in memory.
+    mpl.use("Agg")
 
-#     # Make the indices plot.
-#     if verbose:
-#         print("Creating indices comparison plot.")
-#     sm.MakeIndicesPlot(SMI, SMinterp, fignumber=1)
-#     comparison_plot_file = runid + "_indices.png"
-#     plt.savefig(comparison_plot_file)
+    # Make the indices plot.
+    if verbose:
+        print("Creating indices comparison plot.")
+    sm.MakeIndicesPlot(SMI, SMinterp, fignumber=1)
+    comparison_plot_file = runid + "_indices.png"
+    plt.savefig(comparison_plot_file)
 
-#     # Make the contour plots.
-#     if verbose:
-#         print("Creating contour plots.")
-#     sm.MakeContourPlots(SM, SMinterp, maxx = 1000, fignumber=2)
-#     contour_plot_file = runid + "_contours.png"
-#     plt.savefig(contour_plot_file)
+    # Make the contour plots.
+    if verbose:
+        print("Creating contour plots.")
+    sm.MakeContourPlots(SM, SMinterp, maxx=1000, fignumber=2)
+    contour_plot_file = runid + "_contours.png"
+    plt.savefig(contour_plot_file)
 
 
 def main():
