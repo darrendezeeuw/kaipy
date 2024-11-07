@@ -112,9 +112,11 @@ def getRootVars(fname, gDims):
 		for k in hf.keys():
 			vID = str(k)
 			doV = True
-			if ("Step" in vID or kdefs.grpTimeCache in vID):
+			if ("Step" in vID or kdefs.grpTimeCache in vID):  # Ignore Steps and timeAttributeCache
 				doV = False
-			if ((vID == "X") or (vID == "Y") or (vID == "Z") or (type(hf[k]) != h5py._hl.group.Group)):  # Ignore root geom and root Groups
+			if ((vID == "X") or (vID == "Y") or (vID == "Z")):  # Ignore root geom
+				doV = False
+			if (isinstance(hf[k], h5py._hl.group.Group)):
 				doV = False
 			if (doV):
 				Nv = hf[k].shape
@@ -168,7 +170,7 @@ def getVars(fname, gId, gDims, recursive=False):
 			vID = getVarName(gId, k, recursive)
 			
 			# If its a group, recursively call this function to get to the vars and add them to the list
-			if type(stp0[k]) == h5py._hl.group.Group:
+			if isinstance(stp0[k], h5py._hl.group.Group):
 				vIdR, vLR = getVars(fname, gId+'/'+k, gDims, recursive=True)
 				for vi, vl in zip(vIdR, vLR):
 					vIds.append(vi)
@@ -182,6 +184,27 @@ def getVars(fname, gId, gDims, recursive=False):
 				else:
 					print("Excluding %s" % (vID))
 	return vIds, vLocs
+
+
+def printVidAndLocs(vIds: list, vLocs: list):
+	"""
+	Prints variable ids and their locations (cell vs node)
+
+	Parameters:
+		vIds: List of variable IDs/names
+		vLocs: List of variable locations
+
+	Returns:
+		None
+
+	"""
+	if len(vIds) == 0:
+		print("None")
+		return
+	
+	print("Variable ID/name and grid location:")
+	for vId, vLoc in zip(vIds, vLocs):
+		print("{}\t: {}".format(vId, vLoc))
 
 def AddVectors(Grid, fname, vIds, cDims, vDims, Nd, nStp):
 	"""
