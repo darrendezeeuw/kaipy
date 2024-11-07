@@ -111,16 +111,20 @@ def getRootVars(fname, gDims):
 		vLocs = []
 		for k in hf.keys():
 			vID = str(k)
-			doV = True
+			doV = True  # Whether or not to include variable with name k
 			if ("Step" in vID or kdefs.grpTimeCache in vID):  # Ignore Steps and timeAttributeCache
 				doV = False
 			if ((vID == "X") or (vID == "Y") or (vID == "Z")):  # Ignore root geom
 				doV = False
 			if (isinstance(hf[k], h5py._hl.group.Group)):
+				# Ignore any root groups (technically makes Step check unncessary,
+				#  but keeping it just in case this gets removed or changed for some reason)
 				doV = False
+
 			if (doV):
 				Nv = hf[k].shape
 				vLoc = getLoc(gDims, Nv)
+				# If location is Other (isn't well-described by Cell or Node), don't want to try to make vtk read it
 				if (vLoc != "Other"):
 					vIds.append(vID)
 					vLocs.append(vLoc)
