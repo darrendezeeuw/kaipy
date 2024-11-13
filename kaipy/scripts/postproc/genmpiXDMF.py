@@ -26,6 +26,7 @@ if __name__ == "__main__":
 	parser.add_argument('-id',type=str,metavar="runid",default=ftag,help="RunID of data (default: %(default)s)")
 	parser.add_argument('-outid',type=str,metavar="outid",default=outid,help="RunID of output XMF files (default: %(default)s)")
 	parser.add_argument('-sS',type=int,metavar="stride",default=sStride,help="Output cadence (default: %(default)s)")
+	parser.add_argument('--printVars',action='store_true',default=False,help="Print root and step vars (default: %(default)s)")
 
 
 	#Finalize parsing
@@ -34,6 +35,7 @@ if __name__ == "__main__":
 	ftag = args.id
 	outid = args.outid
 	sStride = args.sS
+	doPrintVars = args.printVars
 
 	#---------------------
 	#Init data
@@ -101,6 +103,11 @@ if __name__ == "__main__":
 						rvIds,rvLocs = kxmf.getRootVars(h5F,gDims)
 						Nv = len(vIds)
 						Nrv = len(rvIds)
+						if doPrintVars:
+							print("Root Vars:")
+							kxmf.printVidAndLocs(rvIds, rvLocs)
+							print("\nStep Vars:")
+							kxmf.printVidAndLocs(vIds, vLocs)
 
 					#Create new subgrid
 					gName = "gMesh%d"%(nMPI)

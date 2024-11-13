@@ -111,14 +111,20 @@ def getRootVars(fname, gDims):
 		vLocs = []
 		for k in hf.keys():
 			vID = str(k)
-			doV = True
-			if ("Step" in vID or kdefs.grpTimeCache in vID):
+			doV = True  # Whether or not to include variable with name k
+			if ("Step" in vID or kdefs.grpTimeCache in vID):  # Ignore Steps and timeAttributeCache
 				doV = False
-			if ((vID == "X") or (vID == "Y") or (vID == "Z") or (type(hf[k]) != h5py._hl.group.Group)):  # Ignore root geom and root Groups
+			if ((vID == "X") or (vID == "Y") or (vID == "Z")):  # Ignore root geom
 				doV = False
+			if (isinstance(hf[k], h5py._hl.group.Group)):
+				# Ignore any root groups (technically makes Step check unncessary,
+				#  but keeping it just in case this gets removed or changed for some reason)
+				doV = False
+
 			if (doV):
 				Nv = hf[k].shape
 				vLoc = getLoc(gDims, Nv)
+				# If location is Other (isn't well-described by Cell or Node), don't want to try to make vtk read it
 				if (vLoc != "Other"):
 					vIds.append(vID)
 					vLocs.append(vLoc)
@@ -168,7 +174,7 @@ def getVars(fname, gId, gDims, recursive=False):
 			vID = getVarName(gId, k, recursive)
 			
 			# If its a group, recursively call this function to get to the vars and add them to the list
-			if type(stp0[k]) == h5py._hl.group.Group:
+			if isinstance(stp0[k], h5py._hl.group.Group):
 				vIdR, vLR = getVars(fname, gId+'/'+k, gDims, recursive=True)
 				for vi, vl in zip(vIdR, vLR):
 					vIds.append(vi)
@@ -182,6 +188,27 @@ def getVars(fname, gId, gDims, recursive=False):
 				else:
 					print("Excluding %s" % (vID))
 	return vIds, vLocs
+
+
+def printVidAndLocs(vIds: list, vLocs: list):
+	"""
+	Prints variable ids and their locations (cell vs node)
+
+	Parameters:
+		vIds: List of variable IDs/names
+		vLocs: List of variable locations
+
+	Returns:
+		None
+
+	"""
+	if len(vIds) == 0:
+		print("None")
+		return
+	
+	print("Variable ID/name and grid location:")
+	for vId, vLoc in zip(vIds, vLocs):
+		print("{}\t: {}".format(vId, vLoc))
 
 def AddVectors(Grid, fname, vIds, cDims, vDims, Nd, nStp):
 	"""

@@ -150,6 +150,7 @@ if __name__ == "__main__":
 	parser.add_argument('-rcmf',type=str,default="msphere.rcm.h5",help="rcm.h5 file to use with '-rcmv' and '-rcmk' args (default: %(default)s)")
 	parser.add_argument('-rcmv',type=str,help="Comma-separated rcm.h5 vars to include in an mhdrcm preset (ex: rcmvm, rcmeeta)")
 	parser.add_argument('-rcmk',type=str,help="Comma-separated RCM k values to pull from 3D vars specified with '-rcmv'")
+	parser.add_argument('--printVars',action='store_true',default=False,help="Print root and step vars (default: %(default)s)")
 	args = parser.parse_args()
 
 	h5fname = args.h5F
@@ -158,6 +159,7 @@ if __name__ == "__main__":
 	rcmh5fname = args.rcmf
 	rcmVars = args.rcmv
 	rcmKs = args.rcmk
+	doPrintVars = args.printVars
 
 	pre,ext = os.path.splitext(h5fname)
 	if outfname is None or outfname == "":
@@ -217,6 +219,11 @@ if __name__ == "__main__":
 	print("Getting Vars and RootVars")
 	vIds ,vLocs  = kxmf.getVars(h5fname,s0str,gDims)
 	rvIds,rvLocs = kxmf.getRootVars(h5fname,gDims)
+	if doPrintVars:
+		print("Root Vars:")
+		kxmf.printVidAndLocs(rvIds, rvLocs)
+		print("\nStep Vars:")
+		kxmf.printVidAndLocs(vIds, vLocs)
 
 	Nv = len(vIds)
 	Nrv = len(rvIds)
