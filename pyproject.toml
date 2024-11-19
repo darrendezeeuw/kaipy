@@ -7,7 +7,7 @@ include-package-data = true
 
 [project]
 name = "kaipy"
-version = "1.0.7"
+version = "1.0.8"
 authors = [
     {name = "Eric Winter", email = "eric.winter@jhuapl.edu"},
 ]
