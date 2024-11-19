@@ -7,13 +7,13 @@ include-package-data = true
 
 [project]
 name = "kaipy"
-version = "1.0.5"
+version = "1.0.7"
 authors = [
     {name = "Eric Winter", email = "eric.winter@jhuapl.edu"},
 ]
-description = "Python software for CGS MAGE and other Kaiu models"
+description = "Python software for CGS MAGE and other Kaiju models"
 readme = "README.md"
-requires-python = ">=3.8,<=3.10"
+requires-python = ">=3.8"
 keywords = ["CGS", "MAGE", "KAIJU"]
 license = {text = "BSD 3-Clause"}
 classifiers = [
