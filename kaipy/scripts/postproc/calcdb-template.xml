@@ -2,8 +2,9 @@
 <Kaiju>
     <Chimp>
         <sim runid="{{ runid }}"/>
-        <time T0="0.0" dt="60.0" tFin="3600.0"/>
+        <time T0="{{ T0 }}" dt="{{ dt }}" tFin="{{ tFin }}"/>
         <fields ebfile="{{ ebfile }}" grType="LFM" doJ="T" isMPI="{{ ismpi }}"/>
         <parallel Ri="{{ Ri }}" Rj="{{ Rj }}" Rk="{{ Rk }}"/>
+        <parintime NumB="{{ NumB }}"/>
     </Chimp>
 </Kaiju>
