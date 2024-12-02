@@ -42,7 +42,7 @@ echo 'The active environment variables are:'
 printenv
 
 # Fetch the SuperMag data and create the comparison plots.
-cmd="supermag_comparion.py -runid {{ runid }}"
+cmd="create_supermag_comparison_plots.py -runid {{ runid }} >& create_supermag_comparison_plots.out"
 echo "Comparison command is:"
 echo $cmd
 eval $cmd

@@ -49,7 +49,7 @@ CALCDB_XML_TEMPLATE = os.path.join(
     pathlib.Path(__file__).parent.resolve(), "calcdb-template.xml"
 )
 
-# Location of template PBS file.
+# Location of template PBS file for calcdb.x.
 CALCDB_PBS_TEMPLATE = os.path.join(
     pathlib.Path(__file__).parent.resolve(), "calcdb-template.pbs"
 )
@@ -73,8 +73,58 @@ DEFAULT_CALCDB_PBS_OPTIONS = {
     "conda_environment": "kaiju-3.8",
     "kaipyhome": os.environ["KAIPYHOME"],
     "kaijuhome": os.environ["KAIJUHOME"],
-#     "calcdb_cmd": None,
-#     "calcdb_xml": None,
+}
+
+# Location of template PBS file for pitmerge.py.
+PITMERGE_PBS_TEMPLATE = os.path.join(
+    pathlib.Path(__file__).parent.resolve(), "pitmerge-template.pbs"
+)
+
+# Default options for filling in the pitmerge.py PBS template.
+DEFAULT_PITMERGE_PBS_OPTIONS = {
+    "job_name": None,
+    "account": os.getlogin(),
+    "queue": "main",
+    "job_priority": "economy",
+    "select": "1:ncpus=128",
+    "walltime": "12:00:00",
+    "modules": [
+                "ncarenv/23.06",
+                "craype/2.7.20",
+                "intel/2023.0.0",
+                "ncarcompilers/1.0.0",
+                "cray-mpich/8.1.25",
+                "hdf5-mpi/1.12.2",
+    ],
+    "conda_environment": "kaiju-3.8",
+    "kaipyhome": os.environ["KAIPYHOME"],
+    "kaijuhome": os.environ["KAIJUHOME"],
+}
+
+# Location of template PBS file for pitmerge.py.
+SUPERMAG_COMPARISON_PBS_TEMPLATE = os.path.join(
+    pathlib.Path(__file__).parent.resolve(), "supermag_comparison-template.pbs"
+)
+
+# Default options for filling in the pitmerge.py PBS template.
+DEFAULT_SUPERMAG_COMPARISON_PBS_OPTIONS = {
+    "job_name": None,
+    "account": os.getlogin(),
+    "queue": "main",
+    "job_priority": "economy",
+    "select": "1:ncpus=128",
+    "walltime": "12:00:00",
+    "modules": [
+                "ncarenv/23.06",
+                "craype/2.7.20",
+                "intel/2023.0.0",
+                "ncarcompilers/1.0.0",
+                "cray-mpich/8.1.25",
+                "hdf5-mpi/1.12.2",
+    ],
+    "conda_environment": "kaiju-3.8",
+    "kaipyhome": os.environ["KAIPYHOME"],
+    "kaijuhome": os.environ["KAIJUHOME"],
 }
 
 
@@ -347,17 +397,15 @@ def create_calcdb_pbs_script(args: dict):
     # Move back to the start directory.
     os.chdir(start_directory)
 
-    # Compute the path to the PBS script.
-    calcdb_pbs_script = os.path.join(mage_results_dir, calcdb_pbs_script)
-
     # Return the path to the PBS script.
     return calcdb_pbs_script
 
 
-def create_stitching_pbs_script(args: dict):
-    """Create the PBS script for stitching together calcdb output.
+def create_pitmerge_pbs_script(args: dict):
+    """Create the PBS script for pitmerge.py to stitch calcdb output.
 
-    Create the PBS script for stitching together calcdb output.
+    Create the PBS script for stitching together calcdb output using the
+    pitmerge.py script.
 
     Parameters
     ----------
@@ -375,14 +423,58 @@ def create_stitching_pbs_script(args: dict):
     """
     # Local convenience variables.
     debug = args["debug"]
+    mage_results_path = args["mage_results_path"]
 
-    stitching_pbs_script = "stitch.pbs"
+    # Split the MAGE results path into a directory and a file.
+    (mage_results_dir, mage_results_file) = os.path.split(mage_results_path)
+    if debug:
+        print(f"mage_results_dir = {mage_results_dir}")
+        print(f"mage_results_file = {mage_results_file}")
 
-    # Return the name of the PBS script.
-    return stitching_pbs_script
+    # Save the current directory.
+    start_directory = os.getcwd()
+    if debug:
+        print(f"start_directory = {start_directory}")
+
+    # Move to the results directory.
+    os.chdir(mage_results_dir)
+
+    # Compute the runid from the file name.
+    runid = filename_to_runid(mage_results_file)
+    if debug:
+        print(f"runid = {runid}")
+
+    # Read the PBS script template for pitmerge.py.
+    with open(PITMERGE_PBS_TEMPLATE, "r", encoding="utf-8") as f:
+        template_content = f.read()
+    if debug:
+        print(f"template_content = {template_content}")
+    template = Template(template_content)
+    if debug:
+        print(f"template = {template}")
+
+    # Fill in the template options.
+    options = copy.deepcopy(DEFAULT_PITMERGE_PBS_OPTIONS)
+    options["job_name"] = f"pitmerge-{runid}"
+    options["select"] = f"{options['select']}:ncpus=128"
+    options["runid"] = runid
+    if debug:
+        print(f"options = {options}")
+
+    # Render the template.
+    pitmerge_pbs_script = f"pitmerge-{runid}.pbs"
+    xml_content = template.render(options)
+    with open(pitmerge_pbs_script, "w", encoding="utf-8") as f:
+        f.write(xml_content)
+
+    # Move back to the start directory.
+    os.chdir(start_directory)
+
+    # Return the path to the PBS script.
+    return pitmerge_pbs_script
 
 
-def create_comparison_pbs_script(args: dict):
+def create_supermag_comparison_pbs_script(args: dict):
     """Create the PBS script for the MAGE-SuperMag comparison from a template.
 
     Create the PBS script for the MAGE-SuperMag comparison from a template.
@@ -394,7 +486,7 @@ def create_comparison_pbs_script(args: dict):
 
     Returns
     -------
-    comparison_pbs_script : str
+    supermag_comparison_pbs_script : str
         Path to PBS script.
 
     Raises
@@ -403,15 +495,60 @@ def create_comparison_pbs_script(args: dict):
     """
     # Local convenience variables.
     debug = args["debug"]
+    mage_results_path = args["mage_results_path"]
 
-    comparison_pbs_script = "comparison.pbs"
+    # Split the MAGE results path into a directory and a file.
+    (mage_results_dir, mage_results_file) = os.path.split(mage_results_path)
+    if debug:
+        print(f"mage_results_dir = {mage_results_dir}")
+        print(f"mage_results_file = {mage_results_file}")
 
-    # Return the name of the PBS script.
-    return comparison_pbs_script
+    # Save the current directory.
+    start_directory = os.getcwd()
+    if debug:
+        print(f"start_directory = {start_directory}")
+
+    # Move to the results directory.
+    os.chdir(mage_results_dir)
+
+    # Compute the runid from the file name.
+    runid = filename_to_runid(mage_results_file)
+    if debug:
+        print(f"runid = {runid}")
+
+    # Read the PBS script template for supermag_comparison.py.
+    with open(SUPERMAG_COMPARISON_PBS_TEMPLATE, "r", encoding="utf-8") as f:
+        template_content = f.read()
+    if debug:
+        print(f"template_content = {template_content}")
+    template = Template(template_content)
+    if debug:
+        print(f"template = {template}")
+
+    # Fill in the template options.
+    options = copy.deepcopy(DEFAULT_SUPERMAG_COMPARISON_PBS_OPTIONS)
+    options["job_name"] = f"supermag_comparison-{runid}"
+    options["select"] = f"{options['select']}:ncpus=128"
+    options["runid"] = runid
+    if debug:
+        print(f"options = {options}")
+
+    # Render the template.
+    supermag_comparison_pbs_script = f"supermag_comparison-{runid}.pbs"
+    xml_content = template.render(options)
+    with open(supermag_comparison_pbs_script, "w", encoding="utf-8") as f:
+        f.write(xml_content)
+
+    # Move back to the start directory.
+    os.chdir(start_directory)
+
+    # Return the path to the PBS script.
+    return supermag_comparison_pbs_script
 
 
-def create_submit_script(calcdb_pbs_script: str, comparison_pbs_script: str,
-                         args: dict):
+def create_submit_script(
+        calcdb_pbs_script: str, pitmerge_pbs_script: str,
+        supermag_comparison_pbs_script: str, args: dict):
     """Create the PBS script for the MAGE-SuperMag comparison from a template.
 
     Create the PBS script for the MAGE-SuperMag comparison from a template.
@@ -423,7 +560,9 @@ def create_submit_script(calcdb_pbs_script: str, comparison_pbs_script: str,
     ----------
     calcdb_pbs_script : str
         Path to calcdb.x PBS script.
-    comparison_pbs_script : str
+    pitmerge_pbs_script : str
+        Path to pitmerge.py PBS script.
+    supermag_comparison_pbs_script : str
         Path to comparison PBS script.
     args : dict
         Dictionary of command-line and other options.
@@ -439,8 +578,52 @@ def create_submit_script(calcdb_pbs_script: str, comparison_pbs_script: str,
     """
     # Local convenience variables.
     debug = args["debug"]
+    mage_results_path = args["mage_results_path"]
 
-    submit_script = "submit.sh"
+    # Split the MAGE results path into a directory and a file.
+    (mage_results_dir, mage_results_file) = os.path.split(mage_results_path)
+    if debug:
+        print(f"mage_results_dir = {mage_results_dir}")
+        print(f"mage_results_file = {mage_results_file}")
+
+    # Save the current directory.
+    start_directory = os.getcwd()
+    if debug:
+        print(f"start_directory = {start_directory}")
+
+    # Move to the results directory.
+    os.chdir(mage_results_dir)
+
+    # Compute the runid from the file name.
+    runid = filename_to_runid(mage_results_file)
+    if debug:
+        print(f"runid = {runid}")
+
+    # Submit the scripts in dependency order.
+    submit_script = f"submit-{runid}.sh"
+    with open(submit_script, "w", encoding="utf-8") as f:
+        cmd = f"job_id=`qsub {calcdb_pbs_script}`\n"
+        f.write(cmd)
+        cmd = "echo $job_id\n"
+        f.write(cmd)
+        cmd = "old_job_id=$job_id\n"
+        f.write(cmd)
+        cmd = (
+            "job_id=`qsub -W depend=afterok:$old_job_id "
+            f"{pitmerge_pbs_script}`\n"
+        )
+        f.write(cmd)
+        cmd = "echo $job_id\n"
+        f.write(cmd)
+        cmd = "old_job_id=$job_id\n"
+        f.write(cmd)
+        cmd = (
+            "job_id=`qsub -W depend=afterok:$old_job_id "
+            f"{supermag_comparison_pbs_script}`\n"
+        )
+        f.write(cmd)
+        cmd = "echo $job_id\n"
+        f.write(cmd)
 
     # Return the name of the PBS script.
     return submit_script
@@ -486,30 +669,31 @@ def run_supermag_comparison(args: dict):
     # Create the PBS script to stitch together the output from calcdb.x.
     if verbose:
         print("Creating PBS script to stitch together the calcdb.x output.")
-    stitching_pbs_script = create_stitching_pbs_script(args)
+    pitmerge_pbs_script = create_pitmerge_pbs_script(args)
     if debug:
-        print(f"stitching_pbs_script = {stitching_pbs_script}")
+        print(f"pitmerge_pbs_script = {pitmerge_pbs_script}")
 
     # Create the PBS script to compare the calcdb.x results with SuperMag
     # data.
     if verbose:
         print("Creating PBS script to run the MAGE-SuperMag comparison job.")
-    comparison_pbs_script = create_comparison_pbs_script(args)
+    supermag_comparison_pbs_script = create_supermag_comparison_pbs_script(args)
     if debug:
-        print(f"comparison_pbs_script = {comparison_pbs_script}")
+        print(f"supermag_comparison_pbs_script = {supermag_comparison_pbs_script}")
 
     # Create the bash script to submit the PBS scripts in the proper order.
     if verbose:
-        print("Creating bash script to submit the calcdb.x and MAGE-SuperMag "
-              "comparison jobs.")
-    submit_script = create_submit_script(calcdb_pbs_script,
-                                         comparison_pbs_script, args)
+        print("Creating bash script to submit the PBS jobs.")
+    submit_script = create_submit_script(
+        calcdb_pbs_script, pitmerge_pbs_script,
+        supermag_comparison_pbs_script, args
+    )
     if debug:
         print(f"submit_script = {submit_script}")
 
-    if verbose:
-        print(f"Please run {submit_script} to submit the PBS jobs to run "
-              "calcdb.x and perform the MAGE-SuperMag comparison.")
+    # if verbose:
+    #     print(f"Please run {submit_script} to submit the PBS jobs to run "
+    #           "calcdb.x and perform the MAGE-SuperMag comparison.")
 
     # Return normally.
     return 0

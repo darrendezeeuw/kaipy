@@ -16,8 +16,8 @@ import os
 import sys
 
 # Import 3rd-party modules.
-# import matplotlib as mpl
-# import matplotlib.pyplot as plt
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 
 # Import project-specific modules.
 import kaipy.supermage as sm
@@ -36,14 +36,14 @@ DEFAULT_ARGS = {
     "calcdb_results_path": None,
 }
 
-# # Number of microseconds in a second.
-# MICROSECONDS_PER_SECOND = 1e6
+# Number of microseconds in a second.
+MICROSECONDS_PER_SECOND = 1e6
 
-# # Number of seconds in a day.
-# SECONDS_PER_DAY = 86400
+# Number of seconds in a day.
+SECONDS_PER_DAY = 86400
 
-# # Location of SuperMag cache folder.
-# SUPERMAG_CACHE_FOLDER = os.path.join(os.environ["HOME"], "supermag")
+# Location of SuperMag cache folder.
+SUPERMAG_CACHE_FOLDER = os.path.join(os.environ["HOME"], "supermag")
 
 
 def create_command_line_parser():
@@ -69,12 +69,12 @@ def create_command_line_parser():
         "--debug", "-d", action="store_true",
         help="Print debugging output (default: %(default)s)."
     )
-#     parser.add_argument(
-#         "--smuser", type=str,
-#         default=DEFAULT_ARGS["smuser"],
-#         help="SuperMag user ID to use for SuperMag queries "
-#              "(default: %(default)s)."
-#     )
+    parser.add_argument(
+        "--smuser", type=str,
+        default=DEFAULT_ARGS["smuser"],
+        help="SuperMag user ID to use for SuperMag queries "
+             "(default: %(default)s)."
+    )
     parser.add_argument(
         "--verbose", "-v", action="store_true",
         help="Print verbose output (default: %(default)s)."
@@ -107,7 +107,7 @@ def create_supermag_comparison_plots(args: dict):
     """
     # Local convenience variables.
     debug = args["debug"]
-    # smuser = args["smuser"]
+    smuser = args["smuser"]
     verbose = args["verbose"]
     calcdb_results_path = args["calcdb_results_path"]
 
@@ -138,67 +138,67 @@ def create_supermag_comparison_plots(args: dict):
     if debug:
         print(f"SIM = {SIM}")
 
-#     # Fetch the start time (as a datetime object) of simulation data.
-#     start = SIM["td"][0]
-#     if debug:
-#         print(f"start = {start}")
+    # Fetch the start time (as a datetime object) of simulation data.
+    start = SIM["td"][0]
+    if debug:
+        print(f"start = {start}")
 
-#     # Compute the duration of the simulated data, in seconds, then days.
-#     duration = SIM["td"][-1] - SIM["td"][0]
-#     duration_seconds = (
-#         duration.seconds + duration.microseconds/MICROSECONDS_PER_SECOND
-#     )
-#     numofdays = duration_seconds/SECONDS_PER_DAY
-#     if debug:
-#         print(f"duration = {duration}")
-#         print(f"duration_seconds = {duration_seconds}")
-#         print(f"numofdays = {numofdays}")
+    # Compute the duration of the simulated data, in seconds, then days.
+    duration = SIM["td"][-1] - SIM["td"][0]
+    duration_seconds = (
+        duration.seconds + duration.microseconds/MICROSECONDS_PER_SECOND
+    )
+    numofdays = duration_seconds/SECONDS_PER_DAY
+    if debug:
+        print(f"duration = {duration}")
+        print(f"duration_seconds = {duration_seconds}")
+        print(f"numofdays = {numofdays}")
 
-#     # Fetch the SuperMag indices for this time period.
-#     if verbose:
-#         print("Fetching SuperMag indices.")
-#     SMI = sm.FetchSMIndices(smuser, start, numofdays)
-#     if debug:
-#         print(f"SMI = {SMI}")
+    # Fetch the SuperMag indices for this time period.
+    if verbose:
+        print("Fetching SuperMag indices.")
+    SMI = sm.FetchSMIndices(smuser, start, numofdays)
+    if debug:
+        print(f"SMI = {SMI}")
 
-#     # Fetch the SuperMag data for this time period.
-#     if verbose:
-#         print("Fetching SuperMag data.")
-#     SM = sm.FetchSMData(smuser, start, numofdays,
-#                         savefolder=SUPERMAG_CACHE_FOLDER)
-#     if debug:
-#         print(f"SM = {SM}")
+    # Fetch the SuperMag data for this time period.
+    if verbose:
+        print("Fetching SuperMag data.")
+    SM = sm.FetchSMData(smuser, start, numofdays,
+                        savefolder=SUPERMAG_CACHE_FOLDER)
+    if debug:
+        print(f"SM = {SM}")
 
-    # # Abort if no data was found.
-    # if len(SM["td"]) == 0:
-    #     raise TypeError("No SuperMag data found for requested time period, "
-    #                     " aborting.")
+    # Abort if no data was found.
+    if len(SM["td"]) == 0:
+        raise TypeError("No SuperMag data found for requested time period, "
+                        " aborting.")
 
-    # # Interpolate the simulated delta B to the measurement times from SuperMag.
-    # if verbose:
-    #     print("Interpolating simulated data to SuperMag times.")
-    # SMinterp = sm.InterpolateSimData(SIM, SM)
-    # if debug:
-    #     print("SMinterp = %s" % SMinterp)
+    # Interpolate the simulated delta B to the measurement times from SuperMag.
+    if verbose:
+        print("Interpolating simulated data to SuperMag times.")
+    SMinterp = sm.InterpolateSimData(SIM, SM)
+    if debug:
+        print("SMinterp = %s" % SMinterp)
 
-    # # ------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
 
-    # # Create the plots in memory.
-    # mpl.use("Agg")
+    # Create the plots in memory.
+    mpl.use("Agg")
 
-    # # Make the indices plot.
-    # if verbose:
-    #     print("Creating indices comparison plot.")
-    # sm.MakeIndicesPlot(SMI, SMinterp, fignumber=1)
-    # comparison_plot_file = "indices.png"
-    # plt.savefig(comparison_plot_file)
+    # Make the indices plot.
+    if verbose:
+        print("Creating indices comparison plot.")
+    sm.MakeIndicesPlot(SMI, SMinterp, fignumber=1)
+    comparison_plot_file = "indices.png"
+    plt.savefig(comparison_plot_file)
 
-    # # Make the contour plots.
-    # if verbose:
-    #     print("Creating contour plots.")
-    # sm.MakeContourPlots(SM, SMinterp, maxx=1000, fignumber=2)
-    # contour_plot_file = "contours.png"
-    # plt.savefig(contour_plot_file)
+    # Make the contour plots.
+    if verbose:
+        print("Creating contour plots.")
+    sm.MakeContourPlots(SM, SMinterp, maxx=1000, fignumber=2)
+    contour_plot_file = "contours.png"
+    plt.savefig(contour_plot_file)
 
     # Return normally.
     return 0
