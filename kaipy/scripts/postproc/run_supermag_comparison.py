@@ -28,7 +28,6 @@ from jinja2 import Template
 # Import project-specific modules.
 from kaipy import kaiH5
 from kaipy import kaiTools
-# import kaipy.supermage as sm
 
 
 # Program constants and defaults
@@ -41,7 +40,6 @@ DEFAULT_ARGUMENTS = {}
 DEFAULT_ARGUMENTS["calcdb"] = "calcdb.x"
 DEFAULT_ARGUMENTS["debug"] = False
 DEFAULT_ARGUMENTS["parintime"] = 1
-DEFAULT_ARGUMENTS["smuser"] = os.getlogin()
 DEFAULT_ARGUMENTS["verbose"] = False
 
 # Location of template XML file for calcdb.x.
@@ -159,11 +157,6 @@ def create_command_line_parser():
         "--parintime", type=int, default=DEFAULT_ARGUMENTS["parintime"],
         help="Split the calculation into this many parallel chunks"
              " (default: %(default)s)."
-    )
-    parser.add_argument(
-        "--smuser", type=str, default=DEFAULT_ARGUMENTS["smuser"],
-        help="SuperMag user ID to use for SuperMag queries "
-             "(default: %(default)s)."
     )
     parser.add_argument(
         "--verbose", "-v", action="store_true",
@@ -456,7 +449,7 @@ def create_pitmerge_pbs_script(args: dict):
     # Fill in the template options.
     options = copy.deepcopy(DEFAULT_PITMERGE_PBS_OPTIONS)
     options["job_name"] = f"pitmerge-{runid}"
-    options["select"] = f"{options['select']}:ncpus=128"
+    options["select"] = f"{options['select']}"
     options["runid"] = runid
     if debug:
         print(f"options = {options}")
@@ -528,7 +521,7 @@ def create_supermag_comparison_pbs_script(args: dict):
     # Fill in the template options.
     options = copy.deepcopy(DEFAULT_SUPERMAG_COMPARISON_PBS_OPTIONS)
     options["job_name"] = f"supermag_comparison-{runid}"
-    options["select"] = f"{options['select']}:ncpus=128"
+    options["select"] = f"{options['select']}"
     options["runid"] = runid
     if debug:
         print(f"options = {options}")
