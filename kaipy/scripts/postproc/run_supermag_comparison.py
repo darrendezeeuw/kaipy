@@ -5,7 +5,10 @@
 
 Perform a comparison of ground magnetic field perturbations computed for a
 MAGE magnetosphere simulation with measured data from SuperMag. This is done
-in a PBS job.
+in a set of PBS jobs run in the specified MAGE results directory.
+
+NOTE: If the calcdb.x binary was built with a module set other than that
+listed below, change the module set in the PBS scripts appropriately.
 
 Author
 ------
@@ -36,11 +39,16 @@ from kaipy import kaiTools
 DESCRIPTION = "Compare MAGE ground delta-B to SuperMag measurements."
 
 # Default values for command-line arguments.
-DEFAULT_ARGUMENTS = {}
-DEFAULT_ARGUMENTS["calcdb"] = "calcdb.x"
-DEFAULT_ARGUMENTS["debug"] = False
-DEFAULT_ARGUMENTS["parintime"] = 1
-DEFAULT_ARGUMENTS["verbose"] = False
+DEFAULT_ARGUMENTS = {
+    "calcdb": "calcdb.x",
+    "debug": False,
+    "dt": 60.0,
+    "parintime": 1,
+    "pbs_account": "",
+    "smuser": "",
+    "verbose": False,
+    "mage_results_path": None,
+}
 
 # Location of template XML file for calcdb.x.
 CALCDB_XML_TEMPLATE = os.path.join(
@@ -55,18 +63,18 @@ CALCDB_PBS_TEMPLATE = os.path.join(
 # Default options for filling in the calcdb.x PBS template.
 DEFAULT_CALCDB_PBS_OPTIONS = {
     "job_name": None,
-    "account": os.getlogin(),
+    "account": "",
     "queue": "main",
     "job_priority": "economy",
     "select": "1:ncpus=128",
     "walltime": "12:00:00",
     "modules": [
-                "ncarenv/23.06",
-                "craype/2.7.20",
-                "intel/2023.0.0",
-                "ncarcompilers/1.0.0",
-                "cray-mpich/8.1.25",
-                "hdf5-mpi/1.12.2",
+        "ncarenv/23.06",
+        "craype/2.7.20",
+        "intel/2023.0.0",
+        "ncarcompilers/1.0.0",
+        "cray-mpich/8.1.25",
+        "hdf5-mpi/1.12.2",
     ],
     "conda_environment": "kaiju-3.8",
     "kaipyhome": os.environ["KAIPYHOME"],
@@ -81,25 +89,25 @@ PITMERGE_PBS_TEMPLATE = os.path.join(
 # Default options for filling in the pitmerge.py PBS template.
 DEFAULT_PITMERGE_PBS_OPTIONS = {
     "job_name": None,
-    "account": os.getlogin(),
+    "account": "",
     "queue": "main",
     "job_priority": "economy",
     "select": "1:ncpus=128",
     "walltime": "12:00:00",
     "modules": [
-                "ncarenv/23.06",
-                "craype/2.7.20",
-                "intel/2023.0.0",
-                "ncarcompilers/1.0.0",
-                "cray-mpich/8.1.25",
-                "hdf5-mpi/1.12.2",
+        "ncarenv/23.06",
+        "craype/2.7.20",
+        "intel/2023.0.0",
+        "ncarcompilers/1.0.0",
+        "cray-mpich/8.1.25",
+        "hdf5-mpi/1.12.2",
     ],
     "conda_environment": "kaiju-3.8",
     "kaipyhome": os.environ["KAIPYHOME"],
     "kaijuhome": os.environ["KAIJUHOME"],
 }
 
-# Location of template PBS file for pitmerge.py.
+# Location of template PBS file for supermag_comparison.py.
 SUPERMAG_COMPARISON_PBS_TEMPLATE = os.path.join(
     pathlib.Path(__file__).parent.resolve(), "supermag_comparison-template.pbs"
 )
@@ -113,12 +121,12 @@ DEFAULT_SUPERMAG_COMPARISON_PBS_OPTIONS = {
     "select": "1:ncpus=128",
     "walltime": "12:00:00",
     "modules": [
-                "ncarenv/23.06",
-                "craype/2.7.20",
-                "intel/2023.0.0",
-                "ncarcompilers/1.0.0",
-                "cray-mpich/8.1.25",
-                "hdf5-mpi/1.12.2",
+        "ncarenv/23.06",
+        "craype/2.7.20",
+        "intel/2023.0.0",
+        "ncarcompilers/1.0.0",
+        "cray-mpich/8.1.25",
+        "hdf5-mpi/1.12.2",
     ],
     "conda_environment": "kaiju-3.8",
     "kaipyhome": os.environ["KAIPYHOME"],
@@ -154,8 +162,23 @@ def create_command_line_parser():
         help="Print debugging output (default: %(default)s)."
     )
     parser.add_argument(
+        "--dt", type=float, default=DEFAULT_ARGUMENTS["dt"],
+        help="Time interval for delta-B computation (seconds)"
+             " (default: %(default)s)."
+    )
+    parser.add_argument(
         "--parintime", type=int, default=DEFAULT_ARGUMENTS["parintime"],
         help="Split the calculation into this many parallel chunks"
+             " (default: %(default)s)."
+    )
+    parser.add_argument(
+        "--pbs_account", type=str, default=DEFAULT_ARGUMENTS["pbs_account"],
+        help="Split the calculation into this many parallel chunks"
+             " (default: %(default)s)."
+    )
+    parser.add_argument(
+        "--smuser", type=str, default=DEFAULT_ARGUMENTS["smuser"],
+        help="Account name for SuperMag database access"
              " (default: %(default)s)."
     )
     parser.add_argument(
@@ -210,8 +233,7 @@ def filename_to_runid(filename: str):
     return runid
 
 
-def create_calcdb_xml_file(runid: str,
-                           parintime: int = DEFAULT_ARGUMENTS["parintime"],
+def create_calcdb_xml_file(runid: str, parintime: int, dt: float,
                            debug: bool = False):
     """Create the XML input file for calcdb.x from a template.
 
@@ -222,8 +244,10 @@ def create_calcdb_xml_file(runid: str,
     ----------
     runid : str
         runid for MAGE results file.
-    parintime : int, default DEFAULT_ARGUMENTS["parintime"]
+    parintime : int
         Number of threads to use for calcdb.x computation.
+    dt : infloatt
+        Time interval for calcdb.x calculations (seconds).
     debug : bool, default False
         Set to True to produce debugging output.
 
@@ -235,7 +259,7 @@ def create_calcdb_xml_file(runid: str,
     Raises
     ------
     TypeError
-        If the MAGE result file containts no steps for time >= 0.
+        If the MAGE result file contains no steps for time >= 0.
     """
     # Fetch run information from the MAGE result file.
     filename, isMPI, Ri, Rj, Rk = kaiTools.getRunInfo(".", runid)
@@ -269,7 +293,6 @@ def create_calcdb_xml_file(runid: str,
     # Find the time for the last step.
     tFin = kaiH5.tStep(filename, sIds[-1], aID="time")
     if debug:
-        print(f"T0 = {T0}")
         print(f"tFin = {tFin}")
 
     # Read the template XML file.
@@ -282,20 +305,21 @@ def create_calcdb_xml_file(runid: str,
         print(f"template = {template}")
 
     # Fill in the template options.
-    options = {}
-    options["runid"] = runid
-    options["T0"] = T0
-    options["dt"] = 60.0
-    options["tFin"] = tFin
-    options["ebfile"] = runid
+    ismpi = "false"
     if isMPI:
-        options["ismpi"] = "true"
-    else:
-        options["ismpi"] = "false"
-    options["Ri"] = Ri
-    options["Rj"] = Rj
-    options["Rk"] = Rk
-    options["NumB"] = parintime
+        ismpi = "true"
+    options = {
+        "runid": runid,
+        "T0": T0,
+        "dt": dt,
+        "tFin": tFin,
+        "ebfile": runid,
+        "ismpi": ismpi,
+        "Ri": Ri,
+        "Rj": Rj,
+        "Rk": Rk,
+        "NumB": parintime,
+    }
     if debug:
         print(f"options = {options}")
 
@@ -355,12 +379,15 @@ def create_calcdb_pbs_script(args: dict):
         print(f"runid = {runid}")
 
     # Create the XML input file for calcdb.x.
-    calcdb_xml_file = create_calcdb_xml_file(runid, args["parintime"], debug)
+    calcdb_xml_file = create_calcdb_xml_file(
+        runid, args["parintime"], args["dt"], debug)
     if debug:
         print(f"calcdb_xml_file = {calcdb_xml_file}")
 
-    # Copy the calcdb.x binary to the results directory.
+    # Copy the calcdb.x binary to the results directory, then make it
+    # executable.
     shutil.copyfile(args["calcdb"], "./calcdb.x")
+    os.chmod("./calcdb.x", 0o755)
 
     # Read the PBS script template for calcdb.x.
     with open(CALCDB_PBS_TEMPLATE, "r", encoding="utf-8") as f:
@@ -373,11 +400,14 @@ def create_calcdb_pbs_script(args: dict):
 
     # Fill in the template options.
     options = copy.deepcopy(DEFAULT_CALCDB_PBS_OPTIONS)
-    options["job_name"] = f"calcdb-{runid}"
-    options["select"] = f"{options['select']}:ompthreads={args['parintime']}"
-    options["omp_num_threads"] = args["parintime"]
-    options["calcdb_xml_file"] = calcdb_xml_file
-    options["runid"] = runid
+    options.update({
+        "job_name": f"calcdb-{runid}",
+        "account": args["pbs_account"],
+        "select": f"{options['select']}:ompthreads={args['parintime']}",
+        "omp_num_threads": args["parintime"],
+        "calcdb_xml_file": calcdb_xml_file,
+        "runid": runid,
+    })
     if debug:
         print(f"options = {options}")
 
@@ -390,7 +420,7 @@ def create_calcdb_pbs_script(args: dict):
     # Move back to the start directory.
     os.chdir(start_directory)
 
-    # Return the path to the PBS script.
+    # Return the name of the PBS script.
     return calcdb_pbs_script
 
 
@@ -448,9 +478,11 @@ def create_pitmerge_pbs_script(args: dict):
 
     # Fill in the template options.
     options = copy.deepcopy(DEFAULT_PITMERGE_PBS_OPTIONS)
-    options["job_name"] = f"pitmerge-{runid}"
-    options["select"] = f"{options['select']}"
-    options["runid"] = runid
+    options.update({
+        "job_name": f"pitmerge-{runid}",
+        "account": args["pbs_account"],
+        "runid": runid,
+    })
     if debug:
         print(f"options = {options}")
 
@@ -463,7 +495,7 @@ def create_pitmerge_pbs_script(args: dict):
     # Move back to the start directory.
     os.chdir(start_directory)
 
-    # Return the path to the PBS script.
+    # Return the name of the PBS script.
     return pitmerge_pbs_script
 
 
@@ -520,9 +552,12 @@ def create_supermag_comparison_pbs_script(args: dict):
 
     # Fill in the template options.
     options = copy.deepcopy(DEFAULT_SUPERMAG_COMPARISON_PBS_OPTIONS)
-    options["job_name"] = f"supermag_comparison-{runid}"
-    options["select"] = f"{options['select']}"
-    options["runid"] = runid
+    options.update({
+        "job_name": f"supermag_comparison-{runid}",
+        "account": args["pbs_account"],
+        "runid": runid,
+        "smuser": args["smuser"],
+    })
     if debug:
         print(f"options = {options}")
 
@@ -535,7 +570,7 @@ def create_supermag_comparison_pbs_script(args: dict):
     # Move back to the start directory.
     os.chdir(start_directory)
 
-    # Return the path to the PBS script.
+    # Return the name of the PBS script.
     return supermag_comparison_pbs_script
 
 
@@ -595,7 +630,7 @@ def create_submit_script(
     # Submit the scripts in dependency order.
     submit_script = f"submit-{runid}.sh"
     with open(submit_script, "w", encoding="utf-8") as f:
-        cmd = f"job_id=`qsub {calcdb_pbs_script}`\n"
+        cmd = f"job_id=`qsub -J 1-{args['parintime']} {calcdb_pbs_script}`\n"
         f.write(cmd)
         cmd = "echo $job_id\n"
         f.write(cmd)
@@ -634,7 +669,7 @@ def run_supermag_comparison(args: dict):
 
     Returns
     -------
-    None
+    int 0 on success
 
     Raises
     ------
@@ -659,7 +694,8 @@ def run_supermag_comparison(args: dict):
     if debug:
         print(f"calcdb_pbs_script = {calcdb_pbs_script}")
 
-    # Create the PBS script to stitch together the output from calcdb.x.
+    # Create the PBS script to stitch together the output from calcdb.x
+    # using pitmerge.py.
     if verbose:
         print("Creating PBS script to stitch together the calcdb.x output.")
     pitmerge_pbs_script = create_pitmerge_pbs_script(args)
@@ -684,9 +720,10 @@ def run_supermag_comparison(args: dict):
     if debug:
         print(f"submit_script = {submit_script}")
 
-    # if verbose:
-    #     print(f"Please run {submit_script} to submit the PBS jobs to run "
-    #           "calcdb.x and perform the MAGE-SuperMag comparison.")
+    if verbose:
+        print(f"Please run {submit_script} (in the MAGE result directory) to "
+              "submit the PBS jobs to run perform the MAGE-SuperMag "
+              "comparison.")
 
     # Return normally.
     return 0

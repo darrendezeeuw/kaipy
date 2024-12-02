@@ -44,7 +44,6 @@ echo 'The active environment variables are:'
 printenv
 
 # Compute the ground delta B values.
-chmod +x ./calcdb.x  # Why is this needed?
 cmd="./calcdb.x {{ calcdb_xml_file }} ${JNUM} >& calcdb.out.${JNUM}"
 echo "calcdb.x run command is:"
 echo $cmd

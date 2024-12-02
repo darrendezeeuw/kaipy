@@ -31,7 +31,7 @@ DESCRIPTION = "Create MAGE-SuperMag comparison plots."
 # Default values for command-line arguments.
 DEFAULT_ARGS = {
     "debug": False,
-    "smuser": os.getlogin(),
+    "smuser": "",
     "verbose": False,
     "calcdb_results_path": None,
 }
