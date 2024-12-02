@@ -350,8 +350,36 @@ def create_calcdb_pbs_script(args: dict):
     # Compute the path to the PBS script.
     calcdb_pbs_script = os.path.join(mage_results_dir, calcdb_pbs_script)
 
-    # Return the name of the PBS script.
+    # Return the path to the PBS script.
     return calcdb_pbs_script
+
+
+def create_stitching_pbs_script(args: dict):
+    """Create the PBS script for stitching together calcdb output.
+
+    Create the PBS script for stitching together calcdb output.
+
+    Parameters
+    ----------
+    args : dict
+        Dictionary of command-line and other options.
+
+    Returns
+    -------
+    stitching_pbs_script : str
+        Path to PBS script.
+
+    Raises
+    ------
+    None
+    """
+    # Local convenience variables.
+    debug = args["debug"]
+
+    stitching_pbs_script = "stitch.pbs"
+
+    # Return the name of the PBS script.
+    return stitching_pbs_script
 
 
 def create_comparison_pbs_script(args: dict):
@@ -454,6 +482,13 @@ def run_supermag_comparison(args: dict):
     calcdb_pbs_script = create_calcdb_pbs_script(args)
     if debug:
         print(f"calcdb_pbs_script = {calcdb_pbs_script}")
+
+    # Create the PBS script to stitch together the output from calcdb.x.
+    if verbose:
+        print("Creating PBS script to stitch together the calcdb.x output.")
+    stitching_pbs_script = create_stitching_pbs_script(args)
+    if debug:
+        print(f"stitching_pbs_script = {stitching_pbs_script}")
 
     # Create the PBS script to compare the calcdb.x results with SuperMag
     # data.

@@ -38,12 +38,21 @@ source {{ kaijuhome }}/scripts/setupEnvironment.sh
 echo "The kaiju software is located at ${KAIJUHOME}."
 
 echo 'Setting environment variables.'
+export OMP_NUM_THREADS={{ omp_num_threads }}
+export JNUM=${PBS_ARRAY_INDEX:-0}
 echo 'The active environment variables are:'
 printenv
 
-# Fetch the SuperMag data and create the comparison plots.
-cmd="supermag_comparion.py -runid {{ runid }}"
-echo "Comparison command is:"
+# Compute the ground delta B values.
+chmod +x ./calcdb.x  # Why is this needed?
+cmd="./calcdb.x {{ calcdb_xml_file }} ${JNUM} >& calcdb.out.${JNUM}"
+echo "calcdb.x run command is:"
+echo $cmd
+eval $cmd
+
+# Stitch the separate ground delta-B values together.
+cmd="pitmerge.py -runid {{ runid }}"
+echo "Stitching command is:"
 echo $cmd
 eval $cmd
 
