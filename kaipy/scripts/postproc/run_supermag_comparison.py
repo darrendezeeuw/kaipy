@@ -557,6 +557,7 @@ def create_supermag_comparison_pbs_script(args: dict):
         "account": args["pbs_account"],
         "runid": runid,
         "smuser": args["smuser"],
+        "calcdb_results_path": f"./{runid}-deltab.h5",
     })
     if debug:
         print(f"options = {options}")
