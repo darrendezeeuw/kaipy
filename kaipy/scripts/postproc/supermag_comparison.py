@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
-"""Compare ground delta B from a MAGE run to SuperMag data.
 
-Compare ground delta B from a MAGE run to SuperMag data.
+"""Create plots comparing ground delta B from a MAGE run to SuperMag data.
+
+Create plots comparing ground delta B from a MAGE run to SuperMag data.
 
 Author
 ------
@@ -12,6 +13,7 @@ Eric Winter (eric.winter@jhuapl.edu)
 
 # Import standard modules.
 import argparse
+import copy
 import os
 import sys
 
@@ -29,7 +31,7 @@ import kaipy.supermage as sm
 DESCRIPTION = "Create MAGE-SuperMag comparison plots."
 
 # Default values for command-line arguments.
-DEFAULT_ARGS = {
+DEFAULT_ARGUMENTS = {
     "debug": False,
     "smuser": "",
     "verbose": False,
@@ -71,7 +73,7 @@ def create_command_line_parser():
     )
     parser.add_argument(
         "--smuser", type=str,
-        default=DEFAULT_ARGS["smuser"],
+        default=DEFAULT_ARGUMENTS["smuser"],
         help="SuperMag user ID to use for SuperMag queries "
              "(default: %(default)s)."
     )
@@ -81,7 +83,7 @@ def create_command_line_parser():
     )
     parser.add_argument(
         "calcdb_results_path",
-        default=DEFAULT_ARGS["calcdb_results_path"],
+        default=DEFAULT_ARGUMENTS["calcdb_results_path"],
         help="Path to a result file from calcdb.x."
     )
     return parser
@@ -99,12 +101,18 @@ def create_supermag_comparison_plots(args: dict):
 
     Returns
     -------
-    None
+    int 0 on success
 
     Raises
     ------
     None
     """
+    # Set defaults for command-line options, then update with values passed
+    # from the caller.
+    local_args = copy.deepcopy(DEFAULT_ARGUMENTS)
+    local_args.update(args)
+    args = local_args
+
     # Local convenience variables.
     debug = args["debug"]
     smuser = args["smuser"]
@@ -174,7 +182,8 @@ def create_supermag_comparison_plots(args: dict):
         raise TypeError("No SuperMag data found for requested time period, "
                         " aborting.")
 
-    # Interpolate the simulated delta B to the measurement times from SuperMag.
+    # Interpolate the simulated delta B to the measurement times from
+    # SuperMag.
     if verbose:
         print("Interpolating simulated data to SuperMag times.")
     SMinterp = sm.InterpolateSimData(SIM, SM)
@@ -185,6 +194,8 @@ def create_supermag_comparison_plots(args: dict):
 
     # Create the plots in memory.
     mpl.use("Agg")
+
+    # ------------------------------------------------------------------------
 
     # Make the indices plot.
     if verbose:
