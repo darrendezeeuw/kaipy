@@ -745,10 +745,12 @@ def MakeIndicesPlot(SMI, SMinterp, fignumber=1):
     plt.plot(SMinterp['td'], SMinterp['SME'], 'r', label='interpolated')
     plt.plot(SMinterp['td'], SMinterp['SMU'], 'r')
     plt.plot(SMinterp['td'], SMinterp['SML'], 'r')
+    plt.gca().xaxis.set_tick_params(labelsize=6)
 
     plt.plot(SMinterp['td'], SMinterp['superSME'], 'g', label='super')
     plt.plot(SMinterp['td'], SMinterp['superSMU'], 'g')
     plt.plot(SMinterp['td'], SMinterp['superSML'], 'g')
+    plt.gca().xaxis.set_tick_params(labelsize=6)
 
     plt.plot(SMI['td'], SMI['SME'], 'b', label='real')
     plt.plot(SMI['td'], SMI['SMU'], 'b')
@@ -757,6 +759,7 @@ def MakeIndicesPlot(SMI, SMinterp, fignumber=1):
     plt.legend()
     plt.xlim([SMinterp['td'][0], SMinterp['td'][-1]])
     plt.ylabel("SME/U/L")
+    plt.gca().xaxis.set_tick_params(labelsize=6)
 
     ax2 = plt.subplot(312)
     plt.plot(SMinterp['td'], SMinterp['SMR'], 'r', label='interpolated')
@@ -766,27 +769,32 @@ def MakeIndicesPlot(SMI, SMinterp, fignumber=1):
     plt.legend()
     plt.xlim([SMinterp['td'][0], SMinterp['td'][-1]])
     plt.ylabel("SMR")
+    plt.gca().xaxis.set_tick_params(labelsize=6)
 
     ax3 = plt.subplot(313)
     plt.plot(SMinterp['td'], SMinterp['SMRbins'][0], 'r', label='interpolated')
     plt.plot(SMinterp['td'], SMinterp['SMRbins'][1], 'r')
     plt.plot(SMinterp['td'], SMinterp['SMRbins'][2], 'r')
     plt.plot(SMinterp['td'], SMinterp['SMRbins'][3], 'r')
+    plt.gca().xaxis.set_tick_params(labelsize=6)
 
     plt.plot(SMinterp['td'], SMinterp['superSMRbins'][0], 'g', label='super')
     plt.plot(SMinterp['td'], SMinterp['superSMRbins'][1], 'g')
     plt.plot(SMinterp['td'], SMinterp['superSMRbins'][2], 'g')
     plt.plot(SMinterp['td'], SMinterp['superSMRbins'][3], 'g')
+    plt.gca().xaxis.set_tick_params(labelsize=6)
 
     plt.plot(SMI['td'], SMI['smr00'], 'b', label='real')
     plt.plot(SMI['td'], SMI['smr06'], 'b')
     plt.plot(SMI['td'], SMI['smr12'], 'b')
     plt.plot(SMI['td'], SMI['smr18'], 'b')
+    plt.gca().xaxis.set_tick_params(labelsize=6)
 
     plt.xlim([SMinterp['td'][0], SMinterp['td'][-1]])
     plt.legend()
     plt.grid(True)
     plt.ylabel("SMR 6-hour bins")
+    plt.gca().xaxis.set_tick_params(labelsize=6)
     plt.show()
 
 def Z_Tensor_1D(resistivities, thicknesses, frequencies):
