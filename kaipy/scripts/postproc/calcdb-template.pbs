@@ -7,9 +7,7 @@
 # needed for other systems, such as pleiades.
 
 #PBS -N {{ job_name }}
-#PBS -A {{ account }}
 #PBS -q {{ queue }}
-#PBS -l job_priority={{ job_priority }}
 #PBS -l select={{ select }}
 #PBS -l walltime={{ walltime }}
 #PBS -j oe
