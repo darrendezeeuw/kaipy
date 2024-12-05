@@ -38,6 +38,7 @@ echo "The kaiju software is located at ${KAIJUHOME}."
 echo 'Setting environment variables.'
 export OMP_NUM_THREADS={{ omp_num_threads }}
 export JNUM=${PBS_ARRAY_INDEX:-0}
+export KMP_STACKSIZE=128M
 echo 'The active environment variables are:'
 printenv
 
