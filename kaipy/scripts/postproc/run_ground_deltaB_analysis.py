@@ -106,7 +106,7 @@ DEFAULT_CALCDB_PBS_OPTIONS_PLEIADES = {
     "kaijuhome": os.environ["KAIJUHOME"],
 }
 
-# Location of template PBS files for pitmerge.py for derecho and pleiades.
+# Locations of template PBS files for pitmerge.py for derecho and pleiades.
 PITMERGE_PBS_TEMPLATE_DERECHO = os.path.join(
     pathlib.Path(__file__).parent.resolve(), "templates",
     "pitmerge-template-derecho.pbs"
@@ -157,10 +157,15 @@ DEFAULT_PITMERGE_PBS_OPTIONS_PLEIADES = {
     "kaijuhome": os.environ["KAIJUHOME"],
 }
 
-# Location of template PBS file for running the ground delta-B analysis.
-GROUND_DELTAB_ANALYSIS_PBS_TEMPLATE = os.path.join(
+# Locations of template PBS file for running the ground delta-B
+# analysis on derecho and pleiades
+GROUND_DELTAB_ANALYSIS_PBS_TEMPLATE_DERECHO = os.path.join(
     pathlib.Path(__file__).parent.resolve(), "templates",
-    "ground_deltab_analysis-template.pbs"
+    "ground_deltab_analysis-template-derecho.pbs"
+)
+GROUND_DELTAB_ANALYSIS_PBS_TEMPLATE_PLEIADES = os.path.join(
+    pathlib.Path(__file__).parent.resolve(), "templates",
+    "ground_deltab_analysis-template-pleiades.pbs"
 )
 
 # Default options for filling in the ground delta-B analysis PBS
@@ -667,10 +672,13 @@ def create_ground_deltab_analysis_pbs_script(args: dict):
 
     Raises
     ------
-    None
+    TypeError
+        If an invalid HPC system is specified.
     """
     # Local convenience variables.
     debug = args["debug"]
+    hpc = args["hpc"]
+    verbose = args["verbose"]
     mage_results_path = args["mage_results_path"]
 
     # Split the MAGE results path into a directory and a file.
@@ -685,6 +693,8 @@ def create_ground_deltab_analysis_pbs_script(args: dict):
         print(f"start_directory = {start_directory}")
 
     # Move to the results directory.
+    if verbose:
+        print(f"Moving to {mage_results_dir}.")
     os.chdir(mage_results_dir)
 
     # Compute the runid from the file name.
@@ -693,8 +703,18 @@ def create_ground_deltab_analysis_pbs_script(args: dict):
         print(f"runid = {runid}")
 
     # Read the PBS script template for ground_deltab_analysis.py.
-    with open(GROUND_DELTAB_ANALYSIS_PBS_TEMPLATE, "r", encoding="utf-8") as f:
-        template_content = f.read()
+    if verbose:
+        print(f"Reading analysis PBS template for {hpc}.")
+    if hpc == "derecho":
+        with open(GROUND_DELTAB_ANALYSIS_PBS_TEMPLATE_DERECHO, "r",
+                  encoding="utf-8") as f:
+            template_content = f.read()
+    elif hpc == "pleiades":
+        with open(GROUND_DELTAB_ANALYSIS_PBS_TEMPLATE_PLEIADES, "r",
+                  encoding="utf-8") as f:
+            template_content = f.read()
+    else:
+        raise TypeError(f"Invalid hpc ({hpc})!")
     if debug:
         print(f"template_content = {template_content}")
     template = Template(template_content)
@@ -702,24 +722,41 @@ def create_ground_deltab_analysis_pbs_script(args: dict):
         print(f"template = {template}")
 
     # Fill in the template options.
-    options = copy.deepcopy(DEFAULT_GROUND_DELTAB_ANALYSIS_PBS_OPTIONS)
-    options.update({
-        "job_name": f"ground_deltab_analysis-{runid}",
-        "account": args["pbs_account"],
-        "runid": runid,
-        "smuser": args["smuser"],
-        "calcdb_results_path": f"./{runid}.deltab.h5",
-    })
+    if hpc == "derecho":
+        options = copy.deepcopy(
+            DEFAULT_GROUND_DELTAB_ANALYSIS_PBS_OPTIONS_DERECHO
+        )
+        options.update({
+            "job_name": f"ground_deltab_analysis-{runid}",
+            "account": args["pbs_account"],
+            "runid": runid,
+            "smuser": args["smuser"],
+            "calcdb_results_path": f"./{runid}.deltab.h5",
+        })
+    elif hpc == "pleiades":
+        options = copy.deepcopy(
+            DEFAULT_GROUND_DELTAB_ANALYSIS_PBS_OPTIONS_PLEIADES
+        )
+        options.update({
+            "job_name": f"ground_deltab_analysis-{runid}",
+            "runid": runid,
+            "smuser": args["smuser"],
+            "calcdb_results_path": f"./{runid}.deltab.h5",
+        })
     if debug:
         print(f"options = {options}")
 
     # Render the template.
+    if verbose:
+        print("Rendering template.")
     ground_deltab_analysis_pbs_script = f"ground_deltab_analysis-{runid}.pbs"
     xml_content = template.render(options)
     with open(ground_deltab_analysis_pbs_script, "w", encoding="utf-8") as f:
         f.write(xml_content)
 
     # Move back to the start directory.
+    if verbose:
+        print(f"Moving to {start_directory}.")
     os.chdir(start_directory)
 
     # Return the name of the PBS script.
@@ -854,13 +891,13 @@ def run_ground_deltab_analysis(args: dict):
     if debug:
         print(f"pitmerge_pbs_script = {pitmerge_pbs_script}")
 
-    # # Create the PBS script to compare the calcdb.x results with SuperMag
-    # # data.
-    # if verbose:
-    #     print("Creating PBS script to run the MAGE-SuperMag comparison job.")
-    # ground_deltab_analysos_pbs_script = create_ground_deltab_analysis_pbs_script(args)
-    # if debug:
-    #     print(f"ground_deltab_analysos_pbs_script = {ground_deltab_analysos_pbs_script}")
+    # Create the PBS script to compare the calcdb.x results with SuperMag
+    # data.
+    if verbose:
+        print("Creating PBS script to run the ground delta-B analysis.")
+    ground_deltab_analysos_pbs_script = create_ground_deltab_analysis_pbs_script(args)
+    if debug:
+        print(f"ground_deltab_analysos_pbs_script = {ground_deltab_analysos_pbs_script}")
 
     # # Create the bash script to submit the PBS scripts in the proper order.
     # if verbose:
