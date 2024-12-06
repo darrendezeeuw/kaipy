@@ -1,10 +1,8 @@
 #!/bin/bash
 
-# This script runs calcdb.x to compute ground delta-B values from the results
-# of a MAGE simulation.
-
-# This file was designed to run on the derecho supercomputer. Modify as
-# needed for other systems, such as pleiades.
+# This script compares ground delta-B values computed from MAGE
+# results with values from SuperMag, and creates a set of SuperMAGE
+# comparison maps.
 
 #PBS -N {{ job_name }}
 #PBS -q {{ queue }}
