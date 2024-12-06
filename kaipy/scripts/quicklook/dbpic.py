@@ -97,6 +97,11 @@ def create_command_line_parser():
         help="Names of spacecraft to plot magnetic footprints, separated by commas (default: %(default)s)"
     )
     parser.add_argument(
+        "--projection", type=str, metavar="projection", default=None,
+        help="Map projection to use for plots (merctor|polar|both)"
+        " (default: %(default)s)"
+    )
+    parser.add_argument(
         "-v", "--verbose", action="store_true", default=False,
         help="Print verbose output (default: %(default)s)."
     )

@@ -1,18 +1,21 @@
 #!/usr/bin/env python
 
 
-"""Run a SuperMag comparison for a MAGE magnetosphere run.
+"""Analyze the ground delta-B values from a MAGE run.
 
-Perform a comparison of ground magnetic field perturbations computed for a
-MAGE magnetosphere simulation with measured data from SuperMag. This is done
-in a set of PBS jobs run in the specified MAGE results directory.
+Perform an analysis of ground magnetic field perturbations computed
+for a MAGE magnetosphere simulation. The computed values are compared
+with measured data from SuperMag. Then a set of SuperMAGE ground
+delta-B maps is created. This is all done by a linked set of PBS jobs
+running the MAGE results directory.
 
-NOTE: If the calcdb.x binary was built with a module set other than that
+NOTE: If the calcdb.x binary was built with a module set other than those
 listed below, change the module set in the PBS scripts appropriately.
 
 Author
 ------
 Eric Winter (eric.winter@jhuapl.edu)
+
 """
 
 
@@ -157,7 +160,7 @@ DEFAULT_PITMERGE_PBS_OPTIONS_PLEIADES = {
     "kaijuhome": os.environ["KAIJUHOME"],
 }
 
-# Locations of template PBS file for running the ground delta-B
+# Locations of template PBS files for running the ground delta-B
 # analysis on derecho and pleiades
 GROUND_DELTAB_ANALYSIS_PBS_TEMPLATE_DERECHO = os.path.join(
     pathlib.Path(__file__).parent.resolve(), "templates",
@@ -627,10 +630,9 @@ def create_pitmerge_pbs_script(args: dict):
             "runid": runid,
         })
     elif hpc == "pleiades":
-        options = copy.deepcopy(DEFAULT_PITMERGE_PBS_OPTIONS_DERECHO)
+        options = copy.deepcopy(DEFAULT_PITMERGE_PBS_OPTIONS_PLEIADES)
         options.update({
             "job_name": f"pitmerge-{runid}",
-            "account": args["pbs_account"],
             "runid": runid,
         })
     else:
@@ -780,7 +782,7 @@ def create_submit_script(
     pitmerge_pbs_script : str
         Path to pitmerge.py PBS script.
     ground_deltab_analysis_pbs_script : str
-        Path to comparison PBS script.
+        Path to analysis PBS script.
     args : dict
         Dictionary of command-line and other options.
 
@@ -795,6 +797,7 @@ def create_submit_script(
     """
     # Local convenience variables.
     debug = args["debug"]
+    verbose = args["verbose"]
     mage_results_path = args["mage_results_path"]
 
     # Split the MAGE results path into a directory and a file.
@@ -809,6 +812,8 @@ def create_submit_script(
         print(f"start_directory = {start_directory}")
 
     # Move to the results directory.
+    if verbose:
+        print(f"Moving to {mage_results_dir}.")
     os.chdir(mage_results_dir)
 
     # Compute the runid from the file name.
@@ -899,20 +904,20 @@ def run_ground_deltab_analysis(args: dict):
     if debug:
         print(f"ground_deltab_analysos_pbs_script = {ground_deltab_analysos_pbs_script}")
 
-    # # Create the bash script to submit the PBS scripts in the proper order.
-    # if verbose:
-    #     print("Creating bash script to submit the PBS jobs.")
-    # submit_script = create_submit_script(
-    #     calcdb_pbs_script, pitmerge_pbs_script,
-    #     ground_deltab_analysos_pbs_script, args
-    # )
-    # if debug:
-    #     print(f"submit_script = {submit_script}")
+    # Create the bash script to submit the PBS scripts in the proper order.
+    if verbose:
+        print("Creating bash script to submit the PBS jobs.")
+    submit_script = create_submit_script(
+        calcdb_pbs_script, pitmerge_pbs_script,
+        ground_deltab_analysos_pbs_script, args
+    )
+    if debug:
+        print(f"submit_script = {submit_script}")
 
-    # if verbose:
-    #     print(f"Please run {submit_script} (in the MAGE result directory) to "
-    #           "submit the PBS jobs to run perform the MAGE-SuperMag "
-    #           "comparison.")
+    if verbose:
+        print(f"Please run {submit_script} (in the MAGE result directory) to "
+              "submit the PBS jobs to run perform the MAGE-SuperMag "
+              "comparison.")
 
     # Return normally.
     return 0

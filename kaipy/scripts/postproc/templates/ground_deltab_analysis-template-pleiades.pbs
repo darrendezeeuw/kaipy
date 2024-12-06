@@ -37,10 +37,16 @@ echo 'Setting environment variables.'
 echo 'The active environment variables are:'
 printenv
 
-# Perform the analysis.
-cmd="ground_deltab_analysis.py --smuser={{ smuser }} {{ calcdb_results_path }} >& ground_deltab_analysis.out"
+# Perform the SuperMag comparison.
+cmd="supermag_comparison.py --smuser={{ smuser }} {{ calcdb_results_path }} >& ground_deltab_analysis.out"
 echo "Analysis command is:"
 echo $cmd
 eval $cmd
+
+# Perform the SuperMage analysis.
+# cmd="supermage_analysis.py --smuser={{ smuser }} {{ calcdb_results_path }} >& ground_deltab_analysis.out"
+# echo "Analysis command is:"
+# echo $cmd
+# eval $cmd
 
 echo "Job $PBS_JOBID ended at `date` on `hostname` in directory `pwd`."

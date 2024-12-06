@@ -90,6 +90,98 @@ def create_command_line_parser():
     return parser
 
 
+def create_dbpic_plot(runid: str, args: dict):
+    """Create the dbpic.py (Mercator) plot of the dB values.
+
+    Create the dbpic.py (Mercator) plot of the dB values.
+
+    Parameters
+    ----------
+    runid : str
+        Run ID for calcdb results file.
+    args: dict
+        Dictionary of command-line options.
+
+    Returns
+    -------
+    None
+
+    Raises
+    ------
+    None
+    """
+    # Local convenience variables.
+    debug = args["debug"]
+    smuser = args["smuser"]
+    verbose = args["verbose"]
+    calcdb_results_path = args["calcdb_results_path"]
+
+    # ------------------------------------------------------------------------
+
+    # Split the calcdb results path into a directory and a file.
+    (calcdb_results_dir, calcdb_results_file) = os.path.split(
+        calcdb_results_path
+    )
+    if debug:
+        print(f"calcdb_results_dir = {calcdb_results_dir}")
+        print(f"calcdb_results_file = {calcdb_results_file}")
+
+    # Move to the results directory.
+    if verbose:
+        print(f"Moving to results directory {calcdb_results_dir}.")
+    os.chdir(calcdb_results_dir)
+
+    # Run dbpic.py.
+    cmd = f"dbpic.py -d . -id {runid}"
+    subprocess.run(cmd, shell=True, check=True)
+
+
+def create_dbpole_plot(runid: str, args: dict):
+    """Create the dbpole.py (polar) plot of the dB values.
+
+    Create the dbpole.py (polar) plot of the dB values.
+
+    Parameters
+    ----------
+    runid : str
+        Run ID for calcdb results file.
+    args: dict
+        Dictionary of command-line options.
+
+    Returns
+    -------
+    None
+
+    Raises
+    ------
+    None
+    """
+    # Local convenience variables.
+    debug = args["debug"]
+    smuser = args["smuser"]
+    verbose = args["verbose"]
+    calcdb_results_path = args["calcdb_results_path"]
+
+    # ------------------------------------------------------------------------
+
+    # Split the calcdb results path into a directory and a file.
+    (calcdb_results_dir, calcdb_results_file) = os.path.split(
+        calcdb_results_path
+    )
+    if debug:
+        print(f"calcdb_results_dir = {calcdb_results_dir}")
+        print(f"calcdb_results_file = {calcdb_results_file}")
+
+    # Move to the results directory.
+    if verbose:
+        print(f"Moving to results directory {calcdb_results_dir}.")
+    os.chdir(calcdb_results_dir)
+
+    # Run dbpic.py.
+    cmd = f"dbpole.py -d . -id {runid}"
+    subprocess.run(cmd, shell=True, check=True)
+
+
 def create_supermag_comparison_plots(args: dict):
     """Create plots comparing MAGE ground delta B to SuperMag data.
 
@@ -217,6 +309,16 @@ def create_supermag_comparison_plots(args: dict):
     sm.MakeContourPlots(SM, SMinterp, maxx=1000, fignumber=2)
     contour_plot_file = "contours.png"
     plt.savefig(contour_plot_file)
+
+    # Make the dbpic.py plot (Mercator projection).
+    if verbose:
+        print("Creating Mercator plot.")
+    create_dbpic_plot(runid, args)
+
+    dbpic_plot_file = "dbpic.png"
+    plt.savefig(dbpic_plot_file)
+
+    # Make the dbpole.py plot (polar projection).
 
     # Return normally.
     return 0
