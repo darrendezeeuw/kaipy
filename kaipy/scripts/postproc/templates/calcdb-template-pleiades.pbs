@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# This script runs calcdb.x to compute ground delta-B values from the
+# results of a MAGE simulation.
+
+#PBS -N {{ job_name }}
+#PBS -q {{ queue }}
+#PBS -l select={{ select }}
+#PBS -l walltime={{ walltime }}
+#PBS -j oe
+#PBS -m abe
+
+echo "Job $PBS_JOBID started at `date` on `hostname` in directory `pwd`."
+
+echo 'Loading modules.'
+module --force purge
+{%- for module in modules %}
+module load {{ module }}
+{%- endfor %}
+echo 'The currently loaded modules are:'
+module list
+
+echo 'Loading python environment.'
+conda activate {{ conda_environment }}
+echo "The current conda environment is ${CONDA_PREFIX}."
+
+echo 'Setting up kaipy environment.'
+source {{ kaipyhome }}/kaipy/scripts/setupEnvironment.sh
+echo "The kaipy software is located at ${KAIPYHOME}."
+
+echo 'Setting up MAGE environment.'
+source {{ kaijuhome }}/scripts/setupEnvironment.sh
+echo "The kaiju software is located at ${KAIJUHOME}."
+
+echo 'Setting environment variables.'
+export OMP_NUM_THREADS={{ omp_num_threads }}
+export JNUM=${PBS_ARRAY_INDEX:-0}
+export KMP_STACKSIZE=128M
+echo 'The active environment variables are:'
+printenv
+
+# Compute the ground delta B values.
+cmd="./calcdb.x {{ calcdb_xml_file }} ${JNUM} >& calcdb.out.${JNUM}"
+echo "calcdb.x run command is:"
+echo $cmd
+eval $cmd
+
+echo "Job $PBS_JOBID ended at `date` on `hostname` in directory `pwd`."

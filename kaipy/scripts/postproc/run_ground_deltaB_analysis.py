@@ -36,13 +36,14 @@ from kaipy import kaiTools
 # Program constants and defaults
 
 # Program description.
-DESCRIPTION = "Compare MAGE ground delta-B to SuperMag measurements."
+DESCRIPTION = "Compare MAGE ground delta-B to SuperMag measurements, and create SuperMAGE analysis maps."
 
 # Default values for command-line arguments.
 DEFAULT_ARGUMENTS = {
     "calcdb": "calcdb.x",
     "debug": False,
     "dt": 60.0,
+    "hpc": "pleiades",
     "parintime": 1,
     "pbs_account": "",
     "smuser": "",
@@ -52,16 +53,43 @@ DEFAULT_ARGUMENTS = {
 
 # Location of template XML file for calcdb.x.
 CALCDB_XML_TEMPLATE = os.path.join(
-    pathlib.Path(__file__).parent.resolve(), "calcdb-template.xml"
+    pathlib.Path(__file__).parent.resolve(), "templates",
+    "calcdb-template.xml"
 )
 
-# Location of template PBS file for calcdb.x.
-CALCDB_PBS_TEMPLATE = os.path.join(
-    pathlib.Path(__file__).parent.resolve(), "calcdb-template.pbs"
+# Locations of template PBS files for calcdb.x for derecho and pleiades.
+CALCDB_PBS_TEMPLATE_DERECHO = os.path.join(
+    pathlib.Path(__file__).parent.resolve(), "templates",
+    "calcdb-template-derecho.pbs"
+)
+CALCDB_PBS_TEMPLATE_PLEIADES = os.path.join(
+    pathlib.Path(__file__).parent.resolve(), "templates",
+    "calcdb-template-pleiades.pbs"
 )
 
-# Default options for filling in the calcdb.x PBS template.
-DEFAULT_CALCDB_PBS_OPTIONS = {
+# Default options for filling in the calcdb.x PBS template on derecho.
+DEFAULT_CALCDB_PBS_OPTIONS_DERECHO = {
+    "job_name": None,
+    "account": "",
+    "queue": "main",
+    "job_priority": "economy",
+    "select": "1:ncpus=128",
+    "walltime": "12:00:00",
+    "modules": [
+        "ncarenv/23.06",
+        "craype/2.7.20",
+        "intel/2023.0.0",
+        "ncarcompilers/1.0.0",
+        "cray-mpich/8.1.25",
+        "hdf5-mpi/1.12.2",
+    ],
+    "conda_environment": "kaiju-3.8",
+    "kaipyhome": os.environ["KAIPYHOME"],
+    "kaijuhome": os.environ["KAIJUHOME"],
+}
+
+# Default options for filling in the calcdb.x PBS template on pleiades.
+DEFAULT_CALCDB_PBS_OPTIONS_PLEIADES = {
     "job_name": None,
     "queue": "normal",
     "select": "1:ncpus=28:model=bro",
@@ -78,13 +106,41 @@ DEFAULT_CALCDB_PBS_OPTIONS = {
     "kaijuhome": os.environ["KAIJUHOME"],
 }
 
-# Location of template PBS file for pitmerge.py.
-PITMERGE_PBS_TEMPLATE = os.path.join(
-    pathlib.Path(__file__).parent.resolve(), "pitmerge-template.pbs"
+# Location of template PBS files for pitmerge.py for derecho and pleiades.
+PITMERGE_PBS_TEMPLATE_DERECHO = os.path.join(
+    pathlib.Path(__file__).parent.resolve(), "templates",
+    "pitmerge-template-derecho.pbs"
+)
+PITMERGE_PBS_TEMPLATE_PLEIADES = os.path.join(
+    pathlib.Path(__file__).parent.resolve(), "templates",
+    "pitmerge-template-pleiades.pbs"
 )
 
-# Default options for filling in the pitmerge.py PBS template.
-DEFAULT_PITMERGE_PBS_OPTIONS = {
+# Default options for filling in the pitmerge.py PBS template for
+# derecho.
+DEFAULT_PITMERGE_PBS_OPTIONS_DERECHO = {
+    "job_name": None,
+    "account": "",
+    "queue": "main",
+    "job_priority": "economy",
+    "select": "1:ncpus=128",
+    "walltime": "12:00:00",
+    "modules": [
+        "ncarenv/23.06",
+        "craype/2.7.20",
+        "intel/2023.0.0",
+        "ncarcompilers/1.0.0",
+        "cray-mpich/8.1.25",
+        "hdf5-mpi/1.12.2",
+    ],
+    "conda_environment": "kaiju-3.8",
+    "kaipyhome": os.environ["KAIPYHOME"],
+    "kaijuhome": os.environ["KAIJUHOME"],
+}
+
+# Default options for filling in the pitmerge.py PBS template for
+# pleiades.
+DEFAULT_PITMERGE_PBS_OPTIONS_PLEIADES = {
     "job_name": None,
     "queue": "normal",
     "select": "1:ncpus=28:model=bro",
@@ -101,13 +157,15 @@ DEFAULT_PITMERGE_PBS_OPTIONS = {
     "kaijuhome": os.environ["KAIJUHOME"],
 }
 
-# Location of template PBS file for supermag_comparison.py.
-SUPERMAG_COMPARISON_PBS_TEMPLATE = os.path.join(
-    pathlib.Path(__file__).parent.resolve(), "supermag_comparison-template.pbs"
+# Location of template PBS file for running the ground delta-B analysis.
+GROUND_DELTAB_ANALYSIS_PBS_TEMPLATE = os.path.join(
+    pathlib.Path(__file__).parent.resolve(), "templates",
+    "ground_deltab_analysis-template.pbs"
 )
 
-# Default options for filling in the pitmerge.py PBS template.
-DEFAULT_SUPERMAG_COMPARISON_PBS_OPTIONS = {
+# Default options for filling in the ground delta-B analysis PBS
+# template on pleiades.
+DEFAULT_GROUND_DELTAB_ANALYSIS_PBS_OPTIONS_PLEIADES = {
     "job_name": None,
     "queue": "normal",
     "select": "1:ncpus=28:model=bro",
@@ -118,6 +176,28 @@ DEFAULT_SUPERMAG_COMPARISON_PBS_OPTIONS = {
         "comp-intel/2020.4.304",
         "mpi-hpe/mpt.2.23",
         "hdf5/1.8.18_mpt",
+    ],
+    "conda_environment": "kaiju-3.8",
+    "kaipyhome": os.environ["KAIPYHOME"],
+    "kaijuhome": os.environ["KAIJUHOME"],
+}
+
+# Default options for filling in the ground delta-B analysis PBS
+# template on derecho.
+DEFAULT_GROUND_DELTAB_ANALYSIS_PBS_OPTIONS_DERECHO = {
+    "job_name": None,
+    "account": "",
+    "queue": "main",
+    "job_priority": "economy",
+    "select": "1:ncpus=128",
+    "walltime": "12:00:00",
+    "modules": [
+        "ncarenv/23.06",
+        "craype/2.7.20",
+        "intel/2023.0.0",
+        "ncarcompilers/1.0.0",
+        "cray-mpich/8.1.25",
+        "hdf5-mpi/1.12.2",
     ],
     "conda_environment": "kaiju-3.8",
     "kaipyhome": os.environ["KAIPYHOME"],
@@ -155,6 +235,11 @@ def create_command_line_parser():
     parser.add_argument(
         "--dt", type=float, default=DEFAULT_ARGUMENTS["dt"],
         help="Time interval for delta-B computation (seconds)"
+             " (default: %(default)s)."
+    )
+    parser.add_argument(
+        "--hpc", type=str, default=DEFAULT_ARGUMENTS["hpc"],
+        help="HPC system to run analysis (derecho|pleiades)"
              " (default: %(default)s)."
     )
     parser.add_argument(
@@ -224,8 +309,7 @@ def filename_to_runid(filename: str):
     return runid
 
 
-def create_calcdb_xml_file(runid: str, parintime: int, dt: float,
-                           debug: bool = False):
+def create_calcdb_xml_file(runid: str, args: dict):
     """Create the XML input file for calcdb.x from a template.
 
     Create the XML input file for calcdb.x from a template. The file is
@@ -235,12 +319,8 @@ def create_calcdb_xml_file(runid: str, parintime: int, dt: float,
     ----------
     runid : str
         runid for MAGE results file.
-    parintime : int
-        Number of threads to use for calcdb.x computation.
-    dt : infloatt
-        Time interval for calcdb.x calculations (seconds).
-    debug : bool, default False
-        Set to True to produce debugging output.
+    args : dict
+        Dictionary of command-line options.
 
     Returns
     -------
@@ -252,7 +332,15 @@ def create_calcdb_xml_file(runid: str, parintime: int, dt: float,
     TypeError
         If the MAGE result file contains no steps for time >= 0.
     """
+    # Local convenience variables.
+    debug = args["debug"]
+    dt = args["dt"]
+    parintime = args["parintime"]
+    verbose = args["verbose"]
+
     # Fetch run information from the MAGE result file.
+    if verbose:
+        print(f"Fetching run information for run {runid}.")
     filename, isMPI, Ri, Rj, Rk = kaiTools.getRunInfo(".", runid)
     if debug:
         print(f"filename = {filename}")
@@ -262,6 +350,8 @@ def create_calcdb_xml_file(runid: str, parintime: int, dt: float,
         print(f"Rk = {Rk}")
 
     # Get the number of steps and the step IDs from the MAGE results file.
+    if verbose:
+        print(f"Counting time steps for run {runid}.")
     nSteps, sIds = kaiH5.cntSteps(filename)
     if debug:
         print(f"nSteps = {nSteps}")
@@ -270,6 +360,8 @@ def create_calcdb_xml_file(runid: str, parintime: int, dt: float,
     # Determine the start and end time of the MAGE results.
 
     # Find the step for the first value of time >= 0, and that time.
+    if verbose:
+        print(f"Finding time for first step with t >= 0 for run {runid}.")
     T0 = None
     for i_step in sIds:
         t_step = kaiH5.tStep(filename, sIds[i_step], aID="time")
@@ -282,11 +374,15 @@ def create_calcdb_xml_file(runid: str, parintime: int, dt: float,
         raise TypeError("MAGE results contain no steps for t >= 0!")
 
     # Find the time for the last step.
+    if verbose:
+        print(f"Finding time for last step for run {runid}.")
     tFin = kaiH5.tStep(filename, sIds[-1], aID="time")
     if debug:
         print(f"tFin = {tFin}")
 
     # Read the template XML file.
+    if verbose:
+        print("Reading calcdb XML template.")
     with open(CALCDB_XML_TEMPLATE, "r", encoding="utf-8") as f:
         template_content = f.read()
     if debug:
@@ -316,6 +412,10 @@ def create_calcdb_xml_file(runid: str, parintime: int, dt: float,
 
     # Render the template.
     xml_file = f"calcdb-{runid}.xml"
+    if verbose:
+        print("Rendering template.")
+    if verbose:
+        print(f"Creating {xml_file}.")
     xml_content = template.render(options)
     with open(xml_file, "w", encoding="utf-8") as f:
         f.write(xml_content)
@@ -344,10 +444,14 @@ def create_calcdb_pbs_script(args: dict):
 
     Raises
     ------
-    None
+    TypeError
+        If an invalid HPC system is specified.
     """
     # Local convenience variables.
+    calcdb = args["calcdb"]
     debug = args["debug"]
+    hpc = args["hpc"]
+    verbose = args["verbose"]
     mage_results_path = args["mage_results_path"]
 
     # Split the MAGE results path into a directory and a file.
@@ -362,6 +466,8 @@ def create_calcdb_pbs_script(args: dict):
         print(f"start_directory = {start_directory}")
 
     # Move to the results directory.
+    if verbose:
+        print(f"Moving to directory {mage_results_dir}.")
     os.chdir(mage_results_dir)
 
     # Compute the runid from the file name.
@@ -370,19 +476,30 @@ def create_calcdb_pbs_script(args: dict):
         print(f"runid = {runid}")
 
     # Create the XML input file for calcdb.x.
-    calcdb_xml_file = create_calcdb_xml_file(
-        runid, args["parintime"], args["dt"], debug)
+    if verbose:
+        print("Creating XML file for calcdb.x.")
+    calcdb_xml_file = create_calcdb_xml_file(runid, args)
     if debug:
         print(f"calcdb_xml_file = {calcdb_xml_file}")
 
     # Copy the calcdb.x binary to the results directory, then make it
     # executable.
-    shutil.copyfile(args["calcdb"], "./calcdb.x")
+    if verbose:
+        print(f"Copying {calcdb} to results directory.")
+    shutil.copyfile(calcdb, "./calcdb.x")
     os.chmod("./calcdb.x", 0o755)
 
     # Read the PBS script template for calcdb.x.
-    with open(CALCDB_PBS_TEMPLATE, "r", encoding="utf-8") as f:
-        template_content = f.read()
+    if verbose:
+        print(f"Reading calcdb.x PBS template for {hpc}.")
+    if hpc == "derecho":
+        with open(CALCDB_PBS_TEMPLATE_DERECHO, "r", encoding="utf-8") as f:
+            template_content = f.read()
+    elif hpc == "pleiades":
+        with open(CALCDB_PBS_TEMPLATE_PLEIADES, "r", encoding="utf-8") as f:
+            template_content = f.read()
+    else:
+        raise TypeError(f"Invalid hpc ({hpc})!")
     if debug:
         print(f"template_content = {template_content}")
     template = Template(template_content)
@@ -390,25 +507,41 @@ def create_calcdb_pbs_script(args: dict):
         print(f"template = {template}")
 
     # Fill in the template options.
-    options = copy.deepcopy(DEFAULT_CALCDB_PBS_OPTIONS)
-    options.update({
-        "job_name": f"calcdb-{runid}",
-        "account": args["pbs_account"],
-        "select": f"{options['select']}:ompthreads={args['parintime']}",
-        "omp_num_threads": args["parintime"],
-        "calcdb_xml_file": calcdb_xml_file,
-        "runid": runid,
-    })
+    if hpc == "derecho":
+        options = copy.deepcopy(DEFAULT_CALCDB_PBS_OPTIONS_DERECHO)
+        options.update({
+            "job_name": f"calcdb-{runid}",
+            "account": args["pbs_account"],
+            "select": f"{options['select']}:ompthreads={args['parintime']}",
+            "omp_num_threads": args["parintime"],
+            "calcdb_xml_file": calcdb_xml_file,
+            "runid": runid,
+        })
+    elif hpc == "pleiades":
+        options = copy.deepcopy(DEFAULT_CALCDB_PBS_OPTIONS_PLEIADES)
+        options.update({
+            "job_name": f"calcdb-{runid}",
+            "select": f"{options['select']}:ompthreads={args['parintime']}",
+            "omp_num_threads": args["parintime"],
+            "calcdb_xml_file": calcdb_xml_file,
+            "runid": runid,
+        })
+    else:
+        raise TypeError(f"Invalid hpc ({hpc})!")
     if debug:
         print(f"options = {options}")
 
     # Render the template.
+    if verbose:
+        print("Rendering template.")
     calcdb_pbs_script = f"calcdb-{runid}.pbs"
-    xml_content = template.render(options)
+    calcdb_pbs_content = template.render(options)
     with open(calcdb_pbs_script, "w", encoding="utf-8") as f:
-        f.write(xml_content)
+        f.write(calcdb_pbs_content)
 
     # Move back to the start directory.
+    if verbose:
+        print(f"Moving to directory {start_directory}.")
     os.chdir(start_directory)
 
     # Return the name of the PBS script.
@@ -433,10 +566,13 @@ def create_pitmerge_pbs_script(args: dict):
 
     Raises
     ------
-    None
+    TypeError
+        If an invalid HPC system is specified.
     """
     # Local convenience variables.
     debug = args["debug"]
+    hpc = args["hpc"]
+    verbose = args["verbose"]
     mage_results_path = args["mage_results_path"]
 
     # Split the MAGE results path into a directory and a file.
@@ -451,6 +587,8 @@ def create_pitmerge_pbs_script(args: dict):
         print(f"start_directory = {start_directory}")
 
     # Move to the results directory.
+    if verbose:
+        print(f"Moving to directory {mage_results_dir}.")
     os.chdir(mage_results_dir)
 
     # Compute the runid from the file name.
@@ -459,8 +597,16 @@ def create_pitmerge_pbs_script(args: dict):
         print(f"runid = {runid}")
 
     # Read the PBS script template for pitmerge.py.
-    with open(PITMERGE_PBS_TEMPLATE, "r", encoding="utf-8") as f:
-        template_content = f.read()
+    if verbose:
+        print(f"Reading pitmerge.py PBS template for {hpc}.")
+    if hpc == "derecho":
+        with open(PITMERGE_PBS_TEMPLATE_DERECHO, "r", encoding="utf-8") as f:
+            template_content = f.read()
+    elif hpc == "pleiades":
+        with open(PITMERGE_PBS_TEMPLATE_PLEIADES, "r", encoding="utf-8") as f:
+            template_content = f.read()
+    else:
+        raise TypeError(f"Invalid hpc ({hpc})!")
     if debug:
         print(f"template_content = {template_content}")
     template = Template(template_content)
@@ -468,32 +614,46 @@ def create_pitmerge_pbs_script(args: dict):
         print(f"template = {template}")
 
     # Fill in the template options.
-    options = copy.deepcopy(DEFAULT_PITMERGE_PBS_OPTIONS)
-    options.update({
-        "job_name": f"pitmerge-{runid}",
-        "account": args["pbs_account"],
-        "runid": runid,
-    })
+    if hpc == "derecho":
+        options = copy.deepcopy(DEFAULT_PITMERGE_PBS_OPTIONS_DERECHO)
+        options.update({
+            "job_name": f"pitmerge-{runid}",
+            "account": args["pbs_account"],
+            "runid": runid,
+        })
+    elif hpc == "pleiades":
+        options = copy.deepcopy(DEFAULT_PITMERGE_PBS_OPTIONS_DERECHO)
+        options.update({
+            "job_name": f"pitmerge-{runid}",
+            "account": args["pbs_account"],
+            "runid": runid,
+        })
+    else:
+        raise TypeError(f"Invalid hpc ({hpc})!")
     if debug:
         print(f"options = {options}")
 
     # Render the template.
+    if verbose:
+        print("Rendering template.")
     pitmerge_pbs_script = f"pitmerge-{runid}.pbs"
-    xml_content = template.render(options)
+    pitmerge_pbs_content = template.render(options)
     with open(pitmerge_pbs_script, "w", encoding="utf-8") as f:
-        f.write(xml_content)
+        f.write(pitmerge_pbs_content)
 
     # Move back to the start directory.
+    if verbose:
+        print(f"Moving to directory {start_directory}.")
     os.chdir(start_directory)
 
     # Return the name of the PBS script.
     return pitmerge_pbs_script
 
 
-def create_supermag_comparison_pbs_script(args: dict):
-    """Create the PBS script for the MAGE-SuperMag comparison from a template.
+def create_ground_deltab_analysis_pbs_script(args: dict):
+    """Create the PBS script for the ground delta-B analysis from a template.
 
-    Create the PBS script for the MAGE-SuperMag comparison from a template.
+    Create the PBS script for the ground delta-B analysis from a template.
 
     Parameters
     ----------
@@ -502,7 +662,7 @@ def create_supermag_comparison_pbs_script(args: dict):
 
     Returns
     -------
-    supermag_comparison_pbs_script : str
+    ground_deltab_analysis_pbs_script : str
         Path to PBS script.
 
     Raises
@@ -532,8 +692,8 @@ def create_supermag_comparison_pbs_script(args: dict):
     if debug:
         print(f"runid = {runid}")
 
-    # Read the PBS script template for supermag_comparison.py.
-    with open(SUPERMAG_COMPARISON_PBS_TEMPLATE, "r", encoding="utf-8") as f:
+    # Read the PBS script template for ground_deltab_analysis.py.
+    with open(GROUND_DELTAB_ANALYSIS_PBS_TEMPLATE, "r", encoding="utf-8") as f:
         template_content = f.read()
     if debug:
         print(f"template_content = {template_content}")
@@ -542,9 +702,9 @@ def create_supermag_comparison_pbs_script(args: dict):
         print(f"template = {template}")
 
     # Fill in the template options.
-    options = copy.deepcopy(DEFAULT_SUPERMAG_COMPARISON_PBS_OPTIONS)
+    options = copy.deepcopy(DEFAULT_GROUND_DELTAB_ANALYSIS_PBS_OPTIONS)
     options.update({
-        "job_name": f"supermag_comparison-{runid}",
+        "job_name": f"ground_deltab_analysis-{runid}",
         "account": args["pbs_account"],
         "runid": runid,
         "smuser": args["smuser"],
@@ -554,21 +714,21 @@ def create_supermag_comparison_pbs_script(args: dict):
         print(f"options = {options}")
 
     # Render the template.
-    supermag_comparison_pbs_script = f"supermag_comparison-{runid}.pbs"
+    ground_deltab_analysis_pbs_script = f"ground_deltab_analysis-{runid}.pbs"
     xml_content = template.render(options)
-    with open(supermag_comparison_pbs_script, "w", encoding="utf-8") as f:
+    with open(ground_deltab_analysis_pbs_script, "w", encoding="utf-8") as f:
         f.write(xml_content)
 
     # Move back to the start directory.
     os.chdir(start_directory)
 
     # Return the name of the PBS script.
-    return supermag_comparison_pbs_script
+    return ground_deltab_analysis_pbs_script
 
 
 def create_submit_script(
         calcdb_pbs_script: str, pitmerge_pbs_script: str,
-        supermag_comparison_pbs_script: str, args: dict):
+        ground_deltab_analysis_pbs_script: str, args: dict):
     """Create the PBS script for the MAGE-SuperMag comparison from a template.
 
     Create the PBS script for the MAGE-SuperMag comparison from a template.
@@ -582,7 +742,7 @@ def create_submit_script(
         Path to calcdb.x PBS script.
     pitmerge_pbs_script : str
         Path to pitmerge.py PBS script.
-    supermag_comparison_pbs_script : str
+    ground_deltab_analysis_pbs_script : str
         Path to comparison PBS script.
     args : dict
         Dictionary of command-line and other options.
@@ -639,7 +799,7 @@ def create_submit_script(
         f.write(cmd)
         cmd = (
             "job_id=`qsub -W depend=afterok:$old_job_id "
-            f"{supermag_comparison_pbs_script}`\n"
+            f"{ground_deltab_analysis_pbs_script}`\n"
         )
         f.write(cmd)
         cmd = "echo $job_id\n"
@@ -649,7 +809,7 @@ def create_submit_script(
     return submit_script
 
 
-def run_supermag_comparison(args: dict):
+def run_ground_deltab_analysis(args: dict):
     """Compare MAGE results for ground dB to SuperMag data.
 
     Compare MAGE results for ground dB to SuperMag data.
@@ -681,7 +841,7 @@ def run_supermag_comparison(args: dict):
 
     # Create the PBS script to run calcdb.x.
     if verbose:
-        print("Creating PBS script to run the calcdb.x job.")
+        print("Creating PBS script to run calcdb.x.")
     calcdb_pbs_script = create_calcdb_pbs_script(args)
     if debug:
         print(f"calcdb_pbs_script = {calcdb_pbs_script}")
@@ -694,28 +854,28 @@ def run_supermag_comparison(args: dict):
     if debug:
         print(f"pitmerge_pbs_script = {pitmerge_pbs_script}")
 
-    # Create the PBS script to compare the calcdb.x results with SuperMag
-    # data.
-    if verbose:
-        print("Creating PBS script to run the MAGE-SuperMag comparison job.")
-    supermag_comparison_pbs_script = create_supermag_comparison_pbs_script(args)
-    if debug:
-        print(f"supermag_comparison_pbs_script = {supermag_comparison_pbs_script}")
+    # # Create the PBS script to compare the calcdb.x results with SuperMag
+    # # data.
+    # if verbose:
+    #     print("Creating PBS script to run the MAGE-SuperMag comparison job.")
+    # ground_deltab_analysos_pbs_script = create_ground_deltab_analysis_pbs_script(args)
+    # if debug:
+    #     print(f"ground_deltab_analysos_pbs_script = {ground_deltab_analysos_pbs_script}")
 
-    # Create the bash script to submit the PBS scripts in the proper order.
-    if verbose:
-        print("Creating bash script to submit the PBS jobs.")
-    submit_script = create_submit_script(
-        calcdb_pbs_script, pitmerge_pbs_script,
-        supermag_comparison_pbs_script, args
-    )
-    if debug:
-        print(f"submit_script = {submit_script}")
+    # # Create the bash script to submit the PBS scripts in the proper order.
+    # if verbose:
+    #     print("Creating bash script to submit the PBS jobs.")
+    # submit_script = create_submit_script(
+    #     calcdb_pbs_script, pitmerge_pbs_script,
+    #     ground_deltab_analysos_pbs_script, args
+    # )
+    # if debug:
+    #     print(f"submit_script = {submit_script}")
 
-    if verbose:
-        print(f"Please run {submit_script} (in the MAGE result directory) to "
-              "submit the PBS jobs to run perform the MAGE-SuperMag "
-              "comparison.")
+    # if verbose:
+    #     print(f"Please run {submit_script} (in the MAGE result directory) to "
+    #           "submit the PBS jobs to run perform the MAGE-SuperMag "
+    #           "comparison.")
 
     # Return normally.
     return 0
@@ -735,7 +895,7 @@ def main():
     args = vars(args)
 
     # Pass the command-line arguments to the main function as a dict.
-    return_code = run_supermag_comparison(args)
+    return_code = run_ground_deltab_analysis(args)
     sys.exit(return_code)
 
 
