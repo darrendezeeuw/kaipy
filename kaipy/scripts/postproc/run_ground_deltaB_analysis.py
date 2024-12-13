@@ -433,12 +433,12 @@ def create_calcdb_xml_file(runid: str, args: dict):
 
 
 def create_calcdb_pbs_script(args: dict):
-    """Create the PBS script for calcdb.x from a template.
+    """Create the PBS script to run calcdb.x from a template.
 
-    Create the PBS script for calcdb.x from a template. The PBS script is
-    created in the directory containing the MAGE results to compare to
-    SuperMag data. The script will set up and run calcdb.x on the specified
-    set of MAGE results, in the results directory.
+    Create the PBS script to run calcdb.x from a template. The PBS script is
+    created in the directory containing the MAGE results. The script will set
+    up and run calcdb.x on the specified set of MAGE results, in the results
+    directory.
 
     Parameters
     ----------
@@ -852,9 +852,9 @@ def create_submit_script(
 
 
 def run_ground_deltab_analysis(args: dict):
-    """Compare MAGE results for ground dB to SuperMag data.
+    """Compare MAGE results for ground delta-B to SuperMag data.
 
-    Compare MAGE results for ground dB to SuperMag data.
+    Compare MAGE results for ground delta-B to SuperMag data.
 
     Parameters
     ----------
@@ -888,36 +888,36 @@ def run_ground_deltab_analysis(args: dict):
     if debug:
         print(f"calcdb_pbs_script = {calcdb_pbs_script}")
 
-    # Create the PBS script to stitch together the output from calcdb.x
-    # using pitmerge.py.
-    if verbose:
-        print("Creating PBS script to stitch together the calcdb.x output.")
-    pitmerge_pbs_script = create_pitmerge_pbs_script(args)
-    if debug:
-        print(f"pitmerge_pbs_script = {pitmerge_pbs_script}")
+    # # Create the PBS script to stitch together the output from calcdb.x
+    # # using pitmerge.py.
+    # if verbose:
+    #     print("Creating PBS script to stitch together the calcdb.x output.")
+    # pitmerge_pbs_script = create_pitmerge_pbs_script(args)
+    # if debug:
+    #     print(f"pitmerge_pbs_script = {pitmerge_pbs_script}")
 
-    # Create the PBS script to compare the calcdb.x results with SuperMag
-    # data.
-    if verbose:
-        print("Creating PBS script to run the ground delta-B analysis.")
-    ground_deltab_analysos_pbs_script = create_ground_deltab_analysis_pbs_script(args)
-    if debug:
-        print(f"ground_deltab_analysos_pbs_script = {ground_deltab_analysos_pbs_script}")
+    # # Create the PBS script to compare the calcdb.x results with SuperMag
+    # # data.
+    # if verbose:
+    #     print("Creating PBS script to run the ground delta-B analysis.")
+    # ground_deltab_analysos_pbs_script = create_ground_deltab_analysis_pbs_script(args)
+    # if debug:
+    #     print(f"ground_deltab_analysos_pbs_script = {ground_deltab_analysos_pbs_script}")
 
-    # Create the bash script to submit the PBS scripts in the proper order.
-    if verbose:
-        print("Creating bash script to submit the PBS jobs.")
-    submit_script = create_submit_script(
-        calcdb_pbs_script, pitmerge_pbs_script,
-        ground_deltab_analysos_pbs_script, args
-    )
-    if debug:
-        print(f"submit_script = {submit_script}")
+    # # Create the bash script to submit the PBS scripts in the proper order.
+    # if verbose:
+    #     print("Creating bash script to submit the PBS jobs.")
+    # submit_script = create_submit_script(
+    #     calcdb_pbs_script, pitmerge_pbs_script,
+    #     ground_deltab_analysos_pbs_script, args
+    # )
+    # if debug:
+    #     print(f"submit_script = {submit_script}")
 
-    if verbose:
-        print(f"Please run {submit_script} (in the MAGE result directory) to "
-              "submit the PBS jobs to run perform the MAGE-SuperMag "
-              "comparison.")
+    # if verbose:
+    #     print(f"Please run {submit_script} (in the MAGE result directory) to "
+    #           "submit the PBS jobs to run perform the MAGE-SuperMag "
+    #           "comparison.")
 
     # Return normally.
     return 0

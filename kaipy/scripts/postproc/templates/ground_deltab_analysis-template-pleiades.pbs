@@ -13,6 +13,8 @@
 
 echo "Job $PBS_JOBID started at `date` on `hostname` in directory `pwd`."
 
+source $HOME/.bashrc
+
 echo 'Loading modules.'
 module --force purge
 {%- for module in modules %}
