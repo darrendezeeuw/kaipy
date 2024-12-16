@@ -1,0 +1,71 @@
+#!/bin/bash
+
+# This script runs calcdb.x to compute ground delta-B values from the
+# results of a MAGE simulation.
+
+# This script was generated to run on {{ hpc }}.
+
+#PBS -N {{ job_name }}
+{%- if hpc == "derecho" %}
+#PBS -A {{ pbs_account }}
+#PBS -q main
+#PBS -l job_priority=economy
+#PBS -l select=1:ncpus=128:ompthreads=128
+{% elif hpc == "pleiades" %}
+#PBS -q normal
+#PBS -l select=1:ncpus=28:ompthreads=28:model=bro
+{% endif -%}
+#PBS -l walltime=12:00:00
+#PBS -j oe
+#PBS -m abe
+
+echo "Job ${PBS_JOBID} started at `date` on `hostname` in directory `pwd`."
+
+source $HOME/.bashrc
+
+echo 'Loading modules.'
+module --force purge
+{%- if hpc == "derecho" %}
+module load ncarenv/23.06
+module load craype/2.7.20
+module load intel/2023.0.0
+module load ncarcompilers/1.0.0
+module load cray-mpich/8.1.25
+module load hdf5-mpi/1.12.2
+{% elif hpc == "pleiades" %}
+module load nas
+module load pkgsrc/2022Q1-rome
+module load nas
+module load comp-intel/2020.4.304
+module load mpi-hpe/mpt.2.23
+{% endif -%}
+echo 'The currently loaded modules are:'
+module list
+
+echo 'Loading python environment.'
+conda activate {{ conda_prefix }}
+echo "The current conda environment is ${CONDA_PREFIX}."
+
+echo 'Setting up kaipy environment.'
+source {{ kaipyhome }}/kaipy/scripts/setupEnvironment.sh
+echo "The kaipy software is located at ${KAIPYHOME}."
+
+echo 'Setting up MAGE environment.'
+source {{ kaijuhome }}/scripts/setupEnvironment.sh
+echo "The kaiju software is located at ${KAIJUHOME}."
+
+echo 'Setting environment variables.'
+export OMP_NUM_THREADS={% if hpc == "derecho" %}128{%elif hpc == "pleiades"%}28{% endif %}
+export KMP_STACKSIZE=128M
+{% if parintime > 1 %}export JNUM=${PBS_ARRAY_INDEX:-0}{% endif %}
+echo 'The active environment variables are:'
+printenv
+
+# Compute the ground delta B values.
+log_file="{% if parintime > 1 %}calcdb.out.{$JNUM}{% else %}calcdb.out{% endif %}"
+cmd="./calcdb.x {{ calcdb_xml_file }} {% if parintime > 1 %}${JNUM}{%- endif %} >& ${log_file}"
+echo "calcdb.x run command is:"
+echo $cmd
+eval $cmd
+
+# echo "Job ${PBS_JOBID} ended at `date` on `hostname` in directory `pwd`."

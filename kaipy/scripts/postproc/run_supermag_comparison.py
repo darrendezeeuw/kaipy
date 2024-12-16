@@ -55,74 +55,74 @@ CALCDB_XML_TEMPLATE = os.path.join(
     pathlib.Path(__file__).parent.resolve(), "calcdb-template.xml"
 )
 
-# Location of template PBS file for calcdb.x.
-CALCDB_PBS_TEMPLATE = os.path.join(
-    pathlib.Path(__file__).parent.resolve(), "calcdb-template.pbs"
-)
+# # Location of template PBS file for calcdb.x.
+# CALCDB_PBS_TEMPLATE = os.path.join(
+#     pathlib.Path(__file__).parent.resolve(), "calcdb-template.pbs"
+# )
 
-# Default options for filling in the calcdb.x PBS template.
-DEFAULT_CALCDB_PBS_OPTIONS = {
-    "job_name": None,
-    "queue": "normal",
-    "select": "1:ncpus=28:model=bro",
-    "walltime": "01:00:00",
-    "modules": [
-        "nas",
-        "pkgsrc/2022Q1-rome",
-        "comp-intel/2020.4.304",
-        "mpi-hpe/mpt.2.23",
-        "hdf5/1.8.18_mpt",
-    ],
-    "conda_environment": "kaiju-3.8",
-    "kaipyhome": os.environ["KAIPYHOME"],
-    "kaijuhome": os.environ["KAIJUHOME"],
-}
+# # Default options for filling in the calcdb.x PBS template.
+# DEFAULT_CALCDB_PBS_OPTIONS = {
+#     "job_name": None,
+#     "queue": "normal",
+#     "select": "1:ncpus=28:model=bro",
+#     "walltime": "01:00:00",
+#     "modules": [
+#         "nas",
+#         "pkgsrc/2022Q1-rome",
+#         "comp-intel/2020.4.304",
+#         "mpi-hpe/mpt.2.23",
+#         "hdf5/1.8.18_mpt",
+#     ],
+#     "conda_environment": "kaiju-3.8",
+#     "kaipyhome": os.environ["KAIPYHOME"],
+#     "kaijuhome": os.environ["KAIJUHOME"],
+# }
 
-# Location of template PBS file for pitmerge.py.
-PITMERGE_PBS_TEMPLATE = os.path.join(
-    pathlib.Path(__file__).parent.resolve(), "pitmerge-template.pbs"
-)
+# # Location of template PBS file for pitmerge.py.
+# PITMERGE_PBS_TEMPLATE = os.path.join(
+#     pathlib.Path(__file__).parent.resolve(), "pitmerge-template.pbs"
+# )
 
-# Default options for filling in the pitmerge.py PBS template.
-DEFAULT_PITMERGE_PBS_OPTIONS = {
-    "job_name": None,
-    "queue": "normal",
-    "select": "1:ncpus=28:model=bro",
-    "walltime": "01:00:00",
-    "modules": [
-        "nas",
-        "pkgsrc/2022Q1-rome",
-        "comp-intel/2020.4.304",
-        "mpi-hpe/mpt.2.23",
-        "hdf5/1.8.18_mpt",
-    ],
-    "conda_environment": "kaiju-3.8",
-    "kaipyhome": os.environ["KAIPYHOME"],
-    "kaijuhome": os.environ["KAIJUHOME"],
-}
+# # Default options for filling in the pitmerge.py PBS template.
+# DEFAULT_PITMERGE_PBS_OPTIONS = {
+#     "job_name": None,
+#     "queue": "normal",
+#     "select": "1:ncpus=28:model=bro",
+#     "walltime": "01:00:00",
+#     "modules": [
+#         "nas",
+#         "pkgsrc/2022Q1-rome",
+#         "comp-intel/2020.4.304",
+#         "mpi-hpe/mpt.2.23",
+#         "hdf5/1.8.18_mpt",
+#     ],
+#     "conda_environment": "kaiju-3.8",
+#     "kaipyhome": os.environ["KAIPYHOME"],
+#     "kaijuhome": os.environ["KAIJUHOME"],
+# }
 
-# Location of template PBS file for supermag_comparison.py.
-SUPERMAG_COMPARISON_PBS_TEMPLATE = os.path.join(
-    pathlib.Path(__file__).parent.resolve(), "supermag_comparison-template.pbs"
-)
+# # Location of template PBS file for supermag_comparison.py.
+# SUPERMAG_COMPARISON_PBS_TEMPLATE = os.path.join(
+#     pathlib.Path(__file__).parent.resolve(), "supermag_comparison-template.pbs"
+# )
 
-# Default options for filling in the pitmerge.py PBS template.
-DEFAULT_SUPERMAG_COMPARISON_PBS_OPTIONS = {
-    "job_name": None,
-    "queue": "normal",
-    "select": "1:ncpus=28:model=bro",
-    "walltime": "01:00:00",
-    "modules": [
-        "nas",
-        "pkgsrc/2022Q1-rome",
-        "comp-intel/2020.4.304",
-        "mpi-hpe/mpt.2.23",
-        "hdf5/1.8.18_mpt",
-    ],
-    "conda_environment": "kaiju-3.8",
-    "kaipyhome": os.environ["KAIPYHOME"],
-    "kaijuhome": os.environ["KAIJUHOME"],
-}
+# # Default options for filling in the pitmerge.py PBS template.
+# DEFAULT_SUPERMAG_COMPARISON_PBS_OPTIONS = {
+#     "job_name": None,
+#     "queue": "normal",
+#     "select": "1:ncpus=28:model=bro",
+#     "walltime": "01:00:00",
+#     "modules": [
+#         "nas",
+#         "pkgsrc/2022Q1-rome",
+#         "comp-intel/2020.4.304",
+#         "mpi-hpe/mpt.2.23",
+#         "hdf5/1.8.18_mpt",
+#     ],
+#     "conda_environment": "kaiju-3.8",
+#     "kaipyhome": os.environ["KAIPYHOME"],
+#     "kaijuhome": os.environ["KAIJUHOME"],
+# }
 
 
 def create_command_line_parser():
@@ -375,44 +375,44 @@ def create_calcdb_pbs_script(args: dict):
     if debug:
         print(f"calcdb_xml_file = {calcdb_xml_file}")
 
-    # Copy the calcdb.x binary to the results directory, then make it
-    # executable.
-    shutil.copyfile(args["calcdb"], "./calcdb.x")
-    os.chmod("./calcdb.x", 0o755)
+    # # Copy the calcdb.x binary to the results directory, then make it
+    # # executable.
+    # shutil.copyfile(args["calcdb"], "./calcdb.x")
+    # os.chmod("./calcdb.x", 0o755)
 
-    # Read the PBS script template for calcdb.x.
-    with open(CALCDB_PBS_TEMPLATE, "r", encoding="utf-8") as f:
-        template_content = f.read()
-    if debug:
-        print(f"template_content = {template_content}")
-    template = Template(template_content)
-    if debug:
-        print(f"template = {template}")
+    # # Read the PBS script template for calcdb.x.
+    # with open(CALCDB_PBS_TEMPLATE, "r", encoding="utf-8") as f:
+    #     template_content = f.read()
+    # if debug:
+    #     print(f"template_content = {template_content}")
+    # template = Template(template_content)
+    # if debug:
+    #     print(f"template = {template}")
 
-    # Fill in the template options.
-    options = copy.deepcopy(DEFAULT_CALCDB_PBS_OPTIONS)
-    options.update({
-        "job_name": f"calcdb-{runid}",
-        "account": args["pbs_account"],
-        "select": f"{options['select']}:ompthreads={args['parintime']}",
-        "omp_num_threads": args["parintime"],
-        "calcdb_xml_file": calcdb_xml_file,
-        "runid": runid,
-    })
-    if debug:
-        print(f"options = {options}")
+    # # Fill in the template options.
+    # options = copy.deepcopy(DEFAULT_CALCDB_PBS_OPTIONS)
+    # options.update({
+    #     "job_name": f"calcdb-{runid}",
+    #     "account": args["pbs_account"],
+    #     "select": f"{options['select']}:ompthreads={args['parintime']}",
+    #     "omp_num_threads": args["parintime"],
+    #     "calcdb_xml_file": calcdb_xml_file,
+    #     "runid": runid,
+    # })
+    # if debug:
+    #     print(f"options = {options}")
 
-    # Render the template.
-    calcdb_pbs_script = f"calcdb-{runid}.pbs"
-    xml_content = template.render(options)
-    with open(calcdb_pbs_script, "w", encoding="utf-8") as f:
-        f.write(xml_content)
+    # # Render the template.
+    # calcdb_pbs_script = f"calcdb-{runid}.pbs"
+    # xml_content = template.render(options)
+    # with open(calcdb_pbs_script, "w", encoding="utf-8") as f:
+    #     f.write(xml_content)
 
-    # Move back to the start directory.
-    os.chdir(start_directory)
+    # # Move back to the start directory.
+    # os.chdir(start_directory)
 
-    # Return the name of the PBS script.
-    return calcdb_pbs_script
+    # # Return the name of the PBS script.
+    # return calcdb_pbs_script
 
 
 def create_pitmerge_pbs_script(args: dict):
@@ -686,36 +686,36 @@ def run_supermag_comparison(args: dict):
     if debug:
         print(f"calcdb_pbs_script = {calcdb_pbs_script}")
 
-    # Create the PBS script to stitch together the output from calcdb.x
-    # using pitmerge.py.
-    if verbose:
-        print("Creating PBS script to stitch together the calcdb.x output.")
-    pitmerge_pbs_script = create_pitmerge_pbs_script(args)
-    if debug:
-        print(f"pitmerge_pbs_script = {pitmerge_pbs_script}")
+    # # Create the PBS script to stitch together the output from calcdb.x
+    # # using pitmerge.py.
+    # if verbose:
+    #     print("Creating PBS script to stitch together the calcdb.x output.")
+    # pitmerge_pbs_script = create_pitmerge_pbs_script(args)
+    # if debug:
+    #     print(f"pitmerge_pbs_script = {pitmerge_pbs_script}")
 
-    # Create the PBS script to compare the calcdb.x results with SuperMag
-    # data.
-    if verbose:
-        print("Creating PBS script to run the MAGE-SuperMag comparison job.")
-    supermag_comparison_pbs_script = create_supermag_comparison_pbs_script(args)
-    if debug:
-        print(f"supermag_comparison_pbs_script = {supermag_comparison_pbs_script}")
+    # # Create the PBS script to compare the calcdb.x results with SuperMag
+    # # data.
+    # if verbose:
+    #     print("Creating PBS script to run the MAGE-SuperMag comparison job.")
+    # supermag_comparison_pbs_script = create_supermag_comparison_pbs_script(args)
+    # if debug:
+    #     print(f"supermag_comparison_pbs_script = {supermag_comparison_pbs_script}")
 
-    # Create the bash script to submit the PBS scripts in the proper order.
-    if verbose:
-        print("Creating bash script to submit the PBS jobs.")
-    submit_script = create_submit_script(
-        calcdb_pbs_script, pitmerge_pbs_script,
-        supermag_comparison_pbs_script, args
-    )
-    if debug:
-        print(f"submit_script = {submit_script}")
+    # # Create the bash script to submit the PBS scripts in the proper order.
+    # if verbose:
+    #     print("Creating bash script to submit the PBS jobs.")
+    # submit_script = create_submit_script(
+    #     calcdb_pbs_script, pitmerge_pbs_script,
+    #     supermag_comparison_pbs_script, args
+    # )
+    # if debug:
+    #     print(f"submit_script = {submit_script}")
 
-    if verbose:
-        print(f"Please run {submit_script} (in the MAGE result directory) to "
-              "submit the PBS jobs to run perform the MAGE-SuperMag "
-              "comparison.")
+    # if verbose:
+    #     print(f"Please run {submit_script} (in the MAGE result directory) to "
+    #           "submit the PBS jobs to run perform the MAGE-SuperMag "
+    #           "comparison.")
 
     # Return normally.
     return 0

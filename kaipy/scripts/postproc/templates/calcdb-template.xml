@@ -2,9 +2,9 @@
 <Kaiju>
     <Chimp>
         <sim runid="{{ runid }}"/>
-        <time T0="{{ T0 }}" dt="{{ dt }}" tFin="{{ tFin }}"/>
-        <fields ebfile="{{ ebfile }}" grType="LFM" doJ="T" isMPI="{{ ismpi }}"/>
-        <parallel Ri="{{ Ri }}" Rj="{{ Rj }}" Rk="{{ Rk }}"/>
-        <parintime NumB="{{ NumB }}"/>
+        <time T0="0.0" dt="{{ dt }}" tFin="{{ tFin }}"/>
+        <fields ebfile="{{ ebfile }}" grType="LFM" doJ="T" isMPI="{% if isMPI %}true{% else %}false{% endif %}"/>
+        {% if isMPI -%}<parallel Ri="{{ Ri }}" Rj="{{ Rj }}" Rk="{{ Rk }}"/>{% endif %}
+        {% if parintime > 1 -%}<parintime NumB="{{ parintime }}"/>{% endif %}
     </Chimp>
 </Kaiju>

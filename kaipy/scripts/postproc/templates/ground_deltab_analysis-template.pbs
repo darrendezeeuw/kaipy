@@ -4,29 +4,47 @@
 # results with values from SuperMag, and creates a set of SuperMAGE
 # comparison maps.
 
+# This script was generated to run on {{ hpc }}.
+
 #PBS -N {{ job_name }}
-#PBS -A {{ account }}
-#PBS -q {{ queue }}
-#PBS -l job_priority={{ job_priority }}
-#PBS -l select={{ select }}
-#PBS -l walltime={{ walltime }}
+{%- if hpc == "derecho" %}
+#PBS -A {{ pbs_account }}
+#PBS -q main
+#PBS -l job_priority=economy
+#PBS -l select=1:ncpus=128:ompthreads=128
+{% elif hpc == "pleiades" %}
+#PBS -q normal
+#PBS -l select=1:ncpus=28:ompthreads=28:model=bro
+{% endif -%}
+#PBS -l walltime=12:00:00
 #PBS -j oe
 #PBS -m abe
 
-echo "Job $PBS_JOBID started at `date` on `hostname` in directory `pwd`."
+echo "Job ${PBS_JOBID} started at `date` on `hostname` in directory `pwd`."
 
 source $HOME/.bashrc
 
 echo 'Loading modules.'
 module --force purge
-{%- for module in modules %}
-module load {{ module }}
-{%- endfor %}
+{%- if hpc == "derecho" %}
+module load ncarenv/23.06
+module load craype/2.7.20
+module load intel/2023.0.0
+module load ncarcompilers/1.0.0
+module load cray-mpich/8.1.25
+module load hdf5-mpi/1.12.2
+{% elif hpc == "pleiades" %}
+module load nas
+module load pkgsrc/2022Q1-rome
+module load nas
+module load comp-intel/2020.4.304
+module load mpi-hpe/mpt.2.23
+{% endif -%}
 echo 'The currently loaded modules are:'
 module list
 
 echo 'Loading python environment.'
-conda activate {{ conda_environment }}
+conda activate {{ conda_prefix }}
 echo "The current conda environment is ${CONDA_PREFIX}."
 
 echo 'Setting up kaipy environment.'
