@@ -15,7 +15,6 @@ Eric Winter (eric.winter@jhuapl.edu)
 import argparse
 import copy
 import os
-import subprocess
 import sys
 
 # Import 3rd-party modules.
@@ -38,9 +37,6 @@ DEFAULT_ARGUMENTS = {
     "verbose": False,
     "calcdb_results_path": None,
 }
-
-# Number of microseconds in a second.
-MICROSECONDS_PER_SECOND = 1e6
 
 # Number of seconds in a day.
 SECONDS_PER_DAY = 86400
@@ -69,7 +65,8 @@ def create_command_line_parser():
     """
     parser = argparse.ArgumentParser(description=DESCRIPTION)
     parser.add_argument(
-        "--debug", "-d", action="store_true",
+        "--debug", "-d", default=DEFAULT_ARGUMENTS["debug"],
+        action="store_true",
         help="Print debugging output (default: %(default)s)."
     )
     parser.add_argument(
@@ -79,21 +76,22 @@ def create_command_line_parser():
              "(default: %(default)s)."
     )
     parser.add_argument(
-        "--verbose", "-v", action="store_true",
+        "--verbose", "-v", default=DEFAULT_ARGUMENTS["verbose"],
+        action="store_true",
         help="Print verbose output (default: %(default)s)."
     )
     parser.add_argument(
         "calcdb_results_path",
         default=DEFAULT_ARGUMENTS["calcdb_results_path"],
-        help="Path to a result file from calcdb.x."
+        help="Path to a (possibly merged) result file from calcdb.x."
     )
     return parser
 
 
-def create_supermag_comparison_plots(args: dict):
-    """Create plots comparing MAGE ground delta B to SuperMag data.
+def supermag_comparison(args: dict):
+    """Create plots comparing MAGE ground delta-B to SuperMag data.
 
-    Create plots comparing MAGE ground delta B to SuperMag data.
+    Create plots comparing MAGE ground-delta B to SuperMag data.
 
     Parameters
     ----------
@@ -106,7 +104,8 @@ def create_supermag_comparison_plots(args: dict):
 
     Raises
     ------
-    None
+    AssertionError
+        If an invalid argument is provided.
     """
     # Set defaults for command-line options, then update with values passed
     # from the caller.
@@ -116,70 +115,77 @@ def create_supermag_comparison_plots(args: dict):
 
     # Local convenience variables.
     debug = args["debug"]
-    smuser = args["smuser"]
     verbose = args["verbose"]
-    calcdb_results_path = args["calcdb_results_path"]
 
-    # Make sure a calcdb result file was specified.
-    if calcdb_results_path is None:
-        raise TypeError("A calcdb result path must be specified!")
+    # Validate arguments.
+    assert len(args["calcdb_results_path"]) > 0
 
     # ------------------------------------------------------------------------
 
     # Split the calcdb results path into a directory and a file.
     (calcdb_results_dir, calcdb_results_file) = os.path.split(
-        calcdb_results_path
+        args["calcdb_results_path"]
     )
     if debug:
         print(f"calcdb_results_dir = {calcdb_results_dir}")
         print(f"calcdb_results_file = {calcdb_results_file}")
 
-    # Extract the runid.
-    runid = calcdb_results_file
-    runid.trim(".deltab.h5")
+    # Save the current directory.
+    start_directory = os.getcwd()
     if debug:
-        print(f"runid = {runid}")
+        print(f"start_directory = {start_directory}")
 
     # Move to the results directory.
     if verbose:
-        print(f"Moving to results directory {calcdb_results_dir}.")
+        print(f"Moving to calcdb results directory {calcdb_results_dir}.")
     os.chdir(calcdb_results_dir)
+
+    # Extract the runid.
+    if verbose:
+        print("Computing runid from calcdb results file "
+              f"{calcdb_results_file}")
+    p = calcdb_results_file.index(".deltab.h5")
+    runid = calcdb_results_file[:p]
+    if debug:
+        print(f"runid = {runid}")
 
     # Read the delta B values.
     if verbose:
-        print("Reading MAGE-derived ground delta B values from "
+        print("Reading MAGE-derived ground delta-B values from "
               f"{calcdb_results_file}.")
     SIM = sm.ReadSimData(calcdb_results_file)
     if debug:
         print(f"SIM = {SIM}")
 
-    # Fetch the start time (as a datetime object) of simulation data.
-    start = SIM["td"][0]
+    # Fetch the start and stop time (as datetime objects) of simulation data.
+    date_start = SIM["td"][0]
+    date_stop = SIM["td"][-1]
     if debug:
-        print(f"start = {start}")
+        print(f"date_start = {date_start}")
+        print(f"date_stop = {date_stop}")
 
     # Compute the duration of the simulated data, in seconds, then days.
-    duration = SIM["td"][-1] - SIM["td"][0]
-    duration_seconds = (
-        duration.seconds + duration.microseconds/MICROSECONDS_PER_SECOND
-    )
-    numofdays = duration_seconds/SECONDS_PER_DAY
+    duration = date_stop - date_start
+    duration_seconds = duration.total_seconds()
+    duration_days = duration_seconds/SECONDS_PER_DAY
     if debug:
         print(f"duration = {duration}")
         print(f"duration_seconds = {duration_seconds}")
-        print(f"numofdays = {numofdays}")
+        print(f"duration_days = {duration_days}")
 
     # Fetch the SuperMag indices for this time period.
     if verbose:
-        print("Fetching SuperMag indices.")
-    SMI = sm.FetchSMIndices(smuser, start, numofdays)
+        print(f"Fetching SuperMag indices for the period {date_start} to "
+              f"{date_stop}.")
+    SMI = sm.FetchSMIndices(args["smuser"], date_start, duration_days)
     if debug:
         print(f"SMI = {SMI}")
 
     # Fetch the SuperMag data for this time period.
     if verbose:
-        print("Fetching SuperMag data.")
-    SM = sm.FetchSMData(smuser, start, numofdays,
+        print(f"Fetching SuperMag data for the period {date_start} to "
+              f"{date_stop}.")
+    SM = sm.FetchSMData(args["smuser"], date_start, duration_days,
                         savefolder=SUPERMAG_CACHE_FOLDER)
     if debug:
         print(f"SM = {SM}")
@@ -192,7 +198,7 @@ def create_supermag_comparison_plots(args: dict):
     # Interpolate the simulated delta B to the measurement times from
     # SuperMag.
     if verbose:
-        print("Interpolating simulated data to SuperMag times.")
+        print("Interpolating MAGE data to SuperMag times.")
     SMinterp = sm.InterpolateSimData(SIM, SM)
     if debug:
         print("SMinterp = %s" % SMinterp)
@@ -218,6 +224,9 @@ def create_supermag_comparison_plots(args: dict):
     contour_plot_file = "contours.png"
     plt.savefig(contour_plot_file)
 
+    # Move back to the start directory.
+    os.chdir(start_directory)
+
     # Return normally.
     return 0
 
@@ -236,7 +245,7 @@ def main():
     args = vars(args)
 
     # Call the main program code.
-    return_code = create_supermag_comparison_plots(args)
+    return_code = supermag_comparison(args)
     sys.exit(return_code)
 
 
