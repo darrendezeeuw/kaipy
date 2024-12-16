@@ -68,4 +68,4 @@ echo "calcdb.x run command is:"
 echo $cmd
 eval $cmd
 
-# echo "Job ${PBS_JOBID} ended at `date` on `hostname` in directory `pwd`."
+echo "Job ${PBS_JOBID} ended at `date` on `hostname` in directory `pwd`."
