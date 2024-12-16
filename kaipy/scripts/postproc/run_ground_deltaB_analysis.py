@@ -526,17 +526,14 @@ def create_submit_script(
     ------
     None
     """
-    # Local convenience variables.
-    debug = args["debug"]
-    verbose = args["verbose"]
-
     # Submit the scripts in dependency order.
     submit_script = f"submit-{runid}.sh"
     with open(submit_script, "w", encoding="utf-8") as f:
 
         # calcdb.x job
         if args["parintime"] > 1:
-            cmd = f"job_id=`qsub -J 1-{args['parintime']} {calcdb_pbs_script}`\n"
+            cmd = (f"job_id=`qsub -J 1-{args['parintime']} "
+                   f"{calcdb_pbs_script}`\n")
         else:
             cmd = f"job_id=`qsub {calcdb_pbs_script}`\n"
         f.write(cmd)
@@ -646,7 +643,7 @@ def run_ground_deltab_analysis(args: dict):
     if args["parintime"] > 1:
         if verbose:
             print("Creating PBS script to stitch together the calcdb.x output "
-                f" for MAGE runid {runid}")
+                  f" for MAGE runid {runid}")
         pitmerge_pbs_script = create_pitmerge_pbs_script(runid, args)
     else:
         pitmerge_pbs_script = None
@@ -680,8 +677,8 @@ def run_ground_deltab_analysis(args: dict):
     if verbose:
         print(f"Please run {submit_script} (in the MAGE result directory) to "
               "submit the PBS jobs to perform the MAGE-SuperMag comparison. "
-              "If you are not using PBS, then you can manually run the scripts "
-              f"individually in the order listed in {submit_script}.")
+              "If you are not using PBS, then you can manually run the "
+              f"scripts individually in the order listed in {submit_script}.")
 
     # Move back to the start directory.
     os.chdir(start_directory)
