@@ -16,37 +16,25 @@ import argparse
 import copy
 import os
 import subprocess
+import re
 import sys
 
 # Import 3rd-party modules.
-import matplotlib as mpl
-import matplotlib.pyplot as plt
 
 # Import project-specific modules.
-import kaipy.supermage as sm
 
 
 # Program constants and defaults
 
 # Program description.
-DESCRIPTION = "Create MAGE-SuperMag comparison plots."
+DESCRIPTION = "Create SuperMAGE analysis plots."
 
 # Default values for command-line arguments.
 DEFAULT_ARGUMENTS = {
     "debug": False,
-    "smuser": "",
     "verbose": False,
-    "calcdb_results_path": None,
+    "mage_results_path": "",
 }
-
-# Number of microseconds in a second.
-MICROSECONDS_PER_SECOND = 1e6
-
-# Number of seconds in a day.
-SECONDS_PER_DAY = 86400
-
-# Location of SuperMag cache folder.
-SUPERMAG_CACHE_FOLDER = os.path.join(os.environ["HOME"], "supermag")
 
 
 def create_command_line_parser():
@@ -69,36 +57,73 @@ def create_command_line_parser():
     """
     parser = argparse.ArgumentParser(description=DESCRIPTION)
     parser.add_argument(
-        "--debug", "-d", action="store_true",
+        "--debug", "-d", default=DEFAULT_ARGUMENTS["debug"],
+        action="store_true",
         help="Print debugging output (default: %(default)s)."
     )
     parser.add_argument(
-        "--smuser", type=str,
-        default=DEFAULT_ARGUMENTS["smuser"],
-        help="SuperMag user ID to use for SuperMag queries "
-             "(default: %(default)s)."
-    )
-    parser.add_argument(
-        "--verbose", "-v", action="store_true",
+        "--verbose", "-v", default=DEFAULT_ARGUMENTS["verbose"],
+        action="store_true",
         help="Print verbose output (default: %(default)s)."
     )
     parser.add_argument(
-        "calcdb_results_path",
-        default=DEFAULT_ARGUMENTS["calcdb_results_path"],
-        help="Path to a result file from calcdb.x."
+        "mage_results_path",
+        default=DEFAULT_ARGUMENTS["mage_results_path"],
+        help="Path to a MAGE result file."
     )
     return parser
 
 
-def create_dbpic_plot(runid: str, args: dict):
-    """Create the dbpic.py (Mercator) plot of the dB values.
+def mage_filename_to_runid(filename: str):
+    """Parse the runid from a MAGE results file name.
 
-    Create the dbpic.py (Mercator) plot of the dB values.
+    Parse the runid from a MAGE results file name.
+
+    For a result file from an MPI run, the runid is all text before the
+    underscore before the set of 6 underscore-separated 4-digit sequences at
+    the end of the name and the terminal .gam.h5 string.
+
+    For a result file from a serial run, the runid is the name of the file,
+    less the .gam.h5 extension.
+
+    Parameters
+    ----------
+    filename : str
+        Name of MAGE results file.
+
+    Returns
+    -------
+    runid : str
+        The MAGE runid for the file.
+
+    Raises
+    ------
+    None
+    """
+    # Check to see if the result file is for an MPI run. If not, it must be
+    # for a serial run.
+    mpi_pattern = (
+        r"^(.+)_(\d{4})_(\d{4})_(\d{4})_(\d{4})_(\d{4})_(\d{4})\.gam.h5$"
+    )
+    serial_pattern = r"^(.+)\.gam.h5$"
+    mpi_re = re.compile(mpi_pattern)
+    serial_re = re.compile(serial_pattern)
+    m = mpi_re.match(filename)
+    if not m:
+        m = serial_re.match(filename)
+    runid = m.groups()[0]
+    return runid
+
+
+def create_dbpic_plots(runid: str, args: dict):
+    """Create the Mercator and polar plots of the dB values.
+
+    Create the Mercator and polar plots of the dB values using dbpic.py.
 
     Parameters
     ----------
     runid : str
-        Run ID for calcdb results file.
+        Run ID for MAGE results.
     args: dict
         Dictionary of command-line options.
 
@@ -110,82 +135,16 @@ def create_dbpic_plot(runid: str, args: dict):
     ------
     None
     """
-    # Local convenience variables.
-    debug = args["debug"]
-    smuser = args["smuser"]
-    verbose = args["verbose"]
-    calcdb_results_path = args["calcdb_results_path"]
-
-    # ------------------------------------------------------------------------
-
-    # Split the calcdb results path into a directory and a file.
-    (calcdb_results_dir, calcdb_results_file) = os.path.split(
-        calcdb_results_path
-    )
-    if debug:
-        print(f"calcdb_results_dir = {calcdb_results_dir}")
-        print(f"calcdb_results_file = {calcdb_results_file}")
-
-    # Move to the results directory.
-    if verbose:
-        print(f"Moving to results directory {calcdb_results_dir}.")
-    os.chdir(calcdb_results_dir)
-
     # Run dbpic.py.
-    cmd = f"dbpic.py -d . -id {runid}"
+    cmd = f"dbpic.py -d . -id {runid} --projection=both"
     subprocess.run(cmd, shell=True, check=True)
+    return "dbpic.png"
 
 
-def create_dbpole_plot(runid: str, args: dict):
-    """Create the dbpole.py (polar) plot of the dB values.
+def supermage_analysis(args: dict):
+    """Create SuperMAGE analysis plots for MAGE results.
 
-    Create the dbpole.py (polar) plot of the dB values.
-
-    Parameters
-    ----------
-    runid : str
-        Run ID for calcdb results file.
-    args: dict
-        Dictionary of command-line options.
-
-    Returns
-    -------
-    None
-
-    Raises
-    ------
-    None
-    """
-    # Local convenience variables.
-    debug = args["debug"]
-    smuser = args["smuser"]
-    verbose = args["verbose"]
-    calcdb_results_path = args["calcdb_results_path"]
-
-    # ------------------------------------------------------------------------
-
-    # Split the calcdb results path into a directory and a file.
-    (calcdb_results_dir, calcdb_results_file) = os.path.split(
-        calcdb_results_path
-    )
-    if debug:
-        print(f"calcdb_results_dir = {calcdb_results_dir}")
-        print(f"calcdb_results_file = {calcdb_results_file}")
-
-    # Move to the results directory.
-    if verbose:
-        print(f"Moving to results directory {calcdb_results_dir}.")
-    os.chdir(calcdb_results_dir)
-
-    # Run dbpic.py.
-    cmd = f"dbpole.py -d . -id {runid}"
-    subprocess.run(cmd, shell=True, check=True)
-
-
-def create_supermag_comparison_plots(args: dict):
-    """Create plots comparing MAGE ground delta B to SuperMag data.
-
-    Create plots comparing MAGE ground delta B to SuperMag data.
+    Create SuperMAGE analysis plots for MAGE results.
 
     Parameters
     ----------
@@ -208,117 +167,50 @@ def create_supermag_comparison_plots(args: dict):
 
     # Local convenience variables.
     debug = args["debug"]
-    smuser = args["smuser"]
     verbose = args["verbose"]
-    calcdb_results_path = args["calcdb_results_path"]
 
-    # Make sure a calcdb result file was specified.
-    if calcdb_results_path is None:
-        raise TypeError("A calcdb result path must be specified!")
+    # Validate arguments.
+    assert len(args["mage_results_path"]) > 0
 
     # ------------------------------------------------------------------------
 
-    # Split the calcdb results path into a directory and a file.
-    (calcdb_results_dir, calcdb_results_file) = os.path.split(
-        calcdb_results_path
+    # Split the MAGE results path into a directory and a file.
+    (mage_results_dir, mage_results_file) = os.path.split(
+        args["mage_results_path"]
     )
     if debug:
-        print(f"calcdb_results_dir = {calcdb_results_dir}")
-        print(f"calcdb_results_file = {calcdb_results_file}")
+        print(f"mage_results_dir = {mage_results_dir}")
+        print(f"mage_results_file = {mage_results_file}")
 
-    # Extract the runid.
-    runid = calcdb_results_file
-    runid.trim(".deltab.h5")
+    # Save the current directory.
+    start_directory = os.getcwd()
     if debug:
-        print(f"runid = {runid}")
+        print(f"start_directory = {start_directory}")
 
     # Move to the results directory.
     if verbose:
-        print(f"Moving to results directory {calcdb_results_dir}.")
-    os.chdir(calcdb_results_dir)
+        print(f"Moving to MAGE results directory {mage_results_dir}.")
+    os.chdir(mage_results_dir)
 
-    # Read the delta B values.
+    # Compute the runid from the file name.
     if verbose:
-        print("Reading MAGE-derived ground delta B values from "
-              f"{calcdb_results_file}.")
-    SIM = sm.ReadSimData(calcdb_results_file)
+        print(f"Computing runid from MAGE results file {mage_results_file}")
+    runid = mage_filename_to_runid(mage_results_file)
     if debug:
-        print(f"SIM = {SIM}")
-
-    # Fetch the start time (as a datetime object) of simulation data.
-    start = SIM["td"][0]
-    if debug:
-        print(f"start = {start}")
-
-    # Compute the duration of the simulated data, in seconds, then days.
-    duration = SIM["td"][-1] - SIM["td"][0]
-    duration_seconds = (
-        duration.seconds + duration.microseconds/MICROSECONDS_PER_SECOND
-    )
-    numofdays = duration_seconds/SECONDS_PER_DAY
-    if debug:
-        print(f"duration = {duration}")
-        print(f"duration_seconds = {duration_seconds}")
-        print(f"numofdays = {numofdays}")
-
-    # Fetch the SuperMag indices for this time period.
-    if verbose:
-        print("Fetching SuperMag indices.")
-    SMI = sm.FetchSMIndices(smuser, start, numofdays)
-    if debug:
-        print(f"SMI = {SMI}")
-
-    # Fetch the SuperMag data for this time period.
-    if verbose:
-        print("Fetching SuperMag data.")
-    SM = sm.FetchSMData(smuser, start, numofdays,
-                        savefolder=SUPERMAG_CACHE_FOLDER)
-    if debug:
-        print(f"SM = {SM}")
-
-    # Abort if no data was found.
-    if len(SM["td"]) == 0:
-        raise TypeError("No SuperMag data found for requested time period, "
-                        " aborting.")
-
-    # Interpolate the simulated delta B to the measurement times from
-    # SuperMag.
-    if verbose:
-        print("Interpolating simulated data to SuperMag times.")
-    SMinterp = sm.InterpolateSimData(SIM, SM)
-    if debug:
-        print("SMinterp = %s" % SMinterp)
+        print(f"runid = {runid}")
 
     # ------------------------------------------------------------------------
 
-    # Create the plots in memory.
-    mpl.use("Agg")
-
-    # ------------------------------------------------------------------------
-
-    # Make the indices plot.
+    # Make the dbpic.py plots (Mercator and polar projection).
     if verbose:
-        print("Creating indices comparison plot.")
-    sm.MakeIndicesPlot(SMI, SMinterp, fignumber=1)
-    comparison_plot_file = "indices.png"
-    plt.savefig(comparison_plot_file)
+        print("Creating Mercator and polar plots of MAGE ground delta-B "
+              "values.")
+    dbpic_plot = create_dbpic_plots(runid, args)
+    if debug:
+        print(f"dbpic_plot = {dbpic_plot}")
 
-    # Make the contour plots.
-    if verbose:
-        print("Creating contour plots.")
-    sm.MakeContourPlots(SM, SMinterp, maxx=1000, fignumber=2)
-    contour_plot_file = "contours.png"
-    plt.savefig(contour_plot_file)
-
-    # Make the dbpic.py plot (Mercator projection).
-    if verbose:
-        print("Creating Mercator plot.")
-    create_dbpic_plot(runid, args)
-
-    dbpic_plot_file = "dbpic.png"
-    plt.savefig(dbpic_plot_file)
-
-    # Make the dbpole.py plot (polar projection).
+    # Move back to the start directory.
+    os.chdir(start_directory)
 
     # Return normally.
     return 0
@@ -338,7 +230,7 @@ def main():
     args = vars(args)
 
     # Call the main program code.
-    return_code = create_supermag_comparison_plots(args)
+    return_code = supermage_analysis(args)
     sys.exit(return_code)
 
 
