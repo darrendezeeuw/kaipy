@@ -14,8 +14,9 @@ Eric Winter (eric.winter@jhuapl.edu)
 
 # Import standard modules.
 import argparse
-import datetime
+import copy
 import os
+import sys
 
 # Import 3rd-party modules.
 import cartopy.crs as ccrs
@@ -36,19 +37,23 @@ import kaipy.kaiViz as kv
 # Program constants and defaults
 
 # Program description.
-description = "Plot the ground magnetic field perturbations for a MAGE magnetosphere run."
+DESCRIPTION = (
+    "Plot the ground magnetic field perturbations for a MAGE magnetosphere "
+    "run."
+)
 
-# Default identifier for results to read.
-default_runid = "msphere"
-
-# Plot the last step by default.
-default_step = -1
-
-# Default vertical layer to plot.
-default_k0 = 0
-
-# Do not show anomalous currents by default.
-default_Jr = False
+# Default values for command-line arguments.
+DEFAULT_ARGUMENTS = {
+    "d": os.getcwd(),
+    "debug": False,
+    "id": "msphere",
+    "Jr": False,
+    "k0": 0,
+    "n": -1,
+    "projection": "both",
+    "spacecraft": None,
+    "verbose": False,
+}
 
 # Default output filename.
 default_output_filename = "qkdbpic.png"
@@ -57,115 +62,135 @@ default_output_filename = "qkdbpic.png"
 figSz = (12, 6)
 
 # Color to use for magnetic footprint positions.
-FOOTPRINT_COLOR = 'red'
+FOOTPRINT_COLOR = "red"
 
 
 def create_command_line_parser():
-    """Create the command-line argument parser.
-    
-    Create the parser for command-line arguments.
+    """Create the command-line parser.
 
-    Returns:
-        argparse.ArgumentParser: Command-line argument parser for this script.
+    Create the parser for the command-line.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    parser : argparse.ArgumentParser
+        Command-line argument parser for this script.
+
+    Raises
+    ------
+    None
     """
-    parser = argparse.ArgumentParser(description=description)
+    parser = argparse.ArgumentParser(description=DESCRIPTION)
     parser.add_argument(
-        "--debug", action="store_true", default=False,
-        help="Print debugging output (default: %(default)s)."
-    )
-    parser.add_argument(
-        "-d", type=str, metavar="directory", default=os.getcwd(),
+        "-d", type=str, metavar="directory", default=DEFAULT_ARGUMENTS["d"],
         help="Directory containing data to read (default: %(default)s)"
     )
     parser.add_argument(
-        "-n", type=int, metavar="step", default=default_step,
-        help="Time slice to plot (default: %(default)s)"
+        "--debug", default=DEFAULT_ARGUMENTS["debug"],
+        action="store_true",
+        help="Print debugging output (default: %(default)s)."
     )
     parser.add_argument(
-        "-id", type=str, metavar="runid", default=default_runid,
+        "-id", type=str, metavar="runid", default=DEFAULT_ARGUMENTS["id"],
         help="Run ID of data (default: %(default)s)"
     )
     parser.add_argument(
-        "-Jr", action="store_true", default=default_Jr,
+        "-Jr", action="store_true", default=DEFAULT_ARGUMENTS["Jr"],
         help="Show radial component of anomalous current (default: %(default)s)."
     )
     parser.add_argument(
-        '-k0', type=int, metavar="layer", default=default_k0,
+        "-k0", type=int, metavar="layer", default=DEFAULT_ARGUMENTS["k0"],
         help="Vertical layer to plot (default: %(default)s)")
     parser.add_argument(
-        "--spacecraft", type=str, metavar="spacecraft", default=None,
-        help="Names of spacecraft to plot magnetic footprints, separated by commas (default: %(default)s)"
+        "-n", type=int, metavar="step", default=DEFAULT_ARGUMENTS["n"],
+        help="Time slice to plot (default: %(default)s)"
     )
     parser.add_argument(
-        "--projection", type=str, metavar="projection", default=None,
-        help="Map projection to use for plots (merctor|polar|both)"
+        "--projection", type=str, metavar="projection",
+        default=DEFAULT_ARGUMENTS["projection"],
+        help="Map projection to use for plots (mercator|polar|both)"
         " (default: %(default)s)"
     )
     parser.add_argument(
-        "-v", "--verbose", action="store_true", default=False,
+        "--spacecraft", type=str, metavar="spacecraft",
+        default=DEFAULT_ARGUMENTS["spacecraft"],
+        help="Names of spacecraft to plot magnetic footprints, separated by "
+        "commas (default: %(default)s)"
+    )
+    parser.add_argument(
+        "--verbose", "-v", default=DEFAULT_ARGUMENTS["verbose"],
+        action="store_true",
         help="Print verbose output (default: %(default)s)."
     )
     return parser
 
 
-if __name__ == "__main__":
-    """Plot the ground magnetic field perturbations."""
+def create_mercator_plot(args: dict):
+    """Make a Mercator plot of the ground magnetic field perturbations.
 
-    # Set up the command-line parser.
-    parser = create_command_line_parser()
+    Make a Mercator plot of the ground magnetic field perturbations.
 
-    # Parse the command-line arguments.
-    args = parser.parse_args()
-    debug = args.debug
-    fdir = args.d
-    runid = args.id
-    nStp = args.n
-    k0 = args.k0
-    doJr = args.Jr
-    spacecraft = args.spacecraft
-    verbose = args.verbose
+    Parameters
+    ----------
+    args: dict
+        Dictionary of command-line options.
+
+    Returns
+    -------
+    None
+
+    Raises
+    ------
+    None
+    """
+    # Local convenience variables.
+    fdir = args["d"]
+    debug = args["debug"]
+    runid = args["id"]
+    doJr = args["Jr"]
+    k0 = args["k0"]
+    nStp = args["n"]
+    verbose = args["verbose"]
+
+    # ------------------------------------------------------------------------
+
+    # Compute the tag of the file containing the ground magnetic field perturbations.
+    ftag = f"{runid}.deltab"
     if debug:
-        print("args = %s" % args)
-
-    # Fetch constants.
-    bLin = dbViz.dbLin
-    bMag = dbViz.dbMag
-    jMag = dbViz.jMag
-
-    # Compute the name of the file containing the ground magnetic field perturbations.
-    ftag = runid + ".deltab"
-    if debug:
-        print("ftag = %s" % ftag)
+        print(f"ftag = {ftag}")
 
     # Read the ground magnetic field perturbations.
-    fname = os.path.join(fdir, ftag + ".h5")
+    fname = os.path.join(fdir, f"{ftag}.h5")
     if debug:
-        print("fname = %s" % fname)
+        print(f"fname = {fname}")
     dbdata = gampp.GameraPipe(fdir, ftag)
     if debug:
-        print("dbdata = %s" % dbdata)
+        print(f"dbdata = {dbdata}")
     print("---")
 
     # Get the ID of the coordinate system, and the Earth radius.
     CoordID, Re = dbViz.GetCoords(fname)
-    print("Found %s coordinate data ..." % CoordID)
+    print(f"Found {CoordID} coordinate data ...")
     if debug:
-        print("CoordID = %s" % CoordID)
-        print("Re = %s" % Re)
+        print(f"CoordID = {CoordID}")
+        print(f"Re = {Re}")
 
     # If the last simulation step was requested, get the step number.
     if nStp < 0:
         nStp = dbdata.sFin
-        print("Using Step %d" % nStp)
+        print(f"Using Step {nStp}")
 
     # Check the vertical level.
     Z0 = dbViz.CheckLevel(dbdata, k0, Re)
     if debug:
-        print("Z0 = %s" % Z0)
+        print(f"Z0 = {Z0}")
 
     # If currents were requested, read them. Otherwise, read the ground
     # magnetic field perturbations.
-    if (doJr):
+    if doJr:
         print("Reading Jr ...")
         Jr = dbdata.GetVar("dbJ", nStp, doVerb=False)[:, :, k0]
         Q = Jr
@@ -176,40 +201,40 @@ if __name__ == "__main__":
     # Convert MJD to UT.
     MJD = kh5.tStep(fname, nStp, aID="MJD")
     if debug:
-        print("MJD = %s" % MJD)
+        print(f"MJD = {MJD}")
     utS = ktools.MJD2UT([MJD])
     if debug:
-        print("utS = %s" % utS)
+        print(f"utS = {utS}")
     utDT= utS[0]
     if debug:
-        print("utDT = %s" % utDT)
+        print(f"utDT = {utDT}")
 
     # Create the mapping grid.
     crs = ccrs.PlateCarree()
     if debug:
-        print("ccrs = %s" % ccrs)
+        print(f"ccrs = {ccrs}")
     LatI, LonI, LatC, LonC = dbViz.GenUniformLL(dbdata, k0)
     if debug:
-        print("LatI = %s" % LatI)
-        print("LonI = %s" % LonI)
-        print("LatC = %s" % LatC)
-        print("LonC = %s" % LonC)
+        print(f"LatI = {LatI}")
+        print(f"LonI = {LonI}")
+        print(f"LatC = {LatC}")
+        print(f"LonC = {LonC}")
 
     # Fetch the color map.
     cmap = kmaps.cmDiv
     if debug:
-        print("cmap = %s" % cmap)
+        print(f"cmap = {cmap}")
 
     # Determine color bar settings.
-    if (doJr):
-        vQ = kv.genNorm(jMag)
+    if doJr:
+        vQ = kv.genNorm(dbViz.jMag)
         cbStr = "Anomalous current"
     else:
-        vQ = kv.genNorm(bMag, doSymLog=True, linP=bLin)
+        vQ = kv.genNorm(dbViz.dbMag, doSymLog=True, linP=dbViz.dbLin)
         cbStr = r"$\Delta B_N$ [nT]"
     if debug:
-        print("vQ = %s" % vQ)
-        print("cbStr = %s" % cbStr)
+        print(f"vQ = {vQ}")
+        print(f"cbStr = {cbStr}")
 
     # Create plot in memory.
     mpl.use("Agg")
@@ -228,11 +253,11 @@ if __name__ == "__main__":
     AxM.pcolormesh(LonI, LatI, Q, norm=vQ, cmap=cmap)
 
     # If requested, overlay the spacecraft magnetic footprints.
-    if spacecraft:
-        print("Overplotting magnetic footprints of %s." % spacecraft)
+    if args["spacecraft"]:
+        print(f"Overplotting magnetic footprints of {args['spacecraft']}")
 
         # Split the list into individual spacecraft names.
-        spacecraft = spacecraft.split(',')
+        spacecraft = args["spacecraft"].split(",")
 
         # Fetch the position of each footprint pair from CDAWeb.
         for sc in spacecraft:
@@ -242,31 +267,31 @@ if __name__ == "__main__":
                 sc, utS[0]
             )
             if debug:
-                print("fp_nlat, fp_nlon = %s, %s" % (fp_nlat, fp_nlon))
+                print(f"fp_nlat, fp_nlon = {fp_nlat}, {fp_nlon}")
 
             # Fetch the southern footprint position.
             fp_slat, fp_slon = cdaweb_utils.fetch_satellite_magnetic_southern_footprint_position(
                 sc, utS[0]
             )
             if debug:
-                print("fp_slat, fp_slon = %s, %s" % (fp_slat, fp_slon))
+                print(f"fp_slat, fp_slon = {fp_slat}, {fp_slon}")
 
             # Plot a labelled dot at the location of each footprint.
             # Skip if no footprint position found.
             if fp_nlon is not None:
-                AxM.plot(fp_nlon, fp_nlat, 'o', c=FOOTPRINT_COLOR)
+                AxM.plot(fp_nlon, fp_nlat, "o", c=FOOTPRINT_COLOR)
                 lon_nudge = 2.0
                 lat_nudge = 2.0
-                AxM.text(fp_nlon + lon_nudge, fp_nlat + lat_nudge, sc + ' (N)')
+                AxM.text(fp_nlon + lon_nudge, fp_nlat + lat_nudge, sc + " (N)")
             else:
-                print("No northern footprint found for spacecraft %s." % sc)
+                print(f"No northern footprint found for spacecraft {sc}.")
             if fp_slon is not None:
-                AxM.plot(fp_slon, fp_slat, 'o', c=FOOTPRINT_COLOR)
+                AxM.plot(fp_slon, fp_slat, "o", c=FOOTPRINT_COLOR)
                 lon_nudge = 2.0
                 lat_nudge = 2.0
-                AxM.text(fp_slon + lon_nudge, fp_slat + lat_nudge, sc + ' (S)')
+                AxM.text(fp_slon + lon_nudge, fp_slat + lat_nudge, sc + " (S)")
             else:
-                print("No southern footprint found for spacecraft %s." % sc)
+                print(f"No southern footprint found for spacecraft {sc}.")
 
     # Make the colorbar.
     kv.genCB(AxCB, vQ, cbStr, cM=cmap)
@@ -274,11 +299,101 @@ if __name__ == "__main__":
     # Add labels and other decorations.
     tStr = dbViz.GenTStr(AxM, fname, nStp)
     if debug:
-        print("tStr = %s" % tStr)
+        print(f"tStr = {tStr}")
     dbViz.DecorateDBAxis(AxM, crs, utDT)
 
     # Save the figure.
-    fOut = default_output_filename
+    fOut = os.path.join(args["d"], default_output_filename)
     if debug:
-        print("fOut = %s" % fOut)
+        print(f"fOut = {fOut}")
     kv.savePic(fOut)
+
+
+def create_polar_plot(args: dict):
+    """Make a polar plot of the ground magnetic field perturbations.
+
+    Make a polar plot of the ground magnetic field perturbations.
+
+    Parameters
+    ----------
+    args: dict
+        Dictionary of command-line options.
+
+    Returns
+    -------
+    None
+
+    Raises
+    ------
+    None
+    """
+
+
+def dbpic(args: dict):
+    """Plot the ground magnetic field perturbations.
+
+    Plot the ground magnetic field perturbations.
+
+    Parameters
+    ----------
+    args: dict
+        Dictionary of command-line options.
+
+    Returns
+    -------
+    int 0 on success
+
+    Raises
+    ------
+    None
+    """
+    # Set defaults for command-line options, then update with values passed
+    # from the caller.
+    local_args = copy.deepcopy(DEFAULT_ARGUMENTS)
+    local_args.update(args)
+    args = local_args
+
+    # Local convenience variables.
+    debug = args["debug"]
+    verbose = args["verbose"]
+
+    # ------------------------------------------------------------------------
+
+    # If requested, create the Mercator plot.
+    if args["projection"] in ["mercator", "both"]:
+        if verbose:
+            print("Creating Mercator plot.")
+        create_mercator_plot(args)
+
+    # If requested, create the polar plot.
+    if args["projection"] in ["polar", "both"]:
+        if verbose:
+            print("Creating polar plot.")
+        create_polar_plot(args)
+
+    # ------------------------------------------------------------------------
+
+    # Return normally.
+    return 0
+
+
+def main():
+    """Driver for command-line version of code."""
+    # Set up the command-line parser.
+    parser = create_command_line_parser()
+
+    # Parse the command line.
+    args = parser.parse_args()
+    if args.debug:
+        print(f"args = {args}")
+
+    # Convert the arguments from Namespace to dict.
+    args = vars(args)
+
+    # Call the main program code.
+    return_code = dbpic(args)
+    sys.exit(return_code)
+
+
+if __name__ == "__main__":
+    main()
