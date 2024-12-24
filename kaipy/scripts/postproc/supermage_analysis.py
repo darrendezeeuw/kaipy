@@ -178,6 +178,8 @@ def supermage_analysis(args: dict):
     (mage_results_dir, mage_results_file) = os.path.split(
         args["mage_results_path"]
     )
+    if mage_results_dir == "":
+        mage_results_dir = "."
     if debug:
         print(f"mage_results_dir = {mage_results_dir}")
         print(f"mage_results_file = {mage_results_file}")

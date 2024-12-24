@@ -11,10 +11,10 @@
 #PBS -A {{ pbs_account }}
 #PBS -q main
 #PBS -l job_priority=economy
-#PBS -l select=1:ncpus=128:ompthreads=128
+#PBS -l select=1:ncpus=128
 {% elif hpc == "pleiades" %}
 #PBS -q normal
-#PBS -l select=1:ncpus=28:ompthreads=28:model=bro
+#PBS -l select=1:ncpus=28:model=bro
 {% endif -%}
 #PBS -l walltime=12:00:00
 #PBS -j oe
@@ -60,13 +60,13 @@ echo 'The active environment variables are:'
 printenv
 
 # Perform the SuperMag comparison.
-cmd="supermag_comparison.py --smuser={{ smuser }} {{ calcdb_results_path }} >& supermag_comparison.out"
+cmd="supermag_comparison.py --verbose --smuser={{ smuser }} {{ calcdb_results_path }} >& supermag_comparison.out"
 echo "Analysis command is:"
 echo $cmd
 eval $cmd
 
 # Perform the SuperMage analysis.
-cmd="supermage_analysis.py {{ calcdb_results_path }} >& supermage_analysis.out"
+cmd="supermage_analysis.py --verbose {{ calcdb_results_path }} >& supermage_analysis.out"
 echo "Analysis command is:"
 echo $cmd
 eval $cmd

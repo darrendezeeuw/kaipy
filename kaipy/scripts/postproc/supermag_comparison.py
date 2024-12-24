@@ -126,6 +126,8 @@ def supermag_comparison(args: dict):
     (calcdb_results_dir, calcdb_results_file) = os.path.split(
         args["calcdb_results_path"]
     )
+    if calcdb_results_dir == "":
+        calcdb_results_dir = "."
     if debug:
         print(f"calcdb_results_dir = {calcdb_results_dir}")
         print(f"calcdb_results_file = {calcdb_results_file}")

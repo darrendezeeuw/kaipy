@@ -409,7 +409,7 @@ def create_pitmerge_pbs_script(runid: str, args: dict):
     # Fill in the template options.
     options = {
         "hpc": args["hpc"],
-        "job_name": f"calcdb-{runid}",
+        "job_name": f"pitmerge-{runid}",
         "pbs_account": args["pbs_account"],
         "conda_prefix": os.environ["CONDA_PREFIX"],
         "kaipyhome": os.environ["KAIPYHOME"],
@@ -470,7 +470,7 @@ def create_ground_deltab_analysis_pbs_script(runid: str, args: dict):
     # Fill in the template options.
     options = {
         "hpc": args["hpc"],
-        "job_name": f"calcdb-{runid}",
+        "job_name": f"ground_deltaB_analysis-{runid}",
         "pbs_account": args["pbs_account"],
         "conda_prefix": os.environ["CONDA_PREFIX"],
         "kaipyhome": os.environ["KAIPYHOME"],
