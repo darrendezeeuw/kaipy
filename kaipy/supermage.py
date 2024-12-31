@@ -526,7 +526,7 @@ def InterpolateSimData(SIM, SM):
             - SMRbins: List of 4 bins using interpolated data (SMR00/06/12/18).
             - superSMRbins: List of 4 bins using all data (SMR00/06/12/18).
     """
-
+    print("Interpolating data!!!")
     # find limits of overlapping data
     starttimei = np.max([SIM['td'][0], SM['td'][0]])
     endtimei = np.min([SIM['td'][-1], SM['td'][-1]])
@@ -574,10 +574,16 @@ def InterpolateSimData(SIM, SM):
     ##### Now to calculate indices #####
     # calculate SME, SML, SMU
     ind = (SM['mlat'] >= 40) * (SM['mlat'] <= 80) # equivalent to SME/SMU/SML
-    Northonly = interp_dBn.T[ind].T
-    SMU_calc = np.max(Northonly, axis = 1)
-    SML_calc = np.min(Northonly, axis = 1)
-    SME_calc = SMU_calc - SML_calc
+    print(f'ind: {ind}')
+    if not np.any(ind):
+        SMU_calc = np.zeros_like(smalltd)
+        SML_calc = np.zeros_like(smalltd)
+        SME_calc = np.zeros_like(smalltd)
+    else:
+        Northonly = interp_dBn.T[ind].T
+        SMU_calc = np.max(Northonly, axis = 1)
+        SML_calc = np.min(Northonly, axis = 1)
+        SME_calc = SMU_calc - SML_calc
 
     # calculate SME indices with ALL points between 40 and 80 (supersupermag)
     ind = (SIM['mlat'] >= 40) * (SIM['mlat'] <= 80)

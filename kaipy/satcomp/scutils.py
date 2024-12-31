@@ -563,6 +563,9 @@ def genSCXML(fdir, ftag, scid="sctrack_A", h5traj="sctrack_A.h5", numSegments=1)
     unitsChild = root.createElement("units")
     unitsChild.setAttribute("uid", "EARTH")
     chimpChild.appendChild(unitsChild)
+    domainChild = root.createElement("domain")
+    domainChild.setAttribute("dtype", "LFM")
+    chimpChild.appendChild(domainChild)
     trajChild = root.createElement("trajectory")
     trajChild.setAttribute("H5Traj", h5traj)
     trajChild.setAttribute("doSmooth", "F")
@@ -571,6 +574,7 @@ def genSCXML(fdir, ftag, scid="sctrack_A", h5traj="sctrack_A.h5", numSegments=1)
     #     outChild = root.createElement('output')
     #     outChild.setAttribute('doTrc', "T")
     #     chimpChild.appendChild(outChild)
+    print("numSegments: ", numSegments)
     if numSegments > 1:
         parInTimeChild = root.createElement("parintime")
         parInTimeChild.setAttribute("NumB", "%d" % numSegments)
@@ -936,15 +940,18 @@ def genSatCompPbsScript(scId, fdir, cmd, account='P28100045'):
 #PBS -A %s
 #PBS -N %s
 #PBS -j oe
-#PBS -q casper
+#PBS -q main
 #PBS -l walltime=1:00:00
 #PBS -l select=1:ncpus=1
 """
     moduleString = """module purge
-module load git/2.22.0 intel/19.1.1 netcdf/4.8.1 impi/2019.7.217
-module load ncarcompilers/0.5.0 ncarenv/1.3 cmake/3.22.0
-module load ffmpeg/4.1.3 geos/3.10.1 conda/latest
-conda activate /glade/p/hao/msphere/gamshare/kaiju-3.8
+module load ncarenv/23.06
+module load craype/2.7.20
+module load intel/2023.0.0
+module load ncarcompilers/1.0.0  # Must come after intel/2023.0.0
+module load hdf5/1.12.2
+module load cmake/3.26.3
+module load geos/3.9.1  # Must come after intel/2023.0.0
 module list
 """
     commandString = """cd %s
@@ -981,7 +988,7 @@ def genSatCompLockScript(scId, fdir, account='P28100045'):
 #PBS -A %s
 #PBS -N %s
 #PBS -j oe
-#PBS -q casper
+#PBS -q main
 #PBS -l walltime=0:15:00
 #PBS -l select=1:ncpus=1
 """
