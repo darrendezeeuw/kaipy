@@ -50,16 +50,18 @@ DEFAULT_ARGUMENTS = {
     "Jr": False,
     "k0": 0,
     "n": -1,
-    "projection": "both",
+    "projection": "mercator",
     "spacecraft": None,
     "verbose": False,
 }
 
-# Default output filename.
-default_output_filename = "qkdbpic.png"
+# Default output filenames.
+MERCATOR_PLOT_NAME = "qkdbpic.png"
+POLAR_PLOT_NAME = "qkdbpole.png"
 
-# Size of figure in inches (width x height).
-figSz = (12, 6)
+# Size of figures in inches (width x height).
+MERCATOR_FIGURE_SIZE = (12, 6)
+POLAR_FIGURE_SIZE = (8, 8)
 
 # Color to use for magnetic footprint positions.
 FOOTPRINT_COLOR = "red"
@@ -99,7 +101,8 @@ def create_command_line_parser():
     )
     parser.add_argument(
         "-Jr", action="store_true", default=DEFAULT_ARGUMENTS["Jr"],
-        help="Show radial component of anomalous current (default: %(default)s)."
+        help="Show radial component of anomalous current "
+        "(default: %(default)s)."
     )
     parser.add_argument(
         "-k0", type=int, metavar="layer", default=DEFAULT_ARGUMENTS["k0"],
@@ -112,7 +115,11 @@ def create_command_line_parser():
         "--projection", type=str, metavar="projection",
         default=DEFAULT_ARGUMENTS["projection"],
         help="Map projection to use for plots (mercator|polar|both)"
-        " (default: %(default)s)"
+        " (default: %(default)s) NOTE: 'mercator' is actually Plate-Carree"
+    )
+    parser.add_argument(
+        "--quiver", "-q", action="store_true", default=False,
+        help="Use quiver for polar plot of dB (default: %(default)s)."
     )
     parser.add_argument(
         "--spacecraft", type=str, metavar="spacecraft",
@@ -133,6 +140,8 @@ def create_mercator_plot(args: dict):
 
     Make a Mercator plot of the ground magnetic field perturbations.
 
+    NOTE: This is actually a Plate-Carree projection, not Metcator.
+
     Parameters
     ----------
     args: dict
@@ -140,7 +149,8 @@ def create_mercator_plot(args: dict):
 
     Returns
     -------
-    None
+    fig : matplotlib.Figure
+        Figure containing plot.
 
     Raises
     ------
@@ -157,21 +167,24 @@ def create_mercator_plot(args: dict):
 
     # ------------------------------------------------------------------------
 
-    # Compute the tag of the file containing the ground magnetic field perturbations.
+    # Compute the tag of the file containing the ground magnetic field
+    # perturbations.
     ftag = f"{runid}.deltab"
     if debug:
         print(f"ftag = {ftag}")
 
     # Read the ground magnetic field perturbations.
     fname = os.path.join(fdir, f"{ftag}.h5")
-    if debug:
-        print(f"fname = {fname}")
+    if verbose:
+        print(f"Reading ground mgnetic field perturbations from {fname}.")
     dbdata = gampp.GameraPipe(fdir, ftag)
     if debug:
         print(f"dbdata = {dbdata}")
     print("---")
 
     # Get the ID of the coordinate system, and the Earth radius.
+    if verbose:
+        print(f"Fetching coordinate system and Earth radius from {fname}.")
     CoordID, Re = dbViz.GetCoords(fname)
     print(f"Found {CoordID} coordinate data ...")
     if debug:
@@ -184,12 +197,16 @@ def create_mercator_plot(args: dict):
         print(f"Using Step {nStp}")
 
     # Check the vertical level.
+    if verbose:
+        print("Checking vertical level.")
     Z0 = dbViz.CheckLevel(dbdata, k0, Re)
     if debug:
         print(f"Z0 = {Z0}")
 
     # If currents were requested, read them. Otherwise, read the ground
     # magnetic field perturbations.
+    if verbose:
+        print("Reading currents.")
     if doJr:
         print("Reading Jr ...")
         Jr = dbdata.GetVar("dbJ", nStp, doVerb=False)[:, :, k0]
@@ -197,22 +214,28 @@ def create_mercator_plot(args: dict):
     else:
         dBn = dbdata.GetVar("dBn", nStp, doVerb=True)[:, :, k0]
         Q = dBn
+    if debug:
+        print(f"Q - {Q}")
 
     # Convert MJD to UT.
+    if verbose:
+        print(f"Reading MJD of step {nStp}.")
     MJD = kh5.tStep(fname, nStp, aID="MJD")
     if debug:
         print(f"MJD = {MJD}")
     utS = ktools.MJD2UT([MJD])
     if debug:
         print(f"utS = {utS}")
-    utDT= utS[0]
+    utDT = utS[0]
     if debug:
         print(f"utDT = {utDT}")
 
     # Create the mapping grid.
+    if verbose:
+        print("Creating mapping  grid.")
     crs = ccrs.PlateCarree()
     if debug:
-        print(f"ccrs = {ccrs}")
+        print(f"crs = {crs}")
     LatI, LonI, LatC, LonC = dbViz.GenUniformLL(dbdata, k0)
     if debug:
         print(f"LatI = {LatI}")
@@ -221,11 +244,15 @@ def create_mercator_plot(args: dict):
         print(f"LonC = {LonC}")
 
     # Fetch the color map.
+    if verbose:
+        print("Fetching color map.")
     cmap = kmaps.cmDiv
     if debug:
         print(f"cmap = {cmap}")
 
     # Determine color bar settings.
+    if verbose:
+        print("Determining color bar settings.")
     if doJr:
         vQ = kv.genNorm(dbViz.jMag)
         cbStr = "Anomalous current"
@@ -236,11 +263,8 @@ def create_mercator_plot(args: dict):
         print(f"vQ = {vQ}")
         print(f"cbStr = {cbStr}")
 
-    # Create plot in memory.
-    mpl.use("Agg")
-
     # Create the figure to hold the plot.
-    fig = plt.figure(figsize=figSz)
+    fig = plt.figure(figsize=MERCATOR_FIGURE_SIZE)
 
     # Specify the grid for the subplots.
     gs = gridspec.GridSpec(3, 1, height_ratios=[20, 1.0, 1.0], hspace=0.025)
@@ -303,10 +327,10 @@ def create_mercator_plot(args: dict):
     dbViz.DecorateDBAxis(AxM, crs, utDT)
 
     # Save the figure.
-    fOut = os.path.join(args["d"], default_output_filename)
+    path = os.path.join(args["d"], MERCATOR_PLOT_NAME)
     if debug:
-        print(f"fOut = {fOut}")
-    kv.savePic(fOut)
+        print(f"path = {path}")
+    kv.savePic(path)
 
 
 def create_polar_plot(args: dict):
@@ -327,12 +351,162 @@ def create_polar_plot(args: dict):
     ------
     None
     """
+    # Local convenience variables.
+    fdir = args["d"]
+    debug = args["debug"]
+    runid = args["id"]
+    doJr = args["Jr"]
+    k0 = args["k0"]
+    nStp = args["n"]
+    quiver = args["quiver"]
+    verbose = args["verbose"]
+
+    # ------------------------------------------------------------------------
+
+    # Compute the tag of the file containing the ground magnetic field
+    # perturbations.
+    ftag = f"{runid}.deltab"
+    if debug:
+        print(f"ftag = {ftag}")
+
+    # Read the ground magnetic field perturbations.
+    fname = os.path.join(fdir, f"{ftag}.h5")
+    if verbose:
+        print(f"Reading ground mgnetic field perturbations from {fname}.")
+    dbdata = gampp.GameraPipe(fdir, ftag)
+    if debug:
+        print(f"dbdata = {dbdata}")
+    print("---")
+
+    # Get the ID of the coordinate system, and the Earth radius.
+    if verbose:
+        print(f"Fetching coordinate system and Earth radius from {fname}.")
+    CoordID, Re = dbViz.GetCoords(fname)
+    print(f"Found {CoordID} coordinate data ...")
+    if debug:
+        print(f"CoordID = {CoordID}")
+        print(f"Re = {Re}")
+
+    # If the last simulation step was requested, get the step number.
+    if nStp < 0:
+        nStp = dbdata.sFin
+        print(f"Using Step {nStp}")
+
+    # Check the vertical level.
+    if verbose:
+        print("Checking vertical level.")
+    Z0 = dbViz.CheckLevel(dbdata, k0, Re)
+    if debug:
+        print(f"Z0 = {Z0}")
+
+    # If currents were requested, read them. Otherwise, read the ground
+    # magnetic field perturbations.
+    if verbose:
+        print("Reading currents.")
+    if doJr:
+        print("Reading Jr ...")
+        Jr = dbdata.GetVar("dbJ", nStp, doVerb=False)[:, :, k0]
+        Q = Jr
+    else:
+        dBn = dbdata.GetVar("dBn", nStp, doVerb=True)[:, :, k0]
+        Q = dBn
+    if debug:
+        print(f"Q - {Q}")
+
+    # Convert MJD to UT.
+    if verbose:
+        print(f"Reading MJD of step {nStp}.")
+    MJD = kh5.tStep(fname, nStp, aID="MJD")
+    if debug:
+        print(f"MJD = {MJD}")
+    utS = ktools.MJD2UT([MJD])
+    if debug:
+        print(f"utS = {utS}")
+    utDT = utS[0]
+    if debug:
+        print(f"utDT = {utDT}")
+
+    # Create the mapping grids.
+    if verbose:
+        print("Creating mapping grids.")
+    crs = ccrs.PlateCarree()
+    toplate = ccrs.PlateCarree()
+    topole = ccrs.Orthographic(-90.0, 90.0)
+    if debug:
+        print(f"crs = {crs}")
+        print(f"toplate = {toplate}")
+        print(f"topole = {topole}")
+    LatI, LonI, LatC, LonC = dbViz.GenUniformLL(dbdata, k0)
+    if debug:
+        print(f"LatI = {LatI}")
+        print(f"LonI = {LonI}")
+        print(f"LatC = {LatC}")
+        print(f"LonC = {LonC}")
+
+    # Fetch the color map.
+    if verbose:
+        print("Fetching color map.")
+    cmap = kmaps.cmDiv
+    if debug:
+        print(f"cmap = {cmap}")
+
+    # Determine color bar settings.
+    if verbose:
+        print("Determining color bar settings.")
+    if doJr:
+        vQ = kv.genNorm(dbViz.jMag)
+        cbStr = "Anomalous current"
+    else:
+        vQ = kv.genNorm(dbViz.dbMag, doSymLog=True, linP=dbViz.dbLin)
+        cbStr = r"$\Delta B_N$ [nT]"
+    if debug:
+        print(f"vQ = {vQ}")
+        print(f"cbStr = {cbStr}")
+
+    # Create the figure to hold the plot.
+    fig = plt.figure(figsize=POLAR_FIGURE_SIZE)
+
+    # Specify the grid for the subplots.
+    gs = gridspec.GridSpec(3, 1, height_ratios=[20, 1.0, 1.0], hspace=0.025)
+
+    # Create the subplots.
+    AxM = fig.add_subplot(gs[0, 0], projection=topole)
+    AxCB = fig.add_subplot(gs[-1, 0])
+
+    # Make the plot.
+    AxM.pcolormesh(LonI, LatI, Q, norm=vQ, cmap=cmap, transform=toplate)
+
+    if quiver:
+        dB_p = dbdata.GetVar("dBp", nStp, doVerb=True)[:, :, k0]
+        dB_t = dbdata.GetVar("dBt", nStp, doVerb=True)[:, :, k0]
+        # U,V should be eastward/northward for cartopy
+        U = -dB_p
+        V = -dB_t
+        nSk = 2
+        AxM.quiver(LonC[::nSk], LatC[::nSk],
+                   U[::nSk, ::nSk], V[::nSk, ::nSk],
+                   alpha=0.5, transform=toplate)
+
+    # Make the colorbar.
+    kv.genCB(AxCB, vQ, cbStr, cM=cmap)
+
+    # Add labels and other decorations.
+    tStr = dbViz.GenTStr(AxM, fname, nStp)
+    if debug:
+        print(f"tStr = {tStr}")
+    dbViz.DecorateDBAxis(AxM, crs, utDT)
+
+    # Save the figure.
+    path = os.path.join(args["d"], POLAR_PLOT_NAME)
+    if debug:
+        print(f"path = {path}")
+    kv.savePic(path)
 
 
 def dbpic(args: dict):
-    """Plot the ground magnetic field perturbations.
+    """Plot the ground magnetic field perturbations from a MAGE run.
 
-    Plot the ground magnetic field perturbations.
+    Plot the ground magnetic field perturbations from a MAGE run.
 
     Parameters
     ----------
@@ -354,12 +528,15 @@ def dbpic(args: dict):
     args = local_args
 
     # Local convenience variables.
-    debug = args["debug"]
+    # debug = args["debug"]
     verbose = args["verbose"]
 
     # ------------------------------------------------------------------------
 
-    # If requested, create the Mercator plot.
+    # Create plots in memory.
+    mpl.use("Agg")
+
+    # If requested, create and save the Mercator plot.
     if args["projection"] in ["mercator", "both"]:
         if verbose:
             print("Creating Mercator plot.")
