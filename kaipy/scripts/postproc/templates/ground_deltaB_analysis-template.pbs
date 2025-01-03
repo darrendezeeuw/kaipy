@@ -68,7 +68,7 @@ echo $cmd
 eval $cmd
 
 # Perform the SuperMage analysis.
-cmd="supermage_analysis.py --verbose {{ calcdb_results_path }} >& supermage_analysis.out"
+cmd="supermage_analysis.py --verbose {{ mage_results_path }} >& supermage_analysis.out"
 echo "Analysis command is:"
 echo $cmd
 eval $cmd

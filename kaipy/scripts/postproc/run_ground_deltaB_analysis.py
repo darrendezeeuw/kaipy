@@ -477,7 +477,8 @@ def create_ground_deltab_analysis_pbs_script(runid: str, args: dict):
         "kaijuhome": os.environ["KAIJUHOME"],
         "runid": runid,
         "smuser": args["smuser"],
-        "calcdb_results_path": f"{runid}.deltab.h5"
+        "calcdb_results_path": f"{runid}.deltab.h5",
+        "mage_results_path": args["mage_results_path"],
     }
     if debug:
         print(f"options = {options}")
