@@ -61,7 +61,7 @@ echo 'The active environment variables are:'
 printenv
 
 # Merge the ground delta B values.
-cmd="pitmerge.py --verbose -runid {{ runid }} >& pitmerge.out"
+cmd="pitmerge.py -runid {{ runid }} >& pitmerge.out"
 echo "Stitching command is:"
 echo $cmd
 eval $cmd
