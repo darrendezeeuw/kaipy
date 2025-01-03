@@ -64,7 +64,7 @@ echo 'The active environment variables are:'
 printenv
 
 # Compute the ground delta B values.
-log_file="{% if parintime > 1 %}calcdb.out.{$JNUM}{% else %}calcdb.out{% endif %}"
+log_file="{% if parintime > 1 %}calcdb.out.${JNUM}{% else %}calcdb.out{% endif %}"
 cmd="./calcdb.x {{ calcdb_xml_file }} {% if parintime > 1 %}${JNUM}{%- endif %} >& ${log_file}"
 echo "calcdb.x run command is:"
 echo $cmd
