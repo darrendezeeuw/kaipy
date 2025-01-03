@@ -80,7 +80,7 @@ PITMERGE_PBS_TEMPLATE = os.path.join(
 
 # Location of template PBS file for running the ground delta-B analysis.
 GROUND_DELTAB_ANALYSIS_PBS_TEMPLATE = os.path.join(
-    TEMPLATE_DIRECTORY, "ground_deltab_analysis-template.pbs"
+    TEMPLATE_DIRECTORY, "ground_deltaB_analysis-template.pbs"
 )
 
 
