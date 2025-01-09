@@ -120,8 +120,7 @@ def create_command_line_parser():
     parser.add_argument(
         "--hpc", type=str, default=DEFAULT_ARGUMENTS["hpc"],
         choices=VALID_HPC,
-        help="HPC system to run analysis (derecho|pleiades) "
-             "(default: %(default)s)."
+        help="HPC system to run analysis (default: %(default)s)."
     )
     parser.add_argument(
         "--parintime", type=int, default=DEFAULT_ARGUMENTS["parintime"],
