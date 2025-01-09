@@ -176,7 +176,7 @@ def create_mercator_plot(args: dict):
     # Read the ground magnetic field perturbations.
     fname = os.path.join(fdir, f"{ftag}.h5")
     if verbose:
-        print(f"Reading ground mgnetic field perturbations from {fname}.")
+        print(f"Reading ground magnetic field perturbations from {fname}.")
     dbdata = gampp.GameraPipe(fdir, ftag)
     if debug:
         print(f"dbdata = {dbdata}")
@@ -330,7 +330,7 @@ def create_mercator_plot(args: dict):
     path = os.path.join(args["d"], MERCATOR_PLOT_NAME)
     if debug:
         print(f"path = {path}")
-    kv.savePic(path)
+    kv.savePic(path, saveFigure=fig)
 
 
 def create_polar_plot(args: dict):
@@ -500,7 +500,7 @@ def create_polar_plot(args: dict):
     path = os.path.join(args["d"], POLAR_PLOT_NAME)
     if debug:
         print(f"path = {path}")
-    kv.savePic(path)
+    kv.savePic(path, saveFigure=fig)
 
 
 def dbpic(args: dict):
