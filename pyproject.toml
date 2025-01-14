@@ -7,7 +7,7 @@ include-package-data = true
 
 [project]
 name = "kaipy"
-version = "1.0.5"
+version = "1.0.6"
 authors = [
     {name = "Eric Winter", email = "eric.winter@jhuapl.edu"},
 ]
@@ -34,3 +34,9 @@ dependencies = [
     "spacepy",
     "sunpy",
 ]
+
+[project.scripts]
+cda2wind = "kaipy.scripts.preproc.cda2wind:main"
+genLFM = "kaipy.scripts.preproc.genLFM:main"
+genRCM = "kaipy.scripts.preproc.genRCM:main"
+XMLGenerator = "kaipy.scripts.preproc.XMLGenerator:main"

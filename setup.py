@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='kaipy',
-    version='1.0.5',
+    version='1.0.6',
     description='Python software for CGS MAGE and other Kaiju models',
     author='Kaiju team',
     author_email='wiltbemj@ucar.edu',
@@ -37,4 +37,12 @@ setup(
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
     ],
+    entry_points={
+        'console_scripts': [
+            'cda2wind=kaipy.scripts.preproc.cda2wind:main',
+            'genLFM=kaipy.scripts.preproc.genLFM:main',
+            'genRCM=kaipy.scripts.preproc.genRCM:main',
+            'XMLGenerator=kaipy.scripts.preproc.XMLGenerator:main'            
+        ]
+    }
 )
