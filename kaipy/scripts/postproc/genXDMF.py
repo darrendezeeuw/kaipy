@@ -29,7 +29,6 @@ def getDimInfo(h5fname,s0IDstr,preset):
 		gridVars = ['xMin','yMin','zMin']
 		with h5.File(h5fname, 'r') as h5f:
 			gDims = np.asarray(h5f[s0IDstr][gridVars[0]].shape)
-		#gDims = np.append(gDims, 1)
 		result['gridVars'] = gridVars
 		result['gDims'] = gDims
 		result['vDims'] = gDims
@@ -41,8 +40,6 @@ def getDimInfo(h5fname,s0IDstr,preset):
 		gridVars=['X','Y','Z']
 		with h5.File(h5fname, 'r') as h5f:
 			gDims = np.asarray(h5f[gridVars[0]].shape)
-		# Add a third with dim 1
-		#gDims = np.append(gDims,1)
 		result['gridVars'] = gridVars
 		result['gDims'] = gDims
 		result['vDims'] = gDims
