@@ -8,7 +8,7 @@ import xml.etree.ElementTree as et
 import xml.dom.minidom
 import numpy as np
 
-presets = {"gam", "mhdrcm_eq", "mhdrcm_bmin"}
+presets = {"gam", "mhdrcm_eq", "mhdrcm_bmin", 'voltSG'}
 
 def getDimInfo(h5fname,s0IDstr,preset):
 
@@ -37,17 +37,19 @@ def getDimInfo(h5fname,s0IDstr,preset):
 		result['geoStr'] = "X_Y_Z"
 		result['topoStr'] = "3DSMesh"
 		result['doAppendStep'] = True
-	elif preset=="rcm3D":
-		gridVars = ["rcmxmin_kji", "rcmymin_kji", "rcmalamc_kji"]
+	elif preset=="voltSG":
+		gridVars=['X','Y','Z']
 		with h5.File(h5fname, 'r') as h5f:
-			gDims = np.asarray(h5f[s0IDstr][gridVars[0]].shape)
+			gDims = np.asarray(h5f[gridVars[0]].shape)
+		# Add a third with dim 1
+		#gDims = np.append(gDims,1)
 		result['gridVars'] = gridVars
 		result['gDims'] = gDims
 		result['vDims'] = gDims
 		result['Nd'] = len(gDims)
 		result['geoStr'] = "X_Y_Z"
 		result['topoStr'] = "3DSMesh"
-		result['doAppendStep'] = True
+		result['doAppendStep'] = False
 	else:  # gam, mhdrcm_iono, etc.
 		#Get root-level XY(Z) dimensions
 		#First check to see if they exist
