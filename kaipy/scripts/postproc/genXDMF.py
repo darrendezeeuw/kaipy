@@ -20,7 +20,6 @@ def getDimInfo(h5fname,s0IDstr,preset):
 			gDims = np.asarray(h5f[s0IDstr][gridVars[0]].shape)
 		result['gridVars'] = gridVars
 		result['gDims'] = gDims
-		result['vDims'] = gDims
 		result['Nd'] = len(gDims)
 		result['geoStr'] = "X_Y"
 		result['topoStr'] = "2DSMesh"
@@ -31,7 +30,6 @@ def getDimInfo(h5fname,s0IDstr,preset):
 			gDims = np.asarray(h5f[s0IDstr][gridVars[0]].shape)
 		result['gridVars'] = gridVars
 		result['gDims'] = gDims
-		result['vDims'] = gDims
 		result['Nd'] = len(gDims)
 		result['geoStr'] = "X_Y_Z"
 		result['topoStr'] = "3DSMesh"
@@ -42,7 +40,6 @@ def getDimInfo(h5fname,s0IDstr,preset):
 			gDims = np.asarray(h5f[gridVars[0]].shape)
 		result['gridVars'] = gridVars
 		result['gDims'] = gDims
-		result['vDims'] = gDims
 		result['Nd'] = len(gDims)
 		result['geoStr'] = "X_Y_Z"
 		result['topoStr'] = "3DSMesh"
@@ -66,7 +63,6 @@ def getDimInfo(h5fname,s0IDstr,preset):
 
 		result['gridVars'] = gridVars
 		result['gDims'] = gDims
-		result['vDims'] = gDims - 1
 		result['Nd'] = len(gDims)
 		result['geoStr'] = '_'.join(gridVars)
 		result['topoStr'] = topoStr
@@ -79,9 +75,9 @@ def addRCMVars(Grid, dimInfo, rcmInfo, sID):
 
 	sIDstr = "Step#" + str(sID) 
 
-	mr_vDims = dimInfo['vDims']  # mhdrcm var dims
+	mr_vDims = dimInfo['gDims']  # mhdrcm var dims
 	mr_vDimStr = ' '.join([str(v) for v in mr_vDims])
-	mr_nDims = len(vDims)
+	mr_nDims = len(mr_vDims)
 	rcmh5fname = rcmInfo['rcmh5fname']
 	rcmVars = rcmInfo['rcmVars'] # List of rcm.h5 variables we want in mhdrcm.xmf
 	rcmKs = rcmInfo['rcmKs'] # List if rcm.h5 k values for 3d rcm.h5 vars
@@ -178,13 +174,13 @@ if __name__ == "__main__":
 	dimInfo = getDimInfo(h5fname, s0str, preset)
 	gridVars = dimInfo['gridVars']
 	gDims = dimInfo['gDims']
-	vDims = dimInfo['vDims']
 	Nd = dimInfo['Nd']
 	geoStr = dimInfo['geoStr']
 	topoStr = dimInfo['topoStr']
 	doAppendStep = dimInfo['doAppendStep']
 	gDimStr = ' '.join([str(v) for v in gDims])
-	vDimStr = ' '.join([str(v) for v in vDims])
+	vDimStr_corner = ' '.join([str(v) for v in gDims])
+	vDimStr_cc = ' '.join([str(v-1) for v in gDims])
 
 	doAddRCMVars = False
 	#Prep to include some rcmh5 vars in mhdrcm.xmf file
@@ -282,10 +278,12 @@ if __name__ == "__main__":
 		#--------------------------------
 		#Step variables
 		for v in range(Nv):
+			vDimStr = vDimStr_corner if vLocs[v]=="Node" else vDimStr_cc
 			kxmf.AddData(Grid,fNames_link[n],vIds[v],vLocs[v],vDimStr,steps_link[n])
 		#--------------------------------
 		#Base grid variables
 		for v in range(Nrv):
+			vDimStr = vDimStr_corner if rvLocs[v]=="Node" else vDimStr_cc
 			kxmf.AddData(Grid,fNames_link[n],rvIds[v],rvLocs[v],vDimStr)
 
 		if doAddRCMVars:
