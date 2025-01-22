@@ -131,6 +131,9 @@ class TimeSeries(dict):
         except TypeError:
             self[key]['data'] = data
 
-if __name__ == '__main__':
+def main():
     import doctest
     doctest.testmod()
+
+if __name__ == '__main__':
+    main()

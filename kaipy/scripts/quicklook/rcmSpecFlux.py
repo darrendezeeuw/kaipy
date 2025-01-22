@@ -41,7 +41,7 @@ def create_command_line_parser():
 	return parser
 
 
-if __name__ == "__main__":
+def main():
 	#Defaults
 	cmap = plt.cm.plasma
 	# Set up the command-line parser.
@@ -171,3 +171,6 @@ if __name__ == "__main__":
 
 	#plt.show()
 	#
+
+if __name__ == "__main__":
+	main()

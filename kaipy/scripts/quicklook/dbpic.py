@@ -103,7 +103,7 @@ def create_command_line_parser():
     return parser
 
 
-if __name__ == "__main__":
+def main():
     """Plot the ground magnetic field perturbations."""
 
     # Set up the command-line parser.
@@ -277,3 +277,6 @@ if __name__ == "__main__":
     if debug:
         print("fOut = %s" % fOut)
     kv.savePic(fOut)
+
+if __name__ == "__main__":
+    main()

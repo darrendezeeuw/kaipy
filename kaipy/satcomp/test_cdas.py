@@ -38,7 +38,10 @@ def test_getCdasData():
 	pass
 
 
-if __name__ == "__main__":
+def main():
 	test_getscIds()
 
 	test_getCdasData()
+
+if __name__ == "__main__":
+	main()
