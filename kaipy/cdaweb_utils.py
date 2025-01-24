@@ -434,7 +434,7 @@ def fetch_helio_spacecraft_HGS_trajectory(spacecraft, t_start, t_end, mjdc):
     """
     # Read the CDAWeb spacecraft database.
     spacecraft_data_file = os.path.join(
-        os.environ["KAIJUHOME"], "kaipy", "satcomp", "sc_helio.json"
+        os.environ["KAIPYHOME"], "kaipy", "satcomp", "sc_helio.json"
     )
     sc_info = scutils.getScIds(spacecraft_data_file=spacecraft_data_file)
 
@@ -508,7 +508,7 @@ def fetch_helio_spacecraft_trajectory(sc_id, t_start, t_end):
     """
     # Read the CDAWeb spacecraft database.
     sc_metadata_path = os.path.join(
-        os.environ["KAIJUHOME"], "kaipy", "satcomp", "sc_helio.json"
+        os.environ["KAIPYHOME"], "kaipy", "satcomp", "sc_helio.json"
     )
     sc_metadata = scutils.getScIds(spacecraft_data_file=sc_metadata_path)
 
@@ -546,7 +546,7 @@ def ingest_helio_spacecraft_trajectory(sc_id, sc_data, MJDc):
     """
     # Read the CDAWeb spacecraft database.
     sc_metadata_path = os.path.join(
-        os.environ["KAIJUHOME"], "kaipy", "satcomp", "sc_helio.json"
+        os.environ["KAIPYHOME"], "kaipy", "satcomp", "sc_helio.json"
     )
     sc_metadata = scutils.getScIds(spacecraft_data_file=sc_metadata_path)
 
