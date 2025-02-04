@@ -221,7 +221,7 @@ class GameraPipe(object):
 			None
 		"""
 
-		uID = kh5.PullAtt(f0, "UnitsID")
+		uID = kh5.PullAtt(f0, "UnitsID",a0="CODE") #Setting default
 		#with h5py.File(f0, 'r') as hf:
 		#	uID = hf.attrs.get("UnitsID", "CODE")
 		if not isinstance(uID, str):
