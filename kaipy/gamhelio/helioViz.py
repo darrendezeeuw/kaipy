@@ -795,9 +795,9 @@ def PlotMerBrNorm(
                       shading="auto")
 
         # Plot the heliospheric current sheet.
-        Ax.contour(np.sqrt(xr_c**2 + yr_c**2), zr_c, Br_r, [0.],
+        Ax.contour(np.sqrt(xr_c**2 + yr_c**2), zr_c, Br_l, [0.],
                    colors='black')
-        Ax.contour(-np.sqrt(xl_c**2 + yl_c**2), zl_c, Br_l, [0.],
+        Ax.contour(-np.sqrt(xl_c**2 + yl_c**2), zl_c, Br_r, [0.],
                    colors='black')
 
     else:
