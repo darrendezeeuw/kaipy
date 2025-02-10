@@ -61,7 +61,6 @@ def locPID(fname, pid):
 		if (ids[loc] != pid):
 			print("Didn't find particle %d ..."%(pid))
 			loc = None
-			quit()
 	return loc
 
 
