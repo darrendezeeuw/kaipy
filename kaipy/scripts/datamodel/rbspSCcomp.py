@@ -64,7 +64,7 @@ def getJScl(Bmag,Beq,en=2.0):
 			It[n] = Ic.sum()/I0
 	return It
 
-if __name__ == "__main__":
+def main():
 	#Defaults
 	fdir  = os.getcwd()
 	ftag  = "eRBpsd.ps.h5"
@@ -314,4 +314,5 @@ if __name__ == "__main__":
 	kv.savePic('1dJComp.png')
 
 
-
+if __name__ == "__main__":
+	main()

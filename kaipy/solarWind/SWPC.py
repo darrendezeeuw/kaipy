@@ -528,6 +528,9 @@ class ACESWPC(DSCOVRNC):
                          units='n/a',
                          data=metadata)
 
-if __name__ == '__main__':
+def main():
     import doctest
     doctest.testmod()
+
+if __name__ == "__main__":
+    main()

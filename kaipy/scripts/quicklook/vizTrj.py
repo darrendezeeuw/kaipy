@@ -67,7 +67,7 @@ def create_command_line_parser():
 	return parser
 
 
-if __name__ == "__main__":
+def main():
 	#Defaults
 	LW = 0.5
 	fs = 16
@@ -108,3 +108,6 @@ if __name__ == "__main__":
 	ax.set_title(titS,fontsize=fs)
 	axEqual3d(ax)
 	plt.show()
+
+if __name__ == "__main__":
+	main()

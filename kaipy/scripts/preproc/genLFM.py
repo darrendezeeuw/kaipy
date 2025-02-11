@@ -52,10 +52,10 @@ def create_command_line_parser():
 	return parser
 
 
-if __name__ == "__main__":
+def main():
 	#Defaults asdf 
 	Nc0 = 8 #Number of outer i cells to cut out from LFM grid (OCT)
-	fIn = "./lfmG"
+	fIn = "lfmG"
 	doEpsY = True
 	TINY = 1.0e-8
 	gLabs = ["Double","Quad","Oct","Hex"]
@@ -120,3 +120,7 @@ if __name__ == "__main__":
 	if (doViz):
 		gg.VizGrid(XX,YY,xxG,yyG,fOut=fOut,doGhost=doVizG)
 	#gg.genRing(XX,YY,Nk=Nk,Tol=1.0,doVerb=True)
+
+
+if __name__ == "__main__":
+	main()

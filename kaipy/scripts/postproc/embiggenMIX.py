@@ -9,7 +9,7 @@ import h5py
 import os
 import kaipy.kaiH5 as kh5
 
-if __name__ == "__main__":
+def main():
 	dIn = os.getcwd()
 
 
@@ -68,3 +68,6 @@ if __name__ == "__main__":
 	#Now get 
 	iH5.close()
 	oH5.close()
+
+if __name__ == "__main__":
+	main()
