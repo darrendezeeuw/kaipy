@@ -50,7 +50,7 @@ def create_command_line_parser():
 	numSamples = 6
 	varStr = "specFlux"
 
-	MainS = """Creates a plot of the differential flux for RCM ions or electrons in units of cm^-2 keV^-1 str^-1
+	MainS = """Plots RCM data at a given equatorial x,y,z point.
 	"""
 	parser = argparse.ArgumentParser(description=MainS, formatter_class=RawTextHelpFormatter)
 	parser.add_argument('-id',type=str,metavar="runid",default=ftag,help="RunID of data (default: %(default)s)")
