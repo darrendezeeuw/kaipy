@@ -224,8 +224,12 @@ class GameraPipe(object):
 		uID = kh5.PullAtt(f0, "UnitsID",a0="CODE") #Setting default
 		#with h5py.File(f0, 'r') as hf:
 		#	uID = hf.attrs.get("UnitsID", "CODE")
+		print(f'GameraPipe: {uID}')
 		if not isinstance(uID, str):
+			print('setting UnitsID')
 			self.UnitsID = uID.decode('utf-8')
+		else:
+			self.UnitsID = uID
 
 	def GetGridParallel(self, doVerbose):
 			"""Parallel read of grid datasets
