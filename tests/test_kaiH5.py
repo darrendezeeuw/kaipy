@@ -7,6 +7,10 @@ from astropy.time import Time
 
 from kaipy.kaiH5 import H5Info, TPInfo, genName, genNameOld, CheckOrDie, CheckDirOrMake, StampHash, StampBranch, GetHash, GetBranch, tStep, cntSteps, cntX, getTs, LocDT, MageStep, getDims, getRootVars, getVars, PullVarLoc, PullVar, PullAtt
 
+Ni = 32
+Nj = 24
+Nk = 48
+
 @pytest.fixture(scope='session')
 def temp_h5_file(tmp_path_factory):
 	temp_dir = tmp_path_factory.mktemp("data")
@@ -18,7 +22,7 @@ def temp_h5_file(tmp_path_factory):
 			grp.attrs['time'] = np.double(i)
 			grp.attrs['MJD'] = Time(today).mjd
 			grp.attrs['timestep'] = i
-			grp.create_dataset("D", data=np.zeros((10, 10, 10)))
+			grp.create_dataset("D", data=np.zeros((Ni, Nj, Nk)))
 	return str(file_path)
 
 def test_H5Info_initialization(temp_h5_file):
@@ -142,14 +146,14 @@ def test_MageStep(tmpdir):
 def test_getDims(tmpdir):
 	file_path = tmpdir.join("test.h5")
 	with h5py.File(file_path, 'w') as f:
-		f.create_dataset("X", data=np.zeros((10, 10, 10)))
+		f.create_dataset("X", data=np.zeros((Ni, Nj, Nk)).T)
 	result = getDims(str(file_path))
-	assert np.array_equal(result, np.array([10, 10, 10]))
+	assert np.array_equal(result, np.array([Ni, Nj, Nk]))
 
 def test_getRootVars(tmpdir):
 	file_path = tmpdir.join("test.h5")
 	with h5py.File(file_path, 'w') as f:
-		f.create_dataset("var1", data=np.zeros((10, 10, 10)))
+		f.create_dataset("var1", data=np.zeros((Ni, Nj, Nk)).T)
 	result = getRootVars(str(file_path))
 	assert result == ['var1']
 
@@ -157,23 +161,23 @@ def test_getVars(tmpdir):
 	file_path = tmpdir.join("test.h5")
 	with h5py.File(file_path, 'w') as f:
 		grp = f.create_group("Step#0")
-		grp.create_dataset("var1", data=np.zeros((10, 10, 10)))
+		grp.create_dataset("var1", data=np.zeros((Ni, Nj, Nk)).T)
 	result = getVars(str(file_path), 0)
 	assert result == ['var1']
 
 def test_PullVarLoc(tmpdir):
 	file_path = tmpdir.join("test.h5")
 	with h5py.File(file_path, 'w') as f:
-		f.create_dataset("var1", data=np.zeros((10, 10, 10)))
+		f.create_dataset("var1", data=np.zeros((Ni, Nj, Nk)).T)
 	result, loc = PullVarLoc(str(file_path), "var1")
-	assert np.array_equal(result, np.zeros((10, 10, 10)))
+	assert np.array_equal(result, np.zeros((Ni, Nj, Nk)))
 
 def test_PullVar(tmpdir):
 	file_path = tmpdir.join("test.h5")
 	with h5py.File(file_path, 'w') as f:
-		f.create_dataset("var1", data=np.zeros((10, 10, 10)))
+		f.create_dataset("var1", data=np.zeros((Ni, Nj, Nk)).T)
 	result = PullVar(str(file_path), "var1")
-	assert np.array_equal(result, np.zeros((10, 10, 10)))
+	assert np.array_equal(result, np.zeros((Ni, Nj, Nk)))
 
 def test_PullAtt(tmpdir):
 	file_path = tmpdir.join("test.h5")
