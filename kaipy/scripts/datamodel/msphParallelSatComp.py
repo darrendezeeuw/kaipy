@@ -34,7 +34,7 @@ import kaipy.kaiTools as kaiTools
 import kaipy.kaijson as kj
 import kaipy.satcomp.scutils as scutils
 
-def main():
+if __name__ == '__main__':
     MainS = """Extracts information from satellite trajectory for various
     spacecraft.  Space craft data is pulled from CDAWeb.  Output CDF files
     contain data pulled from CDAWeb along with data extracted from GAMERA.
@@ -111,6 +111,3 @@ def main():
         subprocess.run(['rm',os.path.join(fdir,'err.*.txt')])
 
     print('All done!')
-
-if __name__ == '__main__':
-    main()

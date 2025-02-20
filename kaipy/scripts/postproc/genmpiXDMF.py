@@ -12,7 +12,7 @@ import kaipy.kaiH5 as kh5
 
 import os
 
-def main():
+if __name__ == "__main__":
 	#Defaults
 	fdir = os.getcwd()
 	ftag = "msphere"
@@ -177,6 +177,3 @@ def main():
 
 		#Prep for next step
 		tOut = tOut+1
-
-if __name__ == "__main__":
-	main()

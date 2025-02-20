@@ -407,9 +407,6 @@ class WIND(OMNI):
 
         return (diff.days*24.0*60.0 + diff.seconds/60.0)
 
-def main():     
+if __name__ == '__main__':
     import doctest
     doctest.testmod()
-
-if __name__ == '__main__':
-    main()

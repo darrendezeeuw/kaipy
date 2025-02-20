@@ -39,7 +39,7 @@ def getKVsFromFile(fName):
 		attrs[k] = v
 	return attrs
 
-def main():
+if __name__=='__main__':
 	idStr_noMPI = ".gam.Res.*.h5"
 	idStrMPI = "_0*_0*_0*_0000_0000_0000.gam.Res.*.h5"
 
@@ -102,5 +102,3 @@ def main():
 		print(formatString)
 
 
-if __name__ == "__main__":
-	main()

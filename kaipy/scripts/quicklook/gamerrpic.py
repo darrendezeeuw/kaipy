@@ -52,7 +52,7 @@ def create_command_line_parser():
 
 	return parser
 
-def main():
+if __name__ == "__main__":
 	#Defaults
 	doMPI = False #[Add MPI tiling]
 	# Set up the command-line parser.
@@ -109,6 +109,3 @@ def main():
 
 	kv.savePic(oName,bLenX=45)
 
-
-if __name__ == "__main__":
-	main()

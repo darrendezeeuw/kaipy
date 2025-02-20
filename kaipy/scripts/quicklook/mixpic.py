@@ -277,7 +277,7 @@ def makePlot(i, remixFile, nStp):
 
         #plt.close(fig)
 
-def main():
+if __name__ == "__main__":
     """Plot remix data, either a single time step or as a movie"""
 
     # Set up the command-line parser.
@@ -380,6 +380,3 @@ def main():
             with Pool(processes=ncpus) as pl:
                 pl.starmap(makePlot,ag)
             print("Done making all the images. Go to mixVid folder")
-
-if __name__ == "__main__":
-    main()

@@ -474,7 +474,7 @@ def makePlot(i,rcmdata,nStp):
     # Save the figure to a file.
     kv.savePic(outPath, dpiQ=300)
 
-def main():
+if __name__ == "__main__":
     """Make a quick figure of a Gamera magnetosphere run."""
 
     # Set up the command-line parser.
@@ -597,5 +597,3 @@ def main():
                 pl.starmap(makePlot,ag)
             print("Done making all the images. Go to mixVid folder")
 
-if __name__ == "__main__":
-    main()

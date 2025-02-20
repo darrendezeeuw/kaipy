@@ -45,7 +45,7 @@ def create_command_line_parser():
 
     return parser
 
-def main():
+if __name__ == "__main__":
 
     #Defaults
     iMax = -1
@@ -128,6 +128,3 @@ def main():
 
     ax.set_xlim(xMin,xMax)
     kv.savePic("qkdstpic.png")
-
-if __name__ == "__main__":
-    main()

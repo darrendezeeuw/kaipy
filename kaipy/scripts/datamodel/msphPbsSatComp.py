@@ -24,7 +24,7 @@ import spacepy.datamodel as dm
 
 
 
-def main():
+if __name__ == '__main__':
 	MainS = """Checks the run for satellites with data avilable and then
 	sets up PBS job scripts for running interpolation in parallel."""
 
@@ -179,5 +179,3 @@ def main():
 
 
 
-if __name__ == '__main__':
-	main()

@@ -64,7 +64,7 @@ def getNum(fIn,n,m):
 		lId = "Line#%d"%(m)
 		Np = hf[gId][lId].attrs["Np"]
 	return Np
-def main():
+if __name__ == "__main__":
     #Set defaults
 	parser = argparse.ArgumentParser(description="Generates XDMF file from CHIMP tracer HDF5 output")
 	parser.add_argument('h5F',nargs=1,type=str,metavar='tracer.h5',help="Filename of CHIMP tracer HDF5 Output")
@@ -186,6 +186,3 @@ def main():
 	xmlStr = xml.dom.minidom.parseString(et.tostring(Xdmf)).toprettyxml(indent="    ")
 	with open(fOutXML,"w") as f:
 		f.write(xmlStr)
-
-if __name__ == "__main__":
-	main()

@@ -115,7 +115,7 @@ def create_command_line_parser():
     return parser
 
 
-def main():
+if __name__ == "__main__":
     """Begin main program."""
 
     # Set up the command-line parser.
@@ -341,6 +341,3 @@ def main():
         # if verbose:
         #     print("Plotting %s trajectory in spacecraft frame to %s." % (sc_id, plot_file_path))
         # kv.helioTrajPlot(plot_file_path, sc_id, sc_data)
-
-if __name__ == "__main__":
-    main()

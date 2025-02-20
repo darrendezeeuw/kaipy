@@ -321,7 +321,7 @@ def makePlot(i,spacecraft,nStp):
     kv.savePic(outPath, bLenX=45)
 
 
-def main():
+if __name__ == "__main__":
     """Make a quick figure of a Gamera magnetosphere run."""
 
     # Set up the command-line parser.
@@ -440,6 +440,3 @@ def main():
             with Pool(processes=ncpus) as pl:
                 pl.starmap(makePlot,ag)
             print("Done making all the images. Go to mixVid folder")
-
-if __name__ == "__main__":
-    main()
