@@ -19,7 +19,7 @@ import kaipy.kaijson as kj
 import kaipy.satcomp.scutils as scutils
 import spacepy.datamodel as dm
 
-def main():
+if __name__ == '__main__':
 	MainS = """Extracts information from satellite trajectory for various
 	spacecraft.  Space craft data is pulled from CDAWeb.  Output CDF files
 	contain data pulled from CDAWeb along with data extracted from GAMERA.
@@ -118,6 +118,3 @@ def main():
 			print('Plotting trajectory to',plotname)
 			kv.trajPlot(plotname,scId,data,toRe)
 			
-
-if __name__ == '__main__':
-	main()

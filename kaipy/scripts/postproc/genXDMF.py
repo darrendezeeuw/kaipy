@@ -131,7 +131,7 @@ def addRCMVars(Grid, dimInfo, rcmInfo, sID):
 					kxmf.addHyperslab(Grid,vName_k,mr_vDimStr,dimStr,startStr,strideStr,numStr,r_vDimStr,text)
 
 
-def main():
+if __name__ == "__main__":
 
 	outfname = ''
 
@@ -300,5 +300,3 @@ def main():
 	with open(fOutXML,"w") as f:
 		f.write(xmlStr)
 		
-if __name__ == "__main__":
-	main()

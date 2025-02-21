@@ -129,7 +129,7 @@ def makeImage(i,gsph1,gsph2,tOut,doVerb,xyBds,fnList,oDir,errTimes,errListRel,er
 	fOut = oDir+"/vid.%04d.png"%(npl)
 	kv.savePic(fOut,bLenX=45,saveFigure=fig,doClose=True)
 
-def main():
+if __name__ == "__main__":
 	#Defaults
 	fdir1 = os.getcwd()
 	ftag1 = "msphere"
@@ -254,6 +254,3 @@ def main():
         
 	makeMovie(oDir,oSub)
 
-
-if __name__ == "__main__":
-	main()

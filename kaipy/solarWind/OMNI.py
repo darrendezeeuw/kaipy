@@ -762,9 +762,6 @@ class OMNIW(OMNI):
         
         return (dates,dataArray, hasBeenInterpolated, dataOrigin)
          
-def main():
+if __name__ == '__main__':
     import doctest
     doctest.testmod()
-
-if __name__ == '__main__':
-    main()

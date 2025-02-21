@@ -220,7 +220,7 @@ def compute_ground_delta_B(runid, mpixml=None):
     return delta_B_file
 
 
-def main():
+if __name__ == "__main__":
     """Begin main program."""
 
     # Set up the command-line parser.
@@ -319,6 +319,3 @@ def main():
     sm.MakeContourPlots(SM, SMinterp, maxx = 1000, fignumber=2)
     contour_plot_file = runid + "_contours.png"
     plt.savefig(contour_plot_file)
-
-if __name__ == "__main__":
-    main()

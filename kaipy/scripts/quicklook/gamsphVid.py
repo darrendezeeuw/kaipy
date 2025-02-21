@@ -67,7 +67,7 @@ def create_command_line_parser():
 
 	return parser
 
-def main():
+if __name__ == "__main__":
 	#Defaults
 	doDen = False
 	doMPI = False #[Add MPI tiling]
@@ -205,7 +205,3 @@ def main():
 
 		fOut = oDir+"/vid.%04d.png"%(npl)
 		kv.savePic(fOut,bLenX=45)
-
-
-if __name__ == "__main__":
-	main()

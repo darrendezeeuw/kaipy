@@ -9,7 +9,7 @@ import h5py
 import os
 import kaipy.kaiH5 as kh5
 
-def main():
+if __name__ == "__main__":
 	dIn = os.getcwd()
 
 
@@ -109,6 +109,3 @@ def main():
 	print("\tRCMSIZEI = %d"%(Nri))
 	print("\tRCMSIZEJ = %d"%(Nrj))
 	print("\tRCMSIZEK = %d"%(Nk))
-
-if __name__ == "__main__":
-	main()

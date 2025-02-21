@@ -148,7 +148,7 @@ def create_command_line_parser():
 
     return parser
 
-def main():
+if __name__ == "__main__":
     #Defaults
     maxf107  = 300.0
     minMfast = 1.5
@@ -578,8 +578,3 @@ def main():
 
     else:
         raise Exception('Error:  Misunderstood output file format.')
-
-
-
-if __name__ == '__main__':
-    main()

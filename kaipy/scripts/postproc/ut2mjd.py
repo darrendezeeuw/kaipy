@@ -6,7 +6,7 @@ import datetime
 
 fmt='%m/%d/%Y, %H:%M:%S'
 
-def main():
+if __name__ == "__main__":
     t0="2010-01-01T00:00:00"
     fmt='%Y-%m-%dT%H:%M:%S'
 
@@ -26,6 +26,3 @@ def main():
     mjd = Time(ut).mjd
 
     print("%s (UT) => %f (MJD)"%(utStr,mjd))
-
-if __name__ == "__main__":
-    main()

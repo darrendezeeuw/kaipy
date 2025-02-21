@@ -23,7 +23,7 @@ def fmtTKL(AxTKL):
 	AxTKL.xaxis.labelpad = -1
 	AxTKL.title.set_text(str(ut_tkl[0]))
 
-def main():
+if __name__=="__main__":
 	fdir  = os.getcwd()
 	ftag  = "msphere"
 	trtag = "RBSP-%s_MAGNETOMETER_1SEC-GSM_EMFISIS-L3.sc.h5"  # Spacecraft trajectory and values along track
@@ -269,6 +269,3 @@ def main():
 		
 	
 	plt.show()
-
-if __name__ == "__main__":
-	main()

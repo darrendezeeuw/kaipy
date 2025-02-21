@@ -4,7 +4,7 @@
 import argparse
 from argparse import RawTextHelpFormatter
 import numpy as np
-import kaipy.gamera.gampp as gampp
+import kaipy.gamera.block_gampp as gampp
 import xml.etree.ElementTree as et
 import xml.dom.minidom
 import kaipy.kaiH5 as kh5
@@ -52,7 +52,7 @@ def genName(bStr, i, j, k, Ri, Rj, Rk,isOld):
     return fID
 
 
-def main():
+if __name__ == "__main__":
     # Defaults
     fdir = os.getcwd()
     ftag = "msphere"
@@ -228,6 +228,3 @@ def main():
 
         # Prep for next step
         tOut = tOut+1
-
-if __name__ == "__main__":
-    main()

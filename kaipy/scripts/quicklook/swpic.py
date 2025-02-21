@@ -32,7 +32,7 @@ def create_command_line_parser():
 
 	return parser
 
-def main():
+if __name__ == "__main__":
 	#Defaults
 
 	# Set up the command-line parser.
@@ -103,5 +103,3 @@ def main():
 	swBCplots.swQuickPlot(UTall,D,Temp,Vx,Vy,Vz,Bx,By,Bz,SYMH,pltInterp,fOut,doEps=doEps,doTrim=doTrim,t0fmt=t0Fmt)
 
 
-if __name__ == "__main__":
-	main()

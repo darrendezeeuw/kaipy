@@ -11,7 +11,7 @@ def MJD2Str(m0):
 	dtObj = Time(m0,format='mjd').datetime
 	tStr = dtObj.strftime("%H:%M:%S") + " " +  dtObj.strftime("%m/%d/%Y") 
 	return tStr
-def main():
+if __name__ == "__main__":
 	#Defaults
 
 	MainS = """Identifies the domain (in steps and time) of a Kaiju HDF-5 file"""
@@ -48,6 +48,3 @@ def main():
 
 		print("\tGit: Hash = %s / Branch = %s"%(hStr,bStr))
 	#---------------------
-
-if __name__ == "__main__":
-	main()

@@ -9,7 +9,7 @@ import h5py
 import os
 import kaipy.kaiH5 as kh5
 
-def main():
+if __name__ == "__main__":
 	dIn = os.getcwd()
 
 	#Input tiling
@@ -191,8 +191,7 @@ def main():
 		os.remove(fTmp)
 		os.remove(fTmp2X)
 
-if __name__ == "__main__":
-	main()
+
 
 
 # #!/usr/bin/env python

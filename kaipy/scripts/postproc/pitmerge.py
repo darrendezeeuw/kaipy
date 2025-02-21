@@ -44,7 +44,7 @@ def createfile(fIn,fOut,doLink=False):
 
 	return oH5
 
-def main():
+if __name__ == "__main__":
 	dIn = os.getcwd()
 
 	runid = "msphere"
@@ -157,7 +157,3 @@ def main():
 	
 	#Done
 	oH5.close()
-
-
-if __name__ == "__main__":
-	main()
