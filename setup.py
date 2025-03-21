@@ -2,17 +2,18 @@ from setuptools import setup, find_packages
 
 setup(
     name='kaipy',
-    version='1.0.5',
+    version='1.0.8',
     description='Python software for CGS MAGE and other Kaiju models',
     author='Kaiju team',
     author_email='wiltbemj@ucar.edu',
     url='https://bitbucket.org/aplkaiju/kaipy/src/master/',
     packages=find_packages(),
+    include_package_data=True,
+    package_data={'kaipy': ['scripts/*', 'scripts/*/*']},
     python_requires='>=3.8,<=3.10',
     install_requires=[
         'alive_progress',
         'astropy',
-        # 'cartopy',
         'cdasws',
         'configparser',
         'h5py',
