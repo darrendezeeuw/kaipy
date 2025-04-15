@@ -35,7 +35,7 @@ DEFAULT_SUPERMAG_USER = "ewinter"
 
 # Location of template XML file.
 XML_TEMPLATE = os.path.join(
-    os.environ["KAIJUHOME"], "scripts", "postproc", "calcdb.xml.template"
+    os.environ["KAIPYHOME"], "scripts", "postproc", "calcdb.xml.template"
 )
 
 # Name of XML file read by calcdb.x.
