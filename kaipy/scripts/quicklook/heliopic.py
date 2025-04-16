@@ -120,6 +120,7 @@ SPACECRAFT_COLORS = list(mpl.colors.TABLEAU_COLORS.keys())
 # Names of valid spacecraft
 VALID_SPACECRAFT = "ACE,STEREO_A,STEREO_B,Parker_Solar_Probe,Solar_Orbiter"
 
+
 def create_command_line_parser():
     parser = argparse.ArgumentParser(description=DESCRIPTION)
     parser.add_argument(
