@@ -56,7 +56,7 @@ default_path = os.getcwd()
 
 # Path to file of heliospheric spacecraft metadata.
 helio_sc_metadata_path = os.path.join(
-    os.environ["KAIJUHOME"], "kaipy", "satcomp", "sc_helio.json"
+    os.environ["KAIPYHOME"], "kaipy", "satcomp", "sc_helio.json"
 )
 
 
