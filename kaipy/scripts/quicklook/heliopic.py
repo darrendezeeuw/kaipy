@@ -117,6 +117,9 @@ DEFAULT_PICTYPE = "pic1"
 # Colors to use for spacecraft position symbols.
 SPACECRAFT_COLORS = list(mpl.colors.TABLEAU_COLORS.keys())
 
+# List of valid spacecraft names.
+VALID_SPACECRAFT = "ACE,STEREO_A,STEREO_B,Parker_Solar_Probe,Solar_Orbiter"
+
 
 def create_command_line_parser():
     parser = argparse.ArgumentParser(description=DESCRIPTION)
@@ -172,8 +175,9 @@ def create_command_line_parser():
     )
     parser.add_argument(
         "--spacecraft", type=str, metavar="spacecraft", default=None,
-        help="Names of spacecraft to plot positions, separated by commas "
-             "(default: %(default)s)"
+        help="Names of spacecraft to plot positions, separated by commas"
+        f"(valid spacecraft are {VALID_SPACECRAFT})"
+        "(default: %(default)s)"
     )
     parser.add_argument(
         "--verbose", "-v", action="store_true",
