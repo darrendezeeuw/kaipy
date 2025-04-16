@@ -107,7 +107,7 @@ valid_movie_formats = ("gif", "mp4")
 
 # Path to spacecraft metadata file.
 sc_metadata_path = os.path.join(
-    os.environ["KAIJUHOME"], "kaipy", "satcomp", "sc_helio.json"
+    os.environ["KAIPYHOME"], "kaipy", "satcomp", "sc_helio.json"
 )
 
 # Figure sizes by plot type, (width, height) in inches.

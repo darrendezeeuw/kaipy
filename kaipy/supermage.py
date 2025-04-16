@@ -669,15 +669,17 @@ def MakeContourPlots(SM, SMinterp, maxx = 'default', fignumber = 1):
     plt.pcolormesh(SM['td'], hourbins, SMUbigreal, vmin = -1*maxx, vmax = maxx, cmap = cmapp, shading = 'auto')
     plt.xlim([SMinterp['td'][0], SMinterp['td'][-1]])
     plt.grid(True)
-    plt.text(xxx, yyy, "Real SMU", horizontalalignment='center', verticalalignment='center', transform=ax1.transAxes, fontsize = qqq)
+    plt.text(xxx, yyy, "Real SMU", horizontalalignment='center', verticalalignment='center', transform=ax1.transAxes)
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    plt.gca().xaxis.set_tick_params(labelsize=6)
 
     ax2 = plt.subplot(3, 2, 2)
     plt.pcolormesh(SM['td'], hourbins, SMLbigreal, vmin = -1*maxx, vmax = maxx, cmap = cmapp, shading = 'auto')
     plt.xlim([SMinterp['td'][0], SMinterp['td'][-1]])
     plt.grid(True)
-    plt.text(xxx, yyy, "Real SML", horizontalalignment='center', verticalalignment='center', transform=ax2.transAxes, fontsize = qqq)
+    plt.text(xxx, yyy, "Real SML", horizontalalignment='center', verticalalignment='center', transform=ax2.transAxes)
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    plt.gca().xaxis.set_tick_params(labelsize=6)
 
     #######################
 
@@ -685,16 +687,18 @@ def MakeContourPlots(SM, SMinterp, maxx = 'default', fignumber = 1):
     plt.pcolormesh(SMinterp['td'], hourbins, SMUbigsim, vmin = -1*maxx, vmax = maxx, cmap = cmapp, shading = 'auto')
     plt.xlim([SMinterp['td'][0], SMinterp['td'][-1]])
     plt.grid(True)
-    plt.text(xxx, yyy, "Interpolated SMU", horizontalalignment='center', verticalalignment='center', transform=ax3.transAxes, fontsize = qqq)
+    plt.text(xxx, yyy, "Interpolated SMU", horizontalalignment='center', verticalalignment='center', transform=ax3.transAxes)
     plt.ylabel("MLT", fontsize = qqq)
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    plt.gca().xaxis.set_tick_params(labelsize=6)
 
     ax4 = plt.subplot(3, 2, 4)
     plt.pcolormesh(SMinterp['td'], hourbins, SMLbigsim, vmin = -1*maxx, vmax = maxx, cmap = cmapp, shading = 'auto')
     plt.xlim([SMinterp['td'][0], SMinterp['td'][-1]])
     plt.grid(True)
-    plt.text(xxx, yyy, "Interpolated SML", horizontalalignment='center', verticalalignment='center', transform=ax4.transAxes, fontsize = qqq)
+    plt.text(xxx, yyy, "Interpolated SML", horizontalalignment='center', verticalalignment='center', transform=ax4.transAxes)
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    plt.gca().xaxis.set_tick_params(labelsize=6)
 
     #######################
        
@@ -702,15 +706,17 @@ def MakeContourPlots(SM, SMinterp, maxx = 'default', fignumber = 1):
     plt.pcolormesh(SMinterp['td'], hourbins, SMUbigsimR, vmin = -1*maxx, vmax = maxx, cmap = cmapp, shading = 'auto')
     plt.xlim([SMinterp['td'][0], SMinterp['td'][-1]])
     plt.grid(True)
-    plt.text(xxx, yyy, "Super-SMU", horizontalalignment='center', verticalalignment='center', transform=ax5.transAxes, fontsize = qqq)
+    plt.text(xxx, yyy, "Super-SMU", horizontalalignment='center', verticalalignment='center', transform=ax5.transAxes)
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    plt.gca().xaxis.set_tick_params(labelsize=6)
 
     ax6 = plt.subplot(3, 2, 6)
     im = plt.pcolormesh(SMinterp['td'], hourbins, SMLbigsimR, vmin = -1*maxx, vmax = maxx, cmap = cmapp, shading = 'auto')
     plt.xlim([SMinterp['td'][0], SMinterp['td'][-1]])
     plt.grid(True)
-    plt.text(xxx, yyy, "Super-SML", horizontalalignment='center', verticalalignment='center', transform=ax6.transAxes, fontsize = qqq)
+    plt.text(xxx, yyy, "Super-SML", horizontalalignment='center', verticalalignment='center', transform=ax6.transAxes)
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    plt.gca().xaxis.set_tick_params(labelsize=6)
 
     plt.tight_layout()
 
@@ -739,10 +745,12 @@ def MakeIndicesPlot(SMI, SMinterp, fignumber=1):
     plt.plot(SMinterp['td'], SMinterp['SME'], 'r', label='interpolated')
     plt.plot(SMinterp['td'], SMinterp['SMU'], 'r')
     plt.plot(SMinterp['td'], SMinterp['SML'], 'r')
+    plt.gca().xaxis.set_tick_params(labelsize=6)
 
     plt.plot(SMinterp['td'], SMinterp['superSME'], 'g', label='super')
     plt.plot(SMinterp['td'], SMinterp['superSMU'], 'g')
     plt.plot(SMinterp['td'], SMinterp['superSML'], 'g')
+    plt.gca().xaxis.set_tick_params(labelsize=6)
 
     plt.plot(SMI['td'], SMI['SME'], 'b', label='real')
     plt.plot(SMI['td'], SMI['SMU'], 'b')
@@ -750,7 +758,8 @@ def MakeIndicesPlot(SMI, SMinterp, fignumber=1):
     plt.grid(True)
     plt.legend()
     plt.xlim([SMinterp['td'][0], SMinterp['td'][-1]])
-    plt.ylabel("SME/U/L", fontsize=20)
+    plt.ylabel("SME/U/L")
+    plt.gca().xaxis.set_tick_params(labelsize=6)
 
     ax2 = plt.subplot(312)
     plt.plot(SMinterp['td'], SMinterp['SMR'], 'r', label='interpolated')
@@ -759,28 +768,33 @@ def MakeIndicesPlot(SMI, SMinterp, fignumber=1):
     plt.grid(True)
     plt.legend()
     plt.xlim([SMinterp['td'][0], SMinterp['td'][-1]])
-    plt.ylabel("SMR", fontsize=20)
+    plt.ylabel("SMR")
+    plt.gca().xaxis.set_tick_params(labelsize=6)
 
     ax3 = plt.subplot(313)
     plt.plot(SMinterp['td'], SMinterp['SMRbins'][0], 'r', label='interpolated')
     plt.plot(SMinterp['td'], SMinterp['SMRbins'][1], 'r')
     plt.plot(SMinterp['td'], SMinterp['SMRbins'][2], 'r')
     plt.plot(SMinterp['td'], SMinterp['SMRbins'][3], 'r')
+    plt.gca().xaxis.set_tick_params(labelsize=6)
 
     plt.plot(SMinterp['td'], SMinterp['superSMRbins'][0], 'g', label='super')
     plt.plot(SMinterp['td'], SMinterp['superSMRbins'][1], 'g')
     plt.plot(SMinterp['td'], SMinterp['superSMRbins'][2], 'g')
     plt.plot(SMinterp['td'], SMinterp['superSMRbins'][3], 'g')
+    plt.gca().xaxis.set_tick_params(labelsize=6)
 
     plt.plot(SMI['td'], SMI['smr00'], 'b', label='real')
     plt.plot(SMI['td'], SMI['smr06'], 'b')
     plt.plot(SMI['td'], SMI['smr12'], 'b')
     plt.plot(SMI['td'], SMI['smr18'], 'b')
+    plt.gca().xaxis.set_tick_params(labelsize=6)
 
     plt.xlim([SMinterp['td'][0], SMinterp['td'][-1]])
     plt.legend()
     plt.grid(True)
-    plt.ylabel("SMR 6-hour bins", fontsize=20)
+    plt.ylabel("SMR 6-hour bins")
+    plt.gca().xaxis.set_tick_params(labelsize=6)
     plt.show()
 
 def Z_Tensor_1D(resistivities, thicknesses, frequencies):
