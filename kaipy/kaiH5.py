@@ -593,7 +593,7 @@ def PullAtt(fname, vID, s0=None, a0=None):
 		fname (str): The path to the HDF5 file.
 		vID (str): The name of the attribute to retrieve.
 		s0 (int, optional): The step number. If provided, the attribute will be retrieved from the group corresponding to the step number.
-		a0 (whatevs, optional): The default for the attribute if it's not in the file
+
 	Returns:
 		The value of the attribute.
 
