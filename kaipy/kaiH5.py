@@ -585,7 +585,7 @@ def PullVar(fname, vID, s0=None, slice=()):
 	return V
 
 #Get attribute data from Step#s0 or root (s0=None)
-def PullAtt(fname, vID, s0=None):
+def PullAtt(fname, vID, s0=None, a0=None):
 	'''
 	Retrieve an attribute from an HDF5 file.
 
@@ -604,9 +604,16 @@ def PullAtt(fname, vID, s0=None):
 	CheckOrDie(fname)
 	with h5py.File(fname, 'r') as hf:
 		if s0 is None:
-			Q = hf.attrs[vID]
+			hfA = hf.attrs
 		else:
 			gID = "/Step#%d" % (s0)
-			Q = hf[gID].attrs[vID]
+			hfA = hf[gID].attrs
+
+		if (vID not in hfA.keys()):
+			#Use default
+			Q = a0
+		else:
+			Q = hfA[vID]
+
 	return Q
 

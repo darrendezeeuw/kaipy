@@ -113,6 +113,30 @@ def makeImage(i,gsph1,gsph2,tOut,doVerb,xyBds,fnList,oDir,errTimes,errListRel,er
 	# end of sequential region
 	AxB.set_xlabel('Time (min)')
 	AxB.set_ylabel('Per-Cell Mean Relative Error',color=relColor)
+	# values and thresholds for background coloring
+	bgAlpha=0.2
+	greenYellow=1.0e-6
+	yellowRed=1.0e-2
+	# coloring background messes with y-axis autoscaling
+	if AxB.get_ylim()[1] < greenYellow:
+		AxB.axhspan(AxB.get_ylim()[0],AxB.get_ylim()[1],color='green',alpha=bgAlpha)
+	elif AxB.get_ylim()[0] < greenYellow:
+		AxB.axhspan(AxB.get_ylim()[0],greenYellow,color='green',alpha=bgAlpha)
+	
+	if AxB.get_ylim()[0] > greenYellow and AxB.get_ylim()[1] < yellowRed:
+		AxB.axhspan(AxB.get_ylim()[0],AxB.get_ylim()[1],color='yellow',alpha=bgAlpha)
+	elif AxB.get_ylim()[0] < greenYellow and AxB.get_ylim()[1] > yellowRed:
+		AxB.axhspan(greenYellow,yellowRed,color='yellow',alpha=bgAlpha)
+	elif AxB.get_ylim()[0] < greenYellow:
+		AxB.axhspan(greenYellow,AxB.get_ylim()[1],color='yellow',alpha=bgAlpha)
+	elif AxB.get_ylim()[1] > yellowRed:
+		AxB.axhspan(AxB.get_ylim()[0],yellowRed,color='yellow',alpha=bgAlpha)
+	
+	if AxB.get_ylim()[0] > yellowRed:
+		AxB.axhspan(AxB.get_ylim()[0],AxB.get_ylim()[1],color='red',alpha=bgAlpha)
+	elif AxB.get_ylim()[1] > yellowRed:
+		AxB.axhspan(yellowRed,AxB.get_ylim()[1],color='red',alpha=bgAlpha)
+
 	AxB.tick_params(axis='y',which='both',colors=relColor,left=True,right=True,labelleft=True,labelright=False)
 	AxB2.set_ylabel('Per-Cell Mean Absolute Error',color=absColor)
 	#AxB2.yaxis.tick_right()
