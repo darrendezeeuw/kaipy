@@ -37,6 +37,7 @@ class H5Info(object):
 		# h5fname = h5fname.split('/')[-1]
 		self.fname = h5fname
 		self.Nt, self.steps = cntSteps(self.fname)
+		print("Found {} steps in {}".format(self.Nt, self.fname))
 		self.stepStrs = ['Step#'+str(s) for s in self.steps]
 		self.times = getTs(self.fname, self.steps, "time")
 		self.MJDs  = getTs(self.fname, self.steps, "MJD" )
@@ -441,8 +442,9 @@ def LocDT(items, pivot):
 	Returns:
 		int: The index of the item in the list that is closest to the pivot value.
 	'''
-	m0 = min(items, key=lambda x: abs(x - pivot))
-	i0 = (items == m0).argmax()
+	items_array = np.array(items)
+	m0 = min(items_array, key=lambda x: abs(x - pivot))
+	i0 = (items_array == m0).argmax()
 	return i0
 
 def MageStep(T0, inFile):
