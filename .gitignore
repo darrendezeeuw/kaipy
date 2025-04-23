@@ -12,6 +12,7 @@ dist/
 
 # vscode IDE data
 .vscode/
+.env
 
 # Compiled Java class files
 *.class
@@ -56,3 +57,6 @@ Thumbs.db
 
 # Python pip build files.
 kaipy.egg-info/*
+
+# pytest coverage file
+.coverage

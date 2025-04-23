@@ -15,7 +15,7 @@ import sys
 sys.path.insert(0, os.path.abspath('../../kaipy'))
 sys.path.insert(1, os.path.abspath('../../kaipy/scripts/quicklook'))
 sys.path.insert(2, os.path.abspath('../../kaipy/scripts/preproc'))
-
+os.environ["KAIPYHOME"] = os.path.abspath('../../kaipy')
 
 # -- Project information -----------------------------------------------------
 

@@ -7,15 +7,15 @@ include-package-data = true
 
 [project]
 name = "kaipy"
-version = "1.0.0"
+version = "1.0.8"
 authors = [
     {name = "Eric Winter", email = "eric.winter@jhuapl.edu"},
 ]
-description = "Python software for CGS MAGE"
+description = "Python software for CGS MAGE and other Kaiju models"
 readme = "README.md"
-requires-python = ">=3.8, <=3.10"
+requires-python = ">=3.8,<=3.10"
 keywords = ["CGS", "MAGE", "KAIJU"]
-license = {text = "MIT"}
+license = {text = "BSD 3-Clause"}
 classifiers = [
     "Programming Language :: Python :: 3",
 ]
@@ -33,4 +33,9 @@ dependencies = [
     "pytest",
     "spacepy",
     "sunpy",
+]
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
 ]

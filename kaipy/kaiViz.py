@@ -247,7 +247,7 @@ def reWrap(V):
 
 #Image files
 #Wrapper to save (and trim) figure
-def savePic(fOut, dpiQ=300, doTrim=True, bLenX=20, bLenY=None, doClose=False, doEps=False):
+def savePic(fOut, dpiQ=300, doTrim=True, bLenX=20, bLenY=None, doClose=False, doEps=False, saveFigure=None):
     """
     Save a matplotlib figure to a file.
 
@@ -259,19 +259,29 @@ def savePic(fOut, dpiQ=300, doTrim=True, bLenX=20, bLenY=None, doClose=False, do
         bLenY (int): The length of the y-axis trim boundary (default: None).
         doClose (bool): Whether to close all figures after saving (default: False).
         doEps (bool): Whether to save the figure in EPS format (default: False).
+        saveFigure (matplotlib figure): A predefined figure to plot into (default: None).
 
     Returns:
         Image File saved to disk.
     """
     if doEps:
-        plt.savefig(fOut, dpi=dpiQ, format='eps')
+        if saveFigure is None:
+            plt.savefig(fOut, dpi=dpiQ, format='eps')
+        else:
+            saveFigure.savefig(fOut, dpi=dpiQ, format='eps')
     else:
-        plt.savefig(fOut, dpi=dpiQ)
+        if saveFigure is None:
+            plt.savefig(fOut, dpi=dpiQ)
+        else:
+            saveFigure.savefig(fOut, dpi=dpiQ)
         if doTrim:
             trimFig(fOut, bLenX, bLenY)
 
     if doClose:
-        plt.close('all')
+        if saveFigure is None:
+            plt.close('all')
+        else:
+            plt.close(saveFigure)
 
 
 #Use imagemagick to trim whitespace off figure

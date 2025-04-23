@@ -52,7 +52,7 @@ def SMtoGSM(x, y, z, ut):
     invec.ticks = Ticktock(ut)
     outvec = invec.convert(toSys, toType)
 
-    return outvec.x[0], outvec.y[0], outvec.z[0]
+    return outvec.x, outvec.y, outvec.z
 
 
 def GSMtoSM(x, y, z, ut):
@@ -82,7 +82,7 @@ def GSMtoSM(x, y, z, ut):
     invec.ticks = Ticktock(ut)
     outvec = invec.convert(toSys, toType)
 
-    return outvec.x[0], outvec.y[0], outvec.z[0]
+    return outvec.x, outvec.y, outvec.z
 
 
 
@@ -116,7 +116,7 @@ def GSEtoGSM(x, y, z, ut):
     invec.ticks = Ticktock(ut)
     outvec = invec.convert(toSys, toType)
 
-    return outvec.x[0], outvec.y[0], outvec.z[0]
+    return outvec.x, outvec.y, outvec.z
 
 
 

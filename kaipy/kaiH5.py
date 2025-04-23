@@ -37,6 +37,7 @@ class H5Info(object):
 		# h5fname = h5fname.split('/')[-1]
 		self.fname = h5fname
 		self.Nt, self.steps = cntSteps(self.fname)
+		print("Found {} steps in {}".format(self.Nt, self.fname))
 		self.stepStrs = ['Step#'+str(s) for s in self.steps]
 		self.times = getTs(self.fname, self.steps, "time")
 		self.MJDs  = getTs(self.fname, self.steps, "MJD" )
@@ -441,8 +442,9 @@ def LocDT(items, pivot):
 	Returns:
 		int: The index of the item in the list that is closest to the pivot value.
 	'''
-	m0 = min(items, key=lambda x: abs(x - pivot))
-	i0 = (items == m0).argmax()
+	items_array = np.array(items)
+	m0 = min(items_array, key=lambda x: abs(x - pivot))
+	i0 = (items_array == m0).argmax()
 	return i0
 
 def MageStep(T0, inFile):
@@ -585,7 +587,7 @@ def PullVar(fname, vID, s0=None, slice=()):
 	return V
 
 #Get attribute data from Step#s0 or root (s0=None)
-def PullAtt(fname, vID, s0=None):
+def PullAtt(fname, vID, s0=None, a0=None):
 	'''
 	Retrieve an attribute from an HDF5 file.
 
@@ -604,9 +606,16 @@ def PullAtt(fname, vID, s0=None):
 	CheckOrDie(fname)
 	with h5py.File(fname, 'r') as hf:
 		if s0 is None:
-			Q = hf.attrs[vID]
+			hfA = hf.attrs
 		else:
 			gID = "/Step#%d" % (s0)
-			Q = hf[gID].attrs[vID]
+			hfA = hf[gID].attrs
+
+		if (vID not in hfA.keys()):
+			#Use default
+			Q = a0
+		else:
+			Q = hfA[vID]
+
 	return Q
 

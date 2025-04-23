@@ -1,0 +1,36 @@
+{
+    "version": "0.0.0",
+
+    "Gamera": {
+        "gameraGridFile": "heliogrid.h5",
+        "GridDir": "./",
+        "gameraIbcFile": "innerbc.h5",
+        "IbcDir": "./"
+    },
+    "Grid": {
+        "tMin": 0.1,
+        "tMax": 0.9,
+        "Rin": 21.5,
+        "Rout": 220.0,
+        "Ni": 128,
+        "Nj": 64,
+        "Nk": 128
+    },
+    "WSA": {
+        "wsafile": "examples/helio/vel_201708132000R002_ahmi.fits",
+        "density_temperature_infile": "no",
+        "gauss_smooth_width": 0,
+        "normalized": "no"
+    },
+    "Constants": {
+        "gamma": 1.5,
+        "Nghost": 4,
+        "Tsolar": 25.38,
+        "nCS": 1100.0,
+        "TCS": 1.0e6
+    },
+    "Normalization": {
+        "B0": 1.0e-3,
+        "n0": 200.0
+    }
+}
