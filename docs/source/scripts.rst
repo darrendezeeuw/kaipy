@@ -5,8 +5,8 @@ Quicklook
 ---------
 The quicklook directory has scripts that are used to quickly look at the data. The scripts are written in python and use the matplotlib library to plot the data. The scripts are:
 
-.. .. autoprogram:: dbpic:create_command_line_parser()
-..     :prog: dbpic.py
+.. autoprogram:: dbpic:create_command_line_parser()
+     :prog: dbpic.py
 
 .. .. autoprogram:: dbVpic:create_command_line_parser()
 ..     :prog: dbVpic.py
@@ -17,17 +17,17 @@ The quicklook directory has scripts that are used to quickly look at the data. T
 .. autoprogram:: gamerrpic:create_command_line_parser()
     :prog: gamerrpic.py
 
-.. autoprogram:: gamerrVid:create_command_line_parser()
+.. .. autoprogram:: gamerrVid:create_command_line_parser()
     :prog: gamerrVid.py
 
 .. autoprogram:: gamsphVid:create_command_line_parser()
     :prog: gamsphVid.py
 
-.. .. autoprogram:: heliomovie:create_command_line_parser()
-..     :prog: heliomovie.py
+.. autoprogram:: heliomovie:create_command_line_parser()
+     :prog: heliomovie.py
 
-.. .. autoprogram:: heliopic:create_command_line_parser()
-..     :prog: heliopic.py
+.. autoprogram:: heliopic:create_command_line_parser()
+     :prog: heliopic.py
 
 .. autoprogram:: mixpic:create_command_line_parser()
     :prog: mixpic.py
@@ -41,7 +41,7 @@ The quicklook directory has scripts that are used to quickly look at the data. T
 .. autoprogram:: rcmpic:create_command_line_parser()
     :prog: rcmpic.py
 
-.. autoprogram:: rcmPrecipSpecFlux:create_command_line_parser()
+.. .. autoprogram:: rcmPrecipSpecFlux:create_command_line_parser()
     :prog: rcmPrecipSpecFlux.py
 
 .. autoprogram:: remixTimeSeries:create_command_line_parser()
