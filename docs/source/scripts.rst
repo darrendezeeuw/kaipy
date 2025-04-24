@@ -5,7 +5,7 @@ Quicklook
 ---------
 The quicklook directory has scripts that are used to quickly look at the data. The scripts are written in python and use the matplotlib library to plot the data. The scripts are:
 
-.. autoprogram:: dbpic:create_command_line_parser()
+.. .. autoprogram:: dbpic:create_command_line_parser()
      :prog: dbpic.py
 
 .. .. autoprogram:: dbVpic:create_command_line_parser()
