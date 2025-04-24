@@ -28,7 +28,6 @@ dependencies = [
     "matplotlib",
     "pandas",
     "progressbar",
-    "pyhdf",
     "pyspedas",
     "pytest",
     "spacepy",

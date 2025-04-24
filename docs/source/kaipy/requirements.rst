@@ -13,7 +13,6 @@ kaipy requires:
 - matplotlib
 - pandas
 - progressbar
-- pyhdf
 - pyspedas
 - pytest
 - slack_sdk
