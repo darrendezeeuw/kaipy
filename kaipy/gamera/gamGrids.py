@@ -9,6 +9,7 @@ import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import kaipy.kaiViz as kv
 import kaipy.kdefs as kdefs
+from scipy.interpolate import RectBivariateSpline
 
 
 #Use routine to generate xx,yy = corners of active upper half plane
@@ -958,7 +959,6 @@ def regrid(xxi, yyi, Ni, Nj, Rin=0.0, Rout=0.0, TINY=1.0e-8, scale=False):
 		ndarray: The x-coordinate values of the regridded grid.
 		ndarray: The y-coordinate values of the regridded grid.
 	"""
-	iMeth = "cubic"
 	Ni0 = xxi.shape[0] - 1
 	Nj0 = xxi.shape[1] - 1
 	rr0 = np.sqrt(xxi ** 2.0 + yyi ** 2.0)
@@ -989,9 +989,9 @@ def regrid(xxi, yyi, Ni, Nj, Rin=0.0, Rout=0.0, TINY=1.0e-8, scale=False):
 			rScl = xSclIn + iLFM[i] * dxScl
 			rr0[i, :] = rScl * rr0[i, :]
 
-	# Create interpolants
-	fR = interpolate.interp2d(iLFM, jLFM, rr0.T, kind=iMeth, fill_value=None)
-	fP = interpolate.interp2d(iLFM, jLFM, pp0.T, kind=iMeth, fill_value=None)
+	# Create interpolants using RectBivariateSpline
+	fR = RectBivariateSpline(iLFM, jLFM, rr0, kx=3, ky=3)
+	fP = RectBivariateSpline(iLFM, jLFM, pp0, kx=3, ky=3)
 
 	# Regrid onto new
 	XXi = np.zeros((Ni + 1, Nj + 1))
@@ -1001,8 +1001,8 @@ def regrid(xxi, yyi, Ni, Nj, Rin=0.0, Rout=0.0, TINY=1.0e-8, scale=False):
 	sj = np.linspace(0, 1, Nj + 1)
 	for i in range(Ni + 1):
 		for j in range(Nj + 1):
-			r = fR(si[i], sj[j])
-			phi = fP(si[i], sj[j])
+			r = fR(si[i], sj[j])[0, 0]
+			phi = fP(si[i], sj[j])[0, 0]
 			phi = np.maximum(TINY, phi)
 			phi = np.minimum(np.pi - TINY, phi)
 
