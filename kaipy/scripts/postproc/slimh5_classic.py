@@ -59,7 +59,7 @@ def createfile(iH5,fOut):
     return oH5
 
     
-if __name__ == "__main__":
+def main():
     #Set defaults
     ns = -1
     ne = -1 #Proxy for last entry
@@ -175,3 +175,6 @@ if __name__ == "__main__":
         #Close up
         iH5.close()
         oH5.close()
+
+if __name__ == "__main__":
+    main()

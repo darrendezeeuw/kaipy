@@ -68,7 +68,7 @@ def create_command_line_parser():
 
 	return parser
 
-if __name__ == "__main__":
+def main():
 
 	# Set up the command-line parser.
 	parser = create_command_line_parser()
@@ -142,3 +142,6 @@ if __name__ == "__main__":
 	
 
 
+
+if __name__ == "__main__":
+	main()

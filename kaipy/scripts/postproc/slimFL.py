@@ -24,7 +24,7 @@ def createfile(iH5,fOut):
             oH5.create_dataset(sQ,data=iH5[sQ])
     return oH5
 
-if __name__ == "__main__":
+def main():
     #Set defaults
     ns = 0
     ne = -1 #Proxy for last entry
@@ -118,4 +118,5 @@ if __name__ == "__main__":
     iH5.close()
     oH5.close()
 
-    	
+if __name__ == "__main__":
+    main()

@@ -45,7 +45,7 @@ def create_command_line_parser():
 	
 	return parser
 
-if __name__ == "__main__":
+def main():
 	parser = create_command_line_parser()
 	args = parser.parse_args()
 	#Open the file and read the time information
@@ -138,6 +138,7 @@ if __name__ == "__main__":
 			dset.attrs['name'] = ipfac['name']
 
 
-
+if __name__ == "__main__":
+	main()
 
 

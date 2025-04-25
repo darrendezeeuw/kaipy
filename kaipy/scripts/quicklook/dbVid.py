@@ -55,7 +55,7 @@ def create_command_line_parser():
 	return parser
 
 
-if __name__ == "__main__":
+def main():
 		#Defaults
 	rad2deg = 180.0/np.pi
 	bMag = dbViz.dbMag
@@ -164,3 +164,7 @@ if __name__ == "__main__":
 		npl = vO[i]-nS
 		fOut = oDir+"/vid.%04d.png"%(npl)
 		kv.savePic(fOut,bLenX=45)
+
+
+if __name__ == "__main__":
+	main()

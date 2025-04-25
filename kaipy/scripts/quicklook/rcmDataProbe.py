@@ -62,7 +62,7 @@ def create_command_line_parser():
 
 	return parser
 
-if __name__ == "__main__":
+def main():
 	#Defaults
 	cmap = plt.cm.plasma
 	# Set up the command-line parser.
@@ -210,3 +210,7 @@ if __name__ == "__main__":
 	#Ax.set_ylim(1.0e+10,1.0e+19)
 	sTag = "e" if doElectrons else "i"
 	kv.savePic("qkrcm%s_%s.png"%(filetag, sTag))
+
+
+if __name__ == "__main__":
+	main()

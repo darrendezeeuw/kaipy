@@ -367,7 +367,7 @@ def create_command_line_parser():
     return parser
 
 
-if __name__ == "__main__":
+def main():
     """Convert a .ini file to a .xml file."""
     # Set up the command-line parser.
     parser = create_command_line_parser()
@@ -385,3 +385,5 @@ if __name__ == "__main__":
             print("Converting %s to XML output %s." % (args.ini_file, args.xml_file))
         create_xml_template(args.ini_file, args.xml_file)
 
+if __name__ == "__main__":
+    main()
