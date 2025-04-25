@@ -93,3 +93,12 @@ def mix_file(tmpdir):
     file_path = fdir.join("test.mix.h5")
     file_path = write_mix_h5(file_path)
     return file_path
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--runslow", action="store_true", default=False, help="run tests marked as slow"
+    )
+
+def pytest_runtest_setup(item):
+    if "slow" in item.keywords and not item.config.getoption("--runslow"):
+        pytest.skip("need --runslow option to run")
