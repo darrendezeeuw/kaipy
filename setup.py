@@ -10,7 +10,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     package_data={'kaipy': ['scripts/*', 'scripts/*/*']},
-    python_requires='>=3.8,<=3.11',
+    python_requires='>=3.8,<=3.13',
     install_requires=[
         'alive_progress',
         'astropy',
@@ -36,5 +36,7 @@ setup(
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
     ],
 )

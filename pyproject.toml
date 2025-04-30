@@ -13,7 +13,7 @@ authors = [
 ]
 description = "Python software for CGS MAGE and other Kaiju models"
 readme = "README.md"
-requires-python = ">=3.8,<=3.10"
+requires-python = ">=3.8,<=3.12"
 keywords = ["CGS", "MAGE", "KAIJU"]
 license = {text = "BSD 3-Clause"}
 classifiers = [
