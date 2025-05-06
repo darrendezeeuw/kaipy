@@ -313,9 +313,10 @@ class GameraPipe(object):
 						self.X = np.zeros((self.Ni+1,self.Nj+1))
 						self.Y = np.zeros((self.Ni+1,self.Nj+1))
 					else:
-						self.X = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
-						self.Y = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
-						self.Z = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
+						self.X  = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
+						self.Y  = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
+						self.Z  = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
+						self.dV = np.zeros((self.Ni  ,self.Nj  ,self.Nk  ))
 					if (doVerbose):
 						#print("Del = (%d,%d,%d)"%(self.dNi,self.dNj,self.dNk))
 						titStr = "%s/Grid"%(self.ftag)
@@ -342,6 +343,7 @@ class GameraPipe(object):
 								self.X[iS:iE+1,jS:jE+1,kS:kE+1] = kh5.PullVar(fIn,"X")
 								self.Y[iS:iE+1,jS:jE+1,kS:kE+1] = kh5.PullVar(fIn,"Y")
 								self.Z[iS:iE+1,jS:jE+1,kS:kE+1] = kh5.PullVar(fIn,"Z")
+								self.dV[iS:iE , jS:jE , kS:kE ] = kh5.PullVar(fIn, "dV")
 							bar()
 			else:
 				print("Grid Previously Loaded")

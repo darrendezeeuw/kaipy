@@ -20,6 +20,7 @@ import os
 import matplotlib as mpl
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 import numpy as np
 import warnings
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
@@ -58,6 +59,46 @@ default_step = -1
 # Color to use for spacecraft position symbols.
 SPACECRAFT_COLOR = 'red'
 
+
+def findIM(indir: str, tag: str) -> str:
+    """Determine whether run used RCM, RAIJU, or no Inner Mag
+
+    Inputs:
+        indir [str]: directory to search
+        tag   [str]: run tag (e.g. msphere)
+
+    Returns:
+        modelName [str]: Imag model used, or None if no Imag model
+
+    """
+
+    strfmt = os.path.join(indir, "{}.{}.h5")
+
+    if os.path.exists(strfmt.format(tag, "raiju")):
+        return "RAIJU"
+    elif os.path.exists(strfmt.format(tag, "mhdrcm")):
+        return "RCM"
+    else:
+        return None
+
+def addIMBox(Ax, bnds):
+    """
+	Add a rectangular box to the given Axes object.
+
+	Args:
+		Ax: The Axes object to which the rectangle will be added.
+
+	Returns:
+		None
+	"""
+    
+    if (Ax is None):
+        Ax = plt.gca()
+    xy0 = (bnds[0],bnds[2])
+    H = bnds[3]-bnds[2]
+    W = bnds[1]-bnds[0]
+    rcmRec = patches.Rectangle( (xy0),W,H, fill=False,edgecolor="dodgerblue")
+    Ax.add_patch(rcmRec)
 
 def create_command_line_parser():
     """Create the command-line argument parser.
@@ -112,11 +153,11 @@ def create_command_line_parser():
         help="Don't show MPI boundaries (default: %(default)s)."
     )
     parser.add_argument(
-        "-norcm", action="store_true", default=False,
-        help="Don't show RCM data (default: %(default)s)."
+        "-noIM", action="store_true", default=False,
+        help="Don't show Inner Mag data (default: %(default)s)."
     )
     parser.add_argument(
-        "-bigrcm", action="store_true", default=False,
+        "-bigIM", action="store_true", default=False,
         help="Show entire RCM domain (default: %(default)s)."
     )
     parser.add_argument(
@@ -212,7 +253,7 @@ def makePlot(i,spacecraft,nStp):
     elif doEphi:
         mviz.PlotEqEphi(gsph, nStp, xyBds, AxR, AxC3)
     else:
-        mviz.PlotMerid(gsph, nStp, xyBds, AxR, doDen, doRCM, AxC3, doSrc=doSrc)
+        mviz.PlotMerid(gsph, nStp, xyBds, AxR, doDen, doIM, AxC3, doSrc=doSrc)
 
     # Add the date and time for the plot.
     gsph.AddTime(nStp, AxL, xy=[0.025, 0.89], fs="x-large")
@@ -220,17 +261,22 @@ def makePlot(i,spacecraft,nStp):
     # Add the solar wind description text.
     gsph.AddSW(nStp, AxL, xy=[0.625, 0.025], fs="small")
 
-    # If available, add the inset RCM plot.
-    if not noRCM:
-        AxRCM = inset_axes(AxL, width="30%", height="30%", loc=3)
-        rcmpp.RCMInset(AxRCM, rcmdata, nStp, mviz.vP)
+    # If available, add the inset Inner Mag plot.
+    if imName is not None:
+        if imName=="RAIJU":
+            stepStr = "Step#"+str(nStp)
+            AxIM = inset_axes(AxL, width="30%", height="30%", loc=3)
+            inset_bnds = rv.plotInset(AxIM, raiI, stepStr, mviz.vP, ax_gam=AxL)
+        if imName=="RCM":
+            AxIM = inset_axes(AxL, width="30%", height="30%", loc=3)
+            inset_bnds = rcmpp.RCMInset(AxIM, rcmdata, nStp, mviz.vP)
         # Add dBz contours.
-        AxRCM.contour(
+        AxIM.contour(
             kv.reWrap(gsph.xxc), kv.reWrap(gsph.yyc), kv.reWrap(Bz), [0.0],
             colors=mviz.bz0Col, linewidths=mviz.cLW
         )
-        # Show the RCM region as a box.
-        rcmpp.AddRCMBox(AxL)
+            # Show the IM region as a box.
+        addIMBox(AxL,inset_bnds)
 
     # Plot the REMIX data, if requested.
     if doIon:
@@ -342,8 +388,8 @@ if __name__ == "__main__":
     doEphi = args.ephi
     doSrc = args.src
     doBz = args.bz
-    noRCM = args.norcm
-    doBigRCM = args.bigrcm
+    doIM = not args.noIM
+    doBigIM = args.bigIM
     do_vid = args.vid
     do_overwrite = args.overwrite
     do_hash = not args.nohash
@@ -365,12 +411,11 @@ if __name__ == "__main__":
     # Open the gamera results pipe.
     gsph = msph.GamsphPipe(fdir, ftag, doFast=doFast)
 
-    # Check for the presence of RCM results.
-    rcmChk = os.path.join(fdir, "%s.mhdrcm.h5" % ftag)
-    doRCM = os.path.exists(rcmChk)
+    
+    # Check for the presence of IM results.
+    imName = findIM(fdir, ftag)
     if debug:
-        print("rcmChk = %s" % rcmChk)
-        print("doRCM = %s" % doRCM)
+        print("imName = %s" % imName)
 
     # Check for the presence of remix results.
     rmxChk = os.path.join(fdir, "%s.mix.h5" % ftag)
@@ -386,12 +431,20 @@ if __name__ == "__main__":
         if debug:
             print(f'branch/commit: {branch}/{githash}')
 
-    # Open RCM data if available, and initialize visualization.
-    if doRCM:
+    # Open inner mag data if available, and initialize visualization.
+    if imName=="RAIJU":
+        print("Found RAIJU data")
+        import kaipy.raiju.raijuUtils as ru
+        import kaipy.raiju.raijuViz as rv
+        raiI = ru.RAIJUInfo(os.path.join(fdir, ftag + ".raiju.h5"))
+        mviz.vP = kv.genNorm(1.0e-2, 100.0, doLog=True)
+    else:
+        raiI = None
+    if imName=="RCM":
         print("Found RCM data")
         rcmdata = gampp.GameraPipe(fdir, ftag + ".mhdrcm")
         mviz.vP = kv.genNorm(1.0e-2, 100.0, doLog=True)
-        rcmpp.doEll = not doBigRCM
+        rcmpp.doEll = not doBigIM
         if debug:
             print("rcmdata = %s" % rcmdata)
     else:
