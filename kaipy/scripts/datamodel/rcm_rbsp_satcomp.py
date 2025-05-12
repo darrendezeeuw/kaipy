@@ -1,21 +1,25 @@
-import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
-from matplotlib import dates
-from astropy.time import Time
+# Standard modules
 import datetime
 import os, sys
 import progressbar
 import argparse
 from argparse import RawTextHelpFormatter
+
+# Third-party modules
+import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+from matplotlib import dates
+from astropy.time import Time
 import numpy as np
 
+# Kaipy modules
 import kaipy.kaiH5 as kh5
 import kaipy.kaiViz as kv
 import kaipy.kaiTools as kT
 import kaipy.satcomp.scutils as scutils
 import kaipy.satcomp.scRCM as scRCM
 
-def fmtTKL(AxTKL):
+def fmtTKL(AxTKL, ut_tkl):
 	AxTKL.set_yscale('log')
 	AxTKL.tick_params(axis='y', pad=-1)
 	AxTKL.yaxis.labelpad = -1
@@ -23,7 +27,13 @@ def fmtTKL(AxTKL):
 	AxTKL.xaxis.labelpad = -1
 	AxTKL.title.set_text(str(ut_tkl[0]))
 
-def main():
+def create_command_line_parser():
+	"""Create the command-line argument parser.
+	Create the parser for command-line arguments.
+	Returns:
+		argparse.ArgumentParser: Command-line argument parser for this script.
+	"""
+	# Default values
 	fdir  = os.getcwd()
 	ftag  = "msphere"
 	trtag = "RBSP-%s_MAGNETOMETER_1SEC-GSM_EMFISIS-L3.sc.h5"  # Spacecraft trajectory and values along track
@@ -58,6 +68,25 @@ def main():
 	parser.add_argument('-tklv', type=str,choices=tklV_choices,default=tklV_choices[0],help="Variable to plot in Lvsk panel (default: %(default)s)")
 	parser.add_argument('-forceCalc',type=str,metavar=pIDs,default="",help="Comma-separated process IDs to force recalculation for given process")
 	parser.add_argument('-HOPESPICE',action='store_true',help="Combine HOPE and RBSPICE hydrogen data")
+	return parser
+
+def main():
+	# Default values
+	fdir  = os.getcwd()
+	ftag  = "msphere"
+	trtag = "RBSP-%s_MAGNETOMETER_1SEC-GSM_EMFISIS-L3.sc.h5"  # Spacecraft trajectory and values along track
+	vTag = "H-PAP_RBSPICE"
+	tStart = -1
+	tEnd = -1
+	tStride = 10
+	vidOut = "vid_rcm-rbsp-comp"
+
+	tklV_choices = ['press', 'odf']
+
+	jdir = "jstore"
+
+	pIDs = ['cdas','times','track','tkl']
+	parser = create_command_line_parser()
 	#Finalize parsing
 	args  = parser.parse_args()
 	fdir  = args.d
@@ -226,7 +255,7 @@ def main():
 	AxTL.xaxis.set_label_position('top')
 	AxTL.tick_params(axis='y', pad=-1)
 	AxTL.yaxis.labelpad = -1 
-	fmtTKL(AxTKL)
+	fmtTKL(AxTKL, ut_tkl)
 	AxCB_press.xaxis.labelpad = -1
 
 	scRCM.plt_rcm_eqlatlon(AxRCMLatLon, AxRCMEq, rcm_eqlatlon, rcmTrack, mjd=pltmjd, norm=pressnorm, cmapName=cmap_press)
@@ -254,7 +283,7 @@ def main():
 		elif tklv == 'press':
 			#Actually partial pressure
 			scRCM.plt_tkl(AxTKL, tkldata, vName=tklv, AxCB=AxCB_parpress, mjd=pltmjd, norm=parpressnorm, cmapName=cmap_parpress, satTrackData=rcmTrack)
-		fmtTKL(AxTKL)
+		fmtTKL(AxTKL, ut_tkl)
 		AxTKL.title.set_text(str(ut_tkl[n]))
 
 		scRCM.plt_rcm_eqlatlon(AxRCMLatLon, AxRCMEq, rcm_eqlatlon, rcmTrack, mjd=pltmjd, norm=pressnorm, cmapName=cmap_press)
