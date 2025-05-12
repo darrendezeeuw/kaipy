@@ -13,22 +13,29 @@
 Mp = 1.67e-27 #Proton mass [kg]
 gamma = 5/3.0
 
+# Standard modules
 import argparse
 from argparse import RawTextHelpFormatter
+import os
+import datetime
+import sys
+
+# Third-party modules
 import numpy as np
 import h5py
 import matplotlib.pyplot as plt
-import os
+from astropy.time import Time
+from cdasws import CdasWs
+
+# Kaipy modules
 import kaipy.solarWind
 from  kaipy.solarWind import swBCplots
 from  kaipy.solarWind.OMNI import OMNI
 from  kaipy.solarWind.WIND import WIND
 from  kaipy.solarWind.SWPC import DSCOVRNC
 from kaipy.solarWind.gfz_api import getGFZ
-import datetime
-from astropy.time import Time
-from cdasws import CdasWs
-import sys
+
+cdas = CdasWs()
 
 # ANSI color codes for color output to terminal
 class Color:
@@ -149,6 +156,7 @@ def create_command_line_parser():
     return parser
 
 def main():
+    global cdas
     #Defaults
     maxf107  = 300.0
     minMfast = 1.5
