@@ -13,17 +13,17 @@ Eric Winter
 """
 
 
-# Import standard modules.
+# Standard modules
 import argparse
 import os
 
-# Import 3rd-party modules.
+# Third-party modules
 from astropy.convolution import convolve, Gaussian2DKernel
 import h5py
 import numpy as np
 from scipy import interpolate
 
-# Import project modules.
+# Kaipy modules
 from kaipy.gamera import gamGrids as gg
 from kaipy.gamhelio.wsa2gamera import params as ini_params
 from kaipy.gamhelio.lib import wsa
@@ -36,7 +36,7 @@ from kaipy.kdefs import JD2MJD, Mp_cgs, kbltz, Tsolar, Day2s, Rsolar, vc_cgs
 DESCRIPTION = "Convert WSA FITS output to gamhelio format."
 
 
-def create_command_line_parser(description: str):
+def create_command_line_parser():
     """Create the command-line argument parser.
 
     Create the parser for command-line arguments.
@@ -55,6 +55,7 @@ def create_command_line_parser(description: str):
     ------
     None
     """
+    description = "Convert WSA FITS output to gamhelio format."
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument(
         "--debug", "-d", action="store_true",
