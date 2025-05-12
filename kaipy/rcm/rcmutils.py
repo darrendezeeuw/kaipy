@@ -1,6 +1,8 @@
+# Third-party modules
 import numpy as np
 import h5py as h5
 
+# Kaipy modules
 import kaipy.kdefs as kd
 import kaipy.kaiH5 as kh5
 
