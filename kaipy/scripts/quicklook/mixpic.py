@@ -148,7 +148,28 @@ def create_command_line_parser():
     return parser
 
 
-def makePlot(i, remixFile, nStp):
+def makePlot(i, remixFile, nStp, args, varDict):
+    debug = args.debug
+    runid = args.id
+    do_nflux = args.nflux
+    do_print = args.print
+    spacecraft = args.spacecraft
+    verbose = args.verbose
+    do_GTYPE = args.GTYPE
+    do_PP = args.PP
+    do_vid = args.vid
+    do_overwrite = args.overwrite
+    do_hash = not args.nohash
+    ncpus = args.ncpus
+
+    # Extract missing variables from varDict
+    branch = varDict.get('branch', 'unknown')
+    githash = varDict.get('githash', 'unknown')
+    n_pad = varDict.get('n_pad', 6)
+    outDir = varDict.get('outDir', 'mixVid')
+    
+    # Init figure
+    fig = plt.figure(figsize=(12, 7.5))
 
     with h5.File(remixFile, 'r') as f5:
         foundT = f5['Step#'+str(nStp)].attrs['MJD']
@@ -348,8 +369,6 @@ def main():
     mpl.rc('mathtext', fontset='stixsans', default='regular')
     mpl.rc('font', size=10)
 
-    # Init figure
-    fig = plt.figure(figsize=(12, 7.5))
 
     if not do_vid:  # Then we are making a single image, keep original functionality
         # Find the time for the specified step.
@@ -358,7 +377,13 @@ def main():
             nStp = sorted(sIds)[-1]
         if debug:
             print("nStp = %s" % nStp)
-        makePlot(nStp, remixFile, nStp)
+        varDict = {
+            'branch': branch,
+            'githash': githash,
+            'n_pad': 0,
+            'outDir': 'remix'
+        }
+        makePlot(nStp, remixFile, nStp, args, varDict)
     
     else:  # Then we make a video, i.e. series of images saved to mixVid
         outDir = 'mixVid'
@@ -369,10 +394,22 @@ def main():
 
         if ncpus == 1:
             for i, nStp in enumerate(alive_it(sIds,length=kd.barLen,bar=kd.barDef)):
-                makePlot(i,remixFile, nStp)
+                varDict = {
+                    'branch': branch,
+                    'githash': githash,
+                    'n_pad': n_pad,
+                    'outDir': outDir
+                }
+                makePlot(i,remixFile, nStp, args, varDict)
         else:
+            varDict = {
+                'branch': branch,
+                'githash': githash,
+                'n_pad': n_pad,
+                'outDir': outDir
+            }
             # Make list of parallel arguments
-            ag = ((i,remixFile,nStp) for i, nStp in enumerate(sIds) )
+            ag = ((i,remixFile,nStp, args, varDict) for i, nStp in enumerate(sIds) )
             # Check we're not exceeding cpu_count on computer
             ncpus = min(int(ncpus),cpu_count(logical=False))
             print('Doing multithreading on ',ncpus,' threads')
