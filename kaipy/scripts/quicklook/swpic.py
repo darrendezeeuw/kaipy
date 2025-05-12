@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 #Creates a time vs distance plot from a 2D slice created by slice.x
+
+# Standard modules
 import argparse
 from argparse import RawTextHelpFormatter
-import kaipy.kaiH5 as kh5
-import kaipy.solarWind.swBCplots as swBCplots
 import os
 import datetime
 import sys
+
+# Kaipy modules
+import kaipy.kaiH5 as kh5
+import kaipy.solarWind.swBCplots as swBCplots
 
 def create_command_line_parser():
 	"""Create the command-line argument parser.

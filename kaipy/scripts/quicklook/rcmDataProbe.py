@@ -2,18 +2,24 @@
 """
 Probes rcm.h5 data file and returns graph of variable vs. channel energy
 """
+
+# Standard modules
+import argparse
+from argparse import RawTextHelpFormatter
+
+# Third-party modules
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
-import kaipy.kaiViz as kv
 import matplotlib.gridspec as gridspec
 import numpy as np
-import kaipy.kaiH5 as kh5
-
 from matplotlib import rcParams, cycler
 
-import argparse
-from argparse import RawTextHelpFormatter
+# Kaipy modules
+import kaipy.kaiViz as kv
+import kaipy.kaiH5 as kh5
+
+
 
 #Variable options
 VOPT_SF = "specFlux"

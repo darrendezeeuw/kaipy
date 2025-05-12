@@ -1,20 +1,26 @@
 #!/usr/bin/env python
 #Make a plot of Dst from Gamera-RCM
+
+# Standard modules
 import argparse
 from argparse import RawTextHelpFormatter
+import datetime
+import os
+
+# Third-party modules
 import matplotlib as mpl
 mpl.use('Agg')
 import h5py
-import matplotlib.pyplot as plt
-import kaipy.gamera.magsphere as msph
-import kaipy.kaiViz as kv
 import numpy as np
 import kaipy.kaiTools as kt
-import datetime
 from matplotlib import dates
 import matplotlib.gridspec as gridspec
 from astropy.time import Time
-import os
+
+# Kaipy modules
+import matplotlib.pyplot as plt
+import kaipy.gamera.magsphere as msph
+import kaipy.kaiViz as kv
 import kaipy.kaiH5 as kaiH5
 
 def create_command_line_parser():
