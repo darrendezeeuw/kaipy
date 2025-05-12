@@ -151,7 +151,43 @@ def create_command_line_parser():
     mviz.AddSizeArgs(parser)
     return parser
 
-def makePlot(i,spacecraft,nStp):
+def makePlot(i,spacecraft,nStp, args, varDict):
+    debug = args.debug
+    verbose = args.verbose
+    fdir = args.d
+    ftag = args.id
+    doDen = args.den
+    noIon = args.noion
+    noMPI = args.nompi
+    doMPI = not noMPI
+    doJy = args.jy
+    doEphi = args.ephi
+    doSrc = args.src
+    doBz = args.bz
+    noRCM = args.norcm
+    doBigRCM = args.bigrcm
+    do_vid = args.vid
+    do_overwrite = args.overwrite
+    do_hash = not args.nohash
+    ncpus = args.ncpus
+
+    # Extract missing variables from varDict
+    n_pad = varDict.get('n_pad', 0)
+    outDir = varDict.get('outDir', 'msphVid')
+    doIon = varDict.get('doIon', not noIon)
+    doMIX = varDict.get('doMIX', False)
+    doRCM = varDict.get('doRCM', not noRCM)
+    rcmdata = varDict.get('rcmdata', None)
+    rmxChk = varDict.get('rmxChk', None)
+    gsph = varDict.get('gsph', None)
+    xyBds = varDict.get('xyBds', None)
+    branch = varDict.get('branch', 'unknown')
+    githash = varDict.get('githash', 'unknown')
+    figSz = varDict.get('figSz', (12, 7.5))
+
+
+    # Init figure
+    fig = plt.figure(figsize=figSz)
 
     # Disable some warning spam if not debug
     if not debug:
@@ -404,15 +440,26 @@ def main():
     mpl.rc('mathtext', fontset='stixsans', default='regular')
     mpl.rc('font', size=10)
 
-    # Init figure
-    fig = plt.figure(figsize=figSz)
-
     if not do_vid: # If we are making a single image, keep original functionality
         # If needed, fetch the number of the last step.
         if nStp < 0:
             nStp = gsph.sFin
             print("Using Step %d" % nStp)
-        makePlot(nStp,spacecraft,nStp)
+        varDict = {
+            'n_pad': 0,
+            'outDir': 'msphVid',
+            'doIon': doIon,
+            'doMIX': doMIX,
+            'doRCM': doRCM,
+            'rcmdata': rcmdata,
+            'rmxChk': rmxChk,
+            'gsph': gsph,
+            'xyBds': xyBds,
+            'branch': branch,
+            'githash': githash,
+            'figSz': figSz
+        }
+        makePlot(nStp,spacecraft,nStp, args, varDict)
 
     else: # then we make a video, i.e. series of images saved to msphVid
 
@@ -429,10 +476,38 @@ def main():
 
         if ncpus == 1:
             for i, nStp in enumerate(sIds):
-                makePlot(i, spacecraft, nStp)
+                varDict = {
+                    'n_pad': n_pad,
+                    'outDir': outDir,
+                    'doIon': doIon,
+                    'doMIX': doMIX,
+                    'doRCM': doRCM,
+                    'rcmdata': rcmdata,
+                    'rmxChk': rmxChk,
+                    'gsph': gsph,
+                    'xyBds': xyBds,
+                    'branch': branch,
+                    'githash': githash,
+                    'figSz': figSz
+                }
+                makePlot(i, spacecraft, nStp, args, varDict)
         else:
+            varDict = {
+                'n_pad': n_pad,
+                'outDir': outDir,
+                'doIon': doIon,
+                'doMIX': doMIX,
+                'doRCM': doRCM,
+                'rcmdata': rcmdata,
+                'rmxChk': rmxChk,
+                'gsph': gsph,
+                'xyBds': xyBds,
+                'branch': branch,
+                'githash': githash,
+                'figSz': figSz
+            }
             # Make list of parallel arguments
-            ag = ((i,spacecraft,nStp) for i, nStp in enumerate(sIds) )
+            ag = ((i,spacecraft,nStp, args, varDict) for i, nStp in enumerate(sIds) )
             # Check we're not exceeding cpu_count on computer
             ncpus = min(int(ncpus),cpu_count(logical=False))
             print('Doing multithreading on ',ncpus,' threads')
