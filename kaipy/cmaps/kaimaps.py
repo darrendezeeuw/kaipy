@@ -1,6 +1,10 @@
+# Standard modules
+import os
+
+# Third-party modules
 import matplotlib as mpl
 import numpy as np
-import os
+
 
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
