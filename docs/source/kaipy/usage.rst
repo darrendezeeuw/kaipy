@@ -2,9 +2,9 @@ Usage
 =====
 The Kaipy package comes with a variety of tools to help you load and analyze data from the MAGE model. This page will walk you through the basic usage of the package.  This includes using the API to load datasets and create plots as well as using the command line interface to run scripts.
 
-Mode: API
+Kaipy API Package
 ---------
-We will go over the basics of loading datasets and creating plots using the Kaipy API.  You can try this out for yourself using our `Google Colab notebook <https://colab.research.google.com/drive/1Y559nAryHyX5R9wgqSLvZ-87QRmazGLD#scrollTo=0bOWk7gnNzd2>`_.
+We will go over the basics of loading datasets and creating plots using the Kaipy API package.  You can try this out for yourself using our `Google Colab notebook <https://colab.research.google.com/drive/1Y559nAryHyX5R9wgqSLvZ-87QRmazGLD#scrollTo=0bOWk7gnNzd2>`_.
 
 Loading datasets
 ~~~~~~~~~~~~~~~~
@@ -87,7 +87,7 @@ The mix object includes an extensive plotting routine that has the capability fo
     :width: 400px
     :align: center
 
-Mode: CLI
+Kaipy Command Line Interface
 ---------
 The Kaipy package also comes with a command line interface that allows you to run scripts to analyze MAGE model data.  The CLI is a great way to automate the analysis of large datasets.  The CLI is run from the terminal and has a variety of options to customize the analysis. 
 

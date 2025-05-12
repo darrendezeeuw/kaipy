@@ -1,4 +1,4 @@
-kaipy.solarWind package
+SolarWind package
 =======================
 
 Submodules

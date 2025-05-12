@@ -1,9 +1,6 @@
 Installation
 ============
 
-Custom
-------
-
 Conda Installation
 ~~~~~~~~~~~~~~~~~~~
 
@@ -53,7 +50,7 @@ Conda Installation
 Creating Environment
 ~~~~~~~~~~~~~~~~~~~~~
 
-Create python environment.  We support using python 3.8 through python 3.10.
+Create python environment.  We support using python 3.10 through python 3.12.
 
 .. note::
 
@@ -61,7 +58,7 @@ Create python environment.  We support using python 3.8 through python 3.10.
 
 .. code-block:: bash
 
-    conda create --name kaipy python=3.8
+    conda create --name kaipy python=3.12
 
 Installing kaipy
 ~~~~~~~~~~~~~~~~~~~

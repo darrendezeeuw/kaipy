@@ -1,8 +1,5 @@
-kaipy.chimp package
+Chimp package
 ===================
-
-Submodules
-----------
 
 kaipy.chimp.chimph5p module
 ---------------------------
