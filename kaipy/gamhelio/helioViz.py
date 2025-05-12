@@ -1,19 +1,24 @@
 #Various helper routines for heliosphere quick look plots
 
+# Standard modules
 import argparse
 from argparse import RawTextHelpFormatter
+import os
+
+# Third-party modules
 import matplotlib as mpl
 import numpy as np
-
-import kaipy.kaiViz as kv
-import kaipy.gamhelio.heliosphere as hsph
-from kaipy.kdefs import *
-import os
 from astropy.coordinates import SkyCoord
 import astropy.units as u
 from sunpy.coordinates import frames
-import kaipy.kaiTools as ktools
 import spacepy.datamodel as dm
+
+# Kaipy modules
+import kaipy.kaiViz as kv
+import kaipy.gamhelio.heliosphere as hsph
+from kaipy.kdefs import *
+import kaipy.kaiTools as ktools
+
 
 
 VMax = 800.
