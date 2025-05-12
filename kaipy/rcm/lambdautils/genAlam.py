@@ -1,7 +1,9 @@
 """ This script is responsible for taking AlamParam objects and turning it into lambdas and associated attributes for AlamData objects
 """
+# Third-party modules
 import numpy as np
 
+# Kaipy modules
 import kaipy.rcm.lambdautils.AlamParams as aP
 import kaipy.rcm.lambdautils.AlamData as aD
 import kaipy.rcm.lambdautils.DistTypes as dT

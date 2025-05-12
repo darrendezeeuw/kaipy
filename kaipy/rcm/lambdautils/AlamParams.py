@@ -1,9 +1,10 @@
+# Standard modules
 from dataclasses import dataclass
 #from dataclasses_json import dataclass_json
 from dataclasses import asdict as dc_asdict
 from typing import Optional, List
 
-#Import other things from this package space
+# Kaipy modules
 import kaipy.rcm.lambdautils.DistTypes as dT
 
 # dataclasses_json isn't a default package. Since its only used for reading, don't want to make it a requirement for everyone
