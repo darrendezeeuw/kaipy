@@ -1,18 +1,24 @@
 #!/usr/bin/env python
 # Make XMF files from an MPI-decomposed gamera run
 
+# Standard modules
 import argparse
 from argparse import RawTextHelpFormatter
+import os
+
+# Third-party modules
 import numpy as np
-import kaipy.gamera.gampp as gampp
 import xml.etree.ElementTree as et
 import xml.dom.minidom
+
+# Kaipy modules
+import kaipy.gamera.gampp as gampp
 import kaipy.kaiH5 as kh5
 
-import os
+
 # Generate name of restart file
 
-def VectorOutput(Vname,Vecs,VDims,n,h5f):
+def VectorOutput(Vname,Vecs,VDims,n,h5F,Grid, cDims):
     vAtt = et.SubElement(Grid, "Attribute")
     vAtt.set("Name", Vname)
     vAtt.set("AttributeType", "Vector")
@@ -51,8 +57,7 @@ def genName(bStr, i, j, k, Ri, Rj, Rk,isOld):
         "_%04d_%04d_%04d_%04d_%04d_%04d.gam.h5" % (Ri, Rj, Rk, i, j, k)
     return fID
 
-
-def main():
+def create_command_line_parser():
     # Defaults
     fdir = os.getcwd()
     ftag = "msphere"
@@ -70,7 +75,10 @@ def main():
                         default=ftag, help="RunID of data (default: %(default)s)")
     parser.add_argument('-outid', type=str, metavar="outid", default=outid,
                         help="RunID of output XMF files (default: %(default)s)")
+    return parser
 
+def main():
+    parser = create_command_line_parser()
     # Finalize parsing
     args = parser.parse_args()
     fdir = args.d
@@ -210,10 +218,10 @@ def main():
                         aDI.text = "%s:/Step#%d/%s" % ( h5F, n, vID)
                         
                      # create vectors
-                    if (haveV): VectorOutput("V",VVec,VDims,n,h5F)
-                    if (haveB): VectorOutput("B",BVec,VDims,n,h5F)
-                    if (haveJ): VectorOutput("J",JVec,VDims,n,h5F)
-                    if (haveE): VectorOutput("E",EVec,VDims,n,h5F)
+                    if (haveV): VectorOutput("V",VVec,VDims,n,h5F,Grid, cDims)
+                    if (haveB): VectorOutput("B",BVec,VDims,n,h5F,Grid, cDims)
+                    if (haveJ): VectorOutput("J",JVec,VDims,n,h5F,Grid, cDims)
+                    if (haveE): VectorOutput("E",EVec,VDims,n,h5F,Grid, cDims)
 
         # Write output
         fOut = "%s/%s.%06d.xmf" % (fodir, outid, tOut)
