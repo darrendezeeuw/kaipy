@@ -1,18 +1,19 @@
-# Custom
+# Standard modules
+import datetime
+import re
+import os
+
+# Third-party modules
+import numpy
+import netCDF4 as nc
+from cdasws import CdasWs
+
+# Kaipy modules
 import kaipy.transform
 from kaipy.solarWind.SolarWind import SolarWind
 from kaipy.solarWind.OMNI import OMNI
 from kaipy.kdefs import *
 
-# 3rd party
-import numpy
-import netCDF4 as nc
-from cdasws import CdasWs
-
-# Standard
-import datetime
-import re
-import os
 
 class DSCOVRNC(OMNI):
     """

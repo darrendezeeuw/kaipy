@@ -1,7 +1,10 @@
+# Standard modules
 import datetime
 
+# Third-party modules
 import numpy
 
+# Kaipy modules
 import kaipy.transform
 from kaipy.solarWind.TimeSeries import TimeSeries 
 from kaipy.solarWind.ols import ols

@@ -1,15 +1,17 @@
-# Custom
+# Standard modules
+import datetime
+import re
+
+
+# Third party modules
+import numpy
+import cdasws as cdas
+
+# Kaipy modules
 import kaipy.transform
 from kaipy.solarWind.SolarWind import SolarWind
 from kaipy.solarWind.OMNI import OMNI
 
-# 3rd party
-import numpy
-import cdasws as cdas
-
-# Standard
-import datetime
-import re
 
 class WIND(OMNI):
     """
