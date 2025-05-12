@@ -1,12 +1,21 @@
 #!/usr/bin/env python
 
+# Standard modules
 import argparse
 from argparse import RawTextHelpFormatter
 import datetime
 
+# Third-party modules
+from astropy.time import Time
+
 fmt='%m/%d/%Y, %H:%M:%S'
 
-def main():
+def create_command_line_parser():
+    """Create the command-line argument parser.
+    Create the parser for command-line arguments.
+    Returns:
+        argparse.ArgumentParser: Command-line argument parser for this script.
+    """
     t0="2010-01-01T00:00:00"
     fmt='%Y-%m-%dT%H:%M:%S'
 
@@ -18,6 +27,14 @@ def main():
     parser = argparse.ArgumentParser(description=MainS, formatter_class=RawTextHelpFormatter)
     parser.add_argument('UT',type=str,metavar="UT",default=t0,help='UT string to convert (default: %(default)s)')
 
+    return parser
+
+
+def main():
+    t0="2010-01-01T00:00:00"
+    fmt='%Y-%m-%dT%H:%M:%S'
+
+    parser = create_command_line_parser()
     #Finalize parsing
     args = parser.parse_args()
 

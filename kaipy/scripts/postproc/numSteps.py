@@ -1,24 +1,38 @@
 #!/usr/bin/env python
 #Simple script to spit out the step information of a Kaiju H5 file
+
+# Standard modules
 import argparse
 from argparse import RawTextHelpFormatter
 import os
-import kaipy.kaiH5 as kh5
+
+# Third-party modules
 import numpy as np
+
+# Kaipy modules
+import kaipy.kaiH5 as kh5
 
 def MJD2Str(m0):
 	from astropy.time import Time
 	dtObj = Time(m0,format='mjd').datetime
 	tStr = dtObj.strftime("%H:%M:%S") + " " +  dtObj.strftime("%m/%d/%Y") 
 	return tStr
-def main():
-	#Defaults
 
+def create_command_line_parser():
+	"""Create the command-line argument parser.
+	Create the parser for command-line arguments.
+	Returns:
+		argparse.ArgumentParser: Command-line argument parser for this script.
+	"""
+	# Defaults
 	MainS = """Identifies the domain (in steps and time) of a Kaiju HDF-5 file"""
 	
 	parser = argparse.ArgumentParser(description=MainS, formatter_class=RawTextHelpFormatter)
 	parser.add_argument('h5F',nargs='+',metavar='Gamera.h5',help="Filename of Gamera HDF5 Output")
+	return parser
 
+def main():
+	parser = create_command_line_parser()
 	#Finished getting arguments, parse and move on
 	args = parser.parse_args()
 	#h5F = args.h5F

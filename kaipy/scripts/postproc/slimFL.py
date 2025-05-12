@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 #Takes H5 field line file and slims it down
 
+# Standard modules
 import argparse
 import os
-import kaipy.kaiH5 as kh5
+
+# Third-party modules
 import h5py
 import numpy as np
+
+# Kaipy modules
+import kaipy.kaiH5 as kh5
 
 #Create new file w/ same root vars/attributes as old
 def createfile(iH5,fOut):
@@ -24,10 +29,15 @@ def createfile(iH5,fOut):
             oH5.create_dataset(sQ,data=iH5[sQ])
     return oH5
 
-def main():
-    #Set defaults
-    ns = 0
-    ne = -1 #Proxy for last entry
+def create_command_line_parser():
+    """Create the command-line argument parser.
+    Create the parser for command-line arguments.
+    Returns:
+        argparse.ArgumentParser: Command-line argument parser for this script.
+    """
+
+
+    
     parser = argparse.ArgumentParser(description="Slims down a FL file")
 
     parser.add_argument('inH5',metavar='Fat.h5',help="Filename of input fat HDF5 file")
@@ -35,6 +45,13 @@ def main():
     parser.add_argument( '-pskip',metavar='pskip',default=1,help="Stride over points on field line")
     parser.add_argument('-flskip',metavar='flskip',default=1,help="Stride over field lines")
 
+    return parser
+
+def main():
+    #Set defaults
+    ns = 0
+    ne = -1 #Proxy for last entry
+    parser = create_command_line_parser()
     #Finalize parsing
     args = parser.parse_args()
 
