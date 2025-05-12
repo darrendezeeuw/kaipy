@@ -1,7 +1,15 @@
 #!/usr/bin/env python
 #Pulls RBSP data from cdasws and compares to model output
+
+# Standard modules
 import argparse
 from argparse import RawTextHelpFormatter
+import json
+import datetime
+import os
+import errno
+
+# Third-party modules
 #import spacepy and cdasws
 import spacepy
 from spacepy.coordinates import Coords
@@ -9,11 +17,7 @@ from spacepy.time import Ticktock
 import spacepy.datamodel as dm
 import spacepy.plot as splot
 from cdasws import CdasWs
-#import standard python stuff
-import json
-import datetime
-import os
-import errno
+
 #import numpy and matplotlib
 import numpy as np
 import matplotlib as mpl
@@ -24,7 +28,9 @@ import matplotlib.gridspec as gridspec
 from matplotlib import dates
 from astropy.time import Time
 import scipy.interpolate
-#Kaipy and related
+
+
+# Kaipy modules
 import kaipy.kaiViz as kv
 import kaipy.kaiTools as kaiTools
 import kaipy.chimp.kCyl as kc
@@ -64,7 +70,15 @@ def getJScl(Bmag,Beq,en=2.0):
 			It[n] = Ic.sum()/I0
 	return It
 
-def main():
+def create_command_line_parser():
+	"""Create the command-line argument parser.
+	Create the parser for command-line arguments.
+	Returns:
+		argparse.ArgumentParser: Command-line argument parser for this script.
+	"""
+	MainS = """Pulls RBSP data and compares it to synthetic RBSP intensity measurementsfrom the simulation, 
+	calculated from extracted RBSP trajectory and PSD files.
+	"""
 	#Defaults
 	fdir  = os.getcwd()
 	ftag  = "eRBpsd.ps.h5"
@@ -73,10 +87,6 @@ def main():
 	Ks    = 1000
 	R0    = 2.0
 
-	MainS = """Pulls RBSP data and compares it to synthetic RBSP intensity measurementsfrom the simulation, 
-	calculated from extracted RBSP trajectory and PSD files.
-	"""
-
 	parser = argparse.ArgumentParser(description=MainS, formatter_class=RawTextHelpFormatter)
 	parser.add_argument('-d',type=str,metavar="directory",default=fdir,help="Directory to read from (default: %(default)s)")
 	parser.add_argument('-id',type=str,metavar="runid",default=ftag,help="RunID of model data (default: %(default)s)")
@@ -84,7 +94,10 @@ def main():
 	parser.add_argument('-trj',type=str,metavar="scTrk",default=trtag,help="spacecraft trajectory file (default: %(default)s)")
 	parser.add_argument('-sc',type=str,metavar="spacecraft",default=sctag,help="RBSP s/c to plot 'A' or 'B' (default: %(default)s)")
 	parser.add_argument('-r0',type=float,metavar="R0",default=R0,help="radius w/in which to mask observations (default: %(default)s)")
+	return parser
 
+def main():
+	parser = create_command_line_parser()
 	#Finalize parsing
 	args  = parser.parse_args()
 	fdir  = args.d
@@ -93,6 +106,8 @@ def main():
 	sctag = args.sc
 	KS    = args.k
 	R0    = args.r0
+	# Ks had missing value below
+	Ks    = float(KS)
 
 	#======
 	#Init data
