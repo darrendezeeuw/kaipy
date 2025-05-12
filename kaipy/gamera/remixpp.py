@@ -1,11 +1,16 @@
 #Various routines for plotting remix output data
 #Generally dependant on basemap
 
+# Standard modules
+
+# Third-party modules
 import numpy as np
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 from mpl_toolkits.axes_grid1.inset_locator import InsetPosition
 import matplotlib.pyplot as plt
 import h5py
+
+# Kaipy modules
 import kaipy.kaiViz as kv
 
 r2deg = 180.0/np.pi
