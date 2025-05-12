@@ -14,16 +14,16 @@ Mike Wiltberger
 """
 
 
-# Include standard modules.
+# Standard modules
 import argparse
 from argparse import RawTextHelpFormatter
 import os
 
-# Include 3rd-party modules.
+# Third-party modules
 import numpy as np
 import spacepy.datamodel as dm
 
-# Include project modules.
+# Kaipy modules
 import kaipy.kaiH5 as kaiH5
 import kaipy.kaiViz as kv
 import kaipy.kaiTools as kaiTools
