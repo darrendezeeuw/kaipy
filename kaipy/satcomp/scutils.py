@@ -1,11 +1,11 @@
 
-# Import standard modules.
+# Standard modules
 import datetime
 import os
 import subprocess
 from xml.dom import minidom
 
-# Import supplemental modules.
+# Third-party modules
 from astropy.coordinates import SkyCoord
 import astropy.units as u
 from cdasws import CdasWs
@@ -16,7 +16,7 @@ import spacepy.datamodel as dm
 from spacepy.time import Ticktock
 from sunpy.coordinates import frames
 
-# Import project-specific modules.
+# Kaipy modules
 import kaipy.kaijson as kj
 import kaipy.kaiTools as kaiTools
 import kaipy.kdefs
