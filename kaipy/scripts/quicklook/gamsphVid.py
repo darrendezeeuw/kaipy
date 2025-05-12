@@ -1,22 +1,28 @@
 #!/usr/bin/env python
 #Make video of Gamera magnetosphere run
+
+# Standard modules
 import argparse
 from argparse import RawTextHelpFormatter
+import os
+import errno
+
+# Third-party modules
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
-import kaipy.kaiViz as kv
+
 import matplotlib.gridspec as gridspec
 import numpy as np
-import numpy as np
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+
+# Kaipy modules
+import kaipy.kaiViz as kv
 import kaipy.gamera.msphViz as mviz
 import kaipy.remix.remix as remix
 import kaipy.gamera.magsphere as msph
 import kaipy.gamera.gampp as gampp
 import kaipy.gamera.rcmpp as rcmpp
-from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-import os
-import errno
 
 cLW = 0.25
 def create_command_line_parser():
