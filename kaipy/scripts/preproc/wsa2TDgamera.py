@@ -2,7 +2,12 @@
 
 #python wsa2TDgamera.py 
 
+# Standard modules
 import os,sys,glob
+import argparse
+import time
+
+# Third-party modules
 import scipy
 from scipy import interpolate
 from scipy.optimize import newton_krylov,anderson
@@ -10,11 +15,12 @@ import h5py
 import numpy as np
 import matplotlib.pyplot as plt
 
-import time
-import kaipy.gamhelio.wsa2TDgamera.params as params
+# Kaipy modules
+import kaipy.gamhelio.wsa2gamera.params as params
 import kaipy.gamhelio.lib.wsa as wsa
 import kaipy.gamhelio.lib.poisson as poisson
 import kaipy.gamera.gamGrids as gg
+
 
 #plotting function for debug
 def plot(wsa_file, var_wsa, var_wsa_rolled):
@@ -43,8 +49,8 @@ def plot(wsa_file, var_wsa, var_wsa_rolled):
     #ax2.set_xlim((0,var_wsa_rolled.shape[1]))
     #ax2.set_ylim((0,var_wsa_rolled.shape[0]))
 
-    fig.suptitle(wsaFile)
-    plt.savefig(wsaFile[:-4]+'png')
+    fig.suptitle(wsa_file)
+    plt.savefig(wsa_file[:-4]+'png')
 
 
 # [EP] function to plot boundary conditions in rotating frame to make a movie
@@ -82,13 +88,22 @@ def plotBc(wsa_file, phi, theta, var1, var2, var3, var4):
     day = date[6:8]
 
     plt.suptitle(year + ':' + month + ':' + day, y=0.85)
-    plt.savefig(wsaFile[:-5]+'_bc.png', bbox_inches='tight')
+    plt.savefig(wsa_file[:-5]+'_bc.png', bbox_inches='tight')
+
+def create_command_line_parser():
+    """Create a command line parser for the script.
+    Returns:
+        argparse.ArgumentParser: The command line parser.
+    """
+    parser = argparse.ArgumentParser(description="Convert WSA data to GAMERA format for the inner boundary conditions.")
+    parser.add_argument('ConfigFileName',help='The name of the configuration file to use',default='startup.config')
+
+    return parser
 
 def main():
     #----------- PARSE ARGUMENTS ---------#
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('ConfigFileName',help='The name of the configuration file to use',default='startup.config')
+    
+    parser = create_command_line_parser
     args = parser.parse_args()
     #----------- PARSE ARGUMENTS ---------#
 
@@ -458,7 +473,7 @@ def main():
                 ep_use = ep_save_p.T #(256,129)
 
                 #rotE of the cell face
-                circE = zeros((nk,nj))
+                circE = np.zeros((nk,nj))
 
                 #circE1 = - (ep_use[:,:-1]*dlp + et_use[1:,:]*dlt - ep_use[:,1:]*dlp - et_use[:-1,:]*dlt)
 
