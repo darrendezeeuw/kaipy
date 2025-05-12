@@ -1,14 +1,20 @@
 #Various routines to generate HDF5 grids to read into Gamera
-import numpy as np
-from scipy import interpolate
+
+# Standard modules
 import sys
 import os
+
+# Third-party modules
+import numpy as np
+from scipy import interpolate
 from scipy.ndimage import gaussian_filter
 import pyhdf
 from pyhdf.SD import SD, SDC
 import matplotlib as mpl
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
+
+# Kaipy modules
 import kaipy.kaiViz as kv
 import kaipy.kdefs as kdefs
 

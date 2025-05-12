@@ -1,13 +1,18 @@
 #Various helper routines for making ground DB pics
 
-import numpy as np
+# Standard modules
 import sys
+
+# Third-party modules
+import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 from cartopy.feature.nightshade import Nightshade
 from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
 import matplotlib.ticker as mticker
+
+# Kaipy modules
 import kaipy.kaiH5 as kh5
 import kaipy.kaiTools as ktools
 
