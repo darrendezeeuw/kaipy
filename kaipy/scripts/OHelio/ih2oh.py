@@ -1,24 +1,39 @@
 #! /usr/bin/env python
 
-import numpy as np
-import os,sys,glob
-from scipy import interpolate
+# Standard modules
 import time
-import h5py
+import os,sys,glob
 import matplotlib.pyplot as plt
+import argparse
 
+# Third-party modules
+import numpy as np
+from scipy import interpolate
+import h5py
+
+# Kaipy modules
 import kaipy.gamhelio.wsa2gamera.params as params
 import kaipy.gamhelio.lib.wsa as wsa
-
 import kaipy.gamera.gamGrids as gg
 
+
+def create_command_line_parser():
+    """Create the command-line argument parser for ih2oh.py."""
+    parser = argparse.ArgumentParser(
+        description="Process configuration file for inner helio to outer helio conversion."
+    )
+    parser.add_argument(
+        'ConfigFileName',
+        type=str,
+        help='The name of the configuration file to use (default: startup.config)',
+        default='startup.config'
+    )
+    return parser
+
 def main():
-    #----------- PARSE ARGUMENTS ---------#
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('ConfigFileName',help='The name of the configuration file to use',default='startup.config')
+    # Parse command-line arguments
+    parser = create_command_line_parser()
     args = parser.parse_args()
-    #----------- PARSE ARGUMENTS ---------#
 
     # Read params from config file
     prm = params.params(args.ConfigFileName)
