@@ -1,9 +1,14 @@
+
+# Standard modules
+import sys
+
+# Third-party modules
 import h5py
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import numpy as np
-import sys
 
+# Kaipy modules
 from kaipy.kdefs import RionE, REarth
 
 Ri      = RionE          # radius of ionosphere in 1000km
