@@ -142,7 +142,57 @@ def create_command_line_parser():
     )
     return parser
 
-def makePlot(i,rcmdata,nStp):
+def makePlot(i,rcmdata,nStp, args, varDict, fig):
+    doBeta = args.beta
+    doBig = args.big
+    doBMin = args.bmin
+    fdir = args.d
+    debug = args.debug
+    doElec = args.elec
+    doFAC = args.fac
+    ftag = args.id + ".mhdrcm"
+    doT   = args.kt
+    spacecraft = args.spacecraft
+    doTb   = args.tbnc
+    verbose = args.verbose
+    doVol = args.vol
+    doWgt = args.wgt
+    do_vid = args.vid
+    do_overwrite = args.overwrite
+    do_hash = not args.nohash
+    ncpus = args.ncpus
+
+    # Extract variables from varDict
+    vP = varDict.get("vP", vP)
+    vS = varDict.get("vS", vS)
+    vW = varDict.get("vW", vW)
+    vV = varDict.get("vV", vV)
+    vT = varDict.get("vT", vT)
+    vB = varDict.get("vB", vB)
+    vI = varDict.get("vI", vI)
+    vBM = varDict.get("vBM", vBM)
+    vFAC = varDict.get("vFAC", vFAC)
+    vD = varDict.get("vD", vD)
+    cVals = varDict.get("cVals", cVals)
+    pCMap = varDict.get("pCMap", pCMap)
+    sCMap = varDict.get("sCMap", sCMap)
+    dCMap = varDict.get("dCMap", dCMap)
+    wCMap = varDict.get("wCMap", wCMap)
+    vCMap = varDict.get("vCMap", vCMap)
+    xyBds = varDict.get("xyBds", xyBds)
+    eCol = varDict.get("eCol", eCol)
+    eLW = varDict.get("eLW", eLW)
+    cLW = varDict.get("cLW", cLW)
+    MHDCol = varDict.get("MHDCol", MHDCol)
+    MHDLW = varDict.get("MHDLW", MHDLW)
+    figSz = varDict.get("figSz", figSz)
+    n_pad = varDict.get("n_pad", n_pad)
+    outDir = varDict.get("outDir", outDir)
+    branch = varDict.get("branch", branch)
+    githash = varDict.get("githash", githash)
+
+    # Initialize the figure.
+    fig = plt.figure(figsize=figSz)
 
     if not debug:
         # Suppress the warning
@@ -568,7 +618,36 @@ def main():
             print("Using Step %d"%(nStp))
         if debug:
             print("nStp = %s" % nStp)
-        makePlot(nStp,rcmdata,nStp)
+        varDict = {
+            "vP": vP,
+            "vS": vS,
+            "vW": vW,
+            "vV": vV,
+            "vT": vT,
+            "vB": vB,
+            "vI": vI,
+            "vBM": vBM,
+            "vFAC": vFAC,
+            "vD": vD,
+            "cVals": cVals,
+            "pCMap": pCMap,
+            "sCMap": sCMap,
+            "dCMap": dCMap,
+            "wCMap": wCMap,
+            "vCMap": vCMap,
+            "xyBds": xyBds,
+            "eCol": eCol,
+            "eLW": eLW,
+            "cLW": cLW,
+            "MHDCol": MHDCol,
+            "MHDLW": MHDLW,
+            "figSz": figSz,
+            "n_pad": 0,
+            "outDir": "rcmpic",
+            "branch": branch,
+            "githash": githash
+        }
+        makePlot(nStp,rcmdata,nStp, args, varDict, fig)
 
     else: # Then we make a video, i.e. series of images saved to rcmVid
 
@@ -585,10 +664,68 @@ def main():
 
         if ncpus == 1:
             for i, nStp in enumerate(sIds):
-                makePlot(i,rcmdata, nStp)
+                varDict = {
+                    "vP": vP,
+                    "vS": vS,
+                    "vW": vW,
+                    "vV": vV,
+                    "vT": vT,
+                    "vB": vB,
+                    "vI": vI,
+                    "vBM": vBM,
+                    "vFAC": vFAC,
+                    "vD": vD,
+                    "cVals": cVals,
+                    "pCMap": pCMap,
+                    "sCMap": sCMap,
+                    "dCMap": dCMap,
+                    "wCMap": wCMap,
+                    "vCMap": vCMap,
+                    "xyBds": xyBds,
+                    "eCol": eCol,
+                    "eLW": eLW,
+                    "cLW": cLW,
+                    "MHDCol": MHDCol,
+                    "MHDLW": MHDLW,
+                    "figSz": figSz,
+                    "n_pad": n_pad,
+                    "outDir": outDir,
+                    "branch": branch,
+                    "githash": githash
+                }
+                makePlot(i,rcmdata, nStp, args, varDict, fig)
         else:
             # Make list of parallel arguments
-            ag = ((i,rcmdata,nStp) for i, nStp in enumerate(sIds) )
+            varDict = {
+                "vP": vP,
+                "vS": vS,
+                "vW": vW,
+                "vV": vV,
+                "vT": vT,
+                "vB": vB,
+                "vI": vI,
+                "vBM": vBM,
+                "vFAC": vFAC,
+                "vD": vD,
+                "cVals": cVals,
+                "pCMap": pCMap,
+                "sCMap": sCMap,
+                "dCMap": dCMap,
+                "wCMap": wCMap,
+                "vCMap": vCMap,
+                "xyBds": xyBds,
+                "eCol": eCol,
+                "eLW": eLW,
+                "cLW": cLW,
+                "MHDCol": MHDCol,
+                "MHDLW": MHDLW,
+                "figSz": figSz,
+                "n_pad": n_pad,
+                "outDir": outDir,
+                "branch": branch,
+                "githash": githash
+            }
+            ag = ((i,rcmdata,nStp, args, varDict, fig) for i, nStp in enumerate(sIds) )
             # Check we're not exceeding cpu_count on computer
             ncpus = min(int(ncpus),cpu_count(logical=False))
             print('Doing multithreading on ',ncpus,' threads')
