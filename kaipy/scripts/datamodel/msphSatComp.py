@@ -1,32 +1,38 @@
 #!/usr/bin/env python
 
-#standard python
+# Standard modules
 import sys
 import os
 import argparse
 from argparse import RawTextHelpFormatter
 
-#numpy
+# Third-party modules
 import numpy as np
-
-#Kaipy and related
 from   astropy.time import Time
 import h5py
+import spacepy.datamodel as dm
+
+# Kaipy modules
 import kaipy.kaiH5 as kaiH5
 import kaipy.kaiViz as kv
 import kaipy.kaiTools as kaiTools
 import kaipy.kaijson as kj
 import kaipy.satcomp.scutils as scutils
-import spacepy.datamodel as dm
 
-def main():
+
+def create_command_line_parser():
+	"""Create the command-line argument parser.
+
+Create the parser for command-line arguments.
+
+Returns:
+	argparse.ArgumentParser: Command-line argument parser for this script.
+"""
 	MainS = """Extracts information from satellite trajectory for various
 	spacecraft.  Space craft data is pulled from CDAWeb.  Output CDF files
 	contain data pulled from CDAWeb along with data extracted from GAMERA.
 	Image files of satellite comparisons are also produced.
 	"""
-
-
 	parser = argparse.ArgumentParser(description=MainS,
 		formatter_class=RawTextHelpFormatter)
 	parser.add_argument('-id',type=str,metavar='runid',default='msphere',
@@ -41,6 +47,15 @@ def main():
 		default=1,help='Number of segments to simulateously process')
 	parser.add_argument('--keep',action='store_true',
 		help='Keep intermediate files')
+	return parser
+
+def main():
+	MainS = """Extracts information from satellite trajectory for various
+	spacecraft.  Space craft data is pulled from CDAWeb.  Output CDF files
+	contain data pulled from CDAWeb along with data extracted from GAMERA.
+	Image files of satellite comparisons are also produced.
+	"""
+	parser = create_command_line_parser()
 
 	args = parser.parse_args()
 
