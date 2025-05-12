@@ -1,9 +1,11 @@
+# Standard modules
 import os
 import json
-
-#Packages needed to handle variable types
-import numpy as np
 import datetime
+
+# Third-party modules
+import numpy as np
+
 
 #todo move to kaidefs
 dtformat = "%Y-%m-%dT%H:%M:%SZ"

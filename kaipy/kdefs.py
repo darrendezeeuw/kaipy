@@ -45,6 +45,7 @@ Output defaults:
     barDef: Default progress bar animation.
     grpTimeCache: Time attribute cache name for I/O.
 """
+# Third-party modules
 import numpy as np
 import alive_progress.animations.bars
 

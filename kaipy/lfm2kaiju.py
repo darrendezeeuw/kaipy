@@ -1,7 +1,10 @@
+# Third-party modules
 import numpy as np
-import kaipy.gamera.gamGrids as gg
 from pyhdf.SD import SD, SDC
 import h5py
+
+# Kaipy modules
+import kaipy.gamera.gamGrids as gg
 
 clight = 2.9979e+10 #Speed of light [cm/s]
 Mp = 1.6726219e-24 #g
