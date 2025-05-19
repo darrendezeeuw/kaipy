@@ -61,5 +61,16 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 html_logo = '_static/kaipy-logo.png'
 
+html_theme_options = {
+    'logo_only': True,
+    'display_version': False,
+    'collapse_navigation': False,
+    'navigation_depth': 3,
+}
+
+html_css_files = [
+    'css/sidebar_theme.css',
+]
+
 # Mock Imports
 autodoc_mock_imports = ['cartopy']
