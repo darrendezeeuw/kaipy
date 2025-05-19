@@ -6,7 +6,6 @@ import os
 # Third-party modules
 import numpy as np
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-from mpl_toolkits.axes_grid1.inset_locator import InsetPosition
 import matplotlib.pyplot as plt
 import h5py
 import numpy.ma as ma

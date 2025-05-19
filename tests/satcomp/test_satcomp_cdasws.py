@@ -21,7 +21,7 @@ def test_emphem(key):
     assert 'CoordSys' in scIdDict[key]['Ephem'], \
         '{} lacks Ephem CoordSys key'.format(key)
 
-
+@pytest.mark.slow
 @pytest.mark.parametrize("key",[key for key in scutils.getScIds().keys()])
 def test_pullVar(key):
 

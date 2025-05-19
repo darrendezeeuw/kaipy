@@ -10,7 +10,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     package_data={'kaipy': ['scripts/*', 'scripts/*/*']},
-    python_requires='>=3.10,<=3.12.10',
+    python_requires='>=3.8,<=3.11',
     install_requires=[
         'alive_progress',
         'astropy',
@@ -21,7 +21,6 @@ setup(
         'matplotlib',
         'pandas',
         'progressbar',
-        'pyhdf',
         'pyspedas',
         'pytest',
         'slack_sdk',

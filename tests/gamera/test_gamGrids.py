@@ -5,9 +5,9 @@ import h5py
 # FILE: kaipy/gamera/test_gamGrids.py
 
 from kaipy.gamera.gamGrids import (
-	genLFM, genEllip, genSph, genEgg, genFatEgg, RampUp, Egglipses,
+	genEllip, genSph, genEgg, genFatEgg, RampUp, Egglipses,
 	GenKSph, GenKSphNonU, GenKSphNonUGL, Aug2D, Aug2Dext, genRing,
-	PrintRing, Aug3D, WriteGrid, WriteChimp, VizGrid, getLFM, LoadTabG, regrid
+	PrintRing, Aug3D, WriteGrid, WriteChimp, VizGrid, LoadTabG, regrid
 )
 
 def test_genEllip():

@@ -8,8 +8,6 @@ import os
 import numpy as np
 from scipy import interpolate
 from scipy.ndimage import gaussian_filter
-import pyhdf
-from pyhdf.SD import SD, SDC
 import matplotlib as mpl
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
@@ -17,6 +15,7 @@ import matplotlib.pyplot as plt
 # Kaipy modules
 import kaipy.kaiViz as kv
 import kaipy.kdefs as kdefs
+from scipy.interpolate import RectBivariateSpline
 
 
 #Use routine to generate xx,yy = corners of active upper half plane
@@ -27,29 +26,6 @@ Ng = 4
 Ni0 = 32
 Nj0 = 64
 Nk0 = 32
-
-#Gen LFM egg
-def genLFM(Ni=Ni0, Nj=Nj0, Rin=3.0, Rout=25.0, fIn="lfm.hdf", TINY=1.0e-8):
-	"""
-	Generate a regridded LFM data.
-
-	Args:
-		Ni (int): Number of grid points in the x-direction.
-		Nj (int): Number of grid points in the y-direction.
-		Rin (float): Inner radius of the region of interest.
-		Rout (float): Outer radius of the region of interest.
-		fIn (str): Input file name for LFM data.
-		TINY (float): A small value used for numerical stability.
-
-	Returns:
-		XX (numpy.ndarray): Regridded x-coordinates.
-		YY (numpy.ndarray): Regridded y-coordinates.
-	"""
-	# Get from LFM data
-	xx0, yy0 = getLFM(fIn=fIn, Rin=Rin, Rout=Rout)
-	XX, YY = regrid(xx0, yy0, Ni, Nj, TINY=TINY)
-
-	return XX, YY
 
 #Gen elliptical grid
 def genEllip(Ni=Ni0,Nj=Nj0,Rin=3.0,Rout=30,TINY=1.0e-8):
@@ -942,62 +918,6 @@ def VizGrid(XX,YY,xxG=None,yyG=None,doGhost=False,doShow=True,xyBds=None,fOut="g
 	if (doShow):
 		plt.show()
 
-#Read in LFM grid, return upper half plane corners
-#Use Rin to cut out inner region, Rout to guarantee at last that much
-def getLFM(fIn, Rin=3.0, Rout=25.0):
-	"""
-	Reads LFM grid data from an HDF file and returns the projected and scaled x and y arrays.
-
-	Args:
-		fIn (str): The path to the HDF file.
-		Rin (float): The inner radius for scaling the x and y arrays. Default is 3.0.
-		Rout (float): The outer radius for cutting out the outer regions of the x and y arrays. Default is 25.0.
-
-	Returns:
-		xxi (ndarray): The projected and scaled x array.
-		yyi (ndarray): The projected and scaled y array.
-	"""
-	hdffile = pyhdf.SD.SD(fIn)
-	# Grab x/y/z arrays from HDF file. Scale by Re
-	# LFM is k,j,i ordering
-	iRe = 1.0/kdefs.Re_cgs
-	x3 = iRe * np.double(hdffile.select('X_grid').get())
-	y3 = iRe * np.double(hdffile.select('Y_grid').get())
-	z3 = iRe * np.double(hdffile.select('Z_grid').get())
-	lfmNc = x3.shape  # Number of corners (k,j,i)
-	nk = x3.shape[0] - 1
-	nj = x3.shape[1] - 1
-	ni = x3.shape[2] - 1
-
-	print("Reading LFM grid from %s, size (%d,%d,%d)" % (fIn, ni, nj, nk))
-
-	# Project to plane, transpose and cut
-	ks = 0  # Upper half x-y plane
-	xxi = x3[ks, :, :].squeeze().T
-	yyi = y3[ks, :, :].squeeze().T
-
-	# Scale so that inner is Rin
-	rr = np.sqrt(xxi ** 2.0 + yyi ** 2.0)
-	lfmIn = rr.min()
-	xyScl = Rin / lfmIn
-	xxi = xxi * xyScl
-	yyi = yyi * xyScl
-
-	rr = np.sqrt(xxi ** 2.0 + yyi ** 2.0)
-
-	# Get min/max radius per I shell
-	rMin = rr.min(axis=1)
-	rMax = rr.max(axis=1)
-	inCut = (rMin >= Rin).argmax()
-	outCut = (rMin >= Rout).argmax()
-
-	# Cut out outer regions to create egg
-	xxi = xxi[0:outCut + 1, :]
-	yyi = yyi[0:outCut + 1, :]
-
-	return xxi, yyi
-
-
 def LoadTabG(fIn="lfmG", Nc=0):
 	"""
 	LoadTabG function loads tabular data from files LFM X and Y grid files.
@@ -1045,7 +965,6 @@ def regrid(xxi, yyi, Ni, Nj, Rin=0.0, Rout=0.0, TINY=1.0e-8, scale=False):
 		ndarray: The x-coordinate values of the regridded grid.
 		ndarray: The y-coordinate values of the regridded grid.
 	"""
-	iMeth = "cubic"
 	Ni0 = xxi.shape[0] - 1
 	Nj0 = xxi.shape[1] - 1
 	rr0 = np.sqrt(xxi ** 2.0 + yyi ** 2.0)
@@ -1076,9 +995,9 @@ def regrid(xxi, yyi, Ni, Nj, Rin=0.0, Rout=0.0, TINY=1.0e-8, scale=False):
 			rScl = xSclIn + iLFM[i] * dxScl
 			rr0[i, :] = rScl * rr0[i, :]
 
-	# Create interpolants
-	fR = interpolate.interp2d(iLFM, jLFM, rr0.T, kind=iMeth, fill_value=None)
-	fP = interpolate.interp2d(iLFM, jLFM, pp0.T, kind=iMeth, fill_value=None)
+	# Create interpolants using RectBivariateSpline
+	fR = RectBivariateSpline(iLFM, jLFM, rr0, kx=3, ky=3)
+	fP = RectBivariateSpline(iLFM, jLFM, pp0, kx=3, ky=3)
 
 	# Regrid onto new
 	XXi = np.zeros((Ni + 1, Nj + 1))
@@ -1088,8 +1007,8 @@ def regrid(xxi, yyi, Ni, Nj, Rin=0.0, Rout=0.0, TINY=1.0e-8, scale=False):
 	sj = np.linspace(0, 1, Nj + 1)
 	for i in range(Ni + 1):
 		for j in range(Nj + 1):
-			r = fR(si[i], sj[j])
-			phi = fP(si[i], sj[j])
+			r = fR(si[i], sj[j])[0, 0]
+			phi = fP(si[i], sj[j])[0, 0]
 			phi = np.maximum(TINY, phi)
 			phi = np.minimum(np.pi - TINY, phi)
 
