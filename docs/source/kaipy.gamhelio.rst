@@ -8,7 +8,6 @@ Subpackages
    :maxdepth: 4
 
    kaipy.gamhelio.lib
-   kaipy.gamhelio.wsa2TDgamera
    kaipy.gamhelio.wsa2gamera
 
 Primary Package
@@ -116,18 +115,6 @@ kaipy.gamhelio.wsa2gamera.params module
    :undoc-members:
    :show-inheritance:
 
-
-
-wsa2TDgamera Package
-----------
-
-kaipy.gamhelio.wsa2TDgamera.params module
------------------------------------------
-
-.. automodule:: kaipy.gamhelio.wsa2TDgamera.params
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 Module contents
 ---------------

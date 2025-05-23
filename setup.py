@@ -69,7 +69,6 @@ setup(
             'genLFM=kaipy.scripts.preproc.genLFM:main',
             'genRCM=kaipy.scripts.preproc.genRCM:main',
             'wsa2gamera=kaipy.scripts.preproc.wsa2gamera:main',
-            'wsa2TDgamera=kaipy.scripts.preproc.wsa2TDgamera:main',
             'XMLGenerator=kaipy.scripts.preproc.XMLGenerator:main',
             'dbVid=kaipy.scripts.quicklook.dbVid:main',
             'dbpic=kaipy.scripts.quicklook.dbpic:main',

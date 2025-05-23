@@ -13,7 +13,7 @@ authors = [
 ]
 description = "Python software for CGS MAGE and other Kaiju models"
 readme = "README.md"
-requires-python = ">=3.8,<=3.12"
+requires-python = ">=3.9,<=3.13"
 keywords = ["CGS", "MAGE", "KAIJU"]
 license = {text = "BSD 3-Clause"}
 classifiers = [
@@ -72,7 +72,6 @@ cda2wind                  = "kaipy.scripts.preproc.cda2wind:main"
 genLFM                    = "kaipy.scripts.preproc.genLFM:main"
 genRCM                    = "kaipy.scripts.preproc.genRCM:main"
 wsa2gamera                = "kaipy.scripts.preproc.wsa2gamera:main"
-wsa2TDgamera              = "kaipy.scripts.preproc.wsa2TDgamera:main"
 XMLGenerator              = "kaipy.scripts.preproc.XMLGenerator:main"
 
 dbVid                     = "kaipy.scripts.quicklook.dbVid:main"

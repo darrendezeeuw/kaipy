@@ -69,9 +69,6 @@ The preprocessing directory has scripts that are used to setup MAGE simulations 
 .. autoprogram:: wsa2gamera:create_command_line_parser()
      :prog: wsa2gamera.py
 
-.. autoprogram:: wsa2TDgamera:create_command_line_parser()
-     :prog: wsa2TDgamera.py
-
 .. autoprogram:: XMLGenerator:create_command_line_parser()
      :prog: XMLGenerator.py
 
