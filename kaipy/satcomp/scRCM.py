@@ -1,19 +1,22 @@
+# Standard modules
+import os
+import datetime
+
+# Third-party modules
 import h5py as h5
 import numpy as np
-import os
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import matplotlib.dates as mdates
 from astropy.time import Time
-import datetime
 
+# Kaipy modules
 import kaipy.kaiH5 as kh5
 import kaipy.kaiViz as kv
 import kaipy.kaijson as kj
 import kaipy.kaiTools as kT
 import kaipy.gamera.gampp as gampp
 import kaipy.gamera.rcmpp as rcmpp
-
 import kaipy.satcomp.scutils as scutils
 
 

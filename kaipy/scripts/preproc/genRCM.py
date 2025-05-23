@@ -1,15 +1,17 @@
 #!/usr/bin/env python	
-#Generates RCM config data
-import numpy as np
+
+# Standard modules
 import argparse
 from argparse import RawTextHelpFormatter
 
-import kaipy.kaiTools as kT
+# Third-party modules
+import numpy as np
 
+# Kaipy modules
+import kaipy.kaiTools as kT
 import kaipy.rcm.lambdautils.AlamData as aD
 import kaipy.rcm.lambdautils.AlamParams as aP
 import kaipy.rcm.lambdautils.DistTypes as dT
-
 import kaipy.rcm.lambdautils.genAlam as genAlam
 from kaipy.rcm.wmutils.wmData import wmParams
 import kaipy.rcm.wmutils.genWM as genWM
@@ -68,7 +70,7 @@ def create_command_line_parser():
 
 	return parser
 
-if __name__ == "__main__":
+def main():
 
 	# Set up the command-line parser.
 	parser = create_command_line_parser()
@@ -142,3 +144,6 @@ if __name__ == "__main__":
 	
 
 
+
+if __name__ == "__main__":
+	main()

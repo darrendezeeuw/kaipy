@@ -1,4 +1,4 @@
-kaipy.solarWind package
+SolarWind package
 =======================
 
 Submodules
@@ -44,13 +44,6 @@ kaipy.solarWind.WIND module
    :undoc-members:
    :show-inheritance:
 
-kaipy.solarWind.ols module
---------------------------
-
-.. automodule:: kaipy.solarWind.ols
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 kaipy.solarWind.swBCplots module
 --------------------------------

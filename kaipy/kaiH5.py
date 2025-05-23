@@ -1,10 +1,14 @@
+# Standard modules
+import os, sys, subprocess
+import datetime
+
+# Third-party modules
 import h5py
 import numpy as np
-import os, sys, subprocess
 from alive_progress import alive_bar, alive_it
-import datetime
 from astropy.time import Time
-#Import kaipy modules
+
+# Kaipy modules
 import kaipy.kdefs as kdefs
 import kaipy.kaiTools as ktools
 

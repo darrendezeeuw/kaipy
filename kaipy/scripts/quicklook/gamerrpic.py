@@ -1,20 +1,25 @@
 #!/usr/bin/env python
 #Make video of error between two Gamera cases
+
+# Standard modules
 import argparse
 from argparse import RawTextHelpFormatter
+import os
+import errno
+
+# Third-party modules
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
 import kaipy.kaiViz as kv
 import matplotlib.gridspec as gridspec
 import numpy as np
-import numpy as np
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+
+# Kaipy modules
 import kaipy.gamera.msphViz as mviz
 import kaipy.gamera.magsphere as msph
 import kaipy.gamera.rcmpp as rcmpp
-from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-import os
-import errno
 
 cLW = 0.25
 def create_command_line_parser():
@@ -52,7 +57,7 @@ def create_command_line_parser():
 
 	return parser
 
-if __name__ == "__main__":
+def main():
 	#Defaults
 	doMPI = False #[Add MPI tiling]
 	# Set up the command-line parser.
@@ -109,3 +114,6 @@ if __name__ == "__main__":
 
 	kv.savePic(oName,bLenX=45)
 
+
+if __name__ == "__main__":
+	main()

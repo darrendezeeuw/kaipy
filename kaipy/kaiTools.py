@@ -1,10 +1,14 @@
-import numpy as np
+# Stnadard modules
 import datetime
 import os
 import glob
 import sys
+
+# Third-party modules
+import numpy as np
 from astropy.time import Time
 
+# Kaipy modules
 import kaipy.kdefs as kd
 import kaipy.kaiH5 as kH5
 

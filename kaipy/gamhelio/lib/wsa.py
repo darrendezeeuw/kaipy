@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
+# Third-party modules
 from astropy.io import fits
-
 from numpy import linspace,pi,meshgrid,sin,cos,zeros,ones,dstack,diff,sqrt,array,savetxt,flatnonzero,insert,asarray,zeros_like,argmin,unravel_index
 
 def read(wsa_file,densTempInfile,normalized=False,verbose=True):

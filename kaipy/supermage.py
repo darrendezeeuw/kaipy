@@ -1,5 +1,13 @@
 # Functions to calculate Supermag indices from simulated outputs
+# Standard modules
 import os
+import warnings
+import math
+import datetime
+import json
+from multiprocessing import Pool
+
+# Third-party modules
 import numpy as np
 import h5py
 import kaipy.kaiH5 as kh5
@@ -7,13 +15,10 @@ from astropy.time import Time
 from scipy.spatial import qhull
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
-import warnings
-import math
-import datetime
-import json
-from multiprocessing import Pool
 import pandas as pd
 
+
+# Kaipy modules
 #### NEED TO POINT TO SUPERMAG API SCRIPT
 #### /glade/p/hao/msphere/gamshare/supermag/supermag_api.py 
 import supermag_api as smapi

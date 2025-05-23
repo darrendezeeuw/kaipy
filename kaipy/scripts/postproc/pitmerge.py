@@ -2,13 +2,19 @@
 # Joins decomposed eb files generated using "Parallel In Time" into a single file
 # Example: bit.ly/3OQg71F
 
+# Standard modules
 import argparse
 from argparse import RawTextHelpFormatter
+import os
+import glob
+
+# Third-party modules
 import numpy as np
 import h5py
-import os
+
+
+# Kaipy modules
 import kaipy.kaiH5 as kh5
-import glob
 import kaipy.kdefs as kd
 
 tEps = 1.0e-3 #Small time
@@ -44,7 +50,13 @@ def createfile(fIn,fOut,doLink=False):
 
 	return oH5
 
-if __name__ == "__main__":
+def create_command_line_parser():
+	"""Create the command-line argument parser.
+	Create the parser for command-line arguments.
+	Returns:
+		argparse.ArgumentParser: Command-line argument parser for this script.
+	"""
+	# Defaults
 	dIn = os.getcwd()
 
 	runid = "msphere"
@@ -60,6 +72,11 @@ if __name__ == "__main__":
 	parser.add_argument('-typeid',type=str,metavar="typeid",default=typeid,help="Input type ID (default: %(default)s)")
 	parser.add_argument('--link',action='store_true',help="Create links to existing files rather than copy data (default: %(default)s)")
 
+	return parser
+
+
+def main():
+	parser = create_command_line_parser()
 	#Finalize parsing
 	args = parser.parse_args()
 	runid = args.runid
@@ -157,3 +174,7 @@ if __name__ == "__main__":
 	
 	#Done
 	oH5.close()
+
+
+if __name__ == "__main__":
+	main()

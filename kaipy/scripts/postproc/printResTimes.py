@@ -3,6 +3,7 @@
 Overengineered script to print the time of each restart file by parsing h5dump output
 Uses only packages available on Cheyenne
 """
+# Standard modules
 import subprocess
 import glob
 import argparse
@@ -39,7 +40,12 @@ def getKVsFromFile(fName):
 		attrs[k] = v
 	return attrs
 
-if __name__=='__main__':
+def create_command_line_parser():
+	"""Create the command-line argument parser.
+	Create the parser for command-line arguments.
+	Returns:
+		argparse.ArgumentParser: Command-line argument parser for this script.
+	"""
 	idStr_noMPI = ".gam.Res.*.h5"
 	idStrMPI = "_0*_0*_0*_0000_0000_0000.gam.Res.*.h5"
 
@@ -52,6 +58,18 @@ if __name__=='__main__':
 	parser.add_argument('-id',type=str,metavar="runid",default=ftag,help="RunID of data (default: %(default)s)")
 	parser.add_argument('-f',type=str,metavar="timeFmt",default=timeFmt,help="Time format [s,m,h] (default: %(default)s)")
 	parser.add_argument('-dt',action='store_true',default=False,help="Print the datetime instead of simulation time (default: %(default)s)")
+	return parser
+
+def main():
+	idStr_noMPI = ".gam.Res.*.h5"
+	idStrMPI = "_0*_0*_0*_0000_0000_0000.gam.Res.*.h5"
+
+	ftag = "msphere"
+	timeFmt = "m"
+	MainS = """Overengineered script to print the time of each restart file by parsing h5dump output
+	"""
+
+	parser = create_command_line_parser()
 	args = parser.parse_args()
 	ftag = args.id
 	timeFormat = args.f
@@ -102,3 +120,5 @@ if __name__=='__main__':
 		print(formatString)
 
 
+if __name__ == "__main__":
+	main()

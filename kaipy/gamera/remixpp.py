@@ -1,10 +1,15 @@
 #Various routines for plotting remix output data
 #Generally dependant on basemap
 
+# Standard modules
+
+# Third-party modules
 import numpy as np
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 import matplotlib.pyplot as plt
 import h5py
+
+# Kaipy modules
 import kaipy.kaiViz as kv
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature

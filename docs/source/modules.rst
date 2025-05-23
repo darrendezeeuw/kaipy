@@ -1,4 +1,4 @@
-kaipy
+module list
 =====
 
 .. toctree::

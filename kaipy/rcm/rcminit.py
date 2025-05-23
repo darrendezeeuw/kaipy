@@ -1,7 +1,9 @@
 #Various routines to generate RCM data
-import numpy as np
+# Standard modules
 import os
 
+# Third-party modules
+import numpy as np
 
 def LoadLAS1(fIn="rcmlas1"):
 	"""

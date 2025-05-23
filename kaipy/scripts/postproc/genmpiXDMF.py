@@ -1,19 +1,29 @@
 #!/usr/bin/env python
 #Make XMF files from an MPI-decomposed gamera run
 
+# Standard modules
 import argparse
 from argparse import RawTextHelpFormatter
-import numpy as np
-import kaipy.gamera.gampp as gampp
-import kaipy.kaixdmf as kxmf
-import xml.etree.ElementTree as et
-import xml.dom.minidom
-import kaipy.kaiH5 as kh5
-
 import os
 
-if __name__ == "__main__":
-	#Defaults
+# Third-party modules
+import numpy as np
+import xml.etree.ElementTree as et
+import xml.dom.minidom
+
+# Kaipy modules
+import kaipy.kaiH5 as kh5
+import kaipy.gamera.gampp as gampp
+import kaipy.kaixdmf as kxmf
+
+
+def create_command_line_parser():
+	"""Create the command-line argument parser.
+	Create the parser for command-line arguments.
+	Returns:
+		argparse.ArgumentParser: Command-line argument parser for this script.
+	"""
+	# Defaults
 	fdir = os.getcwd()
 	ftag = "msphere"
 	outid = "sim"
@@ -28,6 +38,11 @@ if __name__ == "__main__":
 	parser.add_argument('-sS',type=int,metavar="stride",default=sStride,help="Output cadence (default: %(default)s)")
 	parser.add_argument('--printVars',action='store_true',default=False,help="Print root and step vars (default: %(default)s)")
 
+	return parser
+
+def main():
+
+	parser = create_command_line_parser()
 
 	#Finalize parsing
 	args = parser.parse_args()
@@ -177,3 +192,6 @@ if __name__ == "__main__":
 
 		#Prep for next step
 		tOut = tOut+1
+
+if __name__ == "__main__":
+	main()

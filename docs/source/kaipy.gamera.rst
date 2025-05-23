@@ -1,8 +1,5 @@
-kaipy.gamera package
+Gamera package
 ====================
-
-Submodules
-----------
 
 kaipy.gamera.deltabViz module
 -----------------------------

@@ -1,11 +1,13 @@
 #Various scripts to support visualization of Kaiju data
 
-from kaipy.kdefs import *
+# Standard modules
+import os
+from operator import sub
+
+# Third-party modules
 import h5py
 import numpy as np
-import os
 from PIL import Image
-from operator import sub
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
@@ -13,6 +15,9 @@ from matplotlib.colors import Normalize
 from matplotlib.colors import SymLogNorm
 from matplotlib.patches import Wedge
 from matplotlib import ticker
+
+# Kaipy modules
+from kaipy.kdefs import *
 
 
 #Create 2D equatorial grid (Ni,Nj*2+1) from lfm/egg-style

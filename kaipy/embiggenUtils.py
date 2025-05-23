@@ -1,12 +1,17 @@
 #Various routines to help with restart upscaling
 #Updated to work w/ new-form restarts
 
+# Standard modules
+import os
+
+# Third-party modules
 import h5py
 import numpy as np
 import scipy
 from scipy.spatial import ConvexHull
+
+# Kaipy modules
 import kaipy.kaiH5 as kh5
-import os
 import kaipy.gamera.gamGrids as gg
 
 TINY = 1.0e-8

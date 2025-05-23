@@ -1,8 +1,14 @@
+# Standard modules
+import os
+
+# Third-party modules
 import numpy as np
 import h5py as h5
 from scipy.interpolate import RectBivariateSpline
+
+# Kaipy modules
 from kaipy.rcm.wmutils.wmData import wmParams
-import os
+
 
 def genWM(params):
         """

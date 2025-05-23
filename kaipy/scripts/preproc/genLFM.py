@@ -1,10 +1,15 @@
 #!/usr/bin/env python
 #Generates LFM-style HDF-5 grid for Gamera
 
+# Standard modules
 import argparse
-import kaipy.gamera.gamGrids as gg
 from argparse import RawTextHelpFormatter
+
+# Third-party modules
 import numpy as np
+
+# Kaipy modules
+import kaipy.gamera.gamGrids as gg
 
 #Ring params
 rParams = {
@@ -52,7 +57,7 @@ def create_command_line_parser():
 	return parser
 
 
-if __name__ == "__main__":
+def main():
 	#Defaults asdf 
 	Nc0 = 8 #Number of outer i cells to cut out from LFM grid (OCT)
 	fIn = "./lfmG"
@@ -120,3 +125,7 @@ if __name__ == "__main__":
 	if (doViz):
 		gg.VizGrid(XX,YY,xxG,yyG,fOut=fOut,doGhost=doVizG)
 	#gg.genRing(XX,YY,Nk=Nk,Tol=1.0,doVerb=True)
+
+
+if __name__ == "__main__":
+	main()

@@ -1,14 +1,19 @@
 #Gamera post-processing routines
 #Get data from serial/MPI gamera output
+
+# Standard modules
 import glob
+
+# Third-party modules
 import numpy as np
-from kaipy.kaiTools import MJD2UT
 import itertools
-import kaipy.kdefs as kdefs
-import kaipy.kaiH5 as kh5
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from alive_progress import alive_bar
 
+# Kaipy modules
+from kaipy.kaiTools import MJD2UT
+import kaipy.kdefs as kdefs
+import kaipy.kaiH5 as kh5
 #Object to use to pull data from HDF5 structure (serial or mpi)
 
 #Initialize,

@@ -1,7 +1,12 @@
 #Various routines to help scripts that create XMF files from H5 data
+# Standard modules
+import xml.etree.ElementTree as et
+
+# Third-party modules
 import numpy as np
 import h5py
-import xml.etree.ElementTree as et
+
+# Kaipy modules
 import kaipy.kdefs as kdefs
 import kaipy.kaiH5 as kh5
 

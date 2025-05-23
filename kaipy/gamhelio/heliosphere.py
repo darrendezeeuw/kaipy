@@ -1,11 +1,17 @@
 #Various tools to post-process and analyze Gamera heliosphere runs
+
+# Standard modules
+import glob
+
+# Third-party modules
+import numpy as np
+import timeit
+
+# Kaipy modules
 from kaipy.kdefs import *
 import kaipy.gamera.gampp
 from kaipy.gamera.gampp import GameraPipe
-import numpy as np
-import glob
 import kaipy.kaiH5 as kh5
-import timeit
 
 #Object to pull from MPI/Serial heliosphere runs (H5 data), extends base
 
