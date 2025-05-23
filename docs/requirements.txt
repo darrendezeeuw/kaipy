@@ -10,8 +10,10 @@ pandas
 progressbar
 pyspedas
 pytest
+pytest-cov
 slack_sdk
 spacepy
 sphinx-rtd-theme
 sphinxcontrib-autoprogram
 sunpy
+gfz-api-client

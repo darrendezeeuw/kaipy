@@ -33,7 +33,7 @@ from  kaipy.solarWind import swBCplots
 from  kaipy.solarWind.OMNI import OMNI
 from  kaipy.solarWind.WIND import WIND
 from  kaipy.solarWind.SWPC import DSCOVRNC
-from kaipy.solarWind.gfz_api import getGFZ
+from gfz_client import GFZClient
 
 cdas = CdasWs()
 
@@ -239,9 +239,10 @@ def main():
         f107min = np.interp(tmin, t107min[f107 < maxf107], f107[f107 < maxf107] )
 
         kp = data['KP1800']
+        client = GFZClient()
         if (np.all(kp == 99)):
             try:
-                    (time,index,status) = getGFZ(t0Str+"Z",t1Str+"Z",'Kp')
+                    (time,index,status) = client.get_kp_index(starttime=t0Str, endtime=t1Str, index='Kp')
                     tkp = np.zeros(len(time))
                     for i in range(len(time)):
                         tkp[i] = (datetime.datetime.strptime(time[i],fmt+"Z") - t0).days*24.0*60.0 + (datetime.datetime.strptime(time[i],fmt+"Z") - t0).seconds/60
@@ -463,9 +464,11 @@ def main():
             tilt = sw._getTiltAngle(date+datetime.timedelta(minutes=time))
 
             if doBs:
-                lfmD[i] = [time,n[i],v_sm[0],v_sm[1],v_sm[2],cs[i],b_sm[0],b_sm[1],b_sm[2],b[i],tilt,ae[i],al[i],au[i],symh[i],tp[i],va[i],mfast[i],bs_sm[0],bs_sm[1],bs_sm[2]]
+                #lfmD[i] = [time,n[i],v_sm[0],v_sm[1],v_sm[2],cs[i],b_sm[0],b_sm[1],b_sm[2],b[i],tilt,ae[i],al[i],au[i],symh[i],tp[i],va[i],mfast[i],bs_sm[0],bs_sm[1],bs_sm[2]]
+                lfmD[i,:] = [time,n[i],v_sm[0][0],v_sm[1][0],v_sm[2][0],cs[i],b_sm[0][0],b_sm[1][0],b_sm[2][0],b[i],tilt[0],ae[i],al[i],au[i],symh[i],tp[i],va[i],mfast[i],bs_sm[0][0],bs_sm[1][0],bs_sm[2][0]]
             else:
-                lfmD[i] = [time,n[i],v_sm[0],v_sm[1],v_sm[2],cs[i],b_sm[0],b_sm[1],b_sm[2],b[i],tilt,ae[i],al[i],au[i],symh[i],tp[i],va[i],mfast[i]]
+                #lfmD[i] = [time,n[i],v_sm[0],v_sm[1],v_sm[2],cs[i],b_sm[0],b_sm[1],b_sm[2],b[i],tilt,ae[i],al[i],au[i],symh[i],tp[i],va[i],mfast[i]]
+                lfmD[i,:] = [time,n[i],v_sm[0],v_sm[1],v_sm[2],cs[i],b_sm[0],b_sm[1],b_sm[2],b[i],tilt,ae[i],al[i],au[i],symh[i],tp[i],va[i],mfast[i]]
             
             if mfast[i] < minMfast:
                 nSub += 1
@@ -500,7 +503,7 @@ def main():
 
         #Calculating time in UT
         UT = []
-        [UT.append(np.string_(date+datetime.timedelta(seconds=i)).strip()) for i in T]
+        [UT.append(np.bytes_(date+datetime.timedelta(seconds=i)).strip()) for i in T]
 
         #Calculating time in MJD
         MJD = []

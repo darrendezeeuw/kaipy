@@ -44,14 +44,6 @@ kaipy.solarWind.WIND module
    :undoc-members:
    :show-inheritance:
 
-kaipy.solarWind.jdutil module
------------------------------
-
-.. automodule:: kaipy.solarWind.jdutil
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 kaipy.solarWind.ols module
 --------------------------
 
