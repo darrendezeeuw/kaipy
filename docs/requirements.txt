@@ -17,3 +17,4 @@ sphinx-rtd-theme
 sphinxcontrib-autoprogram
 sunpy
 gfz-api-client
+supermag-api
