@@ -21,7 +21,7 @@ import pandas as pd
 # Kaipy modules
 #### NEED TO POINT TO SUPERMAG API SCRIPT
 #### /glade/p/hao/msphere/gamshare/supermag/supermag_api.py 
-import kaipy.supermag_api as smapi
+import supermag_api as smapi
 ####
 
 # this warning is very annoying
@@ -376,7 +376,7 @@ def ReadSimData(filename, quiet = True):
 
     first_step_name = "Step#%s" % sIds[0]
     data = f[first_step_name]
-    dBt, dBp = np.array(data['dBt'])[0], np.array(data['dBp'])[0]
+    dBt, dBp = np.array(data['dBt']), np.array(data['dBp'])
     BH = np.sqrt(dBt**2 + dBp**2)
     maglat = np.array(data['smlat'])[0].flatten()
 
