@@ -25,13 +25,18 @@ dependencies = [
     "cdasws",
     "configparser",
     "h5py",
+    "jupyterlab",
     "matplotlib",
     "pandas",
     "progressbar",
     "pyspedas",
     "pytest",
+    "slack_sdk",
     "spacepy",
+    "sphinx-rtd-theme",
     "sunpy",
+    "gfz-api-client",
+    "supermag-api"
 ]
 
 [tool.pytest.ini_options]

@@ -27,6 +27,8 @@ setup(
         'spacepy',
         'sphinx-rtd-theme',
         'sunpy',
+        'gfz-api-client',
+        'supermag-api'
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
