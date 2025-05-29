@@ -21,8 +21,8 @@
 			"CoordSys" : "GEO"
 		},
 		"_testing" : {
-			"t0" : "2010-12-30T00:00:00Z",
-			"t1" : "2010-12-31T00:00:00Z"
+			"t0" : "2010-11-29T00:00:00Z",
+			"t1" : "2010-11-30T00:00:00Z"
 		}
 	},
 	"GOES12" : {
@@ -47,8 +47,242 @@
 			"CoordSys" : "GEO"
 		},
 		"_testing" : {
-			"t0" : "2010-09-23T00:00:00Z",
-			"t1" : "2010-09-24T00:00:00Z"
+			"t0" : "2010-08-23T00:00:00Z",
+			"t1" : "2010-08-24T00:00:00Z"
+		}
+	},
+	"GOES08" : {
+		"Ephem" : {
+			"Id" : "GOES8_EPHEMERIS_SSC",
+			"Data" : "XYZ_SM",
+			"CoordSys" : "SM"
+		},
+		"MagneticField" : {
+			"Id" : "DN_MAGN-L2-HIRES_G08",
+			"Data" : "b_gsm",
+			"CoordSys" : "GSM"	
+		},
+		"MagneticFootprintNorth" : {
+			"Id" : "GOES8_EPHEMERIS_SSC",
+			"Data" : ["NorthBtrace_GEO_LAT", "NorthBtrace_GEO_LON"],
+			"CoordSys" : "GEO"
+		},
+		"MagneticFootprintSouth" : {
+			"Id" : "GOES8_EPHEMERIS_SSC",
+			"Data" : ["SouthBtrace_GEO_LAT", "SouthBtrace_GEO_LON"],
+			"CoordSys" : "GEO"
+		},
+		"_testing" : {
+			"t0" : "1998-09-23T00:00:00Z",
+			"t1" : "1998-09-24T00:00:00Z"
+		}
+	},
+	"GOES09" : {
+		"Ephem" : {
+			"Id" : "GOES9_EPHEMERIS_SSC",
+			"Data" : "XYZ_SM",
+			"CoordSys" : "SM"
+		},
+		"MagneticField" : {
+			"Id" : "DN_MAGN-L2-HIRES_G09",
+			"Data" : "b_gsm",
+			"CoordSys" : "GSM"	
+		},
+		"MagneticFootprintNorth" : {
+			"Id" : "GOES9_EPHEMERIS_SSC",
+			"Data" : ["NorthBtrace_GEO_LAT", "NorthBtrace_GEO_LON"],
+			"CoordSys" : "GEO"
+		},
+		"MagneticFootprintSouth" : {
+			"Id" : "GOES9_EPHEMERIS_SSC",
+			"Data" : ["SouthBtrace_GEO_LAT", "SouthBtrace_GEO_LON"],
+			"CoordSys" : "GEO"
+		},
+		"_testing" : {
+			"t0" : "1998-09-23T00:00:00Z",
+			"t1" : "1998-09-24T00:00:00Z"
+		}
+	},
+	"GOES10" : {
+		"Ephem" : {
+			"Id" : "GOES10_EPHEMERIS_SSC",
+			"Data" : "XYZ_SM",
+			"CoordSys" : "SM"
+		},
+		"MagneticField" : {
+			"Id" : "DN_MAGN-L2-HIRES_G10",
+			"Data" : "b_gsm",
+			"CoordSys" : "GSM"	
+		},
+		"MagneticFootprintNorth" : {
+			"Id" : "GOES10_EPHEMERIS_SSC",
+			"Data" : ["NorthBtrace_GEO_LAT", "NorthBtrace_GEO_LON"],
+			"CoordSys" : "GEO"
+		},
+		"MagneticFootprintSouth" : {
+			"Id" : "GOES10_EPHEMERIS_SSC",
+			"Data" : ["SouthBtrace_GEO_LAT", "SouthBtrace_GEO_LON"],
+			"CoordSys" : "GEO"
+		},
+		"_testing" : {
+			"t0" : "2003-09-23T00:00:00Z",
+			"t1" : "2003-09-24T00:00:00Z"
+		}
+	},
+	"GOES13" : {
+		"Ephem" : {
+			"Id" : "GOES13_EPHEMERIS_SSC",
+			"Data" : "XYZ_SM",
+			"CoordSys" : "SM"
+		},
+		"MagneticField" : {
+			"Id" : "DN_MAGN-L2-HIRES_G13",
+			"Data" : "b_gsm",
+			"CoordSys" : "GSM"	
+		},
+		"MagneticFootprintNorth" : {
+			"Id" : "GOES13_EPHEMERIS_SSC",
+			"Data" : ["NorthBtrace_GEO_LAT", "NorthBtrace_GEO_LON"],
+			"CoordSys" : "GEO"
+		},
+		"MagneticFootprintSouth" : {
+			"Id" : "GOES13_EPHEMERIS_SSC",
+			"Data" : ["SouthBtrace_GEO_LAT", "SouthBtrace_GEO_LON"],
+			"CoordSys" : "GEO"
+		},
+		"_testing" : {
+			"t0" : "2015-09-23T00:00:00Z",
+			"t1" : "2015-09-24T00:00:00Z"
+		}
+	},
+	"GOES14" : {
+		"Ephem" : {
+			"Id" : "GOES14_EPHEMERIS_SSC",
+			"Data" : "XYZ_SM",
+			"CoordSys" : "SM"
+		},
+		"MagneticField" : {
+			"Id" : "DN_MAGN-L2-HIRES_G14",
+			"Data" : "b_gsm",
+			"CoordSys" : "GSM"	
+		},
+		"MagneticFootprintNorth" : {
+			"Id" : "GOES14_EPHEMERIS_SSC",
+			"Data" : ["NorthBtrace_GEO_LAT", "NorthBtrace_GEO_LON"],
+			"CoordSys" : "GEO"
+		},
+		"MagneticFootprintSouth" : {
+			"Id" : "GOES14_EPHEMERIS_SSC",
+			"Data" : ["SouthBtrace_GEO_LAT", "SouthBtrace_GEO_LON"],
+			"CoordSys" : "GEO"
+		},
+		"_testing" : {
+			"t0" : "2015-09-23T00:00:00Z",
+			"t1" : "2015-09-24T00:00:00Z"
+		}
+	},
+	"GOES15" : {
+		"Ephem" : {
+			"Id" : "GOES15_EPHEMERIS_SSC",
+			"Data" : "XYZ_SM",
+			"CoordSys" : "SM"
+		},
+		"MagneticField" : {
+			"Id" : "DN_MAGN-L2-HIRES_G15",
+			"Data" : "b_gsm",
+			"CoordSys" : "GSM"	
+		},
+		"MagneticFootprintNorth" : {
+			"Id" : "GOES15_EPHEMERIS_SSC",
+			"Data" : ["NorthBtrace_GEO_LAT", "NorthBtrace_GEO_LON"],
+			"CoordSys" : "GEO"
+		},
+		"MagneticFootprintSouth" : {
+			"Id" : "GOES15_EPHEMERIS_SSC",
+			"Data" : ["SouthBtrace_GEO_LAT", "SouthBtrace_GEO_LON"],
+			"CoordSys" : "GEO"
+		},
+		"_testing" : {
+			"t0" : "2015-09-23T00:00:00Z",
+			"t1" : "2015-09-24T00:00:00Z"
+		}
+	},
+	"GOES16" : {
+		"Ephem" : {
+			"Id" : "GOES16_EPHEMERIS_SSC",
+			"Data" : "XYZ_SM",
+			"CoordSys" : "SM"
+		},
+		"MagneticField" : {
+			"Id" : "DN_MAGN-L2-HIRES_G16",
+			"Data" : "b_gsm",
+			"CoordSys" : "GSM"	
+		},
+		"MagneticFootprintNorth" : {
+			"Id" : "GOES16_EPHEMERIS_SSC",
+			"Data" : ["NorthBtrace_GEO_LAT", "NorthBtrace_GEO_LON"],
+			"CoordSys" : "GEO"
+		},
+		"MagneticFootprintSouth" : {
+			"Id" : "GOES16_EPHEMERIS_SSC",
+			"Data" : ["SouthBtrace_GEO_LAT", "SouthBtrace_GEO_LON"],
+			"CoordSys" : "GEO"
+		},
+		"_testing" : {
+			"t0" : "2022-09-23T00:00:00Z",
+			"t1" : "2022-09-24T00:00:00Z"
+		}
+	},
+	"GOES17" : {
+		"Ephem" : {
+			"Id" : "GOES17_EPHEMERIS_SSC",
+			"Data" : "XYZ_SM",
+			"CoordSys" : "SM"
+		},
+		"MagneticField" : {
+			"Id" : "DN_MAGN-L2-HIRES_G17",
+			"Data" : "b_gsm",
+			"CoordSys" : "GSM"	
+		},
+		"MagneticFootprintNorth" : {
+			"Id" : "GOES17_EPHEMERIS_SSC",
+			"Data" : ["NorthBtrace_GEO_LAT", "NorthBtrace_GEO_LON"],
+			"CoordSys" : "GEO"
+		},
+		"MagneticFootprintSouth" : {
+			"Id" : "GOES17_EPHEMERIS_SSC",
+			"Data" : ["SouthBtrace_GEO_LAT", "SouthBtrace_GEO_LON"],
+			"CoordSys" : "GEO"
+		},
+		"_testing" : {
+			"t0" : "2022-09-23T00:00:00Z",
+			"t1" : "2022-09-24T00:00:00Z"
+		}
+	},
+	"GOES18" : {
+		"Ephem" : {
+			"Id" : "GOES18_EPHEMERIS_SSC",
+			"Data" : "XYZ_SM",
+			"CoordSys" : "SM"
+		},
+		"MagneticField" : {
+			"Id" : "DN_MAGN-L2-HIRES_G18",
+			"Data" : "b_gsm",
+			"CoordSys" : "GSM"	
+		},
+		"MagneticFootprintNorth" : {
+			"Id" : "GOES18_EPHEMERIS_SSC",
+			"Data" : ["NorthBtrace_GEO_LAT", "NorthBtrace_GEO_LON"],
+			"CoordSys" : "GEO"
+		},
+		"MagneticFootprintSouth" : {
+			"Id" : "GOES18_EPHEMERIS_SSC",
+			"Data" : ["SouthBtrace_GEO_LAT", "SouthBtrace_GEO_LON"],
+			"CoordSys" : "GEO"
+		},
+		"_testing" : {
+			"t0" : "2022-09-23T00:00:00Z",
+			"t1" : "2022-09-24T00:00:00Z"
 		}
 	},
 	"GEOTAIL" : {
