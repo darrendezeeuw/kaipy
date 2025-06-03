@@ -1,12 +1,17 @@
 #!/usr/bin/env python
+
+# Standard modules
 import argparse
 import os
+
+# Third-party modules
 import h5py
-import kaipy.kaiH5 as kh5
 #import lxml.etree as et
 import xml.etree.ElementTree as et
 import xml.dom.minidom
 import numpy as np
+
+# Kaipy modules
 import kaipy.kaiH5 as kh5
 
 def cntX(fname,gID=None,StrX="/Step#"):
@@ -64,11 +69,24 @@ def getNum(fIn,n,m):
 		lId = "Line#%d"%(m)
 		Np = hf[gId][lId].attrs["Np"]
 	return Np
-if __name__ == "__main__":
-    #Set defaults
+
+def create_command_line_parser():
+	"""Create the command-line argument parser.
+
+	Create the parser for command-line arguments.
+
+	Returns:
+		argparse.ArgumentParser: Command-line argument parser for this script.
+	"""
+	#Set defaults
 	parser = argparse.ArgumentParser(description="Generates XDMF file from CHIMP tracer HDF5 output")
 	parser.add_argument('h5F',nargs=1,type=str,metavar='tracer.h5',help="Filename of CHIMP tracer HDF5 Output")
 	parser.add_argument('-noatts', action='store_true', default=False,help="Don't add XDMF scalars (default: %(default)s)")
+	return parser
+
+def main():
+    #Set defaults
+	parser = create_command_line_parser()
 	#Finished getting arguments, parse and move on
 	args = parser.parse_args()
 
@@ -186,3 +204,6 @@ if __name__ == "__main__":
 	xmlStr = xml.dom.minidom.parseString(et.tostring(Xdmf)).toprettyxml(indent="    ")
 	with open(fOutXML,"w") as f:
 		f.write(xmlStr)
+
+if __name__ == "__main__":
+	main()

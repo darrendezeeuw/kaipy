@@ -1,14 +1,20 @@
 #Various helper routines for magnetosphere quick look plots
 
+# Standard modules
 import argparse
 from argparse import RawTextHelpFormatter
+import os
+
+# Third-party modules
 import matplotlib as mpl
 import numpy as np
+
+# Kaipy modules
 import kaipy.kaiViz as kv
 import kaipy.kaiTools as kt
 import kaipy.gamera.magsphere as msph
 import kaipy.remix.remix as remix
-import os
+
 
 dbMax = 25.0
 dbCM = "RdGy_r"

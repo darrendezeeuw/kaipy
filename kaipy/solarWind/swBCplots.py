@@ -2,14 +2,19 @@
 Generate plots of 1d time series data stored as kaipy.solarWind.TimeSeries
 objects.  See scritps/preproc/cda2wind.py for example usage.
 """
-from kaipy.solarWind.TimeSeries import TimeSeries
+# Standard modules
 import datetime
+
+# Third party modules
 from matplotlib import dates
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
+
+# Kaipy modules
+from kaipy.solarWind.TimeSeries import TimeSeries
 import kaipy.kaiViz as kv
-import datetime
+
 
 def BasicPlot(VarDict, Xname, Yname, Xlabel=True, color='b'):
     """

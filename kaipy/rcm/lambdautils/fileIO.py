@@ -1,9 +1,13 @@
+# Standard modules
 import os
-import numpy as np
 import json
-import h5py as h5
 from dataclasses import asdict as dc_asdict
 
+# Third-party modules
+import numpy as np
+import h5py as h5
+
+# Kaipy modules
 import kaipy.kaijson as kj
 import kaipy.rcm.lambdautils.AlamParams as aP
 import kaipy.rcm.lambdautils.DistTypes as dT

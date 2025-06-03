@@ -13,6 +13,7 @@ Subpackages
    kaipy.paraview
    kaipy.rcm
    kaipy.remix
+   kaipy.satcomp
    kaipy.solarWind
 
 Submodules

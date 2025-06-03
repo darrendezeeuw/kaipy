@@ -1,14 +1,20 @@
 #Various tools to post-process and analyze Gamera magnetosphere runs
+
+# Standard modules
+import glob
+
+# Third-party modules
+from scipy.interpolate import griddata
+import numpy as np
+import h5py
+from astropy.time import Time
+
+# Kaipy modules
+import kaipy.gamera.remixpp as remixpp
+import kaipy.kaiH5 as kh5
 from kaipy.kdefs import *
 import kaipy.gamera.gampp
 from kaipy.gamera.gampp import GameraPipe
-from scipy.interpolate import griddata
-import numpy as np
-import glob
-import kaipy.kaiH5 as kh5
-import h5py
-import kaipy.gamera.remixpp as remixpp
-from astropy.time import Time
 
 #Object to pull from MPI/Serial magnetosphere runs (H5 data), extends base
 

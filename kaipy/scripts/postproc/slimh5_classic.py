@@ -2,8 +2,11 @@
 #Takes Gamera/Chimp/xxx file and slims it down based on start:stop:stride
 #Removes all that janky tecplot stuff that got into the regular slim script
 
+# Standard modules
 import argparse
 import os
+
+# Third-party modules
 import h5py
 import numpy as np
 
@@ -58,8 +61,13 @@ def createfile(iH5,fOut):
             oH5.create_group(sQ)
     return oH5
 
-    
-if __name__ == "__main__":
+def create_command_line_parser():
+    """Create the command-line argument parser.
+    Create the parser for command-line arguments.
+
+    Returns:
+        argparse.ArgumentParser: Command-line argument parser for this script.
+    """
     #Set defaults
     ns = -1
     ne = -1 #Proxy for last entry
@@ -75,6 +83,10 @@ if __name__ == "__main__":
     parser.add_argument('-sk',type=int,metavar="nsk",default=1,help="Stride (default: %(default)s)")
     parser.add_argument('-mpi',type=str,metavar="ijk",default="", help="Comma-separated mpi dimensions (example: '4,4,1', default: noMPI)")
     
+    return parser
+    
+def main():
+    parser = create_command_line_parser()
     #Finalize parsing
     args = parser.parse_args()
 
@@ -175,3 +187,6 @@ if __name__ == "__main__":
         #Close up
         iH5.close()
         oH5.close()
+
+if __name__ == "__main__":
+    main()

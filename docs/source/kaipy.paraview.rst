@@ -1,4 +1,4 @@
-kaipy.paraview package
+Paraview package
 ======================
 
 Submodules

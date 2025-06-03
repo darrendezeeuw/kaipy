@@ -1,12 +1,16 @@
 #Various routines to help with restart upscaling
 
+# Standard modules
+
+# Third-party modules
 import h5py
 import numpy as np
-import kaipy.gamera.gamGrids as gg
 import scipy
 from scipy.spatial import ConvexHull
-import kaipy.kaiH5 as kh5
 
+# Kaipy modules
+import kaipy.kaiH5 as kh5
+import kaipy.gamera.gamGrids as gg
 TINY = 1.0e-8
 NumG = 4
 IDIR = 0

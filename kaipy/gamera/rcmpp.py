@@ -1,15 +1,20 @@
 #Various routines for plotting RCM output data
+
+# Standard modules
+import os
+
+# Third-party modules
 import numpy as np
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-from mpl_toolkits.axes_grid1.inset_locator import InsetPosition
 import matplotlib.pyplot as plt
 import h5py
-import kaipy.kaiViz as kv
-import kaipy.gamera.gampp as gampp
-import os
 import numpy.ma as ma
 import matplotlib.patches as patches
 import matplotlib.ticker as plticker
+
+# Kaipy modules
+import kaipy.kaiViz as kv
+import kaipy.gamera.gampp as gampp
 
 rMin = 1.25
 rMax = 35.0

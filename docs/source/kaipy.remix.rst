@@ -1,4 +1,4 @@
-kaipy.remix package
+Remix package
 ===================
 
 Submodules

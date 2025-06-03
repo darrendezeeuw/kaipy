@@ -1,20 +1,9 @@
 #!/usr/bin/env python
 #Make video of error between two Gamera cases
+
+# Standard modules
 import argparse
 from argparse import RawTextHelpFormatter
-import matplotlib as mpl
-mpl.use('Agg')
-import matplotlib.pyplot as plt
-import kaipy.kaiViz as kv
-import matplotlib.gridspec as gridspec
-import numpy as np
-import numpy as np
-import kaipy.gamera.msphViz as mviz
-import kaipy.gamera.magsphere as msph
-import kaipy.gamera.rcmpp as rcmpp
-from alive_progress import alive_bar
-import kaipy.kdefs as kdefs
-from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 import os
 import errno
 import subprocess
@@ -23,6 +12,22 @@ import concurrent.futures
 import multiprocessing
 import traceback
 
+
+# Third-party modules
+import matplotlib as mpl
+mpl.use('Agg')
+import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+import numpy as np
+from alive_progress import alive_bar
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+
+# Kaipy modules
+import kaipy.kaiViz as kv
+import kaipy.gamera.msphViz as mviz
+import kaipy.gamera.magsphere as msph
+import kaipy.kdefs as kdefs
+import kaipy.gamera.rcmpp as rcmpp
 cLW = 0.25
 relColor = "tab:blue"
 absColor = "tab:orange"
@@ -45,7 +50,7 @@ def makeMovie(frame_dir,movie_name):
 	subprocess.run(cmd, check=True)
 
 # python allows changes by reference to the errTimes,errListRel, errListAbs lists
-def makeImage(i,gsph1,gsph2,tOut,doVerb,xyBds,fnList,oDir,errTimes,errListRel,errListAbs,cv,dataCounter):
+def makeImage(i,gsph1,gsph2,tOut,doVerb,xyBds,fnList,oDir,errTimes,errListRel,errListAbs,cv,dataCounter, vO, figSz, noMPI, noLog, fieldNames):
 	if doVerb:
 		print("Making image %d"%(i))
 	#Convert time (in seconds) to Step #
@@ -153,7 +158,10 @@ def makeImage(i,gsph1,gsph2,tOut,doVerb,xyBds,fnList,oDir,errTimes,errListRel,er
 	fOut = oDir+"/vid.%04d.png"%(npl)
 	kv.savePic(fOut,bLenX=45,saveFigure=fig,doClose=True)
 
-if __name__ == "__main__":
+
+def create_command_line_parser():
+	"""Set up the command-line parser.
+	"""
 	#Defaults
 	fdir1 = os.getcwd()
 	ftag1 = "msphere"
@@ -191,6 +199,27 @@ if __name__ == "__main__":
 	parser.add_argument('-skipMovie',action='store_true', default=skipMovie,help="Skip automatic movie generation afterwards (default: %(default)s)")
 	#parser.add_argument('-nompi', action='store_true', default=noMPI,help="Don't show MPI boundaries (default: %(default)s)")
 
+
+	return parser
+
+def main():
+	#Defaults
+	fdir1 = os.getcwd()
+	ftag1 = "msphere"
+	fdir2 = os.getcwd()
+	ftag2 = "msphere"
+	oDir = "vid2D"
+	ts = 0    #[min]
+	te = 200  #[min]
+	dt = 0.0 #[sec] 0 default means every timestep
+	Nth = 1 #Number of threads
+	noMPI = False # Don't add MPI tiling
+	noLog = False
+	fieldNames = "Bx, By, Bz"
+	doVerb = False
+	skipMovie = False
+
+	parser = create_command_line_parser()
 	mviz.AddSizeArgs(parser)
 
 	#Finalize parsing
@@ -265,7 +294,7 @@ if __name__ == "__main__":
 			melr = m.list(errListRel)
 			mela = m.list(errListAbs)
 			#imageFutures = {executor.submit(makeImage,i,gsph1,gsph2,tOut,doVerb,xyBds,fnList,oDir,errTimes,errListRel,errListAbs,cv): i for i in range(0,Nt)}
-			imageFutures = {executor.submit(makeImage,i,gsph1,gsph2,tOut,doVerb,xyBds,fnList,oDir,met,melr,mela,cv,dataCounter): i for i in range(0,Nt)}
+			imageFutures = {executor.submit(makeImage,i,gsph1,gsph2,tOut,doVerb,xyBds,fnList,oDir,met,melr,mela,cv,dataCounter,vO,figSz,noMPI,noLog,fieldNames): i for i in range(0,Nt)}
 			for future in concurrent.futures.as_completed(imageFutures):
 				try:
 					retVal = future.result()
@@ -278,3 +307,6 @@ if __name__ == "__main__":
         
 	makeMovie(oDir,oSub)
 
+
+if __name__ == "__main__":
+	main()

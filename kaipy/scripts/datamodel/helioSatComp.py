@@ -14,16 +14,16 @@ Mike Wiltberger
 """
 
 
-# Include standard modules.
+# Standard modules
 import argparse
 from argparse import RawTextHelpFormatter
 import os
 
-# Include 3rd-party modules.
+# Third-party modules
 import numpy as np
 import spacepy.datamodel as dm
 
-# Include project modules.
+# Kaipy modules
 import kaipy.kaiH5 as kaiH5
 import kaipy.kaiViz as kv
 import kaipy.kaiTools as kaiTools
@@ -115,7 +115,7 @@ def create_command_line_parser():
     return parser
 
 
-if __name__ == "__main__":
+def main():
     """Begin main program."""
 
     # Set up the command-line parser.
@@ -341,3 +341,6 @@ if __name__ == "__main__":
         # if verbose:
         #     print("Plotting %s trajectory in spacecraft frame to %s." % (sc_id, plot_file_path))
         # kv.helioTrajPlot(plot_file_path, sc_id, sc_data)
+
+if __name__ == "__main__":
+    main()

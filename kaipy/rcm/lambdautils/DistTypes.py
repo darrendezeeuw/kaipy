@@ -1,8 +1,10 @@
+# Standard modules
 from dataclasses import dataclass
 #from dataclasses_json import dataclass_json
 from dataclasses import asdict as dc_asdict
 from typing import Optional, List
 
+# Third-party modules
 import numpy as np
 
 # dataclasses_json isn't a default package. Since its only used for reading, don't want to make it a requirement for everyone

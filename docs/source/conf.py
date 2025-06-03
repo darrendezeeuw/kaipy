@@ -15,6 +15,9 @@ import sys
 sys.path.insert(0, os.path.abspath('../../kaipy'))
 sys.path.insert(1, os.path.abspath('../../kaipy/scripts/quicklook'))
 sys.path.insert(2, os.path.abspath('../../kaipy/scripts/preproc'))
+sys.path.insert(3, os.path.abspath('../../kaipy/scripts/postproc'))
+sys.path.insert(4, os.path.abspath('../../kaipy/scripts/OHelio'))
+sys.path.insert(5, os.path.abspath('../../kaipy/scripts/datamodel'))
 os.environ["KAIPYHOME"] = os.path.abspath('../../kaipy')
 
 # -- Project information -----------------------------------------------------

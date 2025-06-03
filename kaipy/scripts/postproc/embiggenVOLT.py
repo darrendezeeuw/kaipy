@@ -1,15 +1,27 @@
 #!/usr/bin/env python
 #Takes VOLT restart and up/down-scales it
 
+# Standard modules
 import argparse
-import kaipy.gamera.magsphereRescale as upscl
 from argparse import RawTextHelpFormatter
+import os
+
+# Third-party modules
 import numpy as np
 import h5py
-import os
-import kaipy.kaiH5 as kh5
 
-if __name__ == "__main__":
+# Kaipy modules
+import kaipy.kaiH5 as kh5
+import kaipy.gamera.magsphereRescale as upscl
+
+def create_command_line_parser():
+	"""Create the command-line argument parser.
+
+	Create the parser for command-line arguments.
+
+	Returns:
+		argparse.ArgumentParser: Command-line argument parser for this script.
+	"""
 	dIn = os.getcwd()
 
 
@@ -29,7 +41,10 @@ if __name__ == "__main__":
 	parser.add_argument('-n',type=int,metavar="nres",default=0,help="Restart number (default: %(default)s)")
 	parser.add_argument('-o',type=str,metavar="outid",default=outid,help="Output run ID (default: %(default)s)")	
 	parser.add_argument('--down',action='store_true',default=False,help='Downscale instead of upscale (default: %(default)s)')
+	return parser
 
+def main():
+	parser = create_command_line_parser()
 	#Finalize parsing
 	args = parser.parse_args()
 	bStr = args.i
@@ -68,3 +83,6 @@ if __name__ == "__main__":
 	#Now get 
 	iH5.close()
 	oH5.close()
+
+if __name__ == "__main__":
+	main()

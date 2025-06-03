@@ -1,15 +1,27 @@
 #!/usr/bin/env python
 #Takes one MPI-decomposed restart and spits out an upscaled MPI restart
 
+# Standard modules
 import argparse
-import kaipy.gamera.magsphereRescale as upscl
+import os
 from argparse import RawTextHelpFormatter
+
+# Third-party modules
 import numpy as np
 import h5py
-import os
-import kaipy.kaiH5 as kh5
 
-if __name__ == "__main__":
+# Kaipy modules
+import kaipy.kaiH5 as kh5
+import kaipy.gamera.magsphereRescale as upscl
+
+def create_command_line_parser():
+	"""Create the command-line argument parser.
+
+	Create the parser for command-line arguments.
+
+	Returns:
+		argparse.ArgumentParser: Command-line argument parser for this script.
+	"""
 	dIn = os.getcwd()
 
 	#Input tiling
@@ -52,6 +64,10 @@ if __name__ == "__main__":
 	parser.add_argument('--norescale',action='store_true',default=False,help='Do not rescale (up or down) (default: %(default)s)')
 	parser.add_argument('--down',action='store_true',default=False,help='Downscale instead of upscale (default: %(default)s)')
 
+	return parser
+
+def main():
+	parser = create_command_line_parser()
 
 	#Finalize parsing
 	args = parser.parse_args()
@@ -191,7 +207,8 @@ if __name__ == "__main__":
 		os.remove(fTmp)
 		os.remove(fTmp2X)
 
-
+if __name__ == "__main__":
+	main()
 
 
 # #!/usr/bin/env python

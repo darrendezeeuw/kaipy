@@ -1,17 +1,17 @@
-# Custom
-import kaipy.transform
-from kaipy.solarWind.SolarWind import SolarWind
-from kaipy.kdefs import *
+# Standard modules
+import datetime
+import re
 
-# 3rd party
+# Third-party modules
 import numpy
 from cdasws import CdasWs
 from pyspedas import kyoto
 from pytplot import get_data
 
-# Standard
-import datetime
-import re
+# Kaipy modules
+import kaipy.transform
+from kaipy.solarWind.SolarWind import SolarWind
+from kaipy.kdefs import *
 
 class OMNI(SolarWind):
     """
@@ -762,6 +762,9 @@ class OMNIW(OMNI):
         
         return (dates,dataArray, hasBeenInterpolated, dataOrigin)
          
-if __name__ == '__main__':
+def main():
     import doctest
     doctest.testmod()
+
+if __name__ == '__main__':
+    main()
