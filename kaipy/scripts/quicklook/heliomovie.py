@@ -60,6 +60,7 @@ Eric Winter (eric.winter@jhuapl.edu)
 import argparse
 import os
 import subprocess
+import importlib.resources as pkg_resources
 
 # Import supplemental modules.
 import astropy.time
@@ -78,6 +79,7 @@ import kaipy.gamhelio.heliosphere as hsph
 import kaipy.kaiH5 as kh5
 import kaipy.kaiTools as ktools
 import kaipy.kaiViz as kv
+from kaipy import satcomp
 from kaipy.satcomp import scutils
 
 
@@ -106,9 +108,7 @@ default_movie_format = "mp4"
 valid_movie_formats = ("gif", "mp4")
 
 # Path to spacecraft metadata file.
-sc_metadata_path = os.path.join(
-    os.environ["KAIPYHOME"], "kaipy", "satcomp", "sc_helio.json"
-)
+sc_metadata_path = pkg_resources.files(satcomp).joinpath("sc_helio.json") 
 
 # Figure sizes by plot type, (width, height) in inches.
 figure_sizes = {
@@ -124,7 +124,7 @@ figure_sizes = {
 # List of colors to use for spacecraft position dots.
 SPACECRAFT_COLORS = list(mpl.colors.TABLEAU_COLORS.keys())
 
-
+        
 def create_command_line_parser():
     """
     Create the command-line argument parser.
