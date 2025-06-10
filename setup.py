@@ -9,7 +9,9 @@ setup(
     url='https://bitbucket.org/aplkaiju/kaipy/src/master/',
     packages=find_packages(),
     include_package_data=True,
-    package_data={'kaipy': ['scripts/*', 'scripts/*/*']},
+    package_data={'kaipy': ['scripts/*', 'scripts/*/*'],
+                  'kaipy.satcomp': ['sc_helio.json']
+                  },
     python_requires='>=3.9,<=3.13',
     install_requires=[
         'alive_progress',

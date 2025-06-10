@@ -2,6 +2,7 @@
 import datetime
 import os
 import sys
+import importlib.resources as pkg_resources
 
 # Import supplemental modules.
 from astropy.coordinates import SkyCoord
@@ -16,6 +17,7 @@ from sunpy.coordinates import frames
 # Import project modules.
 import kaipy.kaiTools as kaiTools
 import kaipy.satcomp.scutils as scutils
+from kaipy.satcomp import satcomp
 
 # """Simple utilitiles for fetching data from CDAWeb.
 
@@ -34,6 +36,8 @@ import kaipy.satcomp.scutils as scutils
 # Format string for CDAWeb datetime strings.
 CDAWEB_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 
+#  Get the sc_helio.json file from the package and return a temporary file path.
+sc_helio_json_path = pkg_resources.files(satcomp).joinpath("sc_helio.json") 
 
 def fetch_satellite_geographic_position(spacecraft, when):
     """Fetch the geographic position of a satellite at a specified time.
@@ -433,9 +437,7 @@ def fetch_helio_spacecraft_HGS_trajectory(spacecraft, t_start, t_end, mjdc):
         Tuple[np.array, np.array, np.array]: Cartesian coordinates (x, y, z) of the spacecraft in the HGS frame.
     """
     # Read the CDAWeb spacecraft database.
-    spacecraft_data_file = os.path.join(
-        os.environ["KAIPYHOME"], "kaipy", "satcomp", "sc_helio.json"
-    )
+    spacecraft_data_file = sc_helio_json_path
     sc_info = scutils.getScIds(spacecraft_data_file=spacecraft_data_file)
 
     # Create the CDAWeb connection.
@@ -507,9 +509,7 @@ def fetch_helio_spacecraft_trajectory(sc_id, t_start, t_end):
         Tuple[np.array, np.array, np.array]: Cartesian coordinates (x, y, z) of the spacecraft in the HGS frame.
     """
     # Read the CDAWeb spacecraft database.
-    sc_metadata_path = os.path.join(
-        os.environ["KAIPYHOME"], "kaipy", "satcomp", "sc_helio.json"
-    )
+    sc_metadata_path = sc_helio_json_path
     sc_metadata = scutils.getScIds(spacecraft_data_file=sc_metadata_path)
 
     # Create the CDAWeb connection.
@@ -545,9 +545,7 @@ def ingest_helio_spacecraft_trajectory(sc_id, sc_data, MJDc):
         z (dm.dmarray): The z-coordinate in the GH(MJDc) frame.
     """
     # Read the CDAWeb spacecraft database.
-    sc_metadata_path = os.path.join(
-        os.environ["KAIPYHOME"], "kaipy", "satcomp", "sc_helio.json"
-    )
+    sc_metadata_path = sc_helio_json_path
     sc_metadata = scutils.getScIds(spacecraft_data_file=sc_metadata_path)
 
     # Determine the coordinate system used by the CDAWeb ephemeris.

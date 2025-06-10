@@ -18,6 +18,7 @@ Mike Wiltberger
 import argparse
 from argparse import RawTextHelpFormatter
 import os
+import importlib.resources as pkg_resources
 
 # Third-party modules
 import numpy as np
@@ -28,7 +29,7 @@ import kaipy.kaiH5 as kaiH5
 import kaipy.kaiViz as kv
 import kaipy.kaiTools as kaiTools
 import kaipy.satcomp.scutils as scutils
-
+from kaipy import satcomp
 
 # Program constants.
 
@@ -55,9 +56,7 @@ default_numSeg = 1
 default_path = os.getcwd()
 
 # Path to file of heliospheric spacecraft metadata.
-helio_sc_metadata_path = os.path.join(
-    os.environ["KAIPYHOME"], "kaipy", "satcomp", "sc_helio.json"
-)
+helio_sc_metadata_path = pkg_resources.files(satcomp).joinpath("sc_helio.json") 
 
 
 def create_command_line_parser():
