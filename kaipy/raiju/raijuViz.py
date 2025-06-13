@@ -106,7 +106,7 @@ def plotInset(ax: plt.Axes, raiI: ru.RAIJUInfo, stepStr: str, norm_press: mpl.co
     ymcc = kt.to_center2D(ymin)
     active = ru.getVar(s5, 'active')
     mask_cc = active != ru.domain['ACTIVE']
-    mask_corner = ru.getMask_cornerByActive(s5)
+    mask_corner = ru.getMask_cornerByCellCondition(s5, active == ru.domain['ACTIVE'])
     press_tot = ru.getVar(s5,'Pressure',mask=mask_cc,broadcast_dims=(2,))[:,:,0]  # Bulk
     density_psph = ru.getVar(s5,'Density',mask=mask_cc,broadcast_dims=(2,))[:,:,idx_psph+1]  # +1 to account for bulk at idx 0
 

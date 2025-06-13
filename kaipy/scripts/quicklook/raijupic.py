@@ -243,6 +243,10 @@ def plot_frame(pairs,raiI: ru.RAIJUInfo, config):
         bVol    = ru.getVar(s5,'bVol'   ,mask=mask_corner)
         bVol_cc = kt.to_center2D(bVol)
 
+        pot_corot = ru.getVar(s5, 'pot_corot', mask=mask_corner)
+        pot_iono  = ru.getVar(s5, 'pot_iono' , mask=mask_corner)
+        pot_total = pot_corot + pot_iono
+
         press_p = press_all[:,:,spcIdx_p+1]  # First slot is bulk
         press_e = press_all[:,:,spcIdx_e+1]
         den_p = den_all[:,:,spcIdx_p+1]
@@ -250,10 +254,13 @@ def plot_frame(pairs,raiI: ru.RAIJUInfo, config):
         entropy = press_all[:,:,0]*bVol_cc**(5./3.)  # Wolf units [nPa * (Rx/nT)^(5/3)]
         den_psph =  den_all[:,:,spcIdx_psph+1]
         levels_psphDen = [1,10,100,1000]
+        levels_pot = np.arange(-250, 255, 5)
 
         axCol = axs[0]
         rv.plotXYMin(axCol[1], xmin, ymin, press_p,norm=norm_press,bnds=eqBnds,cmap=cmap_press)
+        axCol[1].contour(xmin, ymin, pot_total, levels=levels_pot, colors='white',linewidths=0.5, alpha=0.3)
         rv.plotXYMin(axCol[2], xmin, ymin, press_e,norm=norm_press,bnds=eqBnds,cmap=cmap_press)
+        axCol[2].contour(xmin, ymin, pot_total, levels=levels_pot, colors='white',linewidths=0.5, alpha=0.3)
 
         axCol = axs[1]
         rv.plotXYMin(axCol[1], xmin, ymin, den_p,norm=norm_den,bnds=eqBnds)

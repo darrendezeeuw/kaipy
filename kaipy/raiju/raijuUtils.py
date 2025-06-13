@@ -150,9 +150,9 @@ def getMask(s5, dom="ACTIVE"):
     return mask
 
 
-def getMask_cornerByActive(s5, dom="ACTIVE"):
+def getMask_cornerByCellCondition(s5, condition):
     Ni, Nj = getVar(s5.file,'X').shape
-    is_active = getVar(s5, 'active') == domain[dom]
+    is_active = condition
     # True = good point while we do our operations, convert to true np.mask meaning on return
     mask_corner = np.full((Ni,Nj),False)
 
