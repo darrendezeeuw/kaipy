@@ -99,14 +99,6 @@ kaipy.lfm2kaiju module
    :undoc-members:
    :show-inheritance:
 
-kaipy.supermag\_api module
---------------------------
-
-.. automodule:: kaipy.supermag_api
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 kaipy.supermage module
 ----------------------
 

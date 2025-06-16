@@ -17,7 +17,7 @@ from sunpy.coordinates import frames
 # Import project modules.
 import kaipy.kaiTools as kaiTools
 import kaipy.satcomp.scutils as scutils
-from kaipy.satcomp import satcomp
+from kaipy import satcomp
 
 # """Simple utilitiles for fetching data from CDAWeb.
 
