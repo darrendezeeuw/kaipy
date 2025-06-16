@@ -222,6 +222,8 @@ def RCMInset(AxRCM, rcmdata, nStp, vP, pCol="k", doPP=True):
 
 	AxRCM.set_title("RCM Pressure",fontsize="small",color=rcmCol)
 
+	return rcBds
+
 #Add RCM box to other plot
 def AddRCMBox(Ax):
 	"""
