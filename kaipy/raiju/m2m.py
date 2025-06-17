@@ -300,7 +300,7 @@ def main(config=None):
     if config is None:
         parser = create_command_line_parser()
         args = parser.parse_args()
-        parser = {
+        config = {
         "indir"     : args.d,
         "id"        : args.id,
         "ut_start"  : args.uts,
