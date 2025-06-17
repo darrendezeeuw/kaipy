@@ -1,6 +1,11 @@
-import h5py as h5
+
+# Standard modules
 from dataclasses import asdict as dc_asdict
 
+# Third-party modules
+import h5py as h5
+
+# Kaipy modules
 import kaipy.kaijson as kj
 import kaipy.raiju.lambdautils.AlamData as aD
 

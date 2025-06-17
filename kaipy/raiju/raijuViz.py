@@ -1,10 +1,14 @@
+
+# Standard modules
+
+# Third-party modules
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 
+# Kaipy modules
 import kaipy.kaiTools as kt
 import kaipy.kaiViz as kv
-
 import kaipy.raiju.raijuUtils as ru
 
 inset_bnds = [-15,10,-12.5,12.5]

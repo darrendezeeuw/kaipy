@@ -2,15 +2,19 @@
 Diagnostic tools to check mapping MHD moments to etas and back
 """
 
+# Standard modules
 import os
 import argparse
+import datetime
+
+# Third-party modules
 import h5py as h5
 import numpy as np
 import matplotlib.pyplot as plt
 from dataclasses import dataclass
 from tqdm import tqdm
-import datetime
 
+# Kaipy modules
 import kaipy.kdefs as kd
 import kaipy.kaiViz as kv
 import kaipy.kaiTools as kt

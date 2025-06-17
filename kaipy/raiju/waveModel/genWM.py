@@ -1,6 +1,11 @@
+# Standard modules
+
+# Third-party modules
 import numpy as np
 import h5py as h5
 from scipy.interpolate import RectBivariateSpline
+
+# Kaipy modules
 import kaipy.raiju.waveModel.wmData as wmD
 
 def genWM(params: wmD.wmParams):

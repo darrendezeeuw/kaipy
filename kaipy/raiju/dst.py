@@ -1,11 +1,16 @@
 #%%
+# Standard modules
 import os
+import argparse
+
+# Third-party modules
 import h5py as h5
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
-import argparse
 
+
+# Kaipy modules
 import kaipy.kdefs as kd
 import kaipy.kaiTools as kt
 import kaipy.kaiViz as kv
@@ -161,8 +166,7 @@ def plotDstTS(raiI: ru.RAIJUInfo, rmax=6, mrI: kh5.H5Info = None):
     kv.savePic("DPSDst.png")
         
 #%%
-if __name__=="__main__":
-
+def create_command_line_parser():
     fdir = '.'
     ftag = 'raijuOWD'
     ftag_mr = 'msphere'
@@ -178,6 +182,16 @@ if __name__=="__main__":
     parser.add_argument('-rmax',type=float,metavar="Re",default=rmax,help="Maximum Req value to eval DPSDst out to (default: %(default)s)")
     parser.add_argument('--nomr',action='store_true',default=False,help="Don't do mhdrcm stuff (default: %(default)s)")
     
+    return parser
+#%%
+def main():
+    fdir = '.'
+    ftag = 'raijuOWD'
+    ftag_mr = 'msphere'
+    rmax = 6
+    doMR = True
+
+    parser = create_command_line_parser()
     args = parser.parse_args()
     
     #args = parser.parse_args(args=['-d', '/glade/derecho/scratch/sciola/raijudev/owdTests/dinoKO', '-id', 'raijuOWD_bvolFix'])
@@ -203,3 +217,7 @@ if __name__=="__main__":
     #%%
     plotDstTS(raiI, rmax, mrI)
     # %%
+
+
+if __name__ == "__main__":
+    main()

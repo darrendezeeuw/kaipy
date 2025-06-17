@@ -1,10 +1,14 @@
+
+#Standard modules
+
+# Third-party modules
 import h5py as h5
 import numpy as np
 from typing import List
 import scipy.special as sp
-
 #from bidict import bidict
 
+# Kaipy modules
 import kaipy.kdefs as kd
 import kaipy.kaiTools as kt
 import kaipy.kaiH5 as kh5
