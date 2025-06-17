@@ -1,19 +1,8 @@
 SolarWind package
-=======================
-
-Submodules
-----------
-
-kaipy.solarWind.CUSTOM module
------------------------------
-
-.. automodule:: kaipy.solarWind.CUSTOM
-   :members:
-   :undoc-members:
-   :show-inheritance:
+================================================
 
 kaipy.solarWind.OMNI module
----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.solarWind.OMNI
    :members:
@@ -21,7 +10,7 @@ kaipy.solarWind.OMNI module
    :show-inheritance:
 
 kaipy.solarWind.SolarWind module
---------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.solarWind.SolarWind
    :members:
@@ -29,7 +18,7 @@ kaipy.solarWind.SolarWind module
    :show-inheritance:
 
 kaipy.solarWind.TimeSeries module
----------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.solarWind.TimeSeries
    :members:
@@ -37,7 +26,7 @@ kaipy.solarWind.TimeSeries module
    :show-inheritance:
 
 kaipy.solarWind.WIND module
----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.solarWind.WIND
    :members:
@@ -46,17 +35,9 @@ kaipy.solarWind.WIND module
 
 
 kaipy.solarWind.swBCplots module
---------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.solarWind.swBCplots
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: kaipy.solarWind
    :members:
    :undoc-members:
    :show-inheritance:

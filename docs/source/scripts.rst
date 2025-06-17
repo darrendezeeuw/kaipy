@@ -1,167 +1,183 @@
 Command Line Scripts
-================
+================================================
 
 Quicklook
----------
+------------------------------------------------
+
 The quicklook directory has scripts that are used to quickly look at the data. The scripts are written in python and use the matplotlib library to plot the data. The scripts are:
 
 .. .. autoprogram:: dbpic:create_command_line_parser()
      :prog: dbpic.py
 
 .. autoprogram:: dbVid:create_command_line_parser()
-     :prog: dbVid.py
+     :prog: dbVid
 
 .. autoprogram:: dstpic:create_command_line_parser()
-     :prog: dstpic.py
+     :prog: dstpic
 
 .. autoprogram:: gamerrpic:create_command_line_parser()
-     :prog: gamerrpic.py
+     :prog: gamerrpic
 
 .. autoprogram:: gamerrVid:create_command_line_parser()
-     :prog: gamerrVid.py
+     :prog: gamerrVid
 
 .. autoprogram:: gamsphVid:create_command_line_parser()
-     :prog: gamsphVid.py
+     :prog: gamsphVid
 
 .. autoprogram:: heliomovie:create_command_line_parser()
-     :prog: heliomovie.py
+     :prog: heliomovie
 
 .. autoprogram:: heliopic:create_command_line_parser()
-     :prog: heliopic.py
+     :prog: heliopic
 
 .. autoprogram:: mixpic:create_command_line_parser()
-     :prog: mixpic.py
+     :prog: mixpic
     
 .. autoprogram:: msphpic:create_command_line_parser()
-     :prog: msphpic.py
+     :prog: msphpic
 
 .. autoprogram:: rcmDataProbe:create_command_line_parser()
-     :prog: rcmDataProbe.py
+     :prog: rcmDataProbe
 
 .. autoprogram:: rcmpic:create_command_line_parser()
-     :prog: rcmpic.py
+     :prog: rcmpic
 
 .. autoprogram:: remixTimeSeries:create_command_line_parser()
-     :prog: remixTimeSeries.py
+     :prog: remixTimeSeries
 
 .. autoprogram:: swpic:create_command_line_parser()
-     :prog: swpic.py
+     :prog: swpic
 
 .. autoprogram:: vizTrj:create_command_line_parser()
-     :prog: vizTrj.py
+     :prog: vizTrj
 
 Preprocessing
--------------
+------------------------------------------------
+
 The preprocessing directory has scripts that are used to setup MAGE simulations including grid generation and solar wind input file. The scripts are:
 
 .. autoprogram:: cda2wind:create_command_line_parser()
-     :prog: cda2wind.py
+     :prog: cda2wind
 
 .. autoprogram:: genLFM:create_command_line_parser()
-     :prog: genLFM.py
+     :prog: genLFM
 
 .. autoprogram:: genRCM:create_command_line_parser()
-     :prog: genRCM.py
+     :prog: genRCM
 
 .. .. autoprogram:: INIGenerator:parse_args()
      :prog: INIGenerator.py
 
 .. autoprogram:: wsa2gamera:create_command_line_parser()
-     :prog: wsa2gamera.py
+     :prog: wsa2gamera
 
 .. autoprogram:: XMLGenerator:create_command_line_parser()
-     :prog: XMLGenerator.py
+     :prog: XMLGenerator
 
 
 Postprocessing
-----------------
+------------------------------------------------
+
 The postprocessing directory has scripts that are used to process MAGE simulations including data analysis and visualization. The scripts are:
 
 .. .. autoprogram:: block_genmpiXDMF:create_command_line_parser()
      :prog: block_genmpiXDMF.py
 
 .. autoprogram:: embiggen:create_command_line_parser()
-     :prog: embiggen.py
+     :prog: embiggen
 
 .. autoprogram:: embiggenMIX:create_command_line_parser()
-     :prog: embiggenMIX.py
+     :prog: embiggenMIX
 
 .. autoprogram:: embiggenRCM:create_command_line_parser()
-     :prog: embiggenRCM.py
+     :prog: embiggenRCM
 
 .. autoprogram:: embiggenVOLT:create_command_line_parser()
-     :prog: embiggenVOLT.py
+     :prog: embiggenVOLT
 
 .. autoprogram:: genmpiXDMF:create_command_line_parser()
-     :prog: genmpiXDMF.py
+     :prog: genmpiXDMF
 
 .. autoprogram:: genXDMF:create_command_line_parser()
-     :prog: genXDMF.py
+     :prog: genXDMF
 
 .. autoprogram:: genXLine:create_command_line_parser()
-     :prog: genXLine.py
+     :prog: genXLine
 
 .. autoprogram:: numSteps:create_command_line_parser()
-     :prog: numSteps.py
+     :prog: numSteps
 
 .. autoprogram:: pitmerge:create_command_line_parser()
-     :prog: pitmerge.py
+     :prog: pitmerge
 
 .. autoprogram:: printResTimes:create_command_line_parser()
-     :prog: printResTimes.py
+     :prog: printResTimes
 
 .. autoprogram:: run_calcdb:create_command_line_parser()
-     :prog: run_calcdb.py
+     :prog: run_calcdb
 
 .. autoprogram:: run_ground_deltaB_analysis:create_command_line_parser()
-     :prog: run_ground_deltaB_analysis.py
+     :prog: run_ground_deltaB_analysis
 
 .. autoprogram:: slimFL:create_command_line_parser()
-     :prog: slimFL.py
+     :prog: slimFL
 
 .. autoprogram:: slimh5:create_command_line_parser()
-     :prog: slimh5.py
+     :prog: slimh5
 
 .. autoprogram:: slimh5_classic:create_command_line_parser()
-     :prog: slimh5_classic.py
+     :prog: slimh5_classic
 
 .. autoprogram:: supermag_comparison:create_command_line_parser()
-     :prog: supermag_comparison.py
+     :prog: supermag_comparison
 
 .. autoprogram:: supermage_analysis:create_command_line_parser()
-     :prog: supermage_analysis.py
+     :prog: supermage_analysis
 
 .. autoprogram:: ut2mjd:create_command_line_parser()
-     :prog: ut2mjd.py
+     :prog: ut2mjd
 
 
 Datamodel
-----------
-Edit this: The datamodel directory has scripts that are used to generate the datamodel for MAGE simulations. The scripts are:
+------------------------------------------------
+
+The datamodel directory scripts are:
 
 .. .. autoprogram:: helioSatComp:create_command_line_parser()
      :prog: helioSatComp.py
 
 .. autoprogram:: msphParallelSatComp:create_command_line_parser()
-     :prog: msphParallelSatComp.py
+     :prog: msphParallelSatComp
 
 .. autoprogram:: msphPbsSatComp:create_command_line_parser()
-     :prog: msphPbsSatComp.py
+     :prog: msphPbsSatComp
 
 .. autoprogram:: msphSatComp:create_command_line_parser()
-     :prog: msphSatComp.py
+     :prog: msphSatComp
 
 .. autoprogram:: rbspSCcomp:create_command_line_parser()
-     :prog: rbspSCcomp.py
+     :prog: rbspSCcomp
 
 .. .. autoprogram:: rcm_rbsp_satcomp:create_command_line_parser()
      :prog: rcm_rbsp_satcomp.py
 
 
 OHelio
--------
-Edit this: The OHelio directory has scripts that are used to generate the OHelio for MAGE simulations. The scripts are:
+------------------------------------------------
+
+The OHelio directory scripts are:
 
 .. autoprogram:: ih2oh:create_command_line_parser()
-     :prog: ih2oh.py
+     :prog: ih2oh
 
+Raiju
+------------------------------------------------
+
+Raiju directory scripts are:
+
+
+.. autoprogram:: kaipy.raiju.dst:create_command_line_parser()
+     :prog: raijudst
+
+.. autoprogram:: kaipy.raiju.m2m:create_command_line_parser()
+     :prog: raijum2m
