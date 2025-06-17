@@ -37,7 +37,7 @@ class m2mData_step:
 
 isotfmt = '%Y-%m-%dT%H:%M:%S'
 
-def parse_command_line():
+def create_command_line_parser():
     """
     
     """
@@ -87,19 +87,8 @@ def parse_command_line():
         "-v", "--verbose", action="store_true", default=False,
         help="Print verbose output (default: %(default)s)."
     )
-
-    args = parser.parse_args()
-    config = {
-        "indir"     : args.d,
-        "id"        : args.id,
-        "ut_start"  : args.uts,
-        "ut_end"    : args.ute,
-        "del_min"   : args.dt,
-        "phi0"      : args.phi0,
-        "mode"      : args.mode,
-        "doVerbose" : args.verbose,
-    }
-    return config
+    
+    return parser
 
 
 def checkMom2Mom_pnt(raiI: ru.RAIJUInfo, s5: h5.Group, 
@@ -309,7 +298,18 @@ def checkMom2Mom_summary(raiI:ru.RAIJUInfo, ut_start:datetime.datetime=None, ut_
 def main(config=None):
 
     if config is None:
-        config = parse_command_line()
+        parser = create_command_line_parser()
+        args = parser.parse_args()
+        parser = {
+        "indir"     : args.d,
+        "id"        : args.id,
+        "ut_start"  : args.uts,
+        "ut_end"    : args.ute,
+        "del_min"   : args.dt,
+        "phi0"      : args.phi0,
+        "mode"      : args.mode,
+        "doVerbose" : args.verbose,
+        }
     indir = os.getcwd()
     fname = "msphere.raiju.h5"
 

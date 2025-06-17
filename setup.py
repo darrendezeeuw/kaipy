@@ -92,7 +92,9 @@ setup(
             'OMNI=kaipy.solarWind.OMNI:main',
             'SWPC=kaipy.solarWind.SWPC:main',
             'TimeSeries=kaipy.solarWind.TimeSeries:main',
-            'WIND=kaipy.solarWind.WIND:main'           
+            'WIND=kaipy.solarWind.WIND:main',
+            'raijudst=kaipy.raiju.dst:main',  
+            'raijum2m=kaipy.raiju.m2m:main'        
         ]
     }
 )
