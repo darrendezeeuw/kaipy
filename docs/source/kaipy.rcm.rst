@@ -1,20 +1,11 @@
 RCM package
-=================
-
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 4
-
-   kaipy.rcm.lambdautils
-   kaipy.rcm.wmutils
+================================================
 
 Primary Package
-----------
+------------------------------------------------
 
 kaipy.rcm.rcminit module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.rcm.rcminit
    :members:
@@ -22,7 +13,7 @@ kaipy.rcm.rcminit module
    :show-inheritance:
 
 kaipy.rcm.rcmutils module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.rcm.rcmutils
    :members:
@@ -30,7 +21,7 @@ kaipy.rcm.rcmutils module
    :show-inheritance:
 
 kaipy.rcm.rcmxdmf module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.rcm.rcmxdmf
    :members:
@@ -38,10 +29,10 @@ kaipy.rcm.rcmxdmf module
    :show-inheritance:
 
 Lambdautils Package
-----------
+------------------------------------------------
 
 kaipy.rcm.lambdautils.AlamData module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.rcm.lambdautils.AlamData
    :members:
@@ -49,7 +40,7 @@ kaipy.rcm.lambdautils.AlamData module
    :show-inheritance:
 
 kaipy.rcm.lambdautils.AlamParams module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.rcm.lambdautils.AlamParams
    :members:
@@ -57,7 +48,7 @@ kaipy.rcm.lambdautils.AlamParams module
    :show-inheritance:
 
 kaipy.rcm.lambdautils.DistTypes module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.rcm.lambdautils.DistTypes
    :members:
@@ -65,7 +56,7 @@ kaipy.rcm.lambdautils.DistTypes module
    :show-inheritance:
 
 kaipy.rcm.lambdautils.fileIO module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.rcm.lambdautils.fileIO
    :members:
@@ -73,7 +64,7 @@ kaipy.rcm.lambdautils.fileIO module
    :show-inheritance:
 
 kaipy.rcm.lambdautils.genAlam module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.rcm.lambdautils.genAlam
    :members:
@@ -81,7 +72,7 @@ kaipy.rcm.lambdautils.genAlam module
    :show-inheritance:
 
 kaipy.rcm.lambdautils.plotter module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.rcm.lambdautils.plotter
    :members:
@@ -90,10 +81,10 @@ kaipy.rcm.lambdautils.plotter module
 
 
 Wmutils Package
-----------
+------------------------------------------------
 
 kaipy.rcm.wmutils.genWM module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.rcm.wmutils.genWM
    :members:
@@ -101,16 +92,9 @@ kaipy.rcm.wmutils.genWM module
    :show-inheritance:
 
 kaipy.rcm.wmutils.wmData module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.rcm.wmutils.wmData
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-.. automodule:: kaipy.rcm
    :members:
    :undoc-members:
    :show-inheritance:

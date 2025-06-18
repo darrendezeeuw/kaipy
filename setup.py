@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='kaipy',
-    version='1.0.8',
+    version='1.1.0',
     description='Python software for CGS MAGE and other Kaiju models',
     author='Kaiju team',
     author_email='wiltbemj@ucar.edu',
@@ -12,7 +12,7 @@ setup(
     package_data={'kaipy': ['scripts/*', 'scripts/*/*'],
                   'kaipy.satcomp': ['sc_helio.json']
                   },
-    python_requires='>=3.9,<=3.13',
+    python_requires='>=3.9,<3.13',
     install_requires=[
         'alive_progress',
         'astropy',
@@ -72,6 +72,7 @@ setup(
             'cda2wind=kaipy.scripts.preproc.cda2wind:main',
             'genLFM=kaipy.scripts.preproc.genLFM:main',
             'genRCM=kaipy.scripts.preproc.genRCM:main',
+            'genRAIJU=kaipy.scripts.preproc.genRAIJU:main',
             'wsa2gamera=kaipy.scripts.preproc.wsa2gamera:main',
             'XMLGenerator=kaipy.scripts.preproc.XMLGenerator:main',
             'dbVid=kaipy.scripts.quicklook.dbVid:main',
@@ -84,15 +85,14 @@ setup(
             'heliopic=kaipy.scripts.quicklook.heliopic:main',
             'mixpic=kaipy.scripts.quicklook.mixpic:main',
             'msphpic=kaipy.scripts.quicklook.msphpic:main',
+            'raijupic=kaipy.scripts.quicklook.raijupic:main',
             'rcmDataProbe=kaipy.scripts.quicklook.rcmDataProbe:main',
             'rcmpic=kaipy.scripts.quicklook.rcmpic:main',
             'remixTimeSeries=kaipy.scripts.quicklook.remixTimeSeries:main',
             'swpic=kaipy.scripts.quicklook.swpic:main',
             'vizTrj=kaipy.scripts.quicklook.vizTrj:main',
-            'OMNI=kaipy.solarWind.OMNI:main',
-            'SWPC=kaipy.solarWind.SWPC:main',
-            'TimeSeries=kaipy.solarWind.TimeSeries:main',
-            'WIND=kaipy.solarWind.WIND:main'           
+            'raijudst=kaipy.raiju.dst:main',  
+            'raijum2m=kaipy.raiju.m2m:main'        
         ]
     }
 )

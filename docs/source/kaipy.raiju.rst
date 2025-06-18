@@ -1,90 +1,83 @@
-kaipy package
+Raiju package
 ================================================
 
-kaipy.cdaweb\_utils module
+Primary Package
+------------------------------------------------
+
+kaipy.raiju.dst module
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: kaipy.cdaweb_utils
+.. automodule:: kaipy.raiju.dst
    :members:
    :undoc-members:
    :show-inheritance:
 
-kaipy.embiggenUtils module
+kaipy.raiju.m2m module
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: kaipy.embiggenUtils
+.. automodule:: kaipy.raiju.m2m
    :members:
    :undoc-members:
    :show-inheritance:
 
-kaipy.kJobs module
+kaipy.raiju.raijuUtils module
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: kaipy.kJobs
+.. automodule:: kaipy.raiju.raijuUtils
    :members:
    :undoc-members:
    :show-inheritance:
 
-kaipy.kaiH5 module
+Lambdautils Package
+------------------------------------------------
+
+kaipy.raiju.lambdautils.AlamData module
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: kaipy.kaiH5
+.. automodule:: kaipy.raiju.lambdautils.AlamData
    :members:
    :undoc-members:
    :show-inheritance:
 
-kaipy.kaiTools module
+kaipy.raiju.lambdautils.AlamParams module
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: kaipy.kaiTools
+.. automodule:: kaipy.raiju.lambdautils.AlamParams
    :members:
    :undoc-members:
    :show-inheritance:
 
-kaipy.kaiViz module
+kaipy.raiju.lambdautils.DistTypes module
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: kaipy.kaiViz
+.. automodule:: kaipy.raiju.lambdautils.DistTypes
    :members:
    :undoc-members:
    :show-inheritance:
 
-kaipy.kaijson module
+kaipy.raiju.lambdautils.fileIO module
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: kaipy.kaijson
+.. automodule:: kaipy.raiju.lambdautils.fileIO
    :members:
    :undoc-members:
    :show-inheritance:
 
-kaipy.kaixdmf module
+waveModel Package
+------------------------------------------------
+
+kaipy.raiju.waveModel.genWM module
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: kaipy.kaixdmf
+.. automodule:: kaipy.raiju.waveModel.genWM
    :members:
    :undoc-members:
    :show-inheritance:
 
-kaipy.kdefs module
+kaipy.raiju.waveModel.wmData module
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: kaipy.kdefs
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-kaipy.supermage module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. automodule:: kaipy.supermage
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-kaipy.transform module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. automodule:: kaipy.transform
+.. automodule:: kaipy.raiju.waveModel.wmData
    :members:
    :undoc-members:
    :show-inheritance:

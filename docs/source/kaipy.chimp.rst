@@ -1,8 +1,8 @@
 Chimp package
-===================
+================================================
 
 kaipy.chimp.chimph5p module
----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.chimp.chimph5p
    :members:
@@ -10,7 +10,7 @@ kaipy.chimp.chimph5p module
    :show-inheritance:
 
 kaipy.chimp.chimpviz module
----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.chimp.chimpviz
    :members:
@@ -18,17 +18,10 @@ kaipy.chimp.chimpviz module
    :show-inheritance:
 
 kaipy.chimp.kCyl module
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.chimp.kCyl
    :members:
    :undoc-members:
    :show-inheritance:
 
-Module contents
----------------
-
-.. automodule:: kaipy.chimp
-   :members:
-   :undoc-members:
-   :show-inheritance:

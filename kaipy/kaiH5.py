@@ -37,14 +37,13 @@ class H5Info(object):
 			May or may not include subseconds based on constructor args
 	"""
 
-	def __init__(self, h5fname: str, noSubsec:bool=True):
+	def __init__(self, h5fname: str, noSubsec:bool=True, useTAC=True, useBars=True):
 		# h5fname = h5fname.split('/')[-1]
 		self.fname = h5fname
-		self.Nt, self.steps = cntSteps(self.fname)
-		print("Found {} steps in {}".format(self.Nt, self.fname))
+		self.Nt, self.steps = cntSteps(self.fname, useTAC=useTAC, useBars=useBars)
 		self.stepStrs = ['Step#'+str(s) for s in self.steps]
-		self.times = getTs(self.fname, self.steps, "time")
-		self.MJDs  = getTs(self.fname, self.steps, "MJD" )
+		self.times = getTs(self.fname, self.steps, "time", useTAC=useTAC, useBars=useBars)
+		self.MJDs  = getTs(self.fname, self.steps, "MJD" , useTAC=useTAC, useBars=useBars)
 
 		f5 = h5py.File(h5fname)
 		if noSubsec:
@@ -70,8 +69,8 @@ class H5Info(object):
 		Returns: None
 		"""
 		print("Step Info for {}:".format(self.fname))
-		print("  Step start/end/stride : {} / {} / {}".format(self.steps[0], self.steps[-1], self.steps[1]-self.steps[0]))
-		print("  Time start/end/stride : {:1.2f} / {:1.2f} / {:1.2f}".format(self.times[0], self.times[-1], self.times[1]-self.times[0]))
+		print("  Step start/end/stride : {} / {} / {}".format(self.steps[0], self.steps[-1], self.steps[-1]-self.steps[-2]))
+		print("  Time start/end/stride : {:1.2f} / {:1.2f} / {:1.2f}".format(self.times[0], self.times[-1], self.times[-1]-self.times[-2]))
 		print("  MJD  start/end        : {:1.8f} / {:1.8f}".format(self.MJDs[0], self.MJDs[-1]))
 		print("  UT   start/end        : {} / {}".format(self.UTs[0], self.UTs[-1]))
 
@@ -301,7 +300,7 @@ def tStep(fname, nStp=0, aID="time", aDef=0.0):
 	return t
 
 	
-def cntSteps(fname, doTryRecover=True, s0=0):
+def cntSteps(fname, doTryRecover=True, s0=0, useTAC=True, useBars=True):
 	'''
 	Count the number of steps and retrieve the step IDs from an h5 file.
 
@@ -323,17 +322,21 @@ def cntSteps(fname, doTryRecover=True, s0=0):
 	try:
 		CheckOrDie(fname)
 		with h5py.File(fname, 'r') as hf:
-			if kdefs.grpTimeCache in hf.keys() and 'step' in hf[kdefs.grpTimeCache].keys():
+			if useTAC and kdefs.grpTimeCache in hf.keys() and 'step' in hf[kdefs.grpTimeCache].keys():
 				sIds = np.asarray(hf[kdefs.grpTimeCache]['step'])
 				nSteps = sIds.size
 			else:
-				Steps = [grp for grp in alive_it(hf.keys(), title="#-Steps".ljust(kdefs.barLab), length=kdefs.barLen, bar=kdefs.barDef) if "Step#" in grp]
+				iterator = hf.keys()
+				if useBars:
+					iterator = alive_it(iterator, title="#-Steps".ljust(kdefs.barLab), length=kdefs.barLen, bar=kdefs.barDef)
+				Steps = [grp for grp in iterator if "Step#" in grp]
 				sIds = np.array([str.split(s, "#")[-1] for s in Steps], dtype=int)
 				sIds.sort()
 				nSteps = len(Steps)
 
 		return nSteps, sIds
 	except (ValueError, IndexError) as e:
+		print(e)
 		print("!!Warning: h5 file contains unreadable steps")
 
 	if not doTryRecover:
@@ -395,7 +398,7 @@ def cntX(fname, gID=None, StrX="/Step#"):
 		return nSteps, sIds
 
 
-def getTs(fname, sIds=None, aID="time", aDef=0.0):
+def getTs(fname, sIds=None, aID="time", aDef=0.0, useTAC=True, useBars=True):
 	'''
 	Retrieve time series data from an HDF5 file.
 
@@ -421,17 +424,19 @@ def getTs(fname, sIds=None, aID="time", aDef=0.0):
 	titStr = "Time series: %s" % (aID)
 
 	with h5py.File(fname, 'r') as hf:
-		if kdefs.grpTimeCache in hf.keys():
+		if useTAC and kdefs.grpTimeCache in hf.keys():
 			if aID in hf[kdefs.grpTimeCache]:
 				T = np.asarray(hf[kdefs.grpTimeCache][aID])
 			else:
 				T[:] = aDef
 		else:
-			with alive_bar(Nt, title=titStr.ljust(kdefs.barLab), length=kdefs.barLen, bar=kdefs.barDef) as bar:
-				for idx, n in enumerate(sIds):
-					gId = "/Step#%d" % (n)
-					T[idx] = hf[gId].attrs.get(aID, aDef)
-					bar()
+			iterator = enumerate(sIds)
+			if useBars:
+				iterator = alive_it(iterator, title="#-Steps".ljust(kdefs.barLab), length=kdefs.barLen, bar=kdefs.barDef)
+			for idx, n in iterator:
+				gId = "/Step#%d" % (n)
+				T[idx] = hf[gId].attrs.get(aID, aDef)
+				#bar()
 	return T
 
 #Used by MageStep to find closest datetime
