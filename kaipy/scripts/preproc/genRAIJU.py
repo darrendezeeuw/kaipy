@@ -26,7 +26,14 @@ PFLAV = 2
 EFUDGE = 1./3.
 PFUDGE = 0.0
 
-if __name__ == "__main__":
+def create_command_line_parser():
+    """Create the command-line argument parser.
+
+    Create the parser for command-line arguments.
+
+    Returns:
+        argparse.ArgumentParser: Command-line argument parser for this script.
+    """
 
     #Arg parsing
     fOut = "raijuconfig.h5"
@@ -62,6 +69,11 @@ if __name__ == "__main__":
     parser.add_argument('--noWaveModel',action='store_true',default=False, help="Don't use wave models in the electron/ion loss (default: %(default)s)")
     parser.add_argument('--append',action='store_true',default=False, help="Append existing file rather than make a new one (default: %(default)s)")
 
+    return parser
+
+def main():
+
+    parser = create_command_line_parser()
     # Finalize parsing
     args = parser.parse_args()
     fOut = args.o
@@ -163,3 +175,6 @@ if __name__ == "__main__":
     
     # Save lambda data to file (will also save params as a root attribute)
     fileIO.saveAlamData(fOut, alamData)
+
+if __name__ == "__main__":
+	main()

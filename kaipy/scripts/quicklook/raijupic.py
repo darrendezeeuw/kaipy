@@ -52,9 +52,13 @@ def get_bVol_dipole(f5):
     bVol_dipole_2D = np.broadcast_to(bVol_dipole_1D[:,np.newaxis], (Ni,Nj))
     return bVol_dipole_2D
 
-def parse_command_line():
-    """
+def create_command_line_parser():
+    """Create the command-line argument parser.
 
+    Create the parser for command-line arguments.
+
+    Returns:
+        argparse.ArgumentParser: Command-line argument parser for this script.
     """
 
     parser = argparse.ArgumentParser(
@@ -122,24 +126,7 @@ def parse_command_line():
         help="Number of threads for parallel vid (default: %(default)s)"
     )
 
-    args = parser.parse_args()
-    config = {
-        "indir"      : args.d,
-        "id"         : args.id,
-        "nPlt"       : args.n,
-        "nStride"    : args.dn,
-        "utPlt"      : args.ut,
-        "domain"     : args.domain,
-        "doDiff"     : args.diff,
-        "doVerbose"  : args.verbose,
-        "doVid"      : args.vid,
-        "vidOut"     : args.vidOut,
-        "doOverwrite": args.overwrite,
-        "noHash"     : args.nohash,
-        "nCPU"       : args.ncpus,
-        "nStart"     : args.ns,
-    }
-    return config
+    return parser
 
 def plot_frame(pairs,raiI: ru.RAIJUInfo, config):
 
@@ -335,8 +322,26 @@ def makeSuperPlot(raiI, config):
     with ProcessPoolExecutor(max_workers=nCPU) as executor:
         list(tqdm.tqdm(executor.map(worker, frame_pairs), total=len(frame_pairs)))
 
-if __name__ == "__main__":
-    config = parse_command_line()
+def main():
+    """Main function to run the script."""
+    parser = create_command_line_parser()
+    args = parser.parse_args()
+    config = {
+        "indir"      : args.d,
+        "id"         : args.id,
+        "nPlt"       : args.n,
+        "nStride"    : args.dn,
+        "utPlt"      : args.ut,
+        "domain"     : args.domain,
+        "doDiff"     : args.diff,
+        "doVerbose"  : args.verbose,
+        "doVid"      : args.vid,
+        "vidOut"     : args.vidOut,
+        "doOverwrite": args.overwrite,
+        "noHash"     : args.nohash,
+        "nCPU"       : args.ncpus,
+        "nStart"     : args.ns,
+    }
     print(config)
 
     fname = os.path.join(config['indir'],
@@ -359,3 +364,7 @@ if __name__ == "__main__":
     print("Plotting RAIJU step {} (t={}, UT={})".format(config['nPlt'],raiI.times[config['nPlt']], raiI.UTs[config['nPlt']]))
 
     makeSuperPlot(raiI, config)
+
+
+if __name__ == "__main__":
+	main()
