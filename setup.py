@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='kaipy',
-    version='1.0.8',
+    version='1.1.0',
     description='Python software for CGS MAGE and other Kaiju models',
     author='Kaiju team',
     author_email='wiltbemj@ucar.edu',
@@ -12,7 +12,7 @@ setup(
     package_data={'kaipy': ['scripts/*', 'scripts/*/*'],
                   'kaipy.satcomp': ['sc_helio.json']
                   },
-    python_requires='>=3.9,<=3.13',
+    python_requires='>=3.9,<3.13',
     install_requires=[
         'alive_progress',
         'astropy',
