@@ -15,7 +15,7 @@ setup(
                   'kaipy.raiju.waveModel': ['chorus_polynomial.txt'],
                   'kaipy.rcm': ['enchan.dat', 'dktable'],
                   'kaipy.rcm.wmutils': ['chorus_polynomial.txt'],
-                  'kaipy.cmaps': ['cmDDiv.txt', 'cmMLT.txt'],
+                  'kaipy.cmaps': ['cmDDiv.txt', 'cmMLT.txt']
                   },
     python_requires='>=3.9,<3.13',
     install_requires=[
