@@ -1,11 +1,3 @@
-<p align="center">
-  <img src="docs/source/_static/kaipy-logo.png" alt="Logo" width="60"/>
-</p>
-
-<p align="center">
-  Python Tools for Analyzing and Visualizing Kaiju Results
-</p>
-
 # README #
 
 Kaipy is a Python package for analysis and visualization of simulation
