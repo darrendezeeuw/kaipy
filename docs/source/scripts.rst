@@ -36,6 +36,9 @@ The quicklook directory has scripts that are used to quickly look at the data. T
 .. autoprogram:: msphpic:create_command_line_parser()
      :prog: msphpic
 
+.. autoprogram:: raijupic:create_command_line_parser()
+     :prog: raijupic
+
 .. autoprogram:: rcmDataProbe:create_command_line_parser()
      :prog: rcmDataProbe
 
@@ -64,6 +67,9 @@ The preprocessing directory has scripts that are used to setup MAGE simulations 
 
 .. autoprogram:: genRCM:create_command_line_parser()
      :prog: genRCM
+
+.. autoprogram:: genRAIJU:create_command_line_parser()
+     :prog: genRAIJU
 
 .. .. autoprogram:: INIGenerator:parse_args()
      :prog: INIGenerator.py
