@@ -1,10 +1,13 @@
 # Standard modules
 import os
+import importlib.resources as pkg_resources
 
 # Third-party modules
 import matplotlib as mpl
 import numpy as np
 
+# Kaipy modules
+from kaipy import cmaps
 
 __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
@@ -22,11 +25,11 @@ def load_colormap_from_file(file_path):
     return mpl.colors.ListedColormap(Q/255.0)
 
 # Load cmDiv colormap
-fIn = os.path.join(__location__, "cmDDiv.txt")
+fIn = pkg_resources.files(cmaps).joinpath("cmDDiv.txt")
 cmDiv = load_colormap_from_file(fIn)
 
 # Load cmMLT colormap
-fIn = os.path.join(__location__, "cmMLT.txt")
+fIn = pkg_resources.files(cmaps).joinpath("cmMLT.txt")
 cmMLT = load_colormap_from_file(fIn)
 
 
