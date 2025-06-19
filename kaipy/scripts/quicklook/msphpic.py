@@ -38,7 +38,7 @@ import kaipy.kaiViz as kv
 import kaipy.kaiTools as ktools
 import kaipy.kdefs as kdefs
 import kaipy.remix.remix as remix
-
+import kaipy.raiju.raijuViz as rv
 
 # Program constants and defaults
 
@@ -158,7 +158,7 @@ def create_command_line_parser():
     )
     parser.add_argument(
         "-bigIM", action="store_true", default=False,
-        help="Show entire RCM domain (default: %(default)s)."
+        help="Show entire Inner Mag domain (default: %(default)s)."
     )
     parser.add_argument(
         "-src", action="store_true", default=False,
@@ -205,8 +205,8 @@ def makePlot(i,spacecraft,nStp, args, varDict):
     doEphi = args.ephi
     doSrc = args.src
     doBz = args.bz
-    noRCM = args.norcm
-    doBigRCM = args.bigrcm
+    noIM = args.noIM
+    bigIM = args.bigIM
     do_vid = args.vid
     do_overwrite = args.overwrite
     do_hash = not args.nohash
@@ -217,14 +217,17 @@ def makePlot(i,spacecraft,nStp, args, varDict):
     outDir = varDict.get('outDir', 'msphVid')
     doIon = varDict.get('doIon', not noIon)
     doMIX = varDict.get('doMIX', False)
-    doRCM = varDict.get('doRCM', not noRCM)
+    doIM = varDict.get('doIM', not noIM)
+    doBigIM = varDict.get('doBigIM', bigIM)
     rcmdata = varDict.get('rcmdata', None)
+    raiI = varDict.get('raiI', None)
     rmxChk = varDict.get('rmxChk', None)
     gsph = varDict.get('gsph', None)
     xyBds = varDict.get('xyBds', None)
     branch = varDict.get('branch', 'unknown')
     githash = varDict.get('githash', 'unknown')
     figSz = varDict.get('figSz', (12, 7.5))
+    imName = varDict.get('imName', None)
 
 
     # Init figure
@@ -299,6 +302,7 @@ def makePlot(i,spacecraft,nStp, args, varDict):
 
     # If available, add the inset Inner Mag plot.
     if imName is not None:
+        mviz.vP = kv.genNorm(1.0e-2, 100.0, doLog=True)
         if imName=="RAIJU":
             stepStr = "Step#"+str(nStp)
             AxIM = inset_axes(AxL, width="30%", height="30%", loc=3)
@@ -473,7 +477,7 @@ def main():
         import kaipy.raiju.raijuUtils as ru
         import kaipy.raiju.raijuViz as rv
         raiI = ru.RAIJUInfo(os.path.join(fdir, ftag + ".raiju.h5"))
-        mviz.vP = kv.genNorm(1.0e-2, 100.0, doLog=True)
+        
     else:
         raiI = None
     if imName=="RCM":
@@ -503,14 +507,17 @@ def main():
             'outDir': 'msphVid',
             'doIon': doIon,
             'doMIX': doMIX,
-            'doRCM': doRCM,
+            'doIM': doIM,
+            'doBigIM': doBigIM,
             'rcmdata': rcmdata,
+            'raiI': raiI,
             'rmxChk': rmxChk,
             'gsph': gsph,
             'xyBds': xyBds,
             'branch': branch,
             'githash': githash,
-            'figSz': figSz
+            'figSz': figSz,
+            'imName': imName
         }
         makePlot(nStp,spacecraft,nStp, args, varDict)
 
@@ -534,14 +541,17 @@ def main():
                     'outDir': outDir,
                     'doIon': doIon,
                     'doMIX': doMIX,
-                    'doRCM': doRCM,
+                    'doIM': doIM,
+                    'doBigIM': doBigIM,
                     'rcmdata': rcmdata,
+                    'raiI': raiI,
                     'rmxChk': rmxChk,
                     'gsph': gsph,
                     'xyBds': xyBds,
                     'branch': branch,
                     'githash': githash,
-                    'figSz': figSz
+                    'figSz': figSz,
+                    'imName': imName
                 }
                 makePlot(i, spacecraft, nStp, args, varDict)
         else:
@@ -550,14 +560,17 @@ def main():
                 'outDir': outDir,
                 'doIon': doIon,
                 'doMIX': doMIX,
-                'doRCM': doRCM,
+                'doIM': doIM,
+                'doBigIM': doBigIM,
                 'rcmdata': rcmdata,
+                'raiI': raiI,
                 'rmxChk': rmxChk,
                 'gsph': gsph,
                 'xyBds': xyBds,
                 'branch': branch,
                 'githash': githash,
-                'figSz': figSz
+                'figSz': figSz,
+                'imName': imName
             }
             # Make list of parallel arguments
             ag = ((i,spacecraft,nStp, args, varDict) for i, nStp in enumerate(sIds) )
