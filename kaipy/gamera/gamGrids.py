@@ -11,12 +11,13 @@ from scipy.ndimage import gaussian_filter
 import matplotlib as mpl
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
+import importlib.resources as pkg_resources
 
 # Kaipy modules
 import kaipy.kaiViz as kv
 import kaipy.kdefs as kdefs
 from scipy.interpolate import RectBivariateSpline
-
+from kaipy import gamera
 
 #Use routine to generate xx,yy = corners of active upper half plane
 #Use Aug2D to add ghosts in 2D: xx,yy -> xxG,yyG
@@ -931,10 +932,10 @@ def LoadTabG(fIn="lfmG", Nc=0):
 
 	"""
 	import os
-	__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+	#__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-	fInX = os.path.join(__location__, fIn + ".X.txt")
-	fInY = os.path.join(__location__, fIn + ".Y.txt")
+	fInX = pkg_resources.files(gamera).joinpath(f"{fIn}.X.txt") #os.path.join(__location__, fIn + ".X.txt")
+	fInY = pkg_resources.files(gamera).joinpath(f"{fIn}.Y.txt")#os.path.join(__location__, fIn + ".Y.txt")
 	xxi = np.loadtxt(fInX)
 	yyi = np.loadtxt(fInY)
 

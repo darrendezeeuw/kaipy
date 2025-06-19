@@ -4,6 +4,7 @@ import datetime
 import os
 import subprocess
 from xml.dom import minidom
+import importlib.resources as pkg_resources
 
 # Third-party modules
 from astropy.coordinates import SkyCoord
@@ -20,21 +21,16 @@ from sunpy.coordinates import frames
 import kaipy.kaijson as kj
 import kaipy.kaiTools as kaiTools
 import kaipy.kdefs
-
+from kaipy import satcomp
 
 # Module constants.
 
 # A very small value.
 TINY = 1.0e-8
 
-# Compute the path to the directory containing this module.
-package_directory = os.path.dirname(os.path.abspath(__file__))
-PACKAGE_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 
 # Compute the path to the magnetospheric spacecraft metadata file.
-MAGNETOSPHERIC_SPACECRAFT_METADATA_PATH = os.path.join(
-    PACKAGE_DIRECTORY, "sc_cdasws_strs.json"
-)
+MAGNETOSPHERIC_SPACECRAFT_METADATA_PATH = pkg_resources.files(satcomp).joinpath("sc_cdasws_strs.json") 
 
 # Radius of Sun in kilometers.
 R_SUN_KILOMETERS = u.Quantity(1*u.Rsun, u.km).value
@@ -53,7 +49,7 @@ HTTP_STATUS_NOT_FOUND = 404
 # solar radii.
 R_MIN_HELIO = 21.5
 R_MAX_HELIO = 220.0
-scstrs_fname = os.path.join(package_directory, 'sc_cdasws_strs.json')
+scstrs_fname = MAGNETOSPHERIC_SPACECRAFT_METADATA_PATH
 
 #======
 #General

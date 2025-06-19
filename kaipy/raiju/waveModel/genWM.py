@@ -1,4 +1,5 @@
 # Standard modules
+import importlib.resources as pkg_resources
 
 # Third-party modules
 import numpy as np
@@ -7,15 +8,15 @@ from scipy.interpolate import RectBivariateSpline
 
 # Kaipy modules
 import kaipy.raiju.waveModel.wmData as wmD
-
+from kaipy.raiju import waveModel
 def genWM(params: wmD.wmParams):
 
 	import os
 
 	fInChorus = 'chorus_polynomial.txt'
-	__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+	#__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-	fInChorus = os.path.join(__location__,fInChorus)
+	fInChorus = pkg_resources.files(waveModel).joinpath(f"{fInChorus}") #os.path.join(__location__,fInChorus)
 
 	print("Reading %s"%fInChorus)
 

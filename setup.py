@@ -10,7 +10,12 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     package_data={'kaipy': ['scripts/*', 'scripts/*/*'],
-                  'kaipy.satcomp': ['sc_helio.json']
+                  'kaipy.satcomp': ['sc_helio.json','sc_cdasws_strs.json'],
+                  'kaipy.gamera': ['lfmG.X.txt', 'lfmG.Y.txt'],
+                  'kaipy.raiju.waveModel': ['chorus_polynomial.txt'],
+                  'kaipy.rcm': ['enchan.dat', 'dktable'],
+                  'kaipy.rcm.wmutils': ['chorus_polynomial.txt'],
+                  'kaipy.cmaps': ['cmDDiv.txt', 'cmMLT.txt']
                   },
     python_requires='>=3.9,<3.13',
     install_requires=[
