@@ -1,7 +1,10 @@
 """
 RCM-specific tools to include h5 data in xmf files
 """
+# Third-party modules
 import h5py as h5
+
+# Kaipy modules
 import kaipy.kaixdmf as kxmf
 
 

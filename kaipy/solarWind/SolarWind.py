@@ -1,10 +1,12 @@
+# Standard modules
 import datetime
 
+# Third-party modules
 import numpy
 
+# Kaipy modules
 import kaipy.transform
 from kaipy.solarWind.TimeSeries import TimeSeries 
-from kaipy.solarWind.ols import ols
 
 class SolarWind(object):
     """
@@ -95,7 +97,7 @@ class SolarWind(object):
         Notes:
             - The linear regression fit is applied to the Bx, By, and Bz data stored in the SolarWind object.
             - Before performing the fit, the Bx, By, and Bz data are converted to SM coordinates.
-            - The fit is performed using the OLS (Ordinary Least Squares) method from the kaipy.solarWind.ols module.
+            - The fit is performed using the OLS method from umpy.linalg.lstsq
         """
         # Before doing anything, convert to SM coordinates.
         bx_sm = []
@@ -111,40 +113,17 @@ class SolarWind(object):
             by_sm.append(b_sm[1])
             bz_sm.append(b_sm[2])
 
-        bx_sm = numpy.array(bx_sm)
-        by_sm = numpy.array(by_sm)
-        bz_sm = numpy.array(bz_sm)
+        bx_sm = numpy.squeeze(numpy.array(bx_sm))
+        by_sm = numpy.squeeze(numpy.array(by_sm))
+        bz_sm = numpy.squeeze(numpy.array(bz_sm))
 
         # Now that we're in SM, do the fit!
-        y = bx_sm
-        x = numpy.array([by_sm, bz_sm])
 
-        linearFit = kaipy.solarWind.ols.ols(y,x.T, y_varnm='bx_sm', x_varnm=['by_sm','bz_sm'])
-        ##Obtain information about the fit via the summary:
-        #linearFit.summary()
+        A = numpy.vstack(( by_sm, bz_sm, numpy.ones_like(by_sm))).T
+        npcoeffs = numpy.linalg.lstsq(A, bx_sm, rcond=None)[0]
+        reoderedcoeffs = numpy.array([npcoeffs[2], npcoeffs[0], npcoeffs[1]])
 
-        coef = linearFit.b
-
-        ## Compute the variance... See p
-        #xbar=numpy.average(y)
-        #xi = coef[0]+coef[1]*by_sm+coef[2]*bz_sm
-        #n=0
-        #variance = 0.0
-        #for i in range(len(xi)):
-        #    n += 1
-        #    variance += (xi[i]-xbar)**2
-        #variance /= (n)
-        #print 'variance is', variance
-        #print 'std dev is', numpy.sqrt(variance)
-        #
-        ## Compute chi^2... See p.667-669 of Numerical Recipes in C++
-        #chisq=0
-        #xi = self.data.getData('time_min')
-        #for i in range(len(y)):
-        #    chisq += (y[i]-coef[0]-coef[1]*by_sm[i]-coef[2]*bz_sm[i])**2
-        #print 'chisquared is', chisq
-                                
-        return coef
+        return reoderedcoeffs
 
     def _appendDerivedQuantities(self):
         """

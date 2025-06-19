@@ -14,21 +14,22 @@ Mike Wiltberger
 """
 
 
-# Include standard modules.
+# Standard modules
 import argparse
 from argparse import RawTextHelpFormatter
 import os
+import importlib.resources as pkg_resources
 
-# Include 3rd-party modules.
+# Third-party modules
 import numpy as np
 import spacepy.datamodel as dm
 
-# Include project modules.
+# Kaipy modules
 import kaipy.kaiH5 as kaiH5
 import kaipy.kaiViz as kv
 import kaipy.kaiTools as kaiTools
 import kaipy.satcomp.scutils as scutils
-
+from kaipy import satcomp
 
 # Program constants.
 
@@ -55,9 +56,7 @@ default_numSeg = 1
 default_path = os.getcwd()
 
 # Path to file of heliospheric spacecraft metadata.
-helio_sc_metadata_path = os.path.join(
-    os.environ["KAIPYHOME"], "kaipy", "satcomp", "sc_helio.json"
-)
+helio_sc_metadata_path = pkg_resources.files(satcomp).joinpath("sc_helio.json") 
 
 
 def create_command_line_parser():
@@ -115,7 +114,7 @@ def create_command_line_parser():
     return parser
 
 
-if __name__ == "__main__":
+def main():
     """Begin main program."""
 
     # Set up the command-line parser.
@@ -341,3 +340,6 @@ if __name__ == "__main__":
         # if verbose:
         #     print("Plotting %s trajectory in spacecraft frame to %s." % (sc_id, plot_file_path))
         # kv.helioTrajPlot(plot_file_path, sc_id, sc_data)
+
+if __name__ == "__main__":
+    main()

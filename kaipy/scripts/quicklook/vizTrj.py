@@ -1,15 +1,20 @@
 #!/usr/bin/env python
 #Make a quick figure of a CHIMP particle trajectory
 
+# Standard modules
 import argparse
 from argparse import RawTextHelpFormatter
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+
+# Third-party modules
+import numpy as np
+from mpl_toolkits.mplot3d import axes3d, Axes3D
+
+# Kaipy modules
 import kaipy.kaiViz as kv
 import kaipy.kaiH5 as kh5
 import kaipy.chimp.chimph5p as ch5p
-import numpy as np
-from mpl_toolkits.mplot3d import axes3d, Axes3D
 
 #Adds a simple Earth to 3d pics
 def addEarth(ax,Re=1):
@@ -67,7 +72,7 @@ def create_command_line_parser():
 	return parser
 
 
-if __name__ == "__main__":
+def main():
 	#Defaults
 	LW = 0.5
 	fs = 16
@@ -108,3 +113,6 @@ if __name__ == "__main__":
 	ax.set_title(titS,fontsize=fs)
 	axEqual3d(ax)
 	plt.show()
+
+if __name__ == "__main__":
+	main()

@@ -5,7 +5,7 @@ Converts a XML configuration file for CGS models into INI configuration file(s).
 Brent Smith (February 2022), JHU APL
 #############################################################################'''
 
-# imports (std lib)
+# Standard modules
 import os
 import sys
 import shutil

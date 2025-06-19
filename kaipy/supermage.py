@@ -1,5 +1,13 @@
 # Functions to calculate Supermag indices from simulated outputs
+# Standard modules
 import os
+import warnings
+import math
+import datetime
+import json
+from multiprocessing import Pool
+
+# Third-party modules
 import numpy as np
 import h5py
 import kaipy.kaiH5 as kh5
@@ -7,16 +15,13 @@ from astropy.time import Time
 from scipy.spatial import qhull
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
-import warnings
-import math
-import datetime
-import json
-from multiprocessing import Pool
 import pandas as pd
 
+
+# Kaipy modules
 #### NEED TO POINT TO SUPERMAG API SCRIPT
 #### /glade/p/hao/msphere/gamshare/supermag/supermag_api.py 
-import kaipy.supermag_api as smapi
+import supermag_api as smapi
 ####
 
 # this warning is very annoying
@@ -371,7 +376,7 @@ def ReadSimData(filename, quiet = True):
 
     first_step_name = "Step#%s" % sIds[0]
     data = f[first_step_name]
-    dBt, dBp = np.array(data['dBt'])[0], np.array(data['dBp'])[0]
+    dBt, dBp = np.array(data['dBt']), np.array(data['dBp'])
     BH = np.sqrt(dBt**2 + dBp**2)
     maglat = np.array(data['smlat'])[0].flatten()
 

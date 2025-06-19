@@ -1,7 +1,10 @@
 #Various routines to generate RCM data
-import numpy as np
+# Standard modules
 import os
+import importlib.resources as pkg_resources
 
+# Third-party modules
+import numpy as np
 
 def LoadLAS1(fIn="rcmlas1"):
 	"""
@@ -42,8 +45,9 @@ def LoadDKTab(fIn="dktable"):
 	Returns:
 		numpy.ndarray: A flattened array representing the DK table.
 	"""
-	__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-	fIn = os.path.join(__location__, fIn)
+	from kaipy import rcm
+	#__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+	fIn = pkg_resources.files(rcm).joinpath(fIn)
 
 	print("Reading %s" % (fIn))
 
@@ -65,10 +69,10 @@ def LoadEnchan(fIn="enchan.dat"):
 	"""
 	import os
 	import numpy as np
+	from kaipy import rcm
+	#__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-	__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-
-	fIn = os.path.join(__location__, fIn)
+	fIn = pkg_resources.files(rcm).joinpath(fIn)
 
 	print("Reading %s" % (fIn))
 

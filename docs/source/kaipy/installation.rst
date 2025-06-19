@@ -1,11 +1,8 @@
 Installation
-============
-
-Custom
-------
+================================================
 
 Conda Installation
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1. Download Miniconda Installer
 
@@ -51,9 +48,9 @@ Conda Installation
    - To apply the changes, close and reopen your terminal window.
 
 Creating Environment
-~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Create python environment.  We support using python 3.8 through python 3.10.
+Create python environment.  We support using python 3.10 through python 3.12.
 
 .. note::
 
@@ -61,10 +58,10 @@ Create python environment.  We support using python 3.8 through python 3.10.
 
 .. code-block:: bash
 
-    conda create --name kaipy python=3.8
+    conda create --name kaipy python=3.12
 
 Installing kaipy
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To install kaipy, run the following command:
 

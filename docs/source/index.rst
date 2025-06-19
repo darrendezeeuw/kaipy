@@ -14,16 +14,15 @@ other scientific software for simulation of heliospheric environments such
 as planetary magnetospheres and the solar wind. 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Kaipy:
    
    kaipy/installation
    kaipy/requirements
    kaipy/usage
-   kaipy/developers
    scripts
-   modules
-
+   package
+   kaipy/developers
 
 
 

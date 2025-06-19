@@ -1,11 +1,8 @@
-kaipy.gamera package
-====================
-
-Submodules
-----------
+Gamera package
+================================================
 
 kaipy.gamera.deltabViz module
------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.gamera.deltabViz
    :members:
@@ -13,7 +10,7 @@ kaipy.gamera.deltabViz module
    :show-inheritance:
 
 kaipy.gamera.gamGrids module
-----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.gamera.gamGrids
    :members:
@@ -21,7 +18,7 @@ kaipy.gamera.gamGrids module
    :show-inheritance:
 
 kaipy.gamera.gampp module
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.gamera.gampp
    :members:
@@ -29,7 +26,7 @@ kaipy.gamera.gampp module
    :show-inheritance:
 
 kaipy.gamera.magsphere module
------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.gamera.magsphere
    :members:
@@ -37,7 +34,7 @@ kaipy.gamera.magsphere module
    :show-inheritance:
 
 kaipy.gamera.magsphereRescale module
-------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.gamera.magsphereRescale
    :members:
@@ -45,7 +42,7 @@ kaipy.gamera.magsphereRescale module
    :show-inheritance:
 
 kaipy.gamera.msphViz module
----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.gamera.msphViz
    :members:
@@ -53,7 +50,7 @@ kaipy.gamera.msphViz module
    :show-inheritance:
 
 kaipy.gamera.rcmpp module
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.gamera.rcmpp
    :members:
@@ -61,17 +58,9 @@ kaipy.gamera.rcmpp module
    :show-inheritance:
 
 kaipy.gamera.remixpp module
----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.gamera.remixpp
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: kaipy.gamera
    :members:
    :undoc-members:
    :show-inheritance:

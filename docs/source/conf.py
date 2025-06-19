@@ -15,6 +15,9 @@ import sys
 sys.path.insert(0, os.path.abspath('../../kaipy'))
 sys.path.insert(1, os.path.abspath('../../kaipy/scripts/quicklook'))
 sys.path.insert(2, os.path.abspath('../../kaipy/scripts/preproc'))
+sys.path.insert(3, os.path.abspath('../../kaipy/scripts/postproc'))
+sys.path.insert(4, os.path.abspath('../../kaipy/scripts/OHelio'))
+sys.path.insert(5, os.path.abspath('../../kaipy/scripts/datamodel'))
 os.environ["KAIPYHOME"] = os.path.abspath('../../kaipy')
 
 # -- Project information -----------------------------------------------------
@@ -59,6 +62,18 @@ html_theme = 'sphinx_rtd_theme'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+html_logo = '_static/kaipy-logo.png'
+
+html_theme_options = {
+    'logo_only': True,
+    'display_version': False,
+    'collapse_navigation': False,
+    'navigation_depth': 4,
+}
+
+html_css_files = [
+    'css/sidebar_theme.css',
+]
 
 # Mock Imports
 autodoc_mock_imports = ['cartopy']

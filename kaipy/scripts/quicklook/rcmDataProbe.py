@@ -2,18 +2,24 @@
 """
 Probes rcm.h5 data file and returns graph of variable vs. channel energy
 """
+
+# Standard modules
+import argparse
+from argparse import RawTextHelpFormatter
+
+# Third-party modules
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
-import kaipy.kaiViz as kv
 import matplotlib.gridspec as gridspec
 import numpy as np
-import kaipy.kaiH5 as kh5
-
 from matplotlib import rcParams, cycler
 
-import argparse
-from argparse import RawTextHelpFormatter
+# Kaipy modules
+import kaipy.kaiViz as kv
+import kaipy.kaiH5 as kh5
+
+
 
 #Variable options
 VOPT_SF = "specFlux"
@@ -62,7 +68,7 @@ def create_command_line_parser():
 
 	return parser
 
-if __name__ == "__main__":
+def main():
 	#Defaults
 	cmap = plt.cm.plasma
 	# Set up the command-line parser.
@@ -210,3 +216,7 @@ if __name__ == "__main__":
 	#Ax.set_ylim(1.0e+10,1.0e+19)
 	sTag = "e" if doElectrons else "i"
 	kv.savePic("qkrcm%s_%s.png"%(filetag, sTag))
+
+
+if __name__ == "__main__":
+	main()

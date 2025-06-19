@@ -1,14 +1,20 @@
 #Various helper routines for magnetosphere quick look plots
 
+# Standard modules
 import argparse
 from argparse import RawTextHelpFormatter
+import os
+
+# Third-party modules
 import matplotlib as mpl
 import numpy as np
+
+# Kaipy modules
 import kaipy.kaiViz as kv
 import kaipy.kaiTools as kt
 import kaipy.gamera.magsphere as msph
 import kaipy.remix.remix as remix
-import os
+
 
 dbMax = 25.0
 dbCM = "RdGy_r"
@@ -464,7 +470,7 @@ def PlotMerid(gsph, nStp, xyBds, Ax, doDen=False, doRCM=False, AxCB=None, doClea
 		else:
 			vN = kv.genNorm(0, 25)
 		if doSrc:
-			vID = "SrcD"
+			vID = "SrcD_RING"
 			cbStr = "Source Density [#/cc]"
 		else:
 			vID = "D"
@@ -473,7 +479,7 @@ def PlotMerid(gsph, nStp, xyBds, Ax, doDen=False, doRCM=False, AxCB=None, doClea
 	else:
 		vN = vP
 		if doSrc:
-			vID = "SrcP"
+			vID = "SrcP_RING"
 			cbStr = "Source Pressure [nPa]"
 		else:
 			vID = "P"

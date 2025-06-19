@@ -1,7 +1,12 @@
 #Various routines to deal with h5p data
+
+# Standard modules
+
+# Third-party modules
 import numpy as np
 import h5py
 
+# Kaipy modules
 import kaipy.kaiH5 as kH5
 
 #Count number of particles in an h5p file

@@ -20,7 +20,7 @@ Eric Winter (eric.winter@jhuapl.edu)
 """
 
 
-# Import standard modules.
+# Standard modules.
 import argparse
 import copy
 import os
@@ -29,10 +29,10 @@ import re
 import shutil
 import sys
 
-# Import 3rd-party modules.
+# Third-party modules.
 from jinja2 import Template
 
-# Import project-specific modules.
+# Kaipy modules.
 from kaipy import kaiH5
 from kaipy import kaiTools
 

@@ -1,13 +1,16 @@
 Usage
-=====
+================================================
+
 The Kaipy package comes with a variety of tools to help you load and analyze data from the MAGE model. This page will walk you through the basic usage of the package.  This includes using the API to load datasets and create plots as well as using the command line interface to run scripts.
 
-Mode: API
----------
-We will go over the basics of loading datasets and creating plots using the Kaipy API.  You can try this out for yourself using our `Google Colab notebook <https://colab.research.google.com/drive/1Y559nAryHyX5R9wgqSLvZ-87QRmazGLD#scrollTo=0bOWk7gnNzd2>`_.
+Kaipy API Package
+------------------------------------------------
+
+We will go over the basics of loading datasets and creating plots using the Kaipy API package.  You can try this out for yourself using our `Google Colab notebook <https://colab.research.google.com/drive/1Y559nAryHyX5R9wgqSLvZ-87QRmazGLD#scrollTo=0bOWk7gnNzd2>`_.
 
 Loading datasets
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 In order to load data for the GAMERA and MIX components of the MAGE model you will need to import the following modules:
 
 .. code-block:: python
@@ -40,7 +43,8 @@ Importing the ionospheric data from REMIX follow the same format as the import o
     ion.init_vars('NORTH')
 
 Plots
-~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 The msphViz portion of the kaipy library has numerous routines for visualizing the magnetosphere. Here will demostrate usage of plotXY and plotXZ which make plots of the equatorial and meridional cuts of the magnetosphere. For both of these routines and others in system you need to provide the instance of the magnetosphere object, the step number you want to display, the extent of the domain, and two sets of axes. The first axes object is for the plot and the second is for the colorbar. For plotXZ we will use the minimal set arguments which results in a plot density. For the plotXY example we will specify options so that we end up with Vx on Red/Blue color palette with a mid point normalization.
 
 First the plotXZ example
@@ -87,8 +91,9 @@ The mix object includes an extensive plotting routine that has the capability fo
     :width: 400px
     :align: center
 
-Mode: CLI
----------
+Kaipy Command Line Interface
+------------------------------------------------
+
 The Kaipy package also comes with a command line interface that allows you to run scripts to analyze MAGE model data.  The CLI is a great way to automate the analysis of large datasets.  The CLI is run from the terminal and has a variety of options to customize the analysis. 
 
 A complete list of the available scripts can be found at the `Scripts documentation <https://kaipy-docs.readthedocs.io/en/latest/scripts.html>`_.

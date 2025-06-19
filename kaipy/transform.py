@@ -19,9 +19,11 @@ Functions:
     x, y, z = GSEtoGSM(x, y, z, dateTime)
         Convert from geocentric solar ecliptic to geocentric magnetospheric coordinates.
 """
-
-import numpy as np
+# Standard modules
 import datetime
+
+# Third-party modules
+import numpy as np
 from spacepy.coordinates import Coords
 from spacepy.time import Ticktock
 
@@ -52,7 +54,10 @@ def SMtoGSM(x, y, z, ut):
     invec.ticks = Ticktock(ut)
     outvec = invec.convert(toSys, toType)
 
-    return outvec.x, outvec.y, outvec.z
+    if len(outvec.x > 1):
+        return outvec.x, outvec.y, outvec.z
+    else:
+        return outvec.x[0], outvec.y[0], outvec.z[0]
 
 
 def GSMtoSM(x, y, z, ut):
@@ -82,7 +87,10 @@ def GSMtoSM(x, y, z, ut):
     invec.ticks = Ticktock(ut)
     outvec = invec.convert(toSys, toType)
 
-    return outvec.x, outvec.y, outvec.z
+    if len(outvec.x > 1):
+        return outvec.x, outvec.y, outvec.z
+    else:
+        return outvec.x[0], outvec.y[0], outvec.z[0]
 
 
 
@@ -116,7 +124,10 @@ def GSEtoGSM(x, y, z, ut):
     invec.ticks = Ticktock(ut)
     outvec = invec.convert(toSys, toType)
 
-    return outvec.x, outvec.y, outvec.z
+    if len(outvec.x > 1):
+        return outvec.x, outvec.y, outvec.z
+    else:
+        return outvec.x[0], outvec.y[0], outvec.z[0]
 
 
 

@@ -1,21 +1,11 @@
-kaipy.gamhelio package
-======================
+Gamhelio package
+================================================
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 4
-
-   kaipy.gamhelio.lib
-   kaipy.gamhelio.wsa2TDgamera
-   kaipy.gamhelio.wsa2gamera
-
-Submodules
-----------
+Primary Package
+------------------------------------------------
 
 kaipy.gamhelio.helioViz module
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.gamhelio.helioViz
    :members:
@@ -23,17 +13,32 @@ kaipy.gamhelio.helioViz module
    :show-inheritance:
 
 kaipy.gamhelio.heliosphere module
----------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.gamhelio.heliosphere
    :members:
    :undoc-members:
    :show-inheritance:
 
-Module contents
----------------
+Lib Package
+------------------------------------------------
 
-.. automodule:: kaipy.gamhelio
+kaipy.gamhelio.lib.wsa module
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: kaipy.gamhelio.lib.wsa
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+wsa2gamera Package
+------------------------------------------------
+
+kaipy.gamhelio.wsa2gamera.params module
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: kaipy.gamhelio.wsa2gamera.params
    :members:
    :undoc-members:
    :show-inheritance:

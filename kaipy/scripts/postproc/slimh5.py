@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 #Takes Gamera/Chimp/xxx file and slims it down based on start:stop:stride
 
+# Standard modules
 import argparse
 import os
+
+# Third-party modules
 import h5py
 import numpy as np
 
@@ -58,8 +61,13 @@ def createfile(iH5,fOut):
             oH5.create_group(sQ)
     return oH5
 
-    
-if __name__ == "__main__":
+
+def create_command_line_parser():
+    """Create the command-line argument parser.
+    Create the parser for command-line arguments.
+    Returns:
+        argparse.ArgumentParser: Command-line argument parser for this script.
+    """
     #Set defaults
     ns = -1
     ne = -1 #Proxy for last entry
@@ -76,6 +84,14 @@ if __name__ == "__main__":
     parser.add_argument('-mpi',type=str,metavar="ijk",default="", help="Comma-separated mpi dimensions (example: '4,4,1', default: noMPI)")
     parser.add_argument('--p',action='store_true', help="Preserve Step # instead of labeling at Step#0") 
     
+    return parser    
+def main():
+    #Set defaults
+    ns = -1
+    ne = -1 #Proxy for last entry
+
+    doMPI = False
+    parser = create_command_line_parser()
     #Finalize parsing
     args = parser.parse_args()
 
@@ -183,3 +199,6 @@ if __name__ == "__main__":
         #Close up
         iH5.close()
         oH5.close()
+
+if __name__ == "__main__":
+    main()

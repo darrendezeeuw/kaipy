@@ -1,14 +1,19 @@
 #Gamera post-processing routines
 #Get data from serial/MPI gamera output
+
+# Standard modules
 import glob
+
+# Third-party modules
 import numpy as np
-from kaipy.kaiTools import MJD2UT
 import itertools
-import kaipy.kdefs as kdefs
-import kaipy.kaiH5 as kh5
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from alive_progress import alive_bar
 
+# Kaipy modules
+from kaipy.kaiTools import MJD2UT
+import kaipy.kdefs as kdefs
+import kaipy.kaiH5 as kh5
 #Object to use to pull data from HDF5 structure (serial or mpi)
 
 #Initialize,
@@ -313,9 +318,10 @@ class GameraPipe(object):
 						self.X = np.zeros((self.Ni+1,self.Nj+1))
 						self.Y = np.zeros((self.Ni+1,self.Nj+1))
 					else:
-						self.X = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
-						self.Y = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
-						self.Z = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
+						self.X  = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
+						self.Y  = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
+						self.Z  = np.zeros((self.Ni+1,self.Nj+1,self.Nk+1))
+						self.dV = np.zeros((self.Ni  ,self.Nj  ,self.Nk  ))
 					if (doVerbose):
 						#print("Del = (%d,%d,%d)"%(self.dNi,self.dNj,self.dNk))
 						titStr = "%s/Grid"%(self.ftag)
@@ -342,6 +348,7 @@ class GameraPipe(object):
 								self.X[iS:iE+1,jS:jE+1,kS:kE+1] = kh5.PullVar(fIn,"X")
 								self.Y[iS:iE+1,jS:jE+1,kS:kE+1] = kh5.PullVar(fIn,"Y")
 								self.Z[iS:iE+1,jS:jE+1,kS:kE+1] = kh5.PullVar(fIn,"Z")
+								self.dV[iS:iE , jS:jE , kS:kE ] = kh5.PullVar(fIn, "dV")
 							bar()
 			else:
 				print("Grid Previously Loaded")

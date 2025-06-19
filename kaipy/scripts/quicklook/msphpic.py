@@ -20,6 +20,7 @@ import os
 import matplotlib as mpl
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 import numpy as np
 import warnings
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
@@ -37,7 +38,7 @@ import kaipy.kaiViz as kv
 import kaipy.kaiTools as ktools
 import kaipy.kdefs as kdefs
 import kaipy.remix.remix as remix
-
+import kaipy.raiju.raijuViz as rv
 
 # Program constants and defaults
 
@@ -58,6 +59,46 @@ default_step = -1
 # Color to use for spacecraft position symbols.
 SPACECRAFT_COLOR = 'red'
 
+
+def findIM(indir: str, tag: str) -> str:
+    """Determine whether run used RCM, RAIJU, or no Inner Mag
+
+    Inputs:
+        indir [str]: directory to search
+        tag   [str]: run tag (e.g. msphere)
+
+    Returns:
+        modelName [str]: Imag model used, or None if no Imag model
+
+    """
+
+    strfmt = os.path.join(indir, "{}.{}.h5")
+
+    if os.path.exists(strfmt.format(tag, "raiju")):
+        return "RAIJU"
+    elif os.path.exists(strfmt.format(tag, "mhdrcm")):
+        return "RCM"
+    else:
+        return None
+
+def addIMBox(Ax, bnds):
+    """
+	Add a rectangular box to the given Axes object.
+
+	Args:
+		Ax: The Axes object to which the rectangle will be added.
+
+	Returns:
+		None
+	"""
+    
+    if (Ax is None):
+        Ax = plt.gca()
+    xy0 = (bnds[0],bnds[2])
+    H = bnds[3]-bnds[2]
+    W = bnds[1]-bnds[0]
+    rcmRec = patches.Rectangle( (xy0),W,H, fill=False,edgecolor="dodgerblue")
+    Ax.add_patch(rcmRec)
 
 def create_command_line_parser():
     """Create the command-line argument parser.
@@ -112,12 +153,12 @@ def create_command_line_parser():
         help="Don't show MPI boundaries (default: %(default)s)."
     )
     parser.add_argument(
-        "-norcm", action="store_true", default=False,
-        help="Don't show RCM data (default: %(default)s)."
+        "-noIM", action="store_true", default=False,
+        help="Don't show Inner Mag data (default: %(default)s)."
     )
     parser.add_argument(
-        "-bigrcm", action="store_true", default=False,
-        help="Show entire RCM domain (default: %(default)s)."
+        "-bigIM", action="store_true", default=False,
+        help="Show entire Inner Mag domain (default: %(default)s)."
     )
     parser.add_argument(
         "-src", action="store_true", default=False,
@@ -151,7 +192,46 @@ def create_command_line_parser():
     mviz.AddSizeArgs(parser)
     return parser
 
-def makePlot(i,spacecraft,nStp):
+def makePlot(i,spacecraft,nStp, args, varDict):
+    debug = args.debug
+    verbose = args.verbose
+    fdir = args.d
+    ftag = args.id
+    doDen = args.den
+    noIon = args.noion
+    noMPI = args.nompi
+    doMPI = not noMPI
+    doJy = args.jy
+    doEphi = args.ephi
+    doSrc = args.src
+    doBz = args.bz
+    noIM = args.noIM
+    bigIM = args.bigIM
+    do_vid = args.vid
+    do_overwrite = args.overwrite
+    do_hash = not args.nohash
+    ncpus = args.ncpus
+
+    # Extract missing variables from varDict
+    n_pad = varDict.get('n_pad', 0)
+    outDir = varDict.get('outDir', 'msphVid')
+    doIon = varDict.get('doIon', not noIon)
+    doMIX = varDict.get('doMIX', False)
+    doIM = varDict.get('doIM', not noIM)
+    doBigIM = varDict.get('doBigIM', bigIM)
+    rcmdata = varDict.get('rcmdata', None)
+    raiI = varDict.get('raiI', None)
+    rmxChk = varDict.get('rmxChk', None)
+    gsph = varDict.get('gsph', None)
+    xyBds = varDict.get('xyBds', None)
+    branch = varDict.get('branch', 'unknown')
+    githash = varDict.get('githash', 'unknown')
+    figSz = varDict.get('figSz', (12, 7.5))
+    imName = varDict.get('imName', None)
+
+
+    # Init figure
+    fig = plt.figure(figsize=figSz)
 
     # Disable some warning spam if not debug
     if not debug:
@@ -212,7 +292,7 @@ def makePlot(i,spacecraft,nStp):
     elif doEphi:
         mviz.PlotEqEphi(gsph, nStp, xyBds, AxR, AxC3)
     else:
-        mviz.PlotMerid(gsph, nStp, xyBds, AxR, doDen, doRCM, AxC3, doSrc=doSrc)
+        mviz.PlotMerid(gsph, nStp, xyBds, AxR, doDen, doIM, AxC3, doSrc=doSrc)
 
     # Add the date and time for the plot.
     gsph.AddTime(nStp, AxL, xy=[0.025, 0.89], fs="x-large")
@@ -220,17 +300,23 @@ def makePlot(i,spacecraft,nStp):
     # Add the solar wind description text.
     gsph.AddSW(nStp, AxL, xy=[0.625, 0.025], fs="small")
 
-    # If available, add the inset RCM plot.
-    if not noRCM:
-        AxRCM = inset_axes(AxL, width="30%", height="30%", loc=3)
-        rcmpp.RCMInset(AxRCM, rcmdata, nStp, mviz.vP)
+    # If available, add the inset Inner Mag plot.
+    if imName is not None:
+        mviz.vP = kv.genNorm(1.0e-2, 100.0, doLog=True)
+        if imName=="RAIJU":
+            stepStr = "Step#"+str(nStp)
+            AxIM = inset_axes(AxL, width="30%", height="30%", loc=3)
+            inset_bnds = rv.plotInset(AxIM, raiI, stepStr, mviz.vP, ax_gam=AxL)
+        if imName=="RCM":
+            AxIM = inset_axes(AxL, width="30%", height="30%", loc=3)
+            inset_bnds = rcmpp.RCMInset(AxIM, rcmdata, nStp, mviz.vP)
         # Add dBz contours.
-        AxRCM.contour(
+        AxIM.contour(
             kv.reWrap(gsph.xxc), kv.reWrap(gsph.yyc), kv.reWrap(Bz), [0.0],
             colors=mviz.bz0Col, linewidths=mviz.cLW
         )
-        # Show the RCM region as a box.
-        rcmpp.AddRCMBox(AxL)
+            # Show the IM region as a box.
+        addIMBox(AxL,inset_bnds)
 
     # Plot the REMIX data, if requested.
     if doIon:
@@ -321,7 +407,7 @@ def makePlot(i,spacecraft,nStp):
     kv.savePic(outPath, bLenX=45)
 
 
-if __name__ == "__main__":
+def main():
     """Make a quick figure of a Gamera magnetosphere run."""
 
     # Set up the command-line parser.
@@ -342,8 +428,8 @@ if __name__ == "__main__":
     doEphi = args.ephi
     doSrc = args.src
     doBz = args.bz
-    noRCM = args.norcm
-    doBigRCM = args.bigrcm
+    doIM = not args.noIM
+    doBigIM = args.bigIM
     do_vid = args.vid
     do_overwrite = args.overwrite
     do_hash = not args.nohash
@@ -365,12 +451,11 @@ if __name__ == "__main__":
     # Open the gamera results pipe.
     gsph = msph.GamsphPipe(fdir, ftag, doFast=doFast)
 
-    # Check for the presence of RCM results.
-    rcmChk = os.path.join(fdir, "%s.mhdrcm.h5" % ftag)
-    doRCM = os.path.exists(rcmChk)
+    
+    # Check for the presence of IM results.
+    imName = findIM(fdir, ftag)
     if debug:
-        print("rcmChk = %s" % rcmChk)
-        print("doRCM = %s" % doRCM)
+        print("imName = %s" % imName)
 
     # Check for the presence of remix results.
     rmxChk = os.path.join(fdir, "%s.mix.h5" % ftag)
@@ -386,12 +471,20 @@ if __name__ == "__main__":
         if debug:
             print(f'branch/commit: {branch}/{githash}')
 
-    # Open RCM data if available, and initialize visualization.
-    if doRCM:
+    # Open inner mag data if available, and initialize visualization.
+    if imName=="RAIJU":
+        print("Found RAIJU data")
+        import kaipy.raiju.raijuUtils as ru
+        import kaipy.raiju.raijuViz as rv
+        raiI = ru.RAIJUInfo(os.path.join(fdir, ftag + ".raiju.h5"))
+        
+    else:
+        raiI = None
+    if imName=="RCM":
         print("Found RCM data")
         rcmdata = gampp.GameraPipe(fdir, ftag + ".mhdrcm")
         mviz.vP = kv.genNorm(1.0e-2, 100.0, doLog=True)
-        rcmpp.doEll = not doBigRCM
+        rcmpp.doEll = not doBigIM
         if debug:
             print("rcmdata = %s" % rcmdata)
     else:
@@ -404,15 +497,29 @@ if __name__ == "__main__":
     mpl.rc('mathtext', fontset='stixsans', default='regular')
     mpl.rc('font', size=10)
 
-    # Init figure
-    fig = plt.figure(figsize=figSz)
-
     if not do_vid: # If we are making a single image, keep original functionality
         # If needed, fetch the number of the last step.
         if nStp < 0:
-            nStp = gsph.sFin
+            nStp = gsph.sFin - 1
             print("Using Step %d" % nStp)
-        makePlot(nStp,spacecraft,nStp)
+        varDict = {
+            'n_pad': 0,
+            'outDir': 'msphVid',
+            'doIon': doIon,
+            'doMIX': doMIX,
+            'doIM': doIM,
+            'doBigIM': doBigIM,
+            'rcmdata': rcmdata,
+            'raiI': raiI,
+            'rmxChk': rmxChk,
+            'gsph': gsph,
+            'xyBds': xyBds,
+            'branch': branch,
+            'githash': githash,
+            'figSz': figSz,
+            'imName': imName
+        }
+        makePlot(nStp,spacecraft,nStp, args, varDict)
 
     else: # then we make a video, i.e. series of images saved to msphVid
 
@@ -429,10 +536,44 @@ if __name__ == "__main__":
 
         if ncpus == 1:
             for i, nStp in enumerate(sIds):
-                makePlot(i, spacecraft, nStp)
+                varDict = {
+                    'n_pad': n_pad,
+                    'outDir': outDir,
+                    'doIon': doIon,
+                    'doMIX': doMIX,
+                    'doIM': doIM,
+                    'doBigIM': doBigIM,
+                    'rcmdata': rcmdata,
+                    'raiI': raiI,
+                    'rmxChk': rmxChk,
+                    'gsph': gsph,
+                    'xyBds': xyBds,
+                    'branch': branch,
+                    'githash': githash,
+                    'figSz': figSz,
+                    'imName': imName
+                }
+                makePlot(i, spacecraft, nStp, args, varDict)
         else:
+            varDict = {
+                'n_pad': n_pad,
+                'outDir': outDir,
+                'doIon': doIon,
+                'doMIX': doMIX,
+                'doIM': doIM,
+                'doBigIM': doBigIM,
+                'rcmdata': rcmdata,
+                'raiI': raiI,
+                'rmxChk': rmxChk,
+                'gsph': gsph,
+                'xyBds': xyBds,
+                'branch': branch,
+                'githash': githash,
+                'figSz': figSz,
+                'imName': imName
+            }
             # Make list of parallel arguments
-            ag = ((i,spacecraft,nStp) for i, nStp in enumerate(sIds) )
+            ag = ((i,spacecraft,nStp, args, varDict) for i, nStp in enumerate(sIds) )
             # Check we're not exceeding cpu_count on computer
             ncpus = min(int(ncpus),cpu_count(logical=False))
             print('Doing multithreading on ',ncpus,' threads')
@@ -440,3 +581,6 @@ if __name__ == "__main__":
             with Pool(processes=ncpus) as pl:
                 pl.starmap(makePlot,ag)
             print("Done making all the images. Go to mixVid folder")
+
+if __name__ == "__main__":
+    main()

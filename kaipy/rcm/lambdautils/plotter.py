@@ -1,7 +1,9 @@
+# Third-party modules
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import numpy as np
 
+# Kaipy modules
 import kaipy.kaiTools as kT
 
 

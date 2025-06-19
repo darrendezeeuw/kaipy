@@ -1,25 +1,8 @@
 kaipy package
-=============
-
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 4
-
-   kaipy.chimp
-   kaipy.gamera
-   kaipy.gamhelio
-   kaipy.paraview
-   kaipy.rcm
-   kaipy.remix
-   kaipy.solarWind
-
-Submodules
-----------
+================================================
 
 kaipy.cdaweb\_utils module
---------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.cdaweb_utils
    :members:
@@ -27,7 +10,7 @@ kaipy.cdaweb\_utils module
    :show-inheritance:
 
 kaipy.embiggenUtils module
---------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.embiggenUtils
    :members:
@@ -35,7 +18,7 @@ kaipy.embiggenUtils module
    :show-inheritance:
 
 kaipy.kJobs module
-------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.kJobs
    :members:
@@ -43,7 +26,7 @@ kaipy.kJobs module
    :show-inheritance:
 
 kaipy.kaiH5 module
-------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.kaiH5
    :members:
@@ -51,7 +34,7 @@ kaipy.kaiH5 module
    :show-inheritance:
 
 kaipy.kaiTools module
----------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.kaiTools
    :members:
@@ -59,7 +42,7 @@ kaipy.kaiTools module
    :show-inheritance:
 
 kaipy.kaiViz module
--------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.kaiViz
    :members:
@@ -67,7 +50,7 @@ kaipy.kaiViz module
    :show-inheritance:
 
 kaipy.kaijson module
---------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.kaijson
    :members:
@@ -75,7 +58,7 @@ kaipy.kaijson module
    :show-inheritance:
 
 kaipy.kaixdmf module
---------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.kaixdmf
    :members:
@@ -83,31 +66,15 @@ kaipy.kaixdmf module
    :show-inheritance:
 
 kaipy.kdefs module
-------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.kdefs
    :members:
    :undoc-members:
    :show-inheritance:
 
-kaipy.lfm2kaiju module
-----------------------
-
-.. automodule:: kaipy.lfm2kaiju
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-kaipy.supermag\_api module
---------------------------
-
-.. automodule:: kaipy.supermag_api
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 kaipy.supermage module
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.supermage
    :members:
@@ -115,17 +82,9 @@ kaipy.supermage module
    :show-inheritance:
 
 kaipy.transform module
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: kaipy.transform
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: kaipy
    :members:
    :undoc-members:
    :show-inheritance:

@@ -1,7 +1,13 @@
 #Various routines to deal with K-Cylinders from PSDs
-import numpy as np
+
+# Standard modules
 import datetime
+
+# Third-party modules
+import numpy as np
 import h5py
+
+# Kaipy modules
 import kaipy.kaiViz as kv
 
 #Get grid from K-Cyl

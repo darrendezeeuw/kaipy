@@ -1,10 +1,14 @@
-import numpy as np
+# Stnadard modules
 import datetime
 import os
 import glob
 import sys
+
+# Third-party modules
+import numpy as np
 from astropy.time import Time
 
+# Kaipy modules
 import kaipy.kdefs as kd
 import kaipy.kaiH5 as kH5
 
@@ -157,6 +161,24 @@ def xyz2rtp(phi, theta, Ax, Ay, Az):
 	Ap = -Ax * np.sin(phi) + Ay * np.cos(phi)
 	At = Ax * np.cos(phi) * np.cos(theta) + Ay * np.sin(phi) * np.cos(theta) - Az * np.sin(theta)
 	return Ar, At, Ap
+
+def rtp2rt(r, theta, phi):
+	"""
+	Convert spherical coordinates (r, theta, phi) to 2D polar (r, phi)
+
+	Parameters:
+		r     (float): radial dimension
+		theta (float): [rad] meridional/zenith direction
+		phi   (float): [rad] azimuthal direciton
+
+	Returns:
+		r     (float): radial dimension
+		theta (float): [rad]azimuthal dimenison
+	"""
+	
+	Ar = r*np.sin(theta)
+	Atheta = phi
+	return Ar, Atheta
 
 # Use the Burton 1975 Formula to compute Dst from solar wind parameters
 def burtonDst(secs, n, vx, vy, vz, bx, by, bz):
@@ -352,5 +374,36 @@ def interpTSCWeights(gridX, gridY, x, y):
 	for i in range(3):
 		for j in range(3):
 			w2D[i,j] = wX[i]*wY[j]
-
 	return w2D
+
+
+def dipoleShift(xyz, r):
+    #Find L of this point
+	L = dipoleL(xyz)
+
+	# Avoid bad values if L<r, push as far as possible
+	L = max(L,r)
+
+	# Use r = L*cos^2(latitude)
+	mlat = np.abs(np.acos(np.sqrt(r/L)))
+	mlon = np.atan2(xyz[1],xyz[0])  # No change in longitude
+	if (mlon<0): mlon = mlon+2*np.pi
+
+	if (xyz[2]<0):
+		mlat = -np.abs(mlat)
+	
+	# Get cartesian coordinates
+	xyz_out = [r*np.cos(mlat)*np.cos(mlon),
+			   r*np.cos(mlat)*np.sin(mlon),
+			   r*np.sin(mlat)]
+	return xyz_out
+
+
+def dipoleL(xyz):
+	
+	z = xyz[2]
+
+	rad = np.linalg.norm(xyz)
+	lat = abs( np.arcsin(z/rad) )
+	Leq = rad/( np.cos(lat)*np.cos(lat) )
+	return Leq

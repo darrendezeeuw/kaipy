@@ -1,12 +1,18 @@
 #!/usr/bin/env python
+
+# Standard modules
 import argparse
 import os
+
+# Third-party modules
 import h5py as h5
-import kaipy.kaiH5 as kh5
-import kaipy.kaixdmf as kxmf
 import xml.etree.ElementTree as et
 import xml.dom.minidom
 import numpy as np
+
+# Kaipy modules
+import kaipy.kaiH5 as kh5
+import kaipy.kaixdmf as kxmf
 
 presets = {"gam", "mhdrcm_eq", "mhdrcm_bmin", 'voltSG'}
 
@@ -130,15 +136,17 @@ def addRCMVars(Grid, dimInfo, rcmInfo, sID):
 					vName_k = vName + "_k{}".format(k)
 					kxmf.addHyperslab(Grid,vName_k,mr_vDimStr,dimStr,startStr,strideStr,numStr,r_vDimStr,text)
 
-
-if __name__ == "__main__":
-
-	outfname = ''
-
+def create_command_line_parser():
+	"""Create a command line parser for the script.
+	Returns:
+		argparse.ArgumentParser: The command line parser.
+	"""
+	# Defaults
+	outfname = ""
 	MainS = """Generates XDMF file from non-MPI HDF5 output
 	"""
 
-	parser = argparse.ArgumentParser(description="Generates XDMF file from Gamera HDF5 output")
+	parser = argparse.ArgumentParser(description=MainS)
 	parser.add_argument('h5F',type=str,metavar='model.h5',help="Filename of Kaiju HDF5 Output")
 	parser.add_argument('-outname',type=str,default=outfname,help="Name of generated XMF file")
 	parser.add_argument('-preset', type=str,choices=presets,help="Tell the script what the file is (in case not derivble from name)")
@@ -146,6 +154,11 @@ if __name__ == "__main__":
 	parser.add_argument('-rcmv',type=str,help="Comma-separated rcm.h5 vars to include in an mhdrcm preset (ex: rcmvm, rcmeeta)")
 	parser.add_argument('-rcmk',type=str,help="Comma-separated RCM k values to pull from 3D vars specified with '-rcmv'")
 	parser.add_argument('--printVars',action='store_true',default=False,help="Print root and step vars (default: %(default)s)")
+	return parser
+
+def main():
+
+	parser = create_command_line_parser()
 	args = parser.parse_args()
 
 	h5fname = args.h5F
@@ -300,3 +313,5 @@ if __name__ == "__main__":
 	with open(fOutXML,"w") as f:
 		f.write(xmlStr)
 		
+if __name__ == "__main__":
+	main()
