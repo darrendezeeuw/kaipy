@@ -1,6 +1,6 @@
 alive_progress
 astropy
-#cartopy
+#artopy
 cdasws
 configparser
 h5py
