@@ -345,7 +345,7 @@ class GamsphPipe(GameraPipe):
 			list: A list containing the CPCP values [nCPCP, sCPCP].
 
 		"""
-		n0 = n - self.s0
+		n0 = n - self.s0 - 1
 		tGam = self.T[n0]
 		if self.hasRemixO:  # Old remix style
 			# Find nearest time slice
