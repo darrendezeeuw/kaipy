@@ -1,6 +1,6 @@
 Developers
 ================================================
-Kaipy developers will need to use a different setup process then users.  This section will go over the steps needed to setup a development environment for Kaipy.  The main difference here is that you not use the `pip install` command to install Kaipy.  Instead you will need to clone the repository, install the dependencies, and setup the environment variables.
+Kaipy developers will need to use a different setup process then users.  This section will go over the steps needed to setup a development environment for Kaipy.  The main difference is that developers will need to clone the Kaipy repository and install using the `pip install -e .` command.  
 
 Clone repository
 ------------------------------------------------
@@ -9,42 +9,19 @@ The first step is to clone the Kaipy repository.  You can do this by running the
 
 .. code-block:: bash
 
-    git clone https://bitbucket.org/aplkaiju/kaipy.git
+    git clone https://github.com/JHUAPL/kaipy.git
 
-For beta testers using the kaipy-private repository and the kaiju-private repository you will need to switch both repositories to the `kaipy-amputation` branch.  
-
-Install python dependencies
+Install Editable Kaipy
 ------------------------------------------------
 
-Next you will need to install the dependencies for Kaipy.  You can do this by running the following command in your terminal after navigating to the Kaipy repository:
+Next you will need to install the dependencies for Kaipy.  You can do this by running the following commands in your terminal after navigating to the Kaipy repository:
 
 .. code-block:: bash
 
-    conda create --name kaipy-repo python=3.8
-    conda activate kaipy-repo
-    pip install -r requirements.txt
+    conda create --name kaipy-repo-3.12 python=3.12
+    conda activate kaipy-repo-3.12
+    pip install -e .
 
-Setup environment variables
-------------------------------------------------
+This will install Kaipy in editable mode, allowing you to make changes to the code and have them reflected immediately without needing to reinstall.  
 
-Finally you will need to setup the environment variables for Kaipy.  You can do this by running the following command in your terminal after navigating to the Kaipy repository:
-
-For bash shell:
-
-.. code-block:: bash
-
-    cd kaipy/scripts
-    source setupEnvironment.sh
-    python checkkaipypath.py
-
-
-For csh shell:
-
-.. code-block:: csh
-
-    cd kaipy/scripts
-    source setupEnvironment.csh
-    python checkkaipypath.py
-
-
-The `checkkaipypath.py` script will check that the environment variables have been set correctly, by printing out the directory beginning with `kaipy` that is in your `PYTHONPATH`.
+One minor caveat is that you will need to run the `pip install -e .` command again if you add any new dependencies to the `requirements.txt` file or if you make changes to either of the `setup.py` or `pyproject.toml` files.
