@@ -24,4 +24,6 @@ Next you will need to install the dependencies for Kaipy.  You can do this by ru
 
 This will install Kaipy in editable mode, allowing you to make changes to the code and have them reflected immediately without needing to reinstall.  
 
-One minor caveat is that you will need to run the `pip install -e .` command again if you add any new dependencies to the `requirements.txt` file or if you make changes to either of the `setup.py` or `pyproject.toml` files.
+.. warning::
+    
+ If any changes are made to either of the `setup.py` or `pyproject.toml` files, or new dependencies are added to the `requirements.txt` file, the kaipy package must be reinstalled with the `pip install -e .` command.
