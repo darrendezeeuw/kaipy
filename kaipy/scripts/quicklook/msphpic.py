@@ -500,7 +500,7 @@ def main():
     if not do_vid: # If we are making a single image, keep original functionality
         # If needed, fetch the number of the last step.
         if nStp < 0:
-            nStp = gsph.sFin
+            nStp = gsph.sFin - 1
             print("Using Step %d" % nStp)
         varDict = {
             'n_pad': 0,
